@@ -21,10 +21,8 @@ class MarkdownGeditPluginApp(GObject.Object, Gedit.AppActivatable):
 	def _build_menu(self):
 		self.menu_ext = self.extend_menu("tools-section")		
 		menu = Gio.Menu()
-		sub_menu_item1 = Gio.MenuItem.new("Export as HTML", 'win.export_html')
-		sub_menu_item2 = Gio.MenuItem.new("Export as PDF", 'win.export_pdf')
+		sub_menu_item2 = Gio.MenuItem.new("Export", 'win.export_doc')
 		sub_menu_item3 = Gio.MenuItem.new("Print", 'win.print_doc')
-		menu.append_item(sub_menu_item1)
 		menu.append_item(sub_menu_item2)
 		menu.append_item(sub_menu_item3)
 		self.menu_item = Gio.MenuItem.new_submenu("Markdown Preview", menu)
@@ -63,26 +61,25 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		self._useRelativePaths = self._settings.get_boolean('relative')
 		self._settings.connect('changed::position', self.change_panel)
 		self.insert_in_adequate_panel()
+		self.window.lookup_action('export_doc').set_enabled(False)
+		self.window.lookup_action('print_doc').set_enabled(False)
 
 	def _connect_menu(self):
-		action1 = Gio.SimpleAction(name='export_html')
-		action2 = Gio.SimpleAction(name='export_pdf')
+		action2 = Gio.SimpleAction(name='export_doc')
 		action3 = Gio.SimpleAction(name='print_doc')
-		action1.connect('activate', self.export_html)
-		action2.connect('activate', self.export_pdf)
+		action2.connect('activate', self.export_doc)
 		action3.connect('activate', self.print_doc)
-		self.window.add_action(action1)
 		self.window.add_action(action2)
 		self.window.add_action(action3)
 		
 	def insert_in_adequate_panel(self):
-		self.view = WebKit2.WebView() # FIXME optimisable, ralentit tout le merdier
+		self._webview = WebKit2.WebView() # FIXME optimisable, ralentit tout le merdier
 		
 		if self._isAtBottom:
 			self.preview_bar.props.orientation = Gtk.Orientation.HORIZONTAL
 		else:
 			self.preview_bar.props.orientation = Gtk.Orientation.VERTICAL
-		self.preview_bar.pack_start(self.view, expand=True, fill=True, padding=0)
+		self.preview_bar.pack_start(self._webview, expand=True, fill=True, padding=0)
 		
 		box=Gtk.Box()
 		if self._isAtBottom:
@@ -152,7 +149,7 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		name = doc.get_short_name_for_display()
 		temp = name.split('.')
 		if temp[len(temp)-1] != "md":
-			self.view.load_plain_text("This is not a markdown document.")
+			self._webview.load_plain_text("This is not a markdown document.")
 			return False
 		else:
 			return True
@@ -200,7 +197,8 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		f.write(html_content)
 		f.close()
 		self.temp_file_html = Gio.File.new_for_path(parent_path + '/.gedit_plugin_markdown_preview.html')
-		self.view.load_uri(self.temp_file_html.get_uri())
+		self._webview.load_uri(self.temp_file_html.get_uri())
+		self.window.lookup_action('export_doc').set_enabled(True)
 	
 	def show_on_panel(self):
 		# Get the bottom bar (A Gtk.Stack), or the side bar, and add our bar to it.
@@ -220,12 +218,12 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		self.panel.remove(self.preview_bar)
 	
 	def on_zoom_in(self, a):
-		if self.view.get_zoom_level() < 10:
-			self.view.set_zoom_level(self.view.get_zoom_level() + 0.1)
+		if self._webview.get_zoom_level() < 10:
+			self._webview.set_zoom_level(self._webview.get_zoom_level() + 0.1)
 		
 	def on_zoom_out(self, a):
-		if self.view.get_zoom_level() > 0.15:
-			self.view.set_zoom_level(self.view.get_zoom_level() - 0.1)
+		if self._webview.get_zoom_level() > 0.15:
+			self._webview.set_zoom_level(self._webview.get_zoom_level() - 0.1)
 		
 	def on_insert(self, a):
 		doc = self.window.get_active_document()
@@ -234,7 +232,7 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		name = doc.get_short_name_for_display()
 		temp = name.split('.')
 		if temp[len(temp)-1] != "md":
-			self.view.load_plain_text("This is not a markdown document.")
+			self._webview.load_plain_text("This is not a markdown document.")
 			return
 		
 		# Building a FileChooserDialog for pictures
@@ -251,13 +249,9 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		# It gets the chosen file's path
 		if response == Gtk.ResponseType.OK:
 			picture_path = '![](' + file_chooser.get_filename() + ')'
-		elif response == Gtk.ResponseType.CANCEL:
-			picture_path = ''
+			iter = doc.get_iter_at_mark(doc.get_insert())
+			doc.insert(iter, picture_path)
 		file_chooser.destroy()
-
-		# It inserts it at the current position
-		iter = doc.get_iter_at_mark(doc.get_insert())
-		doc.insert(iter, picture_path)
 	
 	def change_panel(self, a, b):
 		self._remove_from_panel()
@@ -270,33 +264,42 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		widget = MdConfigWidget(self.plugin_info.get_data_dir())
 		return widget.get_box()
 
-	def export_html(self):
-		pass
+	def export_doc(self, a, b):
+		if self.temp_file_html is None:
+			return
+			
+		file_chooser = Gtk.FileChooserDialog("Export", self.window,
+			Gtk.FileChooserAction.SAVE,
+			(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+			Gtk.STOCK_SAVE, Gtk.ResponseType.OK))
+		response = file_chooser.run()
 		
-	def export_pdf(self):
-		pass
+		# It gets the chosen file's path
+		if response == Gtk.ResponseType.OK:
+			subprocess.run(['pandoc', self.temp_file_html.get_path(), '-o', file_chooser.get_filename()])
+		file_chooser.destroy()
 		
-	def print_doc(self):
-		pass
+	def print_doc(self, a, b):
+		self._webview.get_main_frame().print_full()
 		
-class MdView(WebKit2.WebView):
-	"WebKit view"
+#class MdView(WebKit2.WebView):
+#	"WebKit view"
 
-	def new(window):
-		context = WebKit2.WebContext.new()
-		webview = WebKit2.WebView.new_with_context(context)
-		content_manager = webview.get_property("user-content-manager")
-		self._window = window
-		self.__context = context
-		self.__content_manager = content_manager
-		self._uri = None
-		self._title = None
-		self._navigation_uri = None
-		self.set_hexpand(True)
-		self.set_vexpand(True)
-		Gtk.Overlay.do_get_preferred_width(self)
-		Gtk.Overlay.do_get_preferred_height(self)
-		return webview
+#	def new(window):
+#		context = WebKit2.WebContext.new()
+#		webview = WebKit2.WebView.new_with_context(context)
+#		content_manager = webview.get_property("user-content-manager")
+#		self._window = window
+#		self.__context = context
+#		self.__content_manager = content_manager
+#		self._uri = None
+#		self._title = None
+#		self._navigation_uri = None
+#		self.set_hexpand(True)
+#		self.set_vexpand(True)
+#		Gtk.Overlay.do_get_preferred_width(self)
+#		Gtk.Overlay.do_get_preferred_height(self)
+#		return webview
 
 class MdConfigWidget:
 
