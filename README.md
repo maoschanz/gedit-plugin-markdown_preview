@@ -18,6 +18,8 @@ It can:
 
 ## Installation
 
-Run the `install.sh` script in a terminal.
+- Download (or clone) the repo.
+- Open the folder `gedit-plugin-markdown_preview-master` in a terminal
+- Run the `install.sh` script in your terminal.
 
 It needs root privileges because i didn't understand how to create setting schemas otherwise, but the plugin isn't installed system-wide.
