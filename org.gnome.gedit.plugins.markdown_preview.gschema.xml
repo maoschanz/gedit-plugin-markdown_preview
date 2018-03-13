@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+	<schema id="org.gnome.gedit.plugins.markdown_preview" path="/org/gnome/gedit/plugins/markdown_preview/">
+		<key type="s" name="position">
+			<default>"side"</default>
+			<summary></summary>
+			<description></description>
+		</key>
+		<key type="b" name="relative">
+			<default>true</default>
+			<summary></summary>
+			<description></description>
+		</key>
+		<key type="s" name="style">
+			<default>""</default>
+			<summary></summary>
+			<description></description>
+		</key>
+	</schema>
+</schemalist>

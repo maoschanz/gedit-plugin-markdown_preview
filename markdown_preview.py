@@ -3,12 +3,7 @@ import gi
 gi.require_version('WebKit2', '4.0')
 from gi.repository import GObject, Gtk, Gedit, Gio, PeasGtk, WebKit2, GLib
 
-#isAtBottom = False
-isAtBottom = True
-relativePaths = True
-#relativePaths = False
-css_uri = "file:///home/roschan/Bureau/test.css"
-#FIXME doivent être options
+MD_PREVIEW_KEY_BASE = 'org.gnome.gedit.plugins.markdown_preview'
 
 class MarkdownGeditPluginApp(GObject.Object, Gedit.AppActivatable):
 	__gtype_name__ = "MarkdownGeditPluginApp"
@@ -31,7 +26,7 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		GObject.Object.__init__(self)
 		# This is the attachment we will make to bottom panel.
 		self.preview_bar = Gtk.Box()
-		# This is needed because Python is stupid
+		# This is needed because Python is stupid # FIXME dans le activate ?
 		self.temp_file = None
 	
 	# This is called every time the gui is updated
@@ -42,19 +37,22 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		
 	def do_activate(self):
 		# Defining the action which was set earlier in AppActivatable.
-		self._insert_bottom_panel()
+		self._settings = Gio.Settings.new(MD_PREVIEW_KEY_BASE)
+		self._isAtBottom = (self._settings.get_string('position') == 'bottom')
+		relativePaths = self._settings.get_boolean('relative')
+		self.insert_in_adequate_panel()
 
-	def _insert_bottom_panel(self):
-		self.view = WebKit2.WebView()
+	def insert_in_adequate_panel(self):
+		self.view = WebKit2.WebView() # FIXME optimisable, ralentit tout le merdier
 		
-		if isAtBottom:
+		if self._isAtBottom:
 			self.preview_bar.props.orientation = Gtk.Orientation.HORIZONTAL
 		else:
 			self.preview_bar.props.orientation = Gtk.Orientation.VERTICAL
 		self.preview_bar.pack_start(self.view, expand=True, fill=True, padding=0)
 		
 		box=Gtk.Box()
-		if isAtBottom:
+		if self._isAtBottom:
 			box.props.orientation = Gtk.Orientation.VERTICAL
 		else:
 			box.props.orientation = Gtk.Orientation.HORIZONTAL
@@ -114,7 +112,7 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 			return
 		
 		# Support for relative paths is cool, but breaks CSS in many cases
-		if relativePaths:
+		if self._useRelativePaths:
 			path = doc.get_location()
 			arr = path.get_path().split('/')
 			del arr[-1]
@@ -126,7 +124,8 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		
 		# It uses pandoc to produce the html code
 		uri = doc.get_uri_for_display()
-		pre_string = '<html><head><meta charset="utf-8" /><link rel="stylesheet" href="' + css_uri + '" /></head><body>'
+		pre_string = '<html><head><meta charset="utf-8" /><link rel="stylesheet" href="' + \
+			self._settings.get_string('style') + '" /></head><body>'
 		post_string = '</body></html>'
 		result = subprocess.run(['pandoc', uri], stdout=subprocess.PIPE)
 		html_string = result.stdout.decode('utf-8')
@@ -142,7 +141,7 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 	
 	def show_on_panel(self):
 		# Get the bottom bar (A Gtk.Stack), or the side bar, and add our bar to it.
-		if isAtBottom:
+		if self._isAtBottom:
 			panel = self.window.get_bottom_panel()
 		else:
 			panel = self.window.get_side_panel()
@@ -158,7 +157,7 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		self._remove_from_panel()
 
 	def _remove_from_panel(self):
-		if isAtBottom:
+		if self._isAtBottom:
 			panel = self.window.get_bottom_panel()
 		else:
 			panel = self.window.get_side_panel()
@@ -206,44 +205,8 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 
 	def do_create_configure_widget(self):
 		# Just return your box, PeasGtk will automatically pack it into a box and show it.
-		box=Gtk.Box()
-		box.props.orientation = Gtk.Orientation.VERTICAL
-		box.props.spacing = 20
-		box.props.margin_left = 20
-		box.props.margin_right = 20
-		box.props.margin_top = 20
-		box.props.margin_bottom = 20
-		box.props.homogeneous = True
-		#--------
-		positionSettingBox=Gtk.Box()
-		positionSettingBox.props.spacing = 20
-		positionSettingBox.props.orientation = Gtk.Orientation.HORIZONTAL
-		positionSettingBox.pack_start(Gtk.Label("Preview position"), expand=False, fill=False, padding=0)
-		positionCombobox = Gtk.ComboBoxText()
-		positionCombobox.append('side', "Side panel")
-		positionCombobox.append('bottom', "Bottom panel")
-		positionSettingBox.pack_end(positionCombobox, expand=False, fill=False, padding=0)
-		#--------
-		relativePathsSettingBox=Gtk.Box()
-		relativePathsSettingBox.props.spacing = 20
-		relativePathsSettingBox.props.orientation = Gtk.Orientation.HORIZONTAL
-		relativePathsSettingBox.pack_start(Gtk.Label("Use relative paths"), expand=False, fill=False, padding=0)
-		relativePathsSettingBox.pack_end(Gtk.Switch(), expand=False, fill=False, padding=0)
-		#--------
-		styleSettingBox=Gtk.Box()
-		styleSettingBox.props.spacing = 20
-		styleSettingBox.props.orientation = Gtk.Orientation.HORIZONTAL
-		styleSettingBox.pack_start(Gtk.Label("Style"), expand=False, fill=False, padding=0)
-		styleCombobox = Gtk.ComboBoxText()
-		styleCombobox.append('1', "example1")
-		styleCombobox.append('2', "example2")
-		styleCombobox.append('3', "example3")
-		styleSettingBox.pack_end(styleCombobox, expand=False, fill=False, padding=0)
-		#--------
-		box.add(positionSettingBox)
-		box.add(relativePathsSettingBox)
-		box.add(styleSettingBox)
-		return box
+		widget = MdConfigWidget(self.plugin_info.get_data_dir())
+		return widget.get_box()
 
 class MdView(WebKit2.WebView):
 	"WebKit view"
@@ -264,4 +227,90 @@ class MdView(WebKit2.WebView):
 		Gtk.Overlay.do_get_preferred_height(self)
 		return webview
 
+class MdConfigWidget:
 
+	def __init__(self, datadir):
+		self._settings = Gio.Settings.new(MD_PREVIEW_KEY_BASE)
+		self._settings.get_string('position')
+		self._settings.get_boolean('relative')
+		self._settings.get_string('style')
+		
+		self.box = Gtk.Box()
+		self.box.props.orientation = Gtk.Orientation.VERTICAL
+		self.box.props.spacing = 20
+		self.box.props.margin_left = 20
+		self.box.props.margin_right = 20
+		self.box.props.margin_top = 20
+		self.box.props.margin_bottom = 20
+		self.box.props.homogeneous = True
+		#--------
+		positionSettingBox=Gtk.Box()
+		positionSettingBox.props.spacing = 20
+		positionSettingBox.props.orientation = Gtk.Orientation.HORIZONTAL
+		positionSettingBox.pack_start(Gtk.Label("Preview position"), expand=False, fill=False, padding=0)
+		positionCombobox = Gtk.ComboBoxText()
+		positionCombobox.append('side', "Side panel")
+		positionCombobox.append('bottom', "Bottom panel")
+		positionCombobox.connect("changed", self.on_position_changed)
+		positionCombobox.set_active_id(self._settings.get_string('position'))
+		positionSettingBox.pack_end(positionCombobox, expand=False, fill=False, padding=0)
+		#--------
+		relativePathsSettingBox=Gtk.Box()
+		relativePathsSettingBox.props.spacing = 20
+		relativePathsSettingBox.props.orientation = Gtk.Orientation.HORIZONTAL
+		relativePathsSettingBox.pack_start(Gtk.Label("Use relative paths"), expand=False, fill=False, padding=0)
+		relativePathsSwitch = Gtk.Switch()
+		relativePathsSwitch.set_active(self._settings.get_boolean('relative'))
+		relativePathsSwitch.connect('notify::active', self.on_relative_changed)
+		relativePathsSettingBox.pack_end(relativePathsSwitch, expand=False, fill=False, padding=0)
+		#--------
+		styleSettingBox=Gtk.Box()
+		styleSettingBox.props.spacing = 20
+		styleSettingBox.props.orientation = Gtk.Orientation.HORIZONTAL
+		styleSettingBox.pack_start(Gtk.Label("Style"), expand=False, fill=False, padding=0)
+		self.styleLabel = Gtk.Label(self._settings.get_string('style'))
+		styleButton = Gtk.Button()
+		styleButton.connect("clicked", self.on_choose_css)
+		styleImage = Gtk.Image()
+		styleImage.set_from_icon_name('document-open-symbolic', Gtk.IconSize.BUTTON)
+		styleButton.add(styleImage)
+		styleSettingBox.pack_end(styleButton, expand=False, fill=False, padding=0)
+		styleSettingBox.pack_end(self.styleLabel, expand=False, fill=False, padding=0)
+		#--------
+		self.box.add(positionSettingBox)
+		self.box.add(relativePathsSettingBox)
+		self.box.add(styleSettingBox)
+	
+	def get_box(self):
+		return self.box
+		
+	def on_position_changed(self, w):
+		self._settings.set_string('position', w.get_active_id())
+		
+	def on_choose_css(self, w):
+		# Building a FileChooserDialog for CSS
+		file_chooser = Gtk.FileChooserDialog("Select a CSS file", None, # FIXME
+			Gtk.FileChooserAction.OPEN,
+			(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+			Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
+		onlyCSS = Gtk.FileFilter()
+		onlyCSS.set_name("Stylesheet")
+		onlyCSS.add_mime_type("text/css")
+		file_chooser.set_filter(onlyCSS)
+		response = file_chooser.run()
+		
+		# It gets the chosen file's path
+		if response == Gtk.ResponseType.OK:
+			self.styleLabel.label = file_chooser.get_uri()
+			self._settings.set_string('style', file_chooser.get_uri())
+		file_chooser.destroy()
+		
+	def on_relative_changed(self, w, a):
+		if w.active:
+			self._settings.set_boolean('relative', True);
+		else:
+			self._settings.set_boolean('relative', False);
+	
+	
+	
+	
