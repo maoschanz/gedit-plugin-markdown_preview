@@ -130,7 +130,7 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		doc = self.window.get_active_document()
 		
 		# It will not load documents which are not .md
-		if self.test_if_md():
+		if not self.test_if_md():
 			return
 		
 		# Support for relative paths is cool, but breaks CSS in many cases
