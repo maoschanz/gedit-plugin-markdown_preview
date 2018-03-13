@@ -5,16 +5,18 @@ This is a plugin for the Gedit text editor, previewing .md files in the bottom o
 It can:
 
 - load a preview of your markdown file
+- dynamically update the preview
 - zoom in or out
 - insert an image in your markdown file
 - be displayed in the side panel or in the bottom panel
 - apply a CSS stylesheet to the preview
+- export your preview (in any format supported by pandoc)
 
 ## Dependencies
 
 - `gedit` (of course)
 - `pandoc`
-- probably the Python binding for WebkitGTK
+- probably some WebkitGTK library (libwebkit2gtk-4.0-dev ?)
 
 ## Installation
 
