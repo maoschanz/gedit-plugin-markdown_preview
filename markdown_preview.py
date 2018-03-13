@@ -39,7 +39,7 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		# Defining the action which was set earlier in AppActivatable.
 		self._settings = Gio.Settings.new(MD_PREVIEW_KEY_BASE)
 		self._isAtBottom = (self._settings.get_string('position') == 'bottom')
-		relativePaths = self._settings.get_boolean('relative')
+		self._useRelativePaths = self._settings.get_boolean('relative')
 		self.insert_in_adequate_panel()
 
 	def insert_in_adequate_panel(self):
