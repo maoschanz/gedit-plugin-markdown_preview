@@ -28,12 +28,15 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		self.preview_bar = Gtk.Box()
 		# This is needed because Python is stupid # FIXME dans le activate ?
 		self.temp_file = None
+		self._auto_reload = False
 	
 	# This is called every time the gui is updated
 	def do_update_state(self):
-#		if self.window.get_active_view() is not None:
-#			self.on_reload(None) # Debug purpose only ? pas aberrant non plus
-		pass
+		if self.window.get_active_view() is not None:
+			if self._auto_reload:
+				self.on_reload()
+			if self.test_if_md():
+				self.panel.show()
 		
 	def do_activate(self):
 		# Defining the action which was set earlier in AppActivatable.
@@ -69,12 +72,12 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		insertBtn.add(insertImage)
 		box.pack_end(insertBtn, expand=False, fill=False, padding=0)
 
-		refreshBtn = Gtk.Button()
-		refreshBtn.connect("clicked", self.on_reload)
+		self.refreshBtn = Gtk.ToggleButton()
+		self.refreshBtn.connect("toggled", self.on_set_reload)
 		refreshImage = Gtk.Image()
 		refreshImage.set_from_icon_name('view-refresh-symbolic', Gtk.IconSize.BUTTON)
-		refreshBtn.add(refreshImage)
-		box.pack_end(refreshBtn, expand=False, fill=False, padding=0)
+		self.refreshBtn.add(refreshImage)
+		box.pack_end(self.refreshBtn, expand=False, fill=False, padding=0)
 		
 		zoomInBtn = Gtk.Button()
 		zoomInBtn.connect("clicked", self.on_zoom_in)
@@ -96,12 +99,19 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		
 		self.show_on_panel()
 
-	def on_reload(self, a):
+	def on_set_reload(self, a):
+		if self.refreshBtn.get_active():
+			self._auto_reload = True
+		else:
+			self._auto_reload = False
+	
+	def delete_temp_file(self):
 		# Delete the temp file from the previous document
 		if self.temp_file is not None:
 			self.temp_file.delete()
-		
-		# Get the current document
+			self.temp_file = None
+	
+	def test_if_md(self):
 		doc = self.window.get_active_document()
 		
 		# It will not load documents which are not .md
@@ -109,6 +119,18 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		temp = name.split('.')
 		if temp[len(temp)-1] != "md":
 			self.view.load_plain_text("This is not a markdown document.")
+			return False
+		else:
+			return True
+		
+	def on_reload(self):
+		self.delete_temp_file()
+	
+		# Get the current document
+		doc = self.window.get_active_document()
+		
+		# It will not load documents which are not .md
+		if self.test_if_md():
 			return
 		
 		# Support for relative paths is cool, but breaks CSS in many cases
@@ -137,18 +159,16 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		f.write(content)
 		self.temp_file = Gio.File.new_for_path(parent_path + '/gedit_plugin_markdown_preview')
 		self.view.load_uri(self.temp_file.get_uri())
-		
 	
 	def show_on_panel(self):
 		# Get the bottom bar (A Gtk.Stack), or the side bar, and add our bar to it.
 		if self._isAtBottom:
-			panel = self.window.get_bottom_panel()
+			self.panel = self.window.get_bottom_panel()
 		else:
-			panel = self.window.get_side_panel()
-		panel.add_titled(self.preview_bar, 'markdown_preview', "Markdown Preview")
+			self.panel = self.window.get_side_panel()
+		self.panel.add_titled(self.preview_bar, 'markdown_preview', "Markdown Preview")
 		self.preview_bar.show_all()
-#		panel.show()
-		panel.set_visible_child(self.preview_bar)
+		self.panel.set_visible_child(self.preview_bar)
 	
 	def do_deactivate(self):
 		if self.temp_file is not None:
@@ -310,7 +330,5 @@ class MdConfigWidget:
 			self._settings.set_boolean('relative', True);
 		else:
 			self._settings.set_boolean('relative', False);
-	
-	
 	
 	
