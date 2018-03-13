@@ -13,10 +13,26 @@ class MarkdownGeditPluginApp(GObject.Object, Gedit.AppActivatable):
 		GObject.Object.__init__(self)
 
 	def do_activate(self):
-		pass
+		self._build_menu()
 
 	def do_deactivate(self):
-		pass
+		self._remove_menu()
+	
+	def _build_menu(self):
+		self.menu_ext = self.extend_menu("tools-section")		
+		menu = Gio.Menu()
+		sub_menu_item1 = Gio.MenuItem.new("Export as HTML", 'win.export_html')
+		sub_menu_item2 = Gio.MenuItem.new("Export as PDF", 'win.export_pdf')
+		sub_menu_item3 = Gio.MenuItem.new("Print", 'win.print_doc')
+		menu.append_item(sub_menu_item1)
+		menu.append_item(sub_menu_item2)
+		menu.append_item(sub_menu_item3)
+		self.menu_item = Gio.MenuItem.new_submenu("Markdown Preview", menu)
+		self.menu_ext.append_menu_item(self.menu_item)
+	
+	def _remove_menu(self):
+		self.menu_ext = None
+		self.menu_item = None
 
 class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk.Configurable):
 	window = GObject.property(type=Gedit.Window)
@@ -27,7 +43,8 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		# This is the attachment we will make to bottom panel.
 		self.preview_bar = Gtk.Box()
 		# This is needed because Python is stupid # FIXME dans le activate ?
-		self.temp_file = None
+		self.temp_file_html = None
+		self.temp_file_md = None
 		self._auto_reload = False
 	
 	# This is called every time the gui is updated
@@ -40,12 +57,24 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		
 	def do_activate(self):
 		# Defining the action which was set earlier in AppActivatable.
+		self._connect_menu()
 		self._settings = Gio.Settings.new(MD_PREVIEW_KEY_BASE)
 		self._isAtBottom = (self._settings.get_string('position') == 'bottom')
 		self._useRelativePaths = self._settings.get_boolean('relative')
 		self._settings.connect('changed::position', self.change_panel)
 		self.insert_in_adequate_panel()
 
+	def _connect_menu(self):
+		action1 = Gio.SimpleAction(name='export_html')
+		action2 = Gio.SimpleAction(name='export_pdf')
+		action3 = Gio.SimpleAction(name='print_doc')
+		action1.connect('activate', self.export_html)
+		action2.connect('activate', self.export_pdf)
+		action3.connect('activate', self.print_doc)
+		self.window.add_action(action1)
+		self.window.add_action(action2)
+		self.window.add_action(action3)
+		
 	def insert_in_adequate_panel(self):
 		self.view = WebKit2.WebView() # FIXME optimisable, ralentit tout le merdier
 		
@@ -107,11 +136,14 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		else:
 			self._auto_reload = False
 	
-	def delete_temp_file(self):
+	def delete_temp_files(self):
 		# Delete the temp file from the previous document
-		if self.temp_file is not None:
-			self.temp_file.delete()
-			self.temp_file = None
+		if self.temp_file_html is not None:
+			self.temp_file_html.delete()
+			self.temp_file_html = None
+		if self.temp_file_md is not None:
+			self.temp_file_md.delete()
+			self.temp_file_md = None
 	
 	def test_if_md(self):
 		doc = self.window.get_active_document()
@@ -126,7 +158,7 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 			return True
 		
 	def on_reload(self):
-		self.delete_temp_file()
+		self.delete_temp_files()
 	
 		# Get the current document
 		doc = self.window.get_active_document()
@@ -146,21 +178,29 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		else:
 			parent_path = '/tmp'
 		
+		start, end = doc.get_bounds()
+		unsaved_text = doc.get_text(start, end, True)
+		f = open(parent_path + '/.gedit_plugin_markdown_preview.md', 'w') #TODO mettre en caché
+		f.write(unsaved_text)
+		f.close()
+		self.temp_file_md = Gio.File.new_for_path(parent_path + '/.gedit_plugin_markdown_preview.md')
+		uri2 = self.temp_file_md.get_uri()
+		
 		# It uses pandoc to produce the html code
 		uri = doc.get_uri_for_display()
 		pre_string = '<html><head><meta charset="utf-8" /><link rel="stylesheet" href="' + \
 			self._settings.get_string('style') + '" /></head><body>'
 		post_string = '</body></html>'
-		result = subprocess.run(['pandoc', uri], stdout=subprocess.PIPE)
+		result = subprocess.run(['pandoc', uri2], stdout=subprocess.PIPE)
 		html_string = result.stdout.decode('utf-8')
-		content = pre_string + html_string + post_string
-#		self.view.load_html(content, uri) #Simpler but doesn't load the CSS file ???
+		html_content = pre_string + html_string + post_string
 		
 		# It sets the html code in a file, and previews the file
-		f = open(parent_path + '/gedit_plugin_markdown_preview', 'w') #TODO mettre en caché
-		f.write(content)
-		self.temp_file = Gio.File.new_for_path(parent_path + '/gedit_plugin_markdown_preview')
-		self.view.load_uri(self.temp_file.get_uri())
+		f = open(parent_path + '/.gedit_plugin_markdown_preview.html', 'w') #TODO mettre en caché
+		f.write(html_content)
+		f.close()
+		self.temp_file_html = Gio.File.new_for_path(parent_path + '/.gedit_plugin_markdown_preview.html')
+		self.view.load_uri(self.temp_file_html.get_uri())
 	
 	def show_on_panel(self):
 		# Get the bottom bar (A Gtk.Stack), or the side bar, and add our bar to it.
@@ -173,9 +213,7 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		self.panel.set_visible_child(self.preview_bar)
 	
 	def do_deactivate(self):
-		if self.temp_file is not None:
-			self.temp_file.delete()
-			self.temp_file = None
+		self.delete_temp_files()
 		self._remove_from_panel()
 
 	def _remove_from_panel(self):
@@ -232,6 +270,15 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		widget = MdConfigWidget(self.plugin_info.get_data_dir())
 		return widget.get_box()
 
+	def export_html(self):
+		pass
+		
+	def export_pdf(self):
+		pass
+		
+	def print_doc(self):
+		pass
+		
 class MdView(WebKit2.WebView):
 	"WebKit view"
 
