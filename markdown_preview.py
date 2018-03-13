@@ -43,6 +43,7 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		self._settings = Gio.Settings.new(MD_PREVIEW_KEY_BASE)
 		self._isAtBottom = (self._settings.get_string('position') == 'bottom')
 		self._useRelativePaths = self._settings.get_boolean('relative')
+		self._settings.connect('changed::position', self.change_panel)
 		self.insert_in_adequate_panel()
 
 	def insert_in_adequate_panel(self):
@@ -178,11 +179,7 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		self._remove_from_panel()
 
 	def _remove_from_panel(self):
-		if self._isAtBottom:
-			panel = self.window.get_bottom_panel()
-		else:
-			panel = self.window.get_side_panel()
-		panel.remove(self.preview_bar)
+		self.panel.remove(self.preview_bar)
 	
 	def on_zoom_in(self, a):
 		if self.view.get_zoom_level() < 10:
@@ -223,7 +220,13 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		# It inserts it at the current position
 		iter = doc.get_iter_at_mark(doc.get_insert())
 		doc.insert(iter, picture_path)
-
+	
+	def change_panel(self, a, b):
+		self._remove_from_panel()
+		self.preview_bar = Gtk.Box()
+		self._isAtBottom = (self._settings.get_string('position') == 'bottom')
+		self.insert_in_adequate_panel()
+	
 	def do_create_configure_widget(self):
 		# Just return your box, PeasGtk will automatically pack it into a box and show it.
 		widget = MdConfigWidget(self.plugin_info.get_data_dir())
@@ -272,8 +275,8 @@ class MdConfigWidget:
 		positionCombobox = Gtk.ComboBoxText()
 		positionCombobox.append('side', "Side panel")
 		positionCombobox.append('bottom', "Bottom panel")
-		positionCombobox.connect("changed", self.on_position_changed)
 		positionCombobox.set_active_id(self._settings.get_string('position'))
+		positionCombobox.connect("changed", self.on_position_changed)
 		positionSettingBox.pack_end(positionCombobox, expand=False, fill=False, padding=0)
 		#--------
 		relativePathsSettingBox=Gtk.Box()
