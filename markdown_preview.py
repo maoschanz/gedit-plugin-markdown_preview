@@ -102,6 +102,7 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 	def on_set_reload(self, a):
 		if self.refreshBtn.get_active():
 			self._auto_reload = True
+			self.on_reload()
 		else:
 			self._auto_reload = False
 	
