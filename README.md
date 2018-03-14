@@ -23,7 +23,7 @@ It can:
 
 - Download the project & extract the archive (or clone the repo).
 - Open the project's folder `gedit-plugin-markdown_preview-master` in a terminal
-- Run the `install.sh` script.
+- Run the `install.sh` script (**without root privileges**)
 
 ## Available languages
 
