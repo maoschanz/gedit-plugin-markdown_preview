@@ -1,0 +1,47 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-03-03 18:48+0100\n"
+"PO-Revision-Date: 2018-03-05 16:47+0100\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.11\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Last-Translator: \n"
+"Language: fr\n"
+
+msgid "Markdown Preview"
+msgstr "Aperçu Markdown"
+
+msgid "Export the preview"
+msgstr "Exporter l'aperçu"
+
+msgid "Print the preview"
+msgstr "Imprimer l'aperçu"
+
+msgid "This is not a markdown document."
+msgstr "Ceci n'est pas un document markdown."
+
+msgid "Select a picture"
+msgstr "Choisissez une image"
+
+msgid "Select a CSS file"
+msgstr "Choisissez un fichier CSS"
+
+msgid "Preview position"
+msgstr "Position de l'aperçu"
+
+msgid "Bottom panel"
+msgstr "Panneau inférieur"
+
+msgid "Side panel"
+msgstr "Panneau latéral"
+
+msgid "Use relative paths"
+msgstr "Utiliser des chemins relatifs"
+
+msgid "Stylesheet"
+msgstr "Feuille de style"

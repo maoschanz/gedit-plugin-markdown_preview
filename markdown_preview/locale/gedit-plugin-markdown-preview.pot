@@ -1,0 +1,46 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-03-03 18:48+0100\n"
+"PO-Revision-Date: 2018-03-05 16:47+0100\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Markdown Preview"
+msgstr ""
+
+msgid "Export the preview"
+msgstr ""
+
+msgid "Print the preview"
+msgstr ""
+
+msgid "This is not a markdown document."
+msgstr ""
+
+msgid "Select a picture"
+msgstr ""
+
+msgid "Select a CSS file"
+msgstr ""
+
+msgid "Preview position"
+msgstr ""
+
+msgid "Bottom panel"
+msgstr ""
+
+msgid "Side panel"
+msgstr ""
+
+msgid "Use relative paths"
+msgstr ""
+
+msgid "Stylesheet"
+msgstr ""
+
