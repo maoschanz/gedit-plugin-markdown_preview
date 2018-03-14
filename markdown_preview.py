@@ -177,26 +177,28 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		
 		start, end = doc.get_bounds()
 		unsaved_text = doc.get_text(start, end, True)
-		f = open(parent_path + '/.gedit_plugin_markdown_preview.md', 'w') #TODO mettre en caché
+		f = open(parent_path + '/gedit_plugin_markdown_preview.md', 'w') #TODO mettre en caché
 		f.write(unsaved_text)
 		f.close()
-		self.temp_file_md = Gio.File.new_for_path(parent_path + '/.gedit_plugin_markdown_preview.md')
+		self.temp_file_md = Gio.File.new_for_path(parent_path + '/gedit_plugin_markdown_preview.md')
 		uri2 = self.temp_file_md.get_uri()
 		
+		#FIXME ne charge pas car temp_file_md ne s'est pas encore écrit
 		# It uses pandoc to produce the html code
 		uri = doc.get_uri_for_display()
 		pre_string = '<html><head><meta charset="utf-8" /><link rel="stylesheet" href="' + \
 			self._settings.get_string('style') + '" /></head><body>'
 		post_string = '</body></html>'
-		result = subprocess.run(['pandoc', uri2], stdout=subprocess.PIPE)
+		result = subprocess.run(['pandoc', uri], stdout=subprocess.PIPE)
+#		result = subprocess.run(['pandoc', uri2], stdout=subprocess.PIPE)
 		html_string = result.stdout.decode('utf-8')
 		html_content = pre_string + html_string + post_string
 		
 		# It sets the html code in a file, and previews the file
-		f = open(parent_path + '/.gedit_plugin_markdown_preview.html', 'w') #TODO mettre en caché
+		f = open(parent_path + '/gedit_plugin_markdown_preview.html', 'w') #TODO mettre en caché
 		f.write(html_content)
 		f.close()
-		self.temp_file_html = Gio.File.new_for_path(parent_path + '/.gedit_plugin_markdown_preview.html')
+		self.temp_file_html = Gio.File.new_for_path(parent_path + '/gedit_plugin_markdown_preview.html')
 		self._webview.load_uri(self.temp_file_html.get_uri())
 		self.window.lookup_action('export_doc').set_enabled(True)
 	
@@ -281,25 +283,6 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		
 	def print_doc(self, a, b):
 		self._webview.get_main_frame().print_full()
-		
-#class MdView(WebKit2.WebView):
-#	"WebKit view"
-
-#	def new(window):
-#		context = WebKit2.WebContext.new()
-#		webview = WebKit2.WebView.new_with_context(context)
-#		content_manager = webview.get_property("user-content-manager")
-#		self._window = window
-#		self.__context = context
-#		self.__content_manager = content_manager
-#		self._uri = None
-#		self._title = None
-#		self._navigation_uri = None
-#		self.set_hexpand(True)
-#		self.set_vexpand(True)
-#		Gtk.Overlay.do_get_preferred_width(self)
-#		Gtk.Overlay.do_get_preferred_height(self)
-#		return webview
 
 class MdConfigWidget:
 
