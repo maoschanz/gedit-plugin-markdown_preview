@@ -8,3 +8,4 @@ Description=Preview .md files
 Description[fr]=Prévisualiser les fichiers .md
 Authors=Romain F. T.
 Website=https://github.com/Maestroschan/gedit-plugin-markdown_preview
+Version=0.3

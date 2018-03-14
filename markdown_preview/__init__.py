@@ -277,9 +277,6 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		return widget.get_box()
 
 	def export_doc(self, a, b):
-		if self.temp_file_html is None:
-			return
-			
 		file_chooser = Gtk.FileChooserDialog(_("Export the preview"), self.window,
 			Gtk.FileChooserAction.SAVE,
 			(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
