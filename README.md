@@ -13,11 +13,13 @@ It can:
 - export your preview (in any format supported by pandoc)
 - print your preview
 
+![](https://pbs.twimg.com/media/DYSP9rBXcAcwnI6.png)
+
 ## Dependencies
 
 - `gedit` (of course)
 - `pandoc`
-- probably some WebkitGTK library (libwebkit2gtk-4.0-dev ?)
+- probably some Webkit/GTK library (libwebkit2gtk-4.0-dev ?)
 
 ## Installation
 
