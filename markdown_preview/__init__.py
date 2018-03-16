@@ -77,6 +77,8 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		self.window.connect('active-tab-changed', self.on_reload)
 		self.window.lookup_action('export_doc').set_enabled(False)
 		self.window.lookup_action('print_doc').set_enabled(False)
+		self._is_paginated = False
+		self._page_index = 0
 		self.temp_file_md = Gio.File.new_for_path(BASE_TEMP_NAME + '.md')
 
 	def _connect_menu(self):
@@ -89,63 +91,120 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		
 	def insert_in_adequate_panel(self):
 		self._webview = WebKit2.WebView() # FIXME optimisable, ralentit tout le merdier
-		box = Gtk.Box()
+		
+		zoom_box = Gtk.Box()
+		zoom_box.props.orientation = Gtk.Orientation.HORIZONTAL
+		pages_box = Gtk.Box()
+		pages_box.props.orientation = Gtk.Orientation.HORIZONTAL
+		toggle_box = Gtk.Box()
+		toggle_box.props.orientation = Gtk.Orientation.HORIZONTAL
+		insert_box = Gtk.Box()
+		insert_box.props.orientation = Gtk.Orientation.HORIZONTAL
+		
+		main_box = Gtk.Box()
 		
 		if self._isAtBottom:
 			self.preview_bar.props.orientation = Gtk.Orientation.HORIZONTAL
-			box.props.orientation = Gtk.Orientation.VERTICAL
+			main_box.props.orientation = Gtk.Orientation.VERTICAL
+			
 		else:
 			self.preview_bar.props.orientation = Gtk.Orientation.VERTICAL
-			box.props.orientation = Gtk.Orientation.HORIZONTAL
+			main_box.props.orientation = Gtk.Orientation.HORIZONTAL
 			
 		self.preview_bar.pack_start(self._webview, expand=True, fill=True, padding=0)
 		
-		box.props.margin_left = 5
-		box.props.margin_right = 5
-		box.props.margin_top = 5
-		box.props.margin_bottom = 5
-		box.props.homogeneous = True
+		main_box.props.margin_left = 5
+		main_box.props.margin_right = 5
+		main_box.props.margin_top = 5
+		main_box.props.margin_bottom = 5
+		main_box.props.spacing = 5
+		main_box.props.homogeneous = True
 		
 		insertBtn = Gtk.Button()
 		insertBtn.connect('clicked', self.on_insert)
 		insertImage = Gtk.Image()
 		insertImage.set_from_icon_name('insert-image-symbolic', Gtk.IconSize.BUTTON)
 		insertBtn.add(insertImage)
-		box.pack_end(insertBtn, expand=False, fill=False, padding=0)
+		insert_box.pack_end(insertBtn, expand=True, fill=True, padding=0)
 
-		self.refreshBtn = Gtk.ToggleButton()
-		self.refreshBtn.connect('toggled', self.on_set_reload)
+		refreshBtn = Gtk.ToggleButton()
+		refreshBtn.connect('toggled', self.on_set_reload)
 		refreshImage = Gtk.Image()
 		refreshImage.set_from_icon_name('view-refresh-symbolic', Gtk.IconSize.BUTTON)
-		self.refreshBtn.add(refreshImage)
-		box.pack_end(self.refreshBtn, expand=False, fill=False, padding=0)
+		refreshBtn.add(refreshImage)
+		toggle_box.pack_start(refreshBtn, expand=False, fill=True, padding=0)
+
+		paginatedBtn = Gtk.ToggleButton()
+		paginatedBtn.connect('toggled', self.on_set_paginated)
+		paginatedImage = Gtk.Image()
+		paginatedImage.set_from_icon_name('x-office-presentation-symbolic', Gtk.IconSize.BUTTON)
+		paginatedBtn.add(paginatedImage)
+		toggle_box.pack_end(paginatedBtn, expand=False, fill=True, padding=0)
 		
 		zoomInBtn = Gtk.Button()
 		zoomInBtn.connect('clicked', self.on_zoom_in)
 		zoomInImage = Gtk.Image()
 		zoomInImage.set_from_icon_name('zoom-in-symbolic', Gtk.IconSize.BUTTON)
 		zoomInBtn.add(zoomInImage)
-		box.pack_end(zoomInBtn, expand=False, fill=False, padding=0)
+		zoom_box.add(zoomInBtn)
 		
 		zoomOutBtn = Gtk.Button()
 		zoomOutBtn.connect('clicked', self.on_zoom_out)
 		zoomOutImage = Gtk.Image()
 		zoomOutImage.set_from_icon_name('zoom-out-symbolic', Gtk.IconSize.BUTTON)
 		zoomOutBtn.add(zoomOutImage)
-		box.pack_end(zoomOutBtn, expand=False, fill=False, padding=0)
+		zoom_box.add(zoomOutBtn)
 		
-		# box only contains the 4 buttons, it will pack at the end (bottom or right) of
+		previousBtn = Gtk.Button()
+		previousBtn.connect('clicked', self.on_previous_page)
+		previousImage = Gtk.Image()
+		previousImage.set_from_icon_name('go-previous-symbolic', Gtk.IconSize.BUTTON)
+		previousBtn.add(previousImage)
+		pages_box.add(previousBtn)
+		
+		nextBtn = Gtk.Button()
+		nextBtn.connect('clicked', self.on_next_page)
+		nextImage = Gtk.Image()
+		nextImage.set_from_icon_name('go-next-symbolic', Gtk.IconSize.BUTTON)
+		nextBtn.add(nextImage)
+		pages_box.add(nextBtn)
+		
+		main_box.pack_start(zoom_box, expand=False, fill=False, padding=0)
+		main_box.pack_start(pages_box, expand=False, fill=False, padding=0)
+		main_box.pack_end(toggle_box, expand=False, fill=False, padding=0)
+		main_box.pack_end(insert_box, expand=False, fill=False, padding=0)
+		
+		# main_box only contains the buttons, it will pack at the end (bottom or right) of
 		# the preview_bar object, where the webview has already been added.
-		self.preview_bar.pack_end(box, expand=False, fill=False, padding=0)
+		self.preview_bar.pack_end(main_box, expand=False, fill=False, padding=0)
 		
 		self.show_on_panel()
 
-	def on_set_reload(self, a):
-		if self.refreshBtn.get_active():
+	def on_set_reload(self, btn):
+		if btn.get_active():
 			self._auto_reload = True
 			self.on_reload(None, None)
 		else:
 			self._auto_reload = False
+
+	def on_set_paginated(self, btn):
+		if btn.get_active():
+			self._is_paginated = True
+			self.on_reload(None, None)
+		else:
+			self._is_paginated = False
+			self.on_reload(None, None)
+	
+	def on_previous_page(self, btn):
+		if self._page_index > 0:
+			self._page_index = self._page_index -1
+			self.on_reload(None, None)
+		else:
+			btn.active = False
+			
+	def on_next_page(self, btn):
+		self._page_index = self._page_index +1
+		self.on_reload(None, None)
 	
 	def delete_temp_file(self):
 		if self.temp_file_md.query_exists():
@@ -190,6 +249,7 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		post_string = '</body></html>'
 		result = subprocess.run(['pandoc', file_path], stdout=subprocess.PIPE)
 		html_string = result.stdout.decode('utf-8')
+		html_string = self.current_page(html_string)
 		html_content = pre_string + html_string + post_string
 		
 		# The html code is converted into bytes
@@ -205,6 +265,18 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		
 		self.window.lookup_action('export_doc').set_enabled(True)
 		self.window.lookup_action('print_doc').set_enabled(True)
+	
+	def current_page(self, html_string):
+	
+		# Guard clause
+		if not self._is_paginated:
+			return html_string
+		
+		html_pages = html_string.split('<hr />')
+		if self._page_index is len(html_pages):
+			self._page_index = self._page_index -1
+		html_current_page = html_pages[self._page_index]
+		return html_current_page
 	
 	def get_dummy_uri(self):
 		# Support for relative paths is cool, but breaks CSS in many cases
