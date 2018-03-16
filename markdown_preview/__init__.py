@@ -62,7 +62,7 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		if self.window.get_active_view() is not None:
 			if self._auto_reload:
 				self.on_reload(None, None)
-			if self.test_if_md():
+			if self.recognize_format() != 'error':
 				self.panel.show()
 			elif len(self.panel.get_children()) is 1:
 				self.panel.hide()
@@ -73,11 +73,11 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		self._settings = Gio.Settings.new(MD_PREVIEW_KEY_BASE)
 		self._isAtBottom = (self._settings.get_string('position') == 'bottom')
 		self._settings.connect('changed::position', self.change_panel)
+		self._is_paginated = False
 		self.insert_in_adequate_panel()
 		self.window.connect('active-tab-changed', self.on_reload)
 		self.window.lookup_action('export_doc').set_enabled(False)
 		self.window.lookup_action('print_doc').set_enabled(False)
-		self._is_paginated = False
 		self._page_index = 0
 		self.temp_file_md = Gio.File.new_for_path(BASE_TEMP_NAME + '.md')
 
@@ -94,8 +94,8 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		
 		zoom_box = Gtk.Box()
 		zoom_box.props.orientation = Gtk.Orientation.HORIZONTAL
-		pages_box = Gtk.Box()
-		pages_box.props.orientation = Gtk.Orientation.HORIZONTAL
+		self.pages_box = Gtk.Box()
+		self.pages_box.props.orientation = Gtk.Orientation.HORIZONTAL
 		toggle_box = Gtk.Box()
 		toggle_box.props.orientation = Gtk.Orientation.HORIZONTAL
 		insert_box = Gtk.Box()
@@ -106,10 +106,12 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		if self._isAtBottom:
 			self.preview_bar.props.orientation = Gtk.Orientation.HORIZONTAL
 			main_box.props.orientation = Gtk.Orientation.VERTICAL
+			main_box.props.homogeneous = True
 			
 		else:
 			self.preview_bar.props.orientation = Gtk.Orientation.VERTICAL
 			main_box.props.orientation = Gtk.Orientation.HORIZONTAL
+			main_box.props.homogeneous = False
 			
 		self.preview_bar.pack_start(self._webview, expand=True, fill=True, padding=0)
 		
@@ -118,7 +120,6 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		main_box.props.margin_top = 5
 		main_box.props.margin_bottom = 5
 		main_box.props.spacing = 5
-		main_box.props.homogeneous = True
 		
 		insertBtn = Gtk.Button()
 		insertBtn.connect('clicked', self.on_insert)
@@ -160,17 +161,17 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		previousImage = Gtk.Image()
 		previousImage.set_from_icon_name('go-previous-symbolic', Gtk.IconSize.BUTTON)
 		previousBtn.add(previousImage)
-		pages_box.add(previousBtn)
+		self.pages_box.add(previousBtn)
 		
 		nextBtn = Gtk.Button()
 		nextBtn.connect('clicked', self.on_next_page)
 		nextImage = Gtk.Image()
 		nextImage.set_from_icon_name('go-next-symbolic', Gtk.IconSize.BUTTON)
 		nextBtn.add(nextImage)
-		pages_box.add(nextBtn)
+		self.pages_box.add(nextBtn)
 		
 		main_box.pack_start(zoom_box, expand=False, fill=False, padding=0)
-		main_box.pack_start(pages_box, expand=False, fill=False, padding=0)
+		main_box.pack_start(self.pages_box, expand=False, fill=False, padding=0)
 		main_box.pack_end(toggle_box, expand=False, fill=False, padding=0)
 		main_box.pack_end(insert_box, expand=False, fill=False, padding=0)
 		
@@ -190,9 +191,11 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 	def on_set_paginated(self, btn):
 		if btn.get_active():
 			self._is_paginated = True
+			self.pages_box.props.visible = True
 			self.on_reload(None, None)
 		else:
 			self._is_paginated = False
+			self.pages_box.props.visible = False
 			self.on_reload(None, None)
 	
 	def on_previous_page(self, btn):
@@ -210,47 +213,57 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		if self.temp_file_md.query_exists():
 			self.temp_file_md.delete()
 	
-	def test_if_md(self):
+	def recognize_format(self):
 		doc = self.window.get_active_document()
 		
 		# It will not load documents which are not .md
 		name = doc.get_short_name_for_display()
 		temp = name.split('.')
-		if temp[len(temp)-1] != 'md':
+		if temp[len(temp)-1] == 'md':
+			return 'md'
+		elif temp[len(temp)-1] == 'html':
+			return 'html'
+		else:
 			self._webview.load_plain_text(_("This is not a markdown document."))
 			self.window.lookup_action('export_doc').set_enabled(False)
 			self.window.lookup_action('print_doc').set_enabled(False)
-			return False
-		else:
-			return True
+			return 'error'
 	
 	# This needs dummy parameters because it's connected to a signal which give arguments.
 	def on_reload(self, osef, oseb):
 	
 		# Guard clause: it will not load documents which are not .md
-		if not self.test_if_md():
+		if self.recognize_format() is 'error':
 			return
-		
-		# Get the current document, or the temporary document if requested
-		doc = self.window.get_active_document()
-		if self._auto_reload:
+		elif self.recognize_format() is 'html':
+			doc = self.window.get_active_document()
 			start, end = doc.get_bounds()
-			unsaved_text = doc.get_text(start, end, True)
-			f = open(BASE_TEMP_NAME + '.md', 'w')
-			f.write(unsaved_text)
-			f.close()
-			file_path = self.temp_file_md.get_path()
+			html_string = doc.get_text(start, end, True)
+			pre_string = '<html><head><meta charset="utf-8" /></head><body>'
+			post_string = '</body></html>'
+			html_string = self.current_page(html_string)
+			html_content = pre_string + html_string + post_string
 		else:
-			file_path = doc.get_location().get_path()
-		
-		# It uses pandoc to produce the html code
-		pre_string = '<html><head><meta charset="utf-8" /><link rel="stylesheet" href="' + \
-			self._settings.get_string('style') + '" /></head><body>'
-		post_string = '</body></html>'
-		result = subprocess.run(['pandoc', file_path], stdout=subprocess.PIPE)
-		html_string = result.stdout.decode('utf-8')
-		html_string = self.current_page(html_string)
-		html_content = pre_string + html_string + post_string
+			# Get the current document, or the temporary document if requested
+			doc = self.window.get_active_document()
+			if self._auto_reload:
+				start, end = doc.get_bounds()
+				unsaved_text = doc.get_text(start, end, True)
+				f = open(BASE_TEMP_NAME + '.md', 'w')
+				f.write(unsaved_text)
+				f.close()
+				file_path = self.temp_file_md.get_path()
+			else:
+				file_path = doc.get_location().get_path()
+			
+			# It uses pandoc to produce the html code
+			pre_string = '<html><head><meta charset="utf-8" /><link rel="stylesheet" href="' + \
+				self._settings.get_string('style') + '" /></head><body>'
+			post_string = '</body></html>'
+			result = subprocess.run(['pandoc', file_path], stdout=subprocess.PIPE)
+			html_string = result.stdout.decode('utf-8')
+			html_string = self.current_page(html_string)
+			html_content = pre_string + html_string + post_string
 		
 		# The html code is converted into bytes
 		my_string = GLib.String()
@@ -283,7 +296,7 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		if self._settings.get_boolean('relative'):
 			return self.window.get_active_document().get_location().get_uri()
 		else:
-			return 'file:///'
+			return 'file://'
 	
 	def show_on_panel(self):
 		# Get the bottom bar (A Gtk.Stack), or the side bar, and add our bar to it.
@@ -294,7 +307,10 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		self.panel.add_titled(self.preview_bar, 'markdown_preview', _("Markdown Preview"))
 		self.preview_bar.show_all()
 		self.panel.set_visible_child(self.preview_bar)
-	
+		self.pages_box.props.visible = self._is_paginated
+		if self.window.get_active_view() is not None:
+			self.on_reload(None, None)
+				
 	def do_deactivate(self):
 		self.delete_temp_file()
 		self._remove_from_panel()
@@ -311,9 +327,8 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 			self._webview.set_zoom_level(self._webview.get_zoom_level() - 0.1)
 		
 	def on_insert(self, a):
-		
 		# Guard clause: it will not load dialog if the file is not .md
-		if not self.test_if_md():
+		if self.recognize_format() != 'md':
 			return
 		
 		# Building a FileChooserDialog for pictures
