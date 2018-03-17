@@ -39,7 +39,9 @@ The preview be displayed in the side panel or in the bottom panel
 
 - Download the project & extract the archive (or clone the repo).
 - Open the project's folder `gedit-plugin-markdown_preview-master` in a terminal
-- Run the `install.sh` script (**without root privileges**)
+- Run the `install.sh` script
+
+The script `install.sh` can be executed as root (installation system-wide) or as a normal user (installation user-wide).
 
 ## Available languages
 
