@@ -46,4 +46,3 @@ The preview be displayed in the side panel or in the bottom panel
 - English
 - French
 
-
