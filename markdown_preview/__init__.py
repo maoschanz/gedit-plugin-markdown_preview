@@ -54,14 +54,19 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		GObject.Object.__init__(self)
 		# This is the attachment we will make to bottom panel.
 		self.preview_bar = Gtk.Box()
-		# This is needed because Python is stupid # FIXME dans le activate ?
+		
 		self._auto_reload = False
+		self._compteur_laid = 0
 	
 	# This is called every time the gui is updated
 	def do_update_state(self):
 		if self.window.get_active_view() is not None:
 			if self._auto_reload:
-				self.on_reload(None, None)
+				if self._compteur_laid > 3:
+					self._compteur_laid = 0
+					self.on_reload(None, None)
+				else:
+					self._compteur_laid = self._compteur_laid + 1
 			if self.recognize_format() != 'error':
 				self.panel.show()
 			elif len(self.panel.get_children()) is 1:
@@ -101,13 +106,15 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		self._webview = WebKit2.WebView()
 		
 		# Building the interface
-		zoom_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+		self.zoom_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
 		self.pages_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
-		toggle_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
-		insert_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+		self.toggle_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+		self.insert_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
 		
 		main_box = Gtk.Box(margin_left=5, margin_right=5, margin_top=5, margin_bottom=5, spacing=2)
-		
+		self.zoom_box.get_style_context().add_class('linked')
+		self.pages_box.get_style_context().add_class('linked')
+
 		if self._isAtBottom:
 			self.preview_bar.props.orientation = Gtk.Orientation.HORIZONTAL
 			main_box.props.orientation = Gtk.Orientation.VERTICAL
@@ -120,23 +127,31 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		
 		insertBtn = self.build_button('clicked', 'insert-image-symbolic')
 		insertBtn.connect('clicked', self.on_insert)
-		insert_box.pack_end(insertBtn, expand=True, fill=True, padding=0)
+		self.insert_box.pack_end(insertBtn, expand=False, fill=True, padding=0)
+		
+		self._search_entry = Gtk.SearchEntry()
+		self._search_entry.connect('search-changed', self.on_search_changed)
+		
+		searchBtn = self.build_button('toggled', 'system-search-symbolic')
+		searchBtn.connect('toggled', self.on_toggle_search_mode)
+		self.insert_box.pack_start(searchBtn, expand=False, fill=True, padding=0)
 
 		refreshBtn = self.build_button('toggled', 'view-refresh-symbolic')
+		refreshBtn.set_active(self._auto_reload)
 		refreshBtn.connect('toggled', self.on_set_reload)
-		toggle_box.pack_start(refreshBtn, expand=False, fill=True, padding=0)
+		self.toggle_box.pack_start(refreshBtn, expand=False, fill=True, padding=0)
 
 		paginatedBtn = self.build_button('toggled', 'x-office-presentation-symbolic')
 		paginatedBtn.connect('toggled', self.on_set_paginated)
-		toggle_box.pack_end(paginatedBtn, expand=False, fill=True, padding=0)
-		
+		self.toggle_box.pack_end(paginatedBtn, expand=False, fill=True, padding=0)
+				
 		zoomInBtn = self.build_button('clicked', 'zoom-in-symbolic')
 		zoomInBtn.connect('clicked', self.on_zoom_in)
-		zoom_box.add(zoomInBtn)
+		self.zoom_box.add(zoomInBtn)
 		
 		zoomOutBtn = self.build_button('clicked', 'zoom-out-symbolic')
 		zoomOutBtn.connect('clicked', self.on_zoom_out)
-		zoom_box.add(zoomOutBtn)
+		self.zoom_box.add(zoomOutBtn)
 		
 		previousBtn = self.build_button('clicked', 'go-previous-symbolic')
 		previousBtn.connect('clicked', self.on_previous_page)
@@ -146,10 +161,11 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		nextBtn.connect('clicked', self.on_next_page)
 		self.pages_box.add(nextBtn)
 		
-		main_box.pack_start(zoom_box, expand=False, fill=False, padding=0)
+		main_box.pack_start(self.zoom_box, expand=False, fill=False, padding=0)
 		main_box.pack_start(self.pages_box, expand=False, fill=False, padding=0)
-		main_box.pack_end(toggle_box, expand=False, fill=False, padding=0)
-		main_box.pack_end(insert_box, expand=False, fill=False, padding=0)
+		main_box.pack_start(self._search_entry, expand=False, fill=False, padding=0)
+		main_box.pack_end(self.toggle_box, expand=False, fill=False, padding=0)
+		main_box.pack_end(self.insert_box, expand=False, fill=False, padding=0)
 
 		# main_box only contains the buttons, it will pack at the end (bottom or right) of
 		# the preview_bar object, where the webview has already been added.
@@ -210,6 +226,8 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 			return 'md'
 		elif temp[len(temp)-1] == 'html':
 			return 'html'
+		elif temp[len(temp)-1] == 'tex':
+			return 'tex'
 		else:
 			# The current content is not replaced, which allows document consulation while working on a file
 			self.window.lookup_action('export_doc').set_enabled(False)
@@ -218,7 +236,7 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 	
 	# This needs dummy parameters because it's connected to a signal which give arguments.
 	def on_reload(self, osef, oseb):
-	
+		
 		# Guard clause: it will not load documents which are not .md
 		if self.recognize_format() is 'error':
 			return
@@ -228,6 +246,19 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 			html_string = doc.get_text(start, end, True)
 			pre_string = '<html><head><meta charset="utf-8" /></head><body>'
 			post_string = '</body></html>'
+			html_string = self.current_page(html_string)
+			html_content = pre_string + html_string + post_string
+		
+		elif self.recognize_format() is 'tex':
+			doc = self.window.get_active_document()
+			file_path = doc.get_location().get_path()
+			
+			# It uses pandoc to produce the html code
+			pre_string = '<html><head><meta charset="utf-8" /><link rel="stylesheet" href="' + \
+				self._settings.get_string('style') + '" /></head><body>'
+			post_string = '</body></html>'
+			result = subprocess.run(['pandoc', file_path], stdout=subprocess.PIPE)
+			html_string = result.stdout.decode('utf-8')
 			html_string = self.current_page(html_string)
 			html_content = pre_string + html_string + post_string
 		else:
@@ -295,7 +326,7 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		self.preview_bar.show_all()
 		self.panel.set_visible_child(self.preview_bar)
 		self.pages_box.props.visible = self._is_paginated
-#		if self.window.get_active_view() is not None:
+		self._search_entry.props.visible = False
 		if self.window.get_state() is 'STATE_NORMAL':
 			self.on_reload(None, None)
 
@@ -309,6 +340,25 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 	def on_zoom_out(self, a):
 		if self._webview.get_zoom_level() > 0.15:
 			self._webview.set_zoom_level(self._webview.get_zoom_level() - 0.1)
+	
+	def on_search_changed(self, a):
+		text = self._search_entry.get_text()
+		find_controller = self._webview.get_find_controller()
+#		find_controller.count_matches(text, WebKit2.FindOptions.CASE_INSENSITIVE, 100)
+		find_controller.search(text, WebKit2.FindOptions.CASE_INSENSITIVE, 100)
+	
+	def on_toggle_search_mode(self, a):
+		if a.get_active():
+#			self.insert_box.props.visible = False
+			self.zoom_box.props.visible = False
+			self.pages_box.props.visible = False
+			self._search_entry.props.visible = True
+		else:
+			self._search_entry.props.visible = False
+#			self.insert_box.props.visible = True
+			self.zoom_box.props.visible = True
+			self.pages_box.props.visible = self._is_paginated
+		
 		
 	def on_insert(self, a):
 		# Guard clause: it will not load dialog if the file is not .md
@@ -339,6 +389,8 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		self.preview_bar = Gtk.Box()
 		self._isAtBottom = (self._settings.get_string('position') == 'bottom')
 		self.insert_in_adequate_panel()
+		self.do_update_state()
+		self.on_reload(None, None)
 	
 	def do_create_configure_widget(self):
 		# Just return your box, PeasGtk will automatically pack it into a box and show it.
@@ -346,19 +398,22 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		return widget.get_box()
 
 	def export_doc(self, a, b):
-		file_chooser = Gtk.FileChooserDialog(_("Export the preview"), self.window,
-			Gtk.FileChooserAction.SAVE,
-			(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
-			Gtk.STOCK_SAVE, Gtk.ResponseType.OK))
-		response = file_chooser.run()
-		
-		# It gets the chosen file's path
-		if response == Gtk.ResponseType.OK:
-			if file_chooser.get_filename().split('.')[-1] is 'html':
-				subprocess.run(['pandoc', self.window.get_active_document().get_location().get_path(), '-o', file_chooser.get_filename()])
-			else: # in the future it shall behave differently
-				subprocess.run(['pandoc', self.window.get_active_document().get_location().get_path(), '-o', file_chooser.get_filename()])
-		file_chooser.destroy()
+		if (self.recognize_format() == 'tex') and self._settings.get_boolean('pdflatex'):
+			subprocess.run(['pdflatex', self.window.get_active_document().get_location().get_path()])
+		else:
+			file_chooser = Gtk.FileChooserDialog(_("Export the preview"), self.window,
+				Gtk.FileChooserAction.SAVE,
+				(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+				Gtk.STOCK_SAVE, Gtk.ResponseType.OK))
+			response = file_chooser.run()
+			
+			# It gets the chosen file's path
+			if response == Gtk.ResponseType.OK:
+				if (file_chooser.get_filename().split('.')[-1] == 'html'):
+					subprocess.run(['pandoc', self.window.get_active_document().get_location().get_path(), '-o', file_chooser.get_filename()])
+				else: # in the future it shall behave differently
+					subprocess.run(['pandoc', self.window.get_active_document().get_location().get_path(), '-o', file_chooser.get_filename()])
+			file_chooser.destroy()
 		
 	def print_doc(self, a, b):
 		p = WebKit2.PrintOperation.new(self._webview)
@@ -370,9 +425,6 @@ class MdConfigWidget:
 
 	def __init__(self, datadir):
 		self._settings = Gio.Settings.new(MD_PREVIEW_KEY_BASE)
-		self._settings.get_string('position')
-		self._settings.get_boolean('relative')
-		self._settings.get_string('style')
 		
 		self.box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL,spacing=20, \
 			margin_left=20,margin_right=20,margin_top=20,margin_bottom=20,homogeneous=True)
@@ -397,6 +449,15 @@ class MdConfigWidget:
 		relativePathsSwitch.connect('notify::active', self.on_relative_changed)
 		relativePathsSettingBox.pack_end(relativePathsSwitch, expand=False, fill=False, padding=0)
 		#--------
+		pdflatexSettingBox=Gtk.Box()
+		pdflatexSettingBox.props.spacing = 20
+		pdflatexSettingBox.props.orientation = Gtk.Orientation.HORIZONTAL
+		pdflatexSettingBox.pack_start(Gtk.Label(_("Export .tex files with pdflatex")), expand=False, fill=False, padding=0)
+		pdflatexSwitch = Gtk.Switch()
+		pdflatexSwitch.set_state(self._settings.get_boolean('pdflatex'))
+		pdflatexSwitch.connect('notify::active', self.on_pdflatex_changed)
+		pdflatexSettingBox.pack_end(pdflatexSwitch, expand=False, fill=False, padding=0)
+		#--------
 		styleSettingBox=Gtk.Box()
 		styleSettingBox.props.spacing = 20
 		styleSettingBox.props.orientation = Gtk.Orientation.HORIZONTAL
@@ -412,6 +473,7 @@ class MdConfigWidget:
 		#--------
 		self.box.add(positionSettingBox)
 		self.box.add(relativePathsSettingBox)
+		self.box.add(pdflatexSettingBox)
 		self.box.add(styleSettingBox)
 	
 	def get_box(self):
@@ -443,4 +505,10 @@ class MdConfigWidget:
 			self._settings.set_boolean('relative', True)
 		else:
 			self._settings.set_boolean('relative', False)
+		
+	def on_pdflatex_changed(self, w, a):
+		if w.get_state():
+			self._settings.set_boolean('pdflatex', True)
+		else:
+			self._settings.set_boolean('pdflatex', False)
 	

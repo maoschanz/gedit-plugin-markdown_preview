@@ -11,6 +11,11 @@
 			<summary></summary>
 			<description></description>
 		</key>
+		<key type="b" name="pdflatex">
+			<default>false</default>
+			<summary></summary>
+			<description></description>
+		</key>
 		<key type="s" name="style">
 			<default>""</default>
 			<summary></summary>
