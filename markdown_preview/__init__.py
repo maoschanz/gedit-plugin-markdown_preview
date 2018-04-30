@@ -129,13 +129,34 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		insertBtn.connect('clicked', self.on_insert)
 		self.insert_box.pack_end(insertBtn, expand=False, fill=True, padding=0)
 		
-		self._search_entry = Gtk.SearchEntry()
-		self._search_entry.connect('search-changed', self.on_search_changed)
+		########
 		
 		searchBtn = self.build_button('toggled', 'system-search-symbolic')
 		searchBtn.connect('toggled', self.on_toggle_search_mode)
 		self.insert_box.pack_start(searchBtn, expand=False, fill=True, padding=0)
 
+		self._search_entry = Gtk.SearchEntry()
+		self._search_entry.connect('search-changed', self.on_search_changed)
+		self._search_popover = Gtk.Popover()
+		self._search_popover.set_relative_to(searchBtn)
+		
+		search_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+		
+		upBtn = self.build_button('clicked', 'go-up-symbolic')
+		upBtn.connect('clicked', self.on_search_up)
+		downBtn = self.build_button('clicked', 'go-down-symbolic')
+		downBtn.connect('clicked', self.on_search_down)
+		
+		search_box.add(self._search_entry)
+		search_box.add(upBtn)
+		search_box.add(downBtn)
+		search_box.get_style_context().add_class('linked')
+		
+		self._search_popover.add(search_box)
+		self._search_popover.connect('closed', self.on_popover_closed, searchBtn)
+		
+		########
+		
 		refreshBtn = self.build_button('toggled', 'view-refresh-symbolic')
 		refreshBtn.set_active(self._auto_reload)
 		refreshBtn.connect('toggled', self.on_set_reload)
@@ -163,7 +184,6 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		
 		main_box.pack_start(self.zoom_box, expand=False, fill=False, padding=0)
 		main_box.pack_start(self.pages_box, expand=False, fill=False, padding=0)
-		main_box.pack_start(self._search_entry, expand=False, fill=False, padding=0)
 		main_box.pack_end(self.toggle_box, expand=False, fill=False, padding=0)
 		main_box.pack_end(self.insert_box, expand=False, fill=False, padding=0)
 
@@ -341,25 +361,28 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		if self._webview.get_zoom_level() > 0.15:
 			self._webview.set_zoom_level(self._webview.get_zoom_level() - 0.1)
 	
+	########
+	
 	def on_search_changed(self, a):
 		text = self._search_entry.get_text()
-		find_controller = self._webview.get_find_controller()
-#		find_controller.count_matches(text, WebKit2.FindOptions.CASE_INSENSITIVE, 100)
-		find_controller.search(text, WebKit2.FindOptions.CASE_INSENSITIVE, 100)
+		self.find_controller = self._webview.get_find_controller()
+#		self.find_controller.count_matches(text, WebKit2.FindOptions.CASE_INSENSITIVE, 100)
+		self.find_controller.search(text, WebKit2.FindOptions.CASE_INSENSITIVE, 100)
 	
 	def on_toggle_search_mode(self, a):
-		if a.get_active():
-#			self.insert_box.props.visible = False
-			self.zoom_box.props.visible = False
-			self.pages_box.props.visible = False
-			self._search_entry.props.visible = True
-		else:
-			self._search_entry.props.visible = False
-#			self.insert_box.props.visible = True
-			self.zoom_box.props.visible = True
-			self.pages_box.props.visible = self._is_paginated
+		self._search_popover.show_all()
+	
+	def on_popover_closed(self, popover, button):
+		button.set_active(False)
+	
+	def on_search_up(self, btn):
+		self.find_controller.search_previous()
 		
-		
+	def on_search_down(self, btn):
+		self.find_controller.search_next()
+	
+	########
+	
 	def on_insert(self, a):
 		# Guard clause: it will not load dialog if the file is not .md
 		if self.recognize_format() != 'md':
