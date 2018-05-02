@@ -52,7 +52,6 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 
 	def __init__(self):
 		GObject.Object.__init__(self)
-		# This is the attachment we will make to bottom panel.
 		self.preview_bar = Gtk.Box()
 		
 		self._auto_reload = False
@@ -105,38 +104,106 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		# This is the preview itself
 		self._webview = WebKit2.WebView()
 		
+		searchBtn = self.build_search_popover()
+		menuBtn = self.build_menu_popover()
+		
 		# Building the interface
-		self.zoom_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
 		self.pages_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
-		self.toggle_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
-		self.insert_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
 		
 		main_box = Gtk.Box(margin_left=5, margin_right=5, margin_top=5, margin_bottom=5, spacing=2)
-		self.zoom_box.get_style_context().add_class('linked')
+		main_box.props.homogeneous = False
 		self.pages_box.get_style_context().add_class('linked')
 
 		if self._isAtBottom:
 			self.preview_bar.props.orientation = Gtk.Orientation.HORIZONTAL
 			main_box.props.orientation = Gtk.Orientation.VERTICAL
-			main_box.props.homogeneous = True
-			
 		else:
 			self.preview_bar.props.orientation = Gtk.Orientation.VERTICAL
 			main_box.props.orientation = Gtk.Orientation.HORIZONTAL
-			main_box.props.homogeneous = False
 		
-		insertBtn = self.build_button('clicked', 'insert-image-symbolic')
+		refreshBtn = self.build_button('toggled', 'view-refresh-symbolic')
+		refreshBtn.set_active(self._auto_reload)
+		refreshBtn.connect('toggled', self.on_set_reload)
+
+		previousBtn = self.build_button('clicked', 'go-previous-symbolic')
+		previousBtn.connect('clicked', self.on_previous_page)
+		self.pages_box.add(previousBtn)
+		
+		nextBtn = self.build_button('clicked', 'go-next-symbolic')
+		nextBtn.connect('clicked', self.on_next_page)
+		self.pages_box.add(nextBtn)
+		
+		main_box.pack_end(searchBtn, expand=False, fill=False, padding=0)
+		main_box.pack_end(menuBtn, expand=False, fill=False, padding=0)
+		main_box.pack_start(refreshBtn, expand=False, fill=False, padding=0)
+		main_box.pack_start(self.pages_box, expand=False, fill=False, padding=0)
+
+		# main_box only contains the buttons, it will pack at the end (bottom or right) of
+		# the preview_bar object, where the webview has already been added.
+		self.preview_bar.pack_end(main_box, expand=False, fill=False, padding=0)
+		self.preview_bar.pack_start(self._webview, expand=True, fill=True, padding=0)
+		
+		self.show_on_panel()
+
+	def build_menu_popover(self):
+		
+		self.position_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+		self.zoom_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+		
+		self.zoom_box.get_style_context().add_class('linked')
+		self.position_box.get_style_context().add_class('linked')
+		
+		menuBtn = self.build_button('toggled', 'open-menu-symbolic')
+		menuBtn.connect('toggled', self.on_toggle_menu_mode)
+		
+		self._menu_popover = Gtk.Popover()
+		self._menu_popover.set_relative_to(menuBtn)
+		
+		menu_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+		
+		self._menu_popover.add(menu_box)
+		self._menu_popover.connect('closed', self.on_popover_menu_closed, menuBtn)
+		
+		insertBtn = Gtk.Button("Insert picture")
 		insertBtn.connect('clicked', self.on_insert)
-		self.insert_box.pack_end(insertBtn, expand=False, fill=True, padding=0)
+
+		zoomInBtn = self.build_button('clicked', 'zoom-in-symbolic')
+		zoomInBtn.connect('clicked', self.on_zoom_in)
+		self.zoom_box.pack_end(zoomInBtn, expand=True, fill=True, padding=0)
 		
-		########
+		zoomOriginalBtn = self.build_button('clicked', 'zoom-original-symbolic')
+		zoomOriginalBtn.connect('clicked', self.on_zoom_original)
+		self.zoom_box.pack_end(zoomOriginalBtn, expand=True, fill=True, padding=0)
+		
+		zoomOutBtn = self.build_button('clicked', 'zoom-out-symbolic')
+		zoomOutBtn.connect('clicked', self.on_zoom_out)
+		self.zoom_box.pack_end(zoomOutBtn, expand=True, fill=True, padding=0)
+		
+		paginatedBtn = Gtk.ToggleButton("Display only one page")
+		paginatedBtn.connect('toggled', self.on_set_paginated)
+		
+		self.sideBtn = self.build_button('toggled', 'go-first-symbolic')
+		self.sideBtn.set_active(not self._isAtBottom)
+		self.sideBtn.connect('toggled', self.change_position_for, 'side')
+		self.position_box.pack_start(self.sideBtn, expand=True, fill=True, padding=0)
+		
+		self.bottomBtn = self.build_button('toggled', 'go-bottom-symbolic')
+		self.bottomBtn.set_active(self._isAtBottom)
+		self.bottomBtn.connect('toggled', self.change_position_for, 'bottom')
+		self.position_box.pack_start(self.bottomBtn, expand=True, fill=True, padding=0)
+		
+		menu_box.add(self.position_box)
+		menu_box.add(self.zoom_box)
+		menu_box.add(paginatedBtn)
+		menu_box.add(insertBtn)
+		
+		return menuBtn
+		
+	def build_search_popover(self):
 		
 		searchBtn = self.build_button('toggled', 'system-search-symbolic')
 		searchBtn.connect('toggled', self.on_toggle_search_mode)
-		self.insert_box.pack_start(searchBtn, expand=False, fill=True, padding=0)
 
-		self._search_entry = Gtk.SearchEntry()
-		self._search_entry.connect('search-changed', self.on_search_changed)
 		self._search_popover = Gtk.Popover()
 		self._search_popover.set_relative_to(searchBtn)
 		
@@ -147,53 +214,18 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		downBtn = self.build_button('clicked', 'go-down-symbolic')
 		downBtn.connect('clicked', self.on_search_down)
 		
+		self._search_entry = Gtk.SearchEntry()
+		self._search_entry.connect('search-changed', self.on_search_changed)
 		search_box.add(self._search_entry)
 		search_box.add(upBtn)
 		search_box.add(downBtn)
 		search_box.get_style_context().add_class('linked')
 		
 		self._search_popover.add(search_box)
-		self._search_popover.connect('closed', self.on_popover_closed, searchBtn)
+		self._search_popover.connect('closed', self.on_popover_search_closed, searchBtn)
 		
-		########
+		return searchBtn
 		
-		refreshBtn = self.build_button('toggled', 'view-refresh-symbolic')
-		refreshBtn.set_active(self._auto_reload)
-		refreshBtn.connect('toggled', self.on_set_reload)
-		self.toggle_box.pack_start(refreshBtn, expand=False, fill=True, padding=0)
-
-		paginatedBtn = self.build_button('toggled', 'x-office-presentation-symbolic')
-		paginatedBtn.connect('toggled', self.on_set_paginated)
-		self.toggle_box.pack_end(paginatedBtn, expand=False, fill=True, padding=0)
-				
-		zoomInBtn = self.build_button('clicked', 'zoom-in-symbolic')
-		zoomInBtn.connect('clicked', self.on_zoom_in)
-		self.zoom_box.add(zoomInBtn)
-		
-		zoomOutBtn = self.build_button('clicked', 'zoom-out-symbolic')
-		zoomOutBtn.connect('clicked', self.on_zoom_out)
-		self.zoom_box.add(zoomOutBtn)
-		
-		previousBtn = self.build_button('clicked', 'go-previous-symbolic')
-		previousBtn.connect('clicked', self.on_previous_page)
-		self.pages_box.add(previousBtn)
-		
-		nextBtn = self.build_button('clicked', 'go-next-symbolic')
-		nextBtn.connect('clicked', self.on_next_page)
-		self.pages_box.add(nextBtn)
-		
-		main_box.pack_start(self.zoom_box, expand=False, fill=False, padding=0)
-		main_box.pack_start(self.pages_box, expand=False, fill=False, padding=0)
-		main_box.pack_end(self.toggle_box, expand=False, fill=False, padding=0)
-		main_box.pack_end(self.insert_box, expand=False, fill=False, padding=0)
-
-		# main_box only contains the buttons, it will pack at the end (bottom or right) of
-		# the preview_bar object, where the webview has already been added.
-		self.preview_bar.pack_end(main_box, expand=False, fill=False, padding=0)
-		self.preview_bar.pack_start(self._webview, expand=True, fill=True, padding=0)
-		
-		self.show_on_panel()
-
 	def build_button(self, mode, icon):
 		if mode is 'toggled':
 			btn = Gtk.ToggleButton()
@@ -225,8 +257,8 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		if self._page_index > 0:
 			self._page_index = self._page_index -1
 			self.on_reload(None, None)
-		else:
-			btn.active = False
+#		else:
+#			btn.set_sensitive(False)
 			
 	def on_next_page(self, btn):
 		self._page_index = self._page_index +1
@@ -256,7 +288,6 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 	
 	# This needs dummy parameters because it's connected to a signal which give arguments.
 	def on_reload(self, osef, oseb):
-		
 		# Guard clause: it will not load documents which are not .md
 		if self.recognize_format() is 'error':
 			return
@@ -318,7 +349,6 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		self.window.lookup_action('print_doc').set_enabled(True)
 	
 	def current_page(self, html_string):
-	
 		# Guard clause
 		if not self._is_paginated:
 			return html_string
@@ -360,6 +390,12 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 	def on_zoom_out(self, a):
 		if self._webview.get_zoom_level() > 0.15:
 			self._webview.set_zoom_level(self._webview.get_zoom_level() - 0.1)
+			
+	def on_zoom_original(self, a):
+		self._webview.set_zoom_level(1)
+	
+	def change_position_for(self, w, string):
+		self._settings.set_string('position', string)
 	
 	########
 	
@@ -371,8 +407,14 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 	
 	def on_toggle_search_mode(self, a):
 		self._search_popover.show_all()
+		
+	def on_toggle_menu_mode(self, a):
+		self._menu_popover.show_all()
 	
-	def on_popover_closed(self, popover, button):
+	def on_popover_search_closed(self, popover, button):
+		button.set_active(False)
+	
+	def on_popover_menu_closed(self, popover, button):
 		button.set_active(False)
 	
 	def on_search_up(self, btn):
