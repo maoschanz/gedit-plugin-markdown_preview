@@ -31,6 +31,18 @@ msgstr "Choisissez une image"
 msgid "Insert a picture"
 msgstr "Insérer une image"
 
+msgid "Hide the panel"
+msgstr "Masquer le panneau"
+
+msgid "Reload preview"
+msgstr "Recharger l'aperçu"
+
+msgid "No result"
+msgstr "Pas de résultat"
+
+msgid "%s results"
+msgstr "%s résultats"
+
 msgid "Display only one page"
 msgstr "Afficher seulement une page"
 

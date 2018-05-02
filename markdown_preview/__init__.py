@@ -109,6 +109,7 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 	def insert_in_adequate_panel(self):
 		# This is the preview itself
 		self._webview = WebKit2.WebView()
+		self._webview.connect('context-menu', self.on_context_menu)
 		
 		searchBtn = self.build_search_popover()
 		menuBtn = self.build_menu_popover()
@@ -170,6 +171,8 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		self._menu_popover.add(menu_box)
 		self._menu_popover.connect('closed', self.on_popover_menu_closed, menuBtn)
 
+		############
+		
 		zoomInBtn = self.build_button('clicked', 'zoom-in-symbolic')
 		zoomInBtn.connect('clicked', self.on_zoom_in)
 		self.zoom_box.pack_end(zoomInBtn, expand=True, fill=True, padding=0)
@@ -181,9 +184,22 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		zoomOutBtn = self.build_button('clicked', 'zoom-out-symbolic')
 		zoomOutBtn.connect('clicked', self.on_zoom_out)
 		self.zoom_box.pack_end(zoomOutBtn, expand=True, fill=True, padding=0)
+
+		############
 		
 		paginatedBtn = Gtk.ToggleButton(_("Display only one page"))
 		paginatedBtn.connect('toggled', self.on_set_paginated)
+		paginatedBtn.set_relief(Gtk.ReliefStyle.NONE)
+
+		hideBtn = Gtk.Button(_("Hide the panel"))
+		hideBtn.connect('clicked', self.on_hide_panel)
+		hideBtn.set_relief(Gtk.ReliefStyle.NONE)
+
+		insertBtn = Gtk.Button(_("Insert a picture"))
+		insertBtn.connect('clicked', self.insert_picture, None)
+		insertBtn.set_relief(Gtk.ReliefStyle.NONE)
+
+		############
 		
 		self.sideBtn = self.build_button('toggled', 'go-first-symbolic')
 		self.sideBtn.set_active(not self._isAtBottom)
@@ -194,14 +210,41 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		self.bottomBtn.set_active(self._isAtBottom)
 		self.bottomBtn.connect('toggled', self.change_position_for, 'bottom')
 		self.position_box.pack_start(self.bottomBtn, expand=True, fill=True, padding=0)
+
+		############
 		
 		menu_box.add(self.position_box)
+		menu_box.add(hideBtn)
 		menu_box.add(self.zoom_box)
 		menu_box.add(paginatedBtn)
+		menu_box.add(insertBtn)
 		
 		return menuBtn
+	
+	def on_context_menu(self, a, b, c, d):
+		if d.context_is_link():
+			# It's not possible to open a link in a new window or to download its target
+			b.remove(b.get_item_at_position(1))
+			b.remove(b.get_item_at_position(1))
+			# TODO: open with gedit, open in defaut browser
+		elif d.context_is_image():
+			# It's not possible to open an image in a new window or to "save [it] as"
+			b.remove(b.get_item_at_position(0))
+			b.remove(b.get_item_at_position(0))
+		elif d.context_is_selection():
+			pass
+		else:
+			b.remove_all()
+		action_reload_preview = Gio.SimpleAction(name='reload_preview')
+		reloadItem = WebKit2.ContextMenuItem.new_from_gaction(action_reload_preview, _("Reload preview"), None)
+		self.window.add_action(action_reload_preview)
+		action_reload_preview.connect('activate', self.on_reload)
+		b.append(reloadItem)
+		return False
 		
 	def build_search_popover(self):
+		
+		some_damn_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
 		
 		searchBtn = self.build_button('toggled', 'system-search-symbolic')
 		searchBtn.connect('toggled', self.on_toggle_search_mode)
@@ -223,7 +266,14 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		search_box.add(downBtn)
 		search_box.get_style_context().add_class('linked')
 		
-		self._search_popover.add(search_box)
+		self.find_controller = self._webview.get_find_controller()
+		self.find_controller.connect('counted-matches', self.on_count_change)
+		
+		self.count_label = Gtk.Label(_("No result"))
+		
+		some_damn_box.add(search_box)
+		some_damn_box.add(self.count_label)
+		self._search_popover.add(some_damn_box)
 		self._search_popover.connect('closed', self.on_popover_search_closed, searchBtn)
 		
 		return searchBtn
@@ -244,6 +294,12 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 			self.on_reload(None, None)
 		else:
 			self._auto_reload = False
+
+	def on_hide_panel(self, btn):
+		if self._isAtBottom:
+			self.window.get_bottom_panel().set_property("visible", False)
+		else:
+			self.window.get_side_panel().set_property("visible", False)
 
 	def on_set_paginated(self, btn):
 		if btn.get_active():
@@ -405,8 +461,7 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 	
 	def on_search_changed(self, a):
 		text = self._search_entry.get_text()
-		self.find_controller = self._webview.get_find_controller()
-#		self.find_controller.count_matches(text, WebKit2.FindOptions.CASE_INSENSITIVE, 100)
+		self.find_controller.count_matches(text, WebKit2.FindOptions.CASE_INSENSITIVE, 100)
 		self.find_controller.search(text, WebKit2.FindOptions.CASE_INSENSITIVE, 100)
 	
 	def on_toggle_search_mode(self, a):
@@ -427,6 +482,9 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 	def on_search_down(self, btn):
 		self.find_controller.search_next()
 	
+	def on_count_change(self, find_ctrl, number):
+		self.count_label.set_text(_("%s results") % number)
+		
 	########
 	
 	def insert_picture(self, a, b):
