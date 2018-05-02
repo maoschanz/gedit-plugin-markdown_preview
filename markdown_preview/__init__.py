@@ -37,8 +37,10 @@ class MarkdownGeditPluginApp(GObject.Object, Gedit.AppActivatable):
 		menu = Gio.Menu()
 		menu_item_export = Gio.MenuItem.new(_("Export the preview"), 'win.export_doc')
 		menu_item_print = Gio.MenuItem.new(_("Print the preview"), 'win.print_doc')
+		menu_item_insert = Gio.MenuItem.new(_("Insert a picture"), 'win.insert_picture')
 		menu.append_item(menu_item_export)
 		menu.append_item(menu_item_print)
+		menu.append_item(menu_item_insert)
 		self.menu_section = Gio.MenuItem.new_section(_("Markdown Preview"), menu)
 		self.menu_ext.append_menu_item(self.menu_section)
 	
@@ -85,6 +87,7 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		self._connect_menu()
 		self.window.lookup_action('export_doc').set_enabled(False)
 		self.window.lookup_action('print_doc').set_enabled(False)
+		self.window.lookup_action('insert_picture').set_enabled(False)
 				
 	def do_deactivate(self):
 		self._settings.disconnect(self._handlers[0])
@@ -95,10 +98,13 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 	def _connect_menu(self):
 		action_export = Gio.SimpleAction(name='export_doc')
 		action_print = Gio.SimpleAction(name='print_doc')
+		action_insert = Gio.SimpleAction(name='insert_picture')
 		action_export.connect('activate', self.export_doc)
 		action_print.connect('activate', self.print_doc)
+		action_insert.connect('activate', self.insert_picture)
 		self.window.add_action(action_export)
 		self.window.add_action(action_print)
+		self.window.add_action(action_insert)
 		
 	def insert_in_adequate_panel(self):
 		# This is the preview itself
@@ -133,8 +139,8 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		nextBtn.connect('clicked', self.on_next_page)
 		self.pages_box.add(nextBtn)
 		
-		main_box.pack_end(searchBtn, expand=False, fill=False, padding=0)
 		main_box.pack_end(menuBtn, expand=False, fill=False, padding=0)
+		main_box.pack_end(searchBtn, expand=False, fill=False, padding=0)
 		main_box.pack_start(refreshBtn, expand=False, fill=False, padding=0)
 		main_box.pack_start(self.pages_box, expand=False, fill=False, padding=0)
 
@@ -163,9 +169,6 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		
 		self._menu_popover.add(menu_box)
 		self._menu_popover.connect('closed', self.on_popover_menu_closed, menuBtn)
-		
-		insertBtn = Gtk.Button("Insert picture")
-		insertBtn.connect('clicked', self.on_insert)
 
 		zoomInBtn = self.build_button('clicked', 'zoom-in-symbolic')
 		zoomInBtn.connect('clicked', self.on_zoom_in)
@@ -179,7 +182,7 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		zoomOutBtn.connect('clicked', self.on_zoom_out)
 		self.zoom_box.pack_end(zoomOutBtn, expand=True, fill=True, padding=0)
 		
-		paginatedBtn = Gtk.ToggleButton("Display only one page")
+		paginatedBtn = Gtk.ToggleButton(_("Display only one page"))
 		paginatedBtn.connect('toggled', self.on_set_paginated)
 		
 		self.sideBtn = self.build_button('toggled', 'go-first-symbolic')
@@ -195,7 +198,6 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		menu_box.add(self.position_box)
 		menu_box.add(self.zoom_box)
 		menu_box.add(paginatedBtn)
-		menu_box.add(insertBtn)
 		
 		return menuBtn
 		
@@ -284,6 +286,7 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 			# The current content is not replaced, which allows document consulation while working on a file
 			self.window.lookup_action('export_doc').set_enabled(False)
 			self.window.lookup_action('print_doc').set_enabled(False)
+			self.window.lookup_action('insert_picture').set_enabled(False)
 			return 'error'
 	
 	# This needs dummy parameters because it's connected to a signal which give arguments.
@@ -347,6 +350,7 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		
 		self.window.lookup_action('export_doc').set_enabled(True)
 		self.window.lookup_action('print_doc').set_enabled(True)
+		self.window.lookup_action('insert_picture').set_enabled(True)
 	
 	def current_page(self, html_string):
 		# Guard clause
@@ -425,7 +429,7 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 	
 	########
 	
-	def on_insert(self, a):
+	def insert_picture(self, a, b):
 		# Guard clause: it will not load dialog if the file is not .md
 		if self.recognize_format() != 'md':
 			return

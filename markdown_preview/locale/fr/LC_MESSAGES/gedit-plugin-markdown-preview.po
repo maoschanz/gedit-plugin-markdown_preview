@@ -28,8 +28,17 @@ msgstr "Ceci n'est pas un document markdown."
 msgid "Select a picture"
 msgstr "Choisissez une image"
 
+msgid "Insert a picture"
+msgstr "Insérer une image"
+
+msgid "Display only one page"
+msgstr "Afficher seulement une page"
+
 msgid "Select a CSS file"
 msgstr "Choisissez un fichier CSS"
+
+msgid "Export .tex files with pdflatex"
+msgstr "Exporter les fichiers .tex avec pdflatex"
 
 msgid "Preview position"
 msgstr "Position de l'aperçu"

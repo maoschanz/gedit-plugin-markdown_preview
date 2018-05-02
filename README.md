@@ -2,7 +2,7 @@
 
 This is a plugin for the Gedit text editor, previewing .md files in the bottom or the side panel.
 
-Main features (v0.4), for any .md or .html file:
+Main features (v0.5), for any .md or .html file:
 
 - load a preview of a file
 - dynamically update the preview
@@ -10,6 +10,7 @@ Main features (v0.4), for any .md or .html file:
 - "slideshow" mode (preview your file section by section)
 - export your preview (to any format supported by [pandoc](https://pandoc.org/))
 - print your preview
+- search in the page
 
 Also:
 
@@ -17,7 +18,7 @@ Also:
 - it can open most relative links (as an option, because WebKit2GTK can't load URIs with special characters)
 - it can apply a CSS stylesheet to the preview (markdown only)
 
-The preview be displayed in the side panel or in the bottom panel
+The preview be displayed in the side panel or in the bottom panel, and this setting can be changed dynamically.
 
 ----
 
@@ -41,7 +42,7 @@ The preview be displayed in the side panel or in the bottom panel
 - Open the project's folder `gedit-plugin-markdown_preview-master` in a terminal
 - Run the `install.sh` script
 
-The script `install.sh` can be executed as root (installation system-wide) or as a normal user (installation user-wide).
+The script `install.sh` can be executed as root (installation system-wide) or as a normal user (installation user-wide, but it works only with some systems, weirdly).
 
 ## Available languages
 
