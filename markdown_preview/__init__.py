@@ -38,9 +38,11 @@ class MarkdownGeditPluginApp(GObject.Object, Gedit.AppActivatable):
 		menu_item_export = Gio.MenuItem.new(_("Export the preview"), 'win.export_doc')
 		menu_item_print = Gio.MenuItem.new(_("Print the preview"), 'win.print_doc')
 		menu_item_insert = Gio.MenuItem.new(_("Insert a picture"), 'win.insert_picture')
+#		menu_item_reload = Gio.MenuItem.new(_("Reload"), 'win.reload')
 		menu.append_item(menu_item_export)
 		menu.append_item(menu_item_print)
 		menu.append_item(menu_item_insert)
+#		menu.append_item(menu_item_reload)
 		self.menu_section = Gio.MenuItem.new_section(_("Markdown Preview"), menu)
 		self.menu_ext.append_menu_item(self.menu_section)
 	
@@ -68,10 +70,6 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 					self.on_reload(None, None)
 				else:
 					self._compteur_laid = self._compteur_laid + 1
-			if self.recognize_format() != 'error':
-				self.panel.show()
-			elif len(self.panel.get_children()) is 1:
-				self.panel.hide()
 	
 	def do_activate(self):
 		# Defining the action which was set earlier in AppActivatable.
@@ -105,6 +103,10 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		self.window.add_action(action_export)
 		self.window.add_action(action_print)
 		self.window.add_action(action_insert)
+		
+#		action_reload = Gio.SimpleAction(name='reload')
+#		action_reload.connect('activate', self.on_reload)
+#		self.window.add_action(action_reload)
 		
 	def insert_in_adequate_panel(self):
 		# This is the preview itself
@@ -297,9 +299,9 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 
 	def on_hide_panel(self, btn):
 		if self._isAtBottom:
-			self.window.get_bottom_panel().set_property("visible", False)
+			self.window.get_bottom_panel().set_property('visible', False)
 		else:
-			self.window.get_side_panel().set_property("visible", False)
+			self.window.get_side_panel().set_property('visible', False)
 
 	def on_set_paginated(self, btn):
 		if btn.get_active():
@@ -335,8 +337,10 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		if temp[len(temp)-1] == 'md':
 			return 'md'
 		elif temp[len(temp)-1] == 'html':
+			self.window.lookup_action('insert_picture').set_enabled(False)
 			return 'html'
 		elif temp[len(temp)-1] == 'tex':
+			self.window.lookup_action('insert_picture').set_enabled(False)
 			return 'tex'
 		else:
 			# The current content is not replaced, which allows document consulation while working on a file
@@ -349,8 +353,11 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 	def on_reload(self, osef, oseb):
 		# Guard clause: it will not load documents which are not .md
 		if self.recognize_format() is 'error':
+			if len(self.panel.get_children()) is 1:
+				self.panel.hide()
 			return
 		elif self.recognize_format() is 'html':
+			self.panel.show()
 			doc = self.window.get_active_document()
 			start, end = doc.get_bounds()
 			html_string = doc.get_text(start, end, True)
@@ -360,6 +367,7 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 			html_content = pre_string + html_string + post_string
 		
 		elif self.recognize_format() is 'tex':
+			self.panel.show()
 			doc = self.window.get_active_document()
 			file_path = doc.get_location().get_path()
 			
@@ -372,6 +380,7 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 			html_string = self.current_page(html_string)
 			html_content = pre_string + html_string + post_string
 		else:
+			self.panel.show()
 			# Get the current document, or the temporary document if requested
 			doc = self.window.get_active_document()
 			if self._auto_reload:
@@ -525,7 +534,7 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		return widget.get_box()
 
 	def export_doc(self, a, b):
-		if (self.recognize_format() == 'tex') and self._settings.get_boolean('pdflatex'):
+		if (self.recognize_format() == 'tex') and self._settings.get_boolean('pdflatex'): #FIXME mauvais path?
 			subprocess.run(['pdflatex', self.window.get_active_document().get_location().get_path()])
 		else:
 			file_chooser = Gtk.FileChooserDialog(_("Export the preview"), self.window,
