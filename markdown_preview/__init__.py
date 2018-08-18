@@ -38,11 +38,9 @@ class MarkdownGeditPluginApp(GObject.Object, Gedit.AppActivatable):
 		menu_item_export = Gio.MenuItem.new(_("Export the preview"), 'win.export_doc')
 		menu_item_print = Gio.MenuItem.new(_("Print the preview"), 'win.print_doc')
 		menu_item_insert = Gio.MenuItem.new(_("Insert a picture"), 'win.insert_picture')
-#		menu_item_reload = Gio.MenuItem.new(_("Reload"), 'win.reload')
 		menu.append_item(menu_item_export)
 		menu.append_item(menu_item_print)
 		menu.append_item(menu_item_insert)
-#		menu.append_item(menu_item_reload)
 		self.menu_section = Gio.MenuItem.new_section(_("Markdown Preview"), menu)
 		self.menu_ext.append_menu_item(self.menu_section)
 	
@@ -103,10 +101,6 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		self.window.add_action(action_export)
 		self.window.add_action(action_print)
 		self.window.add_action(action_insert)
-		
-#		action_reload = Gio.SimpleAction(name='reload')
-#		action_reload.connect('activate', self.on_reload)
-#		self.window.add_action(action_reload)
 		
 	def insert_in_adequate_panel(self):
 		# This is the preview itself
@@ -416,7 +410,7 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		self.window.lookup_action('export_doc').set_enabled(True)
 		self.window.lookup_action('print_doc').set_enabled(True)
 		self.window.lookup_action('insert_picture').set_enabled(True)
-	
+		
 	def current_page(self, html_string):
 		# Guard clause
 		if not self._is_paginated:
@@ -546,9 +540,25 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 			# It gets the chosen file's path
 			if response == Gtk.ResponseType.OK:
 				if (file_chooser.get_filename().split('.')[-1] == 'html'):
-					subprocess.run(['pandoc', self.window.get_active_document().get_location().get_path(), '-o', file_chooser.get_filename()])
-				else: # in the future it shall behave differently
-					subprocess.run(['pandoc', self.window.get_active_document().get_location().get_path(), '-o', file_chooser.get_filename()])
+					subprocess.run(['pandoc', self.window.get_active_document().get_location().get_path(), \
+						'-o', file_chooser.get_filename()])
+						
+					pre_string = '<html><head><meta charset="utf-8" /><link rel="stylesheet" href="' + \
+						self._settings.get_string('style') + '" /></head><body>'
+					post_string = '</body></html>'
+					
+					with open(file_chooser.get_filename(), 'r+') as f:
+						content = f.read()
+						f.seek(0, 0)
+						f.write(pre_string.rstrip('\r\n') + '\n' + content)
+						f.close()
+						
+					f=open(file_chooser.get_filename(),'a')
+					f.write(post_string)
+					f.close()
+				else:
+					subprocess.run(['pandoc', self.window.get_active_document().get_location().get_path(), \
+						'-o', file_chooser.get_filename()])
 			file_chooser.destroy()
 		
 	def print_doc(self, a, b):
