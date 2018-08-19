@@ -33,11 +33,11 @@ class MarkdownGeditPluginApp(GObject.Object, Gedit.AppActivatable):
 		self._remove_menu()
 	
 	def _build_menu(self):
-		self.menu_ext = self.extend_menu('file-section-1')
+		self.menu_ext = self.extend_menu('tools-section')
 		menu = Gio.Menu()
-		menu_item_export = Gio.MenuItem.new(_("Export the preview"), 'win.export_doc')
-		menu_item_print = Gio.MenuItem.new(_("Print the preview"), 'win.print_doc')
-		menu_item_insert = Gio.MenuItem.new(_("Insert a picture"), 'win.insert_picture')
+		menu_item_export = Gio.MenuItem.new(_("Export the preview"), 'win.md_prev_export_doc')
+		menu_item_print = Gio.MenuItem.new(_("Print the preview"), 'win.md_prev_print_doc')
+		menu_item_insert = Gio.MenuItem.new(_("Insert a picture"), 'win.md_prev_insert_picture')
 		menu.append_item(menu_item_export)
 		menu.append_item(menu_item_print)
 		menu.append_item(menu_item_insert)
@@ -65,7 +65,7 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 			if self._auto_reload:
 				if self._compteur_laid > 3:
 					self._compteur_laid = 0
-					self.on_reload(None, None)
+					self.on_reload()
 				else:
 					self._compteur_laid = self._compteur_laid + 1
 	
@@ -81,9 +81,9 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		self._page_index = 0
 		self.temp_file_md = Gio.File.new_for_path(BASE_TEMP_NAME + '.md')
 		self._connect_menu()
-		self.window.lookup_action('export_doc').set_enabled(False)
-		self.window.lookup_action('print_doc').set_enabled(False)
-		self.window.lookup_action('insert_picture').set_enabled(False)
+		self.window.lookup_action('md_prev_export_doc').set_enabled(False)
+		self.window.lookup_action('md_prev_print_doc').set_enabled(False)
+		self.window.lookup_action('md_prev_insert_picture').set_enabled(False)
 				
 	def do_deactivate(self):
 		self._settings.disconnect(self._handlers[0])
@@ -92,15 +92,52 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		self._remove_from_panel()
 
 	def _connect_menu(self):
-		action_export = Gio.SimpleAction(name='export_doc')
-		action_print = Gio.SimpleAction(name='print_doc')
-		action_insert = Gio.SimpleAction(name='insert_picture')
+		action_export = Gio.SimpleAction(name='md_prev_export_doc')
+		action_print = Gio.SimpleAction(name='md_prev_print_doc')
+		action_insert = Gio.SimpleAction(name='md_prev_insert_picture')
 		action_export.connect('activate', self.export_doc)
 		action_print.connect('activate', self.print_doc)
 		action_insert.connect('activate', self.insert_picture)
 		self.window.add_action(action_export)
 		self.window.add_action(action_print)
 		self.window.add_action(action_insert)
+		
+		action_zoom_in = Gio.SimpleAction(name='md_prev_zoom_in')
+		action_zoom_original = Gio.SimpleAction(name='md_prev_zoom_original')
+		action_zoom_out = Gio.SimpleAction(name='md_prev_zoom_out')
+		action_zoom_in.connect('activate', self.on_zoom_in)
+		action_zoom_original.connect('activate', self.on_zoom_original)
+		action_zoom_out.connect('activate', self.on_zoom_out)
+		self.window.add_action(action_zoom_in)
+		self.window.add_action(action_zoom_original)
+		self.window.add_action(action_zoom_out)
+		
+		action_paginated = Gio.SimpleAction().new_stateful('md_prev_set_paginated', \
+		None, GLib.Variant.new_boolean(False))
+		action_paginated.connect('change-state', self.on_set_paginated)
+		self.window.add_action(action_paginated)
+		
+		action_autoreload = Gio.SimpleAction().new_stateful('md_prev_set_autoreload', \
+		None, GLib.Variant.new_boolean(self._auto_reload))
+		action_autoreload.connect('change-state', self.on_set_reload)
+		self.window.add_action(action_autoreload)
+		
+		action_panel = Gio.SimpleAction().new_stateful('md_prev_panel', \
+		GLib.VariantType.new('s'), GLib.Variant.new_string(self._settings.get_string('position')))
+		action_panel.connect('change-state', self.on_change_panel_from_popover)
+		self.window.add_action(action_panel)
+		
+		action_hide = Gio.SimpleAction(name='md_prev_hide')
+		action_hide.connect('activate', self.on_hide_panel)
+		self.window.add_action(action_hide)
+		
+	def on_change_panel_from_popover(self, *args):
+		if GLib.Variant.new_string('bottom') == args[0].get_state():
+			self._settings.set_string('position', 'side')
+			args[0].set_state(GLib.Variant.new_string('side'))
+		else:
+			self._settings.set_string('position', 'bottom')
+			args[0].set_state(GLib.Variant.new_string('bottom'))
 		
 	def insert_in_adequate_panel(self):
 		# This is the preview itself
@@ -124,16 +161,15 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 			self.preview_bar.props.orientation = Gtk.Orientation.VERTICAL
 			main_box.props.orientation = Gtk.Orientation.HORIZONTAL
 		
-		refreshBtn = self.build_button('toggled', 'view-refresh-symbolic')
-		refreshBtn.set_active(self._auto_reload)
-		refreshBtn.connect('toggled', self.on_set_reload)
+		refreshBtn = Gtk.Button().new_from_icon_name('view-refresh-symbolic', Gtk.IconSize.BUTTON)
+		refreshBtn.connect('clicked', self.on_reload)
 
-		previousBtn = self.build_button('clicked', 'go-previous-symbolic')
+		previousBtn = Gtk.Button().new_from_icon_name('go-previous-symbolic', Gtk.IconSize.BUTTON)
 		previousBtn.connect('clicked', self.on_previous_page)
-		self.pages_box.add(previousBtn)
 		
-		nextBtn = self.build_button('clicked', 'go-next-symbolic')
+		nextBtn = Gtk.Button().new_from_icon_name('go-next-symbolic', Gtk.IconSize.BUTTON)
 		nextBtn.connect('clicked', self.on_next_page)
+		self.pages_box.add(previousBtn)
 		self.pages_box.add(nextBtn)
 		
 		main_box.pack_end(menuBtn, expand=False, fill=False, padding=0)
@@ -149,84 +185,23 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		self.show_on_panel()
 
 	def build_menu_popover(self):
-		
-		self.position_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
-		self.zoom_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
-		
-		self.zoom_box.get_style_context().add_class('linked')
-		self.position_box.get_style_context().add_class('linked')
-		
-		menuBtn = self.build_button('toggled', 'open-menu-symbolic')
-		menuBtn.connect('toggled', self.on_toggle_menu_mode)
-		
-		self._menu_popover = Gtk.Popover()
-		self._menu_popover.set_relative_to(menuBtn)
-		
-		menu_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-		
-		self._menu_popover.add(menu_box)
-		self._menu_popover.connect('closed', self.on_popover_menu_closed, menuBtn)
-
-		############
-		
-		zoomInBtn = self.build_button('clicked', 'zoom-in-symbolic')
-		zoomInBtn.connect('clicked', self.on_zoom_in)
-		self.zoom_box.pack_end(zoomInBtn, expand=True, fill=True, padding=0)
-		
-		zoomOriginalBtn = self.build_button('clicked', 'zoom-original-symbolic')
-		zoomOriginalBtn.connect('clicked', self.on_zoom_original)
-		self.zoom_box.pack_end(zoomOriginalBtn, expand=True, fill=True, padding=0)
-		
-		zoomOutBtn = self.build_button('clicked', 'zoom-out-symbolic')
-		zoomOutBtn.connect('clicked', self.on_zoom_out)
-		self.zoom_box.pack_end(zoomOutBtn, expand=True, fill=True, padding=0)
-
-		############
-		
-		paginatedBtn = Gtk.ToggleButton(_("Display only one page"))
-		paginatedBtn.connect('toggled', self.on_set_paginated)
-		paginatedBtn.set_relief(Gtk.ReliefStyle.NONE)
-
-		hideBtn = Gtk.Button(_("Hide the panel"))
-		hideBtn.connect('clicked', self.on_hide_panel)
-		hideBtn.set_relief(Gtk.ReliefStyle.NONE)
-
-		insertBtn = Gtk.Button(_("Insert a picture"))
-		insertBtn.connect('clicked', self.insert_picture, None)
-		insertBtn.set_relief(Gtk.ReliefStyle.NONE)
-
-		############
-		
-		self.sideBtn = self.build_button('toggled', 'go-first-symbolic')
-		self.sideBtn.set_active(not self._isAtBottom)
-		self.sideBtn.connect('toggled', self.change_position_for, 'side')
-		self.position_box.pack_start(self.sideBtn, expand=True, fill=True, padding=0)
-		
-		self.bottomBtn = self.build_button('toggled', 'go-bottom-symbolic')
-		self.bottomBtn.set_active(self._isAtBottom)
-		self.bottomBtn.connect('toggled', self.change_position_for, 'bottom')
-		self.position_box.pack_start(self.bottomBtn, expand=True, fill=True, padding=0)
-
-		############
-		
-		menu_box.add(self.position_box)
-		menu_box.add(hideBtn)
-		menu_box.add(self.zoom_box)
-		menu_box.add(paginatedBtn)
-		menu_box.add(insertBtn)
-		
+		menuBtn = Gtk.MenuButton()
+		menuBtn.set_image(Gtk.Image().new_from_icon_name('view-more-symbolic', Gtk.IconSize.BUTTON))
+		builder = Gtk.Builder().new_from_file(os.path.join(BASE_PATH, 'menu.ui'))
+		self._menu_popover = Gtk.Popover().new_from_model(menuBtn, builder.get_object('preview-menu'))
+		menuBtn.set_popover(self._menu_popover)
 		return menuBtn
 	
 	def on_context_menu(self, a, b, c, d):
 		if d.context_is_link():
-			# It's not possible to open a link in a new window or to download its target
-			b.remove(b.get_item_at_position(1))
-			b.remove(b.get_item_at_position(1))
-			# TODO: open with gedit, open in defaut browser
+			# It's not possible to...
+			b.remove(b.get_item_at_position(2)) # download its target
+			b.remove(b.get_item_at_position(1)) # open a link in a new window
+			# TODO: open with gedit, open in defaut browser?
 		elif d.context_is_image():
-			# It's not possible to open an image in a new window or to "save [it] as"
-			b.remove(b.get_item_at_position(0))
-			b.remove(b.get_item_at_position(0))
+			# It's not possible to...
+#			b.remove(b.get_item_at_position(1)) # "save [it] as"
+			b.remove(b.get_item_at_position(0)) # open an image in a new window
 		elif d.context_is_selection():
 			pass
 		else:
@@ -239,23 +214,22 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		return False
 		
 	def build_search_popover(self):
-		
 		some_damn_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
 		
-		searchBtn = self.build_button('toggled', 'system-search-symbolic')
-		searchBtn.connect('toggled', self.on_toggle_search_mode)
-
+		searchBtn = Gtk.MenuButton()
+		searchBtn.set_image(Gtk.Image().new_from_icon_name('system-search-symbolic', Gtk.IconSize.BUTTON))
 		self._search_popover = Gtk.Popover()
 		self._search_popover.set_relative_to(searchBtn)
+		searchBtn.set_popover(self._search_popover)
 		
-		search_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+		search_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, visible=True)
 		
-		upBtn = self.build_button('clicked', 'go-up-symbolic')
+		upBtn = Gtk.Button().new_from_icon_name('go-up-symbolic', Gtk.IconSize.BUTTON)
 		upBtn.connect('clicked', self.on_search_up)
-		downBtn = self.build_button('clicked', 'go-down-symbolic')
+		downBtn = Gtk.Button().new_from_icon_name('go-down-symbolic', Gtk.IconSize.BUTTON)
 		downBtn.connect('clicked', self.on_search_down)
 		
-		self._search_entry = Gtk.SearchEntry()
+		self._search_entry = Gtk.SearchEntry() # FIXME ????????
 		self._search_entry.connect('search-changed', self.on_search_changed)
 		search_box.add(self._search_entry)
 		search_box.add(upBtn)
@@ -269,54 +243,60 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		
 		some_damn_box.add(search_box)
 		some_damn_box.add(self.count_label)
+		some_damn_box.show_all()
 		self._search_popover.add(some_damn_box)
-		self._search_popover.connect('closed', self.on_popover_search_closed, searchBtn)
 		
 		return searchBtn
 		
-	def build_button(self, mode, icon):
-		if mode is 'toggled':
-			btn = Gtk.ToggleButton()
-		else:
-			btn = Gtk.Button()
-		image = Gtk.Image()
-		image.set_from_icon_name(icon, Gtk.IconSize.BUTTON)
-		btn.add(image)
-		return btn
+#####	def build_button(self, mode, icon):
+#####		if mode is 'toggle':
+#####			btn = Gtk.ToggleButton()
+#####		elif mode is 'menu':
+#####			btn = Gtk.MenuButton()
+#####		else:
+#####			btn = Gtk.Button()
+#####		image = Gtk.Image()
+#####		image.set_from_icon_name(icon, Gtk.IconSize.BUTTON)
+#####		btn.add(image)
+#####		return btn
 	
-	def on_set_reload(self, btn):
-		if btn.get_active():
+	def on_set_reload(self, *args):
+		if not args[0].get_state():
 			self._auto_reload = True
-			self.on_reload(None, None)
+			self.on_reload()
+			args[0].set_state(GLib.Variant.new_boolean(True))
 		else:
 			self._auto_reload = False
+			args[0].set_state(GLib.Variant.new_boolean(False))
 
-	def on_hide_panel(self, btn):
+	def on_hide_panel(self, *args):
 		if self._isAtBottom:
 			self.window.get_bottom_panel().set_property('visible', False)
 		else:
 			self.window.get_side_panel().set_property('visible', False)
 
-	def on_set_paginated(self, btn):
-		if btn.get_active():
+	def on_set_paginated(self, *args):
+		if not args[0].get_state():
 			self._is_paginated = True
 			self.pages_box.props.visible = True
-			self.on_reload(None, None)
+			self.on_reload()
+			args[0].set_state(GLib.Variant.new_boolean(True))
 		else:
 			self._is_paginated = False
 			self.pages_box.props.visible = False
-			self.on_reload(None, None)
+			self.on_reload()
+			args[0].set_state(GLib.Variant.new_boolean(False))
 	
 	def on_previous_page(self, btn):
 		if self._page_index > 0:
 			self._page_index = self._page_index -1
-			self.on_reload(None, None)
+			self.on_reload()
 #		else:
 #			btn.set_sensitive(False)
 			
 	def on_next_page(self, btn):
 		self._page_index = self._page_index +1
-		self.on_reload(None, None)
+		self.on_reload()
 	
 	def delete_temp_file(self):
 		if self.temp_file_md.query_exists():
@@ -331,20 +311,20 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		if temp[len(temp)-1] == 'md':
 			return 'md'
 		elif temp[len(temp)-1] == 'html':
-			self.window.lookup_action('insert_picture').set_enabled(False)
+			self.window.lookup_action('md_prev_insert_picture').set_enabled(False)
 			return 'html'
 		elif temp[len(temp)-1] == 'tex':
-			self.window.lookup_action('insert_picture').set_enabled(False)
+			self.window.lookup_action('md_prev_insert_picture').set_enabled(False)
 			return 'tex'
 		else:
 			# The current content is not replaced, which allows document consulation while working on a file
-			self.window.lookup_action('export_doc').set_enabled(False)
-			self.window.lookup_action('print_doc').set_enabled(False)
-			self.window.lookup_action('insert_picture').set_enabled(False)
+			self.window.lookup_action('md_prev_export_doc').set_enabled(False)
+			self.window.lookup_action('md_prev_print_doc').set_enabled(False)
+			self.window.lookup_action('md_prev_insert_picture').set_enabled(False)
 			return 'error'
 	
 	# This needs dummy parameters because it's connected to a signal which give arguments.
-	def on_reload(self, osef, oseb):
+	def on_reload(self, *args):
 		# Guard clause: it will not load documents which are not .md
 		if self.recognize_format() is 'error':
 			if len(self.panel.get_children()) is 1:
@@ -407,9 +387,9 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		# The content is loaded
 		self._webview.load_bytes(bytes_content, 'text/html', 'UTF-8', dummy_uri)
 		
-		self.window.lookup_action('export_doc').set_enabled(True)
-		self.window.lookup_action('print_doc').set_enabled(True)
-		self.window.lookup_action('insert_picture').set_enabled(True)
+		self.window.lookup_action('md_prev_export_doc').set_enabled(True)
+		self.window.lookup_action('md_prev_print_doc').set_enabled(True)
+		self.window.lookup_action('md_prev_insert_picture').set_enabled(True)
 		
 	def current_page(self, html_string):
 		# Guard clause
@@ -439,26 +419,22 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		self.preview_bar.show_all()
 		self.panel.set_visible_child(self.preview_bar)
 		self.pages_box.props.visible = self._is_paginated
-		self._search_entry.props.visible = False
 		if self.window.get_state() is 'STATE_NORMAL':
-			self.on_reload(None, None)
+			self.on_reload()
 
 	def _remove_from_panel(self):
 		self.panel.remove(self.preview_bar)
 	
-	def on_zoom_in(self, a):
+	def on_zoom_in(self, *args):
 		if self._webview.get_zoom_level() < 10:
 			self._webview.set_zoom_level(self._webview.get_zoom_level() + 0.1)
 		
-	def on_zoom_out(self, a):
+	def on_zoom_out(self, *args):
 		if self._webview.get_zoom_level() > 0.15:
 			self._webview.set_zoom_level(self._webview.get_zoom_level() - 0.1)
 			
-	def on_zoom_original(self, a):
+	def on_zoom_original(self, *args):
 		self._webview.set_zoom_level(1)
-	
-	def change_position_for(self, w, string):
-		self._settings.set_string('position', string)
 	
 	########
 	
@@ -466,18 +442,6 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		text = self._search_entry.get_text()
 		self.find_controller.count_matches(text, WebKit2.FindOptions.CASE_INSENSITIVE, 100)
 		self.find_controller.search(text, WebKit2.FindOptions.CASE_INSENSITIVE, 100)
-	
-	def on_toggle_search_mode(self, a):
-		self._search_popover.show_all()
-		
-	def on_toggle_menu_mode(self, a):
-		self._menu_popover.show_all()
-	
-	def on_popover_search_closed(self, popover, button):
-		button.set_active(False)
-	
-	def on_popover_menu_closed(self, popover, button):
-		button.set_active(False)
 	
 	def on_search_up(self, btn):
 		self.find_controller.search_previous()
@@ -520,7 +484,7 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		self._isAtBottom = (self._settings.get_string('position') == 'bottom')
 		self.insert_in_adequate_panel()
 		self.do_update_state()
-		self.on_reload(None, None)
+		self.on_reload()
 	
 	def do_create_configure_widget(self):
 		# Just return your box, PeasGtk will automatically pack it into a box and show it.

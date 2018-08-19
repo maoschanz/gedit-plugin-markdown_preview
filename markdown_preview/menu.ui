@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<interface domain="draw">
+  <menu id="preview-menu">
+    <section>
+        <item>
+            <attribute name="label" translatable="yes">Export as</attribute>
+            <attribute name="action">win.md_prev_export_doc</attribute>
+        </item>
+        <item>
+            <attribute name="label" translatable="yes">Print</attribute>
+            <attribute name="action">win.md_prev_print_doc</attribute>
+        </item>
+    </section>
+    <section id="zoom">
+        <attribute name="display-hint">horizontal-buttons</attribute>
+<!--        <attribute name="label" translatable="yes">Zoom</attribute>-->
+            <item>
+                <attribute name="label" translatable="yes">Zoom out</attribute>
+                <attribute name="action">win.md_prev_zoom_out</attribute>
+                <attribute name="verb-icon">zoom-out-symbolic</attribute>
+            </item>
+            <item>
+                <attribute name="action">win.md_prev_zoom_original</attribute>
+                <attribute name="label" translatable="yes">Original Zoom</attribute>
+                <attribute name="verb-icon">zoom-original-symbolic</attribute>
+            </item>
+            <item>
+                <attribute name="label" translatable="yes">Zoom in</attribute>
+                <attribute name="action">win.md_prev_zoom_in</attribute>
+                <attribute name="verb-icon">zoom-in-symbolic</attribute>
+            </item>
+    </section>
+    <section>
+        <item>
+            <attribute name="label" translatable="yes">Display only one page</attribute>
+            <attribute name="action">win.md_prev_set_paginated</attribute>
+        </item>
+        <item>
+            <attribute name="label" translatable="yes">Automatically reload</attribute>
+            <attribute name="action">win.md_prev_set_autoreload</attribute>
+        </item>
+    </section>
+    <section id="position">
+        <attribute name="label" translatable="yes">Position</attribute>
+        <item>
+            <attribute name="label" translatable="yes">Side Panel</attribute>
+            <attribute name="action">win.md_prev_panel</attribute>
+            <attribute name="target">side</attribute>
+        </item>
+        <item>
+            <attribute name="label" translatable="yes">Bottom Panel</attribute>
+            <attribute name="action">win.md_prev_panel</attribute>
+            <attribute name="target">bottom</attribute>
+        </item>
+        <item>
+            <attribute name="label" translatable="yes">Hide</attribute>
+            <attribute name="action">win.md_prev_hide</attribute>
+        </item>
+    </section>
+    <section>
+        <item>
+            <attribute name="label" translatable="yes">Insert an image</attribute>
+            <attribute name="action">win.md_prev_insert_picture</attribute>
+        </item>
+    </section>
+  </menu>
+</interface>
