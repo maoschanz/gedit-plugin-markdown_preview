@@ -2,67 +2,146 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-03 18:48+0100\n"
+"POT-Creation-Date: 2018-08-20 16:04+0200\n"
 "PO-Revision-Date: 2018-03-05 16:47+0100\n"
+"Last-Translator: \n"
 "Language-Team: \n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 1.8.11\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"Last-Translator: \n"
-"Language: fr\n"
 
-msgid "Markdown Preview"
-msgstr "Aperçu Markdown"
-
+#: markdown_preview/__init__.py:38 markdown_preview/__init__.py:496
 msgid "Export the preview"
 msgstr "Exporter l'aperçu"
 
+#: markdown_preview/__init__.py:39
 msgid "Print the preview"
 msgstr "Imprimer l'aperçu"
 
-msgid "This is not a markdown document."
-msgstr "Ceci n'est pas un document markdown."
-
-msgid "Select a picture"
-msgstr "Choisissez une image"
-
+#: markdown_preview/__init__.py:40
 msgid "Insert a picture"
 msgstr "Insérer une image"
 
-msgid "Hide the panel"
-msgstr "Masquer le panneau"
+#: markdown_preview/__init__.py:44 markdown_preview/__init__.py:418
+msgid "Markdown Preview"
+msgstr "Aperçu Markdown"
 
-msgid "Reload preview"
+#: markdown_preview/__init__.py:168 markdown_preview/__init__.py:202
+msgid "Reload the preview"
 msgstr "Recharger l'aperçu"
 
+#: markdown_preview/__init__.py:169
+msgid "Previous page"
+msgstr "Page précédente"
+
+#: markdown_preview/__init__.py:170
+msgid "Next page"
+msgstr "Page suivante"
+
+#: markdown_preview/__init__.py:171
+msgid "Search"
+msgstr "Recherche"
+
+#: markdown_preview/__init__.py:172
+msgid "More options"
+msgstr "Plus d'options"
+
+#: markdown_preview/__init__.py:234
 msgid "No result"
 msgstr "Pas de résultat"
 
+#: markdown_preview/__init__.py:312
+msgid "Can't preview an unsaved document"
+msgstr "Impossible de prévisualiser un document non-enregistré"
+
+#: markdown_preview/__init__.py:314
+msgid "Unsupported type of document: "
+msgstr "Type de document non-supporté : "
+
+#: markdown_preview/__init__.py:453
+#, python-format
 msgid "%s results"
 msgstr "%s résultats"
 
-msgid "Display only one page"
-msgstr "Afficher seulement une page"
+#: markdown_preview/__init__.py:463
+msgid "Select a picture"
+msgstr "Choisissez une image"
 
-msgid "Select a CSS file"
-msgstr "Choisissez un fichier CSS"
-
-msgid "Export .tex files with pdflatex"
-msgstr "Exporter les fichiers .tex avec pdflatex"
-
+#: markdown_preview/__init__.py:543
 msgid "Preview position"
 msgstr "Position de l'aperçu"
 
-msgid "Bottom panel"
-msgstr "Panneau inférieur"
-
+#: markdown_preview/__init__.py:545
 msgid "Side panel"
 msgstr "Panneau latéral"
 
+#: markdown_preview/__init__.py:546
+msgid "Bottom panel"
+msgstr "Panneau inférieur"
+
+#: markdown_preview/__init__.py:554
 msgid "Use relative paths"
 msgstr "Utiliser des chemins relatifs"
 
+#: markdown_preview/__init__.py:563
+msgid "Export .tex files with pdflatex"
+msgstr "Exporter les fichiers .tex avec pdflatex"
+
+#: markdown_preview/__init__.py:572 markdown_preview/__init__.py:600
 msgid "Stylesheet"
 msgstr "Feuille de style"
+
+#: markdown_preview/__init__.py:595
+msgid "Select a CSS file"
+msgstr "Choisissez un fichier CSS"
+
+#: markdown_preview/menu.ui:6
+msgid "Export"
+msgstr "Exporter"
+
+#: markdown_preview/menu.ui:10
+msgid "Print"
+msgstr "Imprimer"
+
+#: markdown_preview/menu.ui:18
+msgid "Zoom out"
+msgstr "Dézoomer"
+
+#: markdown_preview/menu.ui:24
+msgid "Original Zoom"
+msgstr "Zoom original"
+
+#: markdown_preview/menu.ui:28
+msgid "Zoom in"
+msgstr "Zoomer"
+
+#: markdown_preview/menu.ui:35
+msgid "Display only one page"
+msgstr "Afficher seulement une page"
+
+#: markdown_preview/menu.ui:39
+msgid "Automatically reload"
+msgstr "Recharger automatiquement"
+
+#: markdown_preview/menu.ui:44
+msgid "Position"
+msgstr "Position"
+
+#: markdown_preview/menu.ui:46
+msgid "Side Panel"
+msgstr "Panneau latéral"
+
+#: markdown_preview/menu.ui:51
+msgid "Bottom Panel"
+msgstr "Panneau inférieur"
+
+#: markdown_preview/menu.ui:56
+msgid "Hide the panel"
+msgstr "Masquer le panneau"
+
+#: markdown_preview/menu.ui:62
+msgid "Insert an image"
+msgstr "Insérer une image"

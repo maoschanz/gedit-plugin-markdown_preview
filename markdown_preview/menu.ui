@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
-<interface domain="draw">
+<interface domain="gedit-plugin-markdown-preview">
   <menu id="preview-menu">
     <section>
         <item>
-            <attribute name="label" translatable="yes">Export as</attribute>
+            <attribute name="label" translatable="yes">Export</attribute>
             <attribute name="action">win.md_prev_export_doc</attribute>
         </item>
         <item>
@@ -53,7 +53,7 @@
             <attribute name="target">bottom</attribute>
         </item>
         <item>
-            <attribute name="label" translatable="yes">Hide</attribute>
+            <attribute name="label" translatable="yes">Hide the panel</attribute>
             <attribute name="action">win.md_prev_hide</attribute>
         </item>
     </section>

@@ -1,46 +1,151 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-03 18:48+0100\n"
-"PO-Revision-Date: 2018-03-05 16:47+0100\n"
+"POT-Creation-Date: 2018-08-20 16:04+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgid "Markdown Preview"
-msgstr ""
-
+#: markdown_preview/__init__.py:38 markdown_preview/__init__.py:496
 msgid "Export the preview"
 msgstr ""
 
+#: markdown_preview/__init__.py:39
 msgid "Print the preview"
 msgstr ""
 
-msgid "This is not a markdown document."
+#: markdown_preview/__init__.py:40
+msgid "Insert a picture"
 msgstr ""
 
+#: markdown_preview/__init__.py:44 markdown_preview/__init__.py:418
+msgid "Markdown Preview"
+msgstr ""
+
+#: markdown_preview/__init__.py:168 markdown_preview/__init__.py:202
+msgid "Reload the preview"
+msgstr ""
+
+#: markdown_preview/__init__.py:169
+msgid "Previous page"
+msgstr ""
+
+#: markdown_preview/__init__.py:170
+msgid "Next page"
+msgstr ""
+
+#: markdown_preview/__init__.py:171
+msgid "Search"
+msgstr ""
+
+#: markdown_preview/__init__.py:172
+msgid "More options"
+msgstr ""
+
+#: markdown_preview/__init__.py:234
+msgid "No result"
+msgstr ""
+
+#: markdown_preview/__init__.py:312
+msgid "Can't preview an unsaved document"
+msgstr ""
+
+#: markdown_preview/__init__.py:314
+msgid "Unsupported type of document: "
+msgstr ""
+
+#: markdown_preview/__init__.py:453
+#, python-format
+msgid "%s results"
+msgstr ""
+
+#: markdown_preview/__init__.py:463
 msgid "Select a picture"
 msgstr ""
 
-msgid "Select a CSS file"
-msgstr ""
-
+#: markdown_preview/__init__.py:543
 msgid "Preview position"
 msgstr ""
 
-msgid "Bottom panel"
-msgstr ""
-
+#: markdown_preview/__init__.py:545
 msgid "Side panel"
 msgstr ""
 
+#: markdown_preview/__init__.py:546
+msgid "Bottom panel"
+msgstr ""
+
+#: markdown_preview/__init__.py:554
 msgid "Use relative paths"
 msgstr ""
 
+#: markdown_preview/__init__.py:563
+msgid "Export .tex files with pdflatex"
+msgstr ""
+
+#: markdown_preview/__init__.py:572 markdown_preview/__init__.py:600
 msgid "Stylesheet"
 msgstr ""
 
+#: markdown_preview/__init__.py:595
+msgid "Select a CSS file"
+msgstr ""
+
+#: markdown_preview/menu.ui:6
+msgid "Export"
+msgstr ""
+
+#: markdown_preview/menu.ui:10
+msgid "Print"
+msgstr ""
+
+#: markdown_preview/menu.ui:18
+msgid "Zoom out"
+msgstr ""
+
+#: markdown_preview/menu.ui:24
+msgid "Original Zoom"
+msgstr ""
+
+#: markdown_preview/menu.ui:28
+msgid "Zoom in"
+msgstr ""
+
+#: markdown_preview/menu.ui:35
+msgid "Display only one page"
+msgstr ""
+
+#: markdown_preview/menu.ui:39
+msgid "Automatically reload"
+msgstr ""
+
+#: markdown_preview/menu.ui:44
+msgid "Position"
+msgstr ""
+
+#: markdown_preview/menu.ui:46
+msgid "Side Panel"
+msgstr ""
+
+#: markdown_preview/menu.ui:51
+msgid "Bottom Panel"
+msgstr ""
+
+#: markdown_preview/menu.ui:56
+msgid "Hide the panel"
+msgstr ""
+
+#: markdown_preview/menu.ui:62
+msgid "Insert an image"
+msgstr ""

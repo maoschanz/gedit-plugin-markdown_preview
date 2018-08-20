@@ -4,12 +4,12 @@
 
 - vérifier pandoc et libwebkit2gtk-4.0-dev
 - vérifier le schéma après installation
+- générer les traductions
 
 ## Général
 
-- déconnecter les signaux : `self.truc.disconnect(self._handlers[0])`
+- les traductions ??????
 - s'abstraire du fichier temporaire pour utiliser [le module pipes](https://docs.python.org/fr/3.6/library/pipes.html)
-- ne pas faire tourner si caché, évidemment
 
 ### Support de Xed
 
@@ -32,8 +32,10 @@
 
 ## Préférences
 
+- utiliser un .ui
 - update le label
 - autohide si pas reconnu ?
+- sensibilité du compteur laid
 
 ![](/home/roschan/Images/XHzRUpI.jpg)
 

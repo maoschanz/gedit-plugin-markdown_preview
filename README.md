@@ -2,7 +2,7 @@
 
 This is a plugin for the Gedit text editor, previewing .md files in the bottom or the side panel.
 
-Main features (v0.5), for any .md or .html file:
+Main features (v0.6), for any .md or .html file:
 
 - load a preview of a file
 - dynamically update the preview
@@ -18,15 +18,15 @@ Also:
 - it can open most relative links (as an option, because WebKit2GTK can't load URIs with special characters)
 - it can apply a CSS stylesheet to the preview (markdown only)
 
-The preview be displayed in the side panel or in the bottom panel, and this setting can be changed dynamically.
+The preview can be displayed in the side panel or in the bottom panel, and this setting can be changed dynamically.
 
 ----
 
 ## Screenshots
 
-![With the preview in the bottom panel, slideshow mode](http://image.noelshack.com/fichiers/2018/11/5/1521221133-capture-d-ecran-de-2018-03-16-18-25-21.png)
+![With the preview in the bottom panel, slideshow mode, searching](https://i.imgur.com/4xnqoUZ.png)
 
-![With the preview in the side panel, dynamically updated](http://image.noelshack.com/fichiers/2018/11/5/1521221246-capture-d-ecran-de-2018-03-16-18-27-19.png)
+![With the preview in the side panel, menu opened](https://i.imgur.com/k9qIsgw.png)
 
 ----
 
