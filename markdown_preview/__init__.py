@@ -68,10 +68,13 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		self.build_preview_ui()
 		self._handlers.append( self.window.connect('active-tab-changed', self.on_reload) )
 		self.page_index = 0
+		self.page_number = 1
 		self.temp_file_md = Gio.File.new_for_path(BASE_TEMP_NAME + '.md')
 		self.window.lookup_action('md_prev_export_doc').set_enabled(False)
 		self.window.lookup_action('md_prev_print_doc').set_enabled(False)
 		self.window.lookup_action('md_prev_insert_picture').set_enabled(False)
+		self.window.lookup_action('md_prev_next').set_enabled(False)
+		self.window.lookup_action('md_prev_previous').set_enabled(False)
 	
 	# This is called every time the gui is updated
 	def do_update_state(self):
@@ -128,9 +131,27 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		action_panel.connect('change-state', self.on_change_panel_from_popover)
 		self.window.add_action(action_panel)
 		
+		action_presentation = Gio.SimpleAction(name='md_prev_presentation')
+		action_presentation.connect('activate', self.on_presentation)
+		self.window.add_action(action_presentation)
+		
 		action_hide = Gio.SimpleAction(name='md_prev_hide')
 		action_hide.connect('activate', self.on_hide_panel)
 		self.window.add_action(action_hide)
+		
+		# ----------
+		
+		self.action_reload_preview = Gio.SimpleAction(name='md_prev_reload')
+		self.action_reload_preview.connect('activate', self.on_reload)
+		self.window.add_action(self.action_reload_preview)
+		
+		self.action_previous_page = Gio.SimpleAction(name='md_prev_previous')
+		self.action_previous_page.connect('activate', self.on_previous_page)
+		self.window.add_action(self.action_previous_page)
+		
+		self.action_next_page = Gio.SimpleAction(name='md_prev_next')
+		self.action_next_page.connect('activate', self.on_next_page)
+		self.window.add_action(self.action_next_page)
 		
 	def build_preview_ui(self):
 		# This is the preview itself
@@ -199,10 +220,11 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 			pass
 		else:
 			b.remove_all()
-		action_reload_preview = Gio.SimpleAction(name='reload_preview') # FIXME action dupliquee inutilement
-		reloadItem = WebKit2.ContextMenuItem.new_from_gaction(action_reload_preview, _("Reload the preview"), None)
-		self.window.add_action(action_reload_preview)
-		action_reload_preview.connect('activate', self.on_reload)
+		nextPageItem = WebKit2.ContextMenuItem.new_from_gaction(self.action_next_page, _("Next page"), None)
+		prevPageItem = WebKit2.ContextMenuItem.new_from_gaction(self.action_previous_page, _("Previous page"), None)
+		reloadItem = WebKit2.ContextMenuItem.new_from_gaction(self.action_reload_preview, _("Reload the preview"), None)
+		b.append(prevPageItem)
+		b.append(nextPageItem)
 		b.append(reloadItem)
 		return False
 		
@@ -242,7 +264,7 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		return searchBtn
 		
 	def on_change_panel_from_popover(self, *args):
-		if GLib.Variant.new_string('bottom') == args[0].get_state():
+		if GLib.Variant.new_string('side') == args[1]:
 			self._settings.set_string('position', 'side')
 			args[0].set_state(GLib.Variant.new_string('side'))
 		else:
@@ -267,23 +289,27 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 	def on_set_paginated(self, *args):
 		if not args[0].get_state():
 			self.is_paginated = True
+			self.window.lookup_action('md_prev_next').set_enabled(True)
+			self.window.lookup_action('md_prev_previous').set_enabled(True)
 			self.pages_box.props.visible = True
 			self.on_reload()
 			args[0].set_state(GLib.Variant.new_boolean(True))
 		else:
 			self.is_paginated = False
+			self.window.lookup_action('md_prev_next').set_enabled(False)
+			self.window.lookup_action('md_prev_previous').set_enabled(False)
 			self.pages_box.props.visible = False
 			self.on_reload()
 			args[0].set_state(GLib.Variant.new_boolean(False))
 	
-	def on_previous_page(self, btn):
+	def on_previous_page(self, *args):
 		if self.page_index > 0:
 			self.page_index = self.page_index -1
 			self.on_reload()
 #		else:
 #			btn.set_sensitive(False)
 			
-	def on_next_page(self, btn):
+	def on_next_page(self, *args):
 		self.page_index = self.page_index +1
 		self.on_reload()
 	
@@ -394,8 +420,9 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 			return html_string
 		
 		html_pages = html_string.split('<hr />')
-		if self.page_index is len(html_pages):
-			self.page_index = self.page_index -1
+		self.page_number = len(html_pages)
+		if self.page_index >= self.page_number:
+			self.page_index = self.page_number-1
 		html_current_page = html_pages[self.page_index]
 		return html_current_page
 	
@@ -417,22 +444,25 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 			self.preview_bar.props.orientation = Gtk.Orientation.VERTICAL
 			self.buttons_main_box.props.orientation = Gtk.Orientation.HORIZONTAL
 		self.panel.add_titled(self.preview_bar, 'markdown_preview', _("Markdown Preview"))
-		self.preview_bar.show_all()
 		self.panel.set_visible_child(self.preview_bar)
+		self.preview_bar.show_all()
 		self.pages_box.props.visible = self.is_paginated
 		if self.window.get_state() is 'STATE_NORMAL':
 			self.on_reload()
 
 	def remove_from_panel(self):
-		self.panel.remove(self.preview_bar)
+		if self.panel is not None:
+			self.panel.remove(self.preview_bar)
 	
 	def on_zoom_in(self, *args):
 		if self._webview.get_zoom_level() < 10:
 			self._webview.set_zoom_level(self._webview.get_zoom_level() + 0.1)
+		return self._webview.get_zoom_level()
 		
 	def on_zoom_out(self, *args):
 		if self._webview.get_zoom_level() > 0.15:
 			self._webview.set_zoom_level(self._webview.get_zoom_level() - 0.1)
+		return self._webview.get_zoom_level()
 			
 	def on_zoom_original(self, *args):
 		self._webview.set_zoom_level(1)
@@ -484,6 +514,11 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		self.show_on_panel()
 		self.do_update_state()
 		self.on_reload()
+		
+	def on_presentation(self, *args):
+		self.preview_bar.remove(self._webview)
+		w = MdPreviewWindow(self)
+		w.window.present()
 	
 	def do_create_configure_widget(self):
 		# Just return your box, PeasGtk will automatically pack it into a box and show it.
@@ -527,7 +562,83 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 	def print_doc(self, a, b):
 		p = WebKit2.PrintOperation.new(self._webview)
 		p.run_dialog()
+		
+class MdPreviewWindow():
+	__gtype_name__ = 'MdPreviewWindow'
 
+	def __init__(self, gedit_window):
+		self.window = Gtk.Window(title=_("Markdown Preview"))
+		self.gedit_window = gedit_window
+		self.gedit_window.is_paginated = True
+		self.gedit_window.on_reload()
+		headerbar = Gtk.HeaderBar(show_close_button=False)
+		
+		zoom_box = Gtk.Box()
+		zoom_box.get_style_context().add_class('linked')
+		zoom_out_btn = Gtk.Button().new_from_icon_name('zoom-out-symbolic', Gtk.IconSize.BUTTON)
+		self.zoom_current = Gtk.Button(label='100%')
+		zoom_in_btn = Gtk.Button().new_from_icon_name('zoom-in-symbolic', Gtk.IconSize.BUTTON)
+		zoom_box.add(zoom_out_btn)
+		zoom_box.add(self.zoom_current)
+		zoom_box.add(zoom_in_btn)
+		zoom_out_btn.connect('clicked', self.on_zoom_out)
+		self.zoom_current.connect('clicked', self.on_zoom_original)
+		zoom_in_btn.connect('clicked', self.on_zoom_in)
+		self.on_zoom_original()
+		headerbar.pack_start(zoom_box)
+		
+		page_box = Gtk.Box(spacing=5)
+		page_prev_btn = Gtk.Button().new_from_icon_name('go-previous-symbolic', Gtk.IconSize.BUTTON)
+		self.page_current = Gtk.Label(label='1/1')
+		page_next_btn = Gtk.Button().new_from_icon_name('go-next-symbolic', Gtk.IconSize.BUTTON)
+		page_box.add(page_prev_btn)
+		page_box.add(self.page_current)
+		page_box.add(page_next_btn)
+		page_prev_btn.connect('clicked', self.on_page_previous)
+		page_next_btn.connect('clicked', self.on_page_next)
+		self.update_page_label()
+		headerbar.set_custom_title(page_box)
+		
+		restore_btn = Gtk.Button().new_from_icon_name('view-restore-symbolic', Gtk.IconSize.BUTTON)
+		restore_btn.connect('clicked', self.on_close)
+		headerbar.pack_end(restore_btn)
+		
+		headerbar.show_all()
+		self.window.set_titlebar(headerbar)
+		self.window.add(self.gedit_window._webview)
+		self.window.maximize()
+		self.window.connect('destroy', self.restore_preview)
+		
+	def on_close(self, *args):
+		self.window.close()
+		
+	def on_zoom_original(self, *args):
+		self.gedit_window.on_zoom_original()
+		self.zoom_current.set_label('100%')
+		
+	def on_zoom_in(self, *args):
+		self.zoom_current.set_label(str(int(self.gedit_window.on_zoom_in()*100)) + '%')
+		
+	def on_zoom_out(self, *args):
+		self.zoom_current.set_label(str(int(self.gedit_window.on_zoom_out()*100)) + '%')
+		
+	def on_page_previous(self, *args):
+		self.gedit_window.on_previous_page()
+		self.update_page_label()
+		
+	def on_page_next(self, *args):
+		self.gedit_window.on_next_page()
+		self.update_page_label()
+		
+	def update_page_label(self):
+		self.page_current.set_label(str(int(self.gedit_window.page_index)+1) + '/' \
+			+ str(int(self.gedit_window.page_number)))
+		
+	def restore_preview(self, *args):
+		self.window.remove(self.gedit_window._webview)
+		self.gedit_window.preview_bar.pack_start(self.gedit_window._webview, expand=True, fill=True, padding=0)
+		self.gedit_window._webview.show()
+		
 ############################
 
 class MdConfigWidget(Gtk.Box):

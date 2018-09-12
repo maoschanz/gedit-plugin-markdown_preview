@@ -3,10 +3,11 @@
 ## Script d'installation
 
 - vérifier pandoc et libwebkit2gtk-4.0-dev
-- vérifier le schéma après installation
-- générer les traductions
+- vérifier le schéma après installation -> oulala mdr ça ne marche pas comme prévu
 
 ## Général
+
+- plein écran : faire une fenêtre et l'envoyer en fullscreen oklm ? just window.fullscreen() et .unfullscreen()
 
 - les traductions ??????
 - s'abstraire du fichier temporaire pour utiliser [le module pipes](https://docs.python.org/fr/3.6/library/pipes.html)

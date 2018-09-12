@@ -53,6 +53,10 @@
             <attribute name="target">bottom</attribute>
         </item>
         <item>
+            <attribute name="label" translatable="yes">Presentation</attribute>
+            <attribute name="action">win.md_prev_presentation</attribute>
+        </item>
+        <item>
             <attribute name="label" translatable="yes">Hide the panel</attribute>
             <attribute name="action">win.md_prev_hide</attribute>
         </item>
