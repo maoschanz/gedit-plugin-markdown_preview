@@ -7,10 +7,10 @@
 
 ## Général
 
-- plein écran : faire une fenêtre et l'envoyer en fullscreen oklm ? just window.fullscreen() et .unfullscreen()
-
 - les traductions ??????
-- s'abstraire du fichier temporaire pour utiliser [le module pipes](https://docs.python.org/fr/3.6/library/pipes.html)
+- s'abstraire du fichier temporaire pour utiliser [le module pipes](https://docs.python.org/fr/3.6/library/pipes.html) ou bien mieux python-markdown
+
+- étendre le clic-droit pour ajouter gras/italique/liste/titre±
 
 ### Support de Xed
 

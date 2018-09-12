@@ -145,3 +145,6 @@ msgstr "Masquer le panneau"
 #: markdown_preview/menu.ui:62
 msgid "Insert an image"
 msgstr "Insérer une image"
+
+#~ msgid "Presentation"
+#~ msgstr "Présentation"

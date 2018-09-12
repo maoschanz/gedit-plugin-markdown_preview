@@ -145,14 +145,6 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		self.action_reload_preview.connect('activate', self.on_reload)
 		self.window.add_action(self.action_reload_preview)
 		
-		self.action_previous_page = Gio.SimpleAction(name='md_prev_previous')
-		self.action_previous_page.connect('activate', self.on_previous_page)
-		self.window.add_action(self.action_previous_page)
-		
-		self.action_next_page = Gio.SimpleAction(name='md_prev_next')
-		self.action_next_page.connect('activate', self.on_next_page)
-		self.window.add_action(self.action_next_page)
-		
 	def build_preview_ui(self):
 		# This is the preview itself
 		self._webview = WebKit2.WebView()
@@ -220,11 +212,7 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 			pass
 		else:
 			b.remove_all()
-		nextPageItem = WebKit2.ContextMenuItem.new_from_gaction(self.action_next_page, _("Next page"), None)
-		prevPageItem = WebKit2.ContextMenuItem.new_from_gaction(self.action_previous_page, _("Previous page"), None)
 		reloadItem = WebKit2.ContextMenuItem.new_from_gaction(self.action_reload_preview, _("Reload the preview"), None)
-		b.append(prevPageItem)
-		b.append(nextPageItem)
 		b.append(reloadItem)
 		return False
 		
