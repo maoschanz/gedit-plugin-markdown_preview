@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-20 16:04+0200\n"
+"POT-Creation-Date: 2018-09-12 15:26+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: markdown_preview/__init__.py:38 markdown_preview/__init__.py:496
+#: markdown_preview/__init__.py:38 markdown_preview/__init__.py:520
 msgid "Export the preview"
 msgstr ""
 
@@ -29,76 +29,77 @@ msgstr ""
 msgid "Insert a picture"
 msgstr ""
 
-#: markdown_preview/__init__.py:44 markdown_preview/__init__.py:418
+#: markdown_preview/__init__.py:44 markdown_preview/__init__.py:434
+#: markdown_preview/__init__.py:558
 msgid "Markdown Preview"
 msgstr ""
 
-#: markdown_preview/__init__.py:168 markdown_preview/__init__.py:202
+#: markdown_preview/__init__.py:182 markdown_preview/__init__.py:215
 msgid "Reload the preview"
 msgstr ""
 
-#: markdown_preview/__init__.py:169
+#: markdown_preview/__init__.py:183
 msgid "Previous page"
 msgstr ""
 
-#: markdown_preview/__init__.py:170
+#: markdown_preview/__init__.py:184
 msgid "Next page"
 msgstr ""
 
-#: markdown_preview/__init__.py:171
+#: markdown_preview/__init__.py:185
 msgid "Search"
 msgstr ""
 
-#: markdown_preview/__init__.py:172
+#: markdown_preview/__init__.py:186
 msgid "More options"
 msgstr ""
 
-#: markdown_preview/__init__.py:234
+#: markdown_preview/__init__.py:245
 msgid "No result"
 msgstr ""
 
-#: markdown_preview/__init__.py:312
+#: markdown_preview/__init__.py:327
 msgid "Can't preview an unsaved document"
 msgstr ""
 
-#: markdown_preview/__init__.py:314
+#: markdown_preview/__init__.py:329
 msgid "Unsupported type of document: "
 msgstr ""
 
-#: markdown_preview/__init__.py:453
+#: markdown_preview/__init__.py:472
 #, python-format
 msgid "%s results"
 msgstr ""
 
-#: markdown_preview/__init__.py:463
+#: markdown_preview/__init__.py:482
 msgid "Select a picture"
 msgstr ""
 
-#: markdown_preview/__init__.py:543
+#: markdown_preview/__init__.py:645
 msgid "Preview position"
 msgstr ""
 
-#: markdown_preview/__init__.py:545
-msgid "Side panel"
+#: markdown_preview/__init__.py:647 markdown_preview/menu.ui:46
+msgid "Side Panel"
 msgstr ""
 
-#: markdown_preview/__init__.py:546
-msgid "Bottom panel"
+#: markdown_preview/__init__.py:648 markdown_preview/menu.ui:51
+msgid "Bottom Panel"
 msgstr ""
 
-#: markdown_preview/__init__.py:554
+#: markdown_preview/__init__.py:654
 msgid "Use relative paths"
 msgstr ""
 
-#: markdown_preview/__init__.py:563
+#: markdown_preview/__init__.py:661
 msgid "Export .tex files with pdflatex"
 msgstr ""
 
-#: markdown_preview/__init__.py:572 markdown_preview/__init__.py:600
+#: markdown_preview/__init__.py:668 markdown_preview/__init__.py:700
 msgid "Stylesheet"
 msgstr ""
 
-#: markdown_preview/__init__.py:595
+#: markdown_preview/__init__.py:695
 msgid "Select a CSS file"
 msgstr ""
 
@@ -134,18 +135,14 @@ msgstr ""
 msgid "Position"
 msgstr ""
 
-#: markdown_preview/menu.ui:46
-msgid "Side Panel"
-msgstr ""
-
-#: markdown_preview/menu.ui:51
-msgid "Bottom Panel"
-msgstr ""
-
 #: markdown_preview/menu.ui:56
+msgid "Presentation"
+msgstr ""
+
+#: markdown_preview/menu.ui:60
 msgid "Hide the panel"
 msgstr ""
 
-#: markdown_preview/menu.ui:62
+#: markdown_preview/menu.ui:66
 msgid "Insert an image"
 msgstr ""

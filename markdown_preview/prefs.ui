@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface domain="gedit-plugin-markdown-preview">
+	<object class="GtkBox" id="preview_page">
+		<property name="visible">True</property>
+		<property name="spacing">20</property>
+		<property name="orientation">vertical</property>
+		<child>
+			<object class="GtkBox">
+				<property name="visible">True</property>
+				<property name="orientation">horizontal</property>
+				<child>
+					<object class="GtkLabel">
+						<property name="visible">True</property>
+						<property name="label" translatable="yes">Preview position</property>
+					</object>
+					<packing>
+						<property name="pack-type">start</property>
+					</packing>
+				</child>
+				<child>
+					<object class="GtkComboBoxText" id="positionCombobox">
+						<property name="visible">True</property>
+					</object>
+					<packing>
+						<property name="pack-type">end</property>
+					</packing>
+				</child>
+			</object>
+		</child>
+		
+		<child>
+			<object class="GtkBox">
+				<property name="visible">True</property>
+				<property name="orientation">horizontal</property>
+				<child>
+					<object class="GtkLabel">
+						<property name="visible">True</property>
+						<property name="label" translatable="yes">Use relative paths</property>
+					</object>
+					<packing>
+						<property name="pack-type">start</property>
+					</packing>
+				</child>
+				<child>
+					<object class="GtkSwitch" id="relativePathsSwitch">
+						<property name="visible">True</property>
+					</object>
+					<packing>
+						<property name="pack-type">end</property>
+					</packing>
+				</child>
+			</object>
+		</child>
+		
+		<child>
+			<object class="GtkBox">
+				<property name="visible">True</property>
+				<property name="orientation">horizontal</property>
+				<property name="spacing">10</property>
+				<child>
+					<object class="GtkLabel">
+						<property name="visible">True</property>
+						<property name="label" translatable="yes">Stylesheet</property>
+					</object>
+					<packing>
+						<property name="pack-type">start</property>
+					</packing>
+				</child>
+				<child>
+					<object class="GtkButton" id="styleButton">
+						<property name="visible">True</property>
+						<child>
+							<object class="GtkBox">
+								<property name="visible">True</property>
+								<property name="spacing">5</property>
+								<child>
+									<object class="GtkLabel" id="styleLabel">
+										<property name="visible">True</property>
+									</object>
+								</child>
+								<child>
+									<object class="GtkImage">
+										<property name="visible">True</property>
+										<property name="icon-name">document-open-symbolic</property>
+									</object>
+								</child>
+							</object>
+						</child>
+					</object>
+					<packing>
+						<property name="pack-type">end</property>
+					</packing>
+				</child>
+			</object>
+		</child>
+	</object>
+	<object class="GtkBox" id="export_page">
+		<property name="visible">True</property>
+		<property name="spacing">20</property>
+		<property name="orientation">vertical</property>
+		<child>
+			<object class="GtkBox">
+				<property name="visible">True</property>
+				<property name="orientation">horizontal</property>
+				<child>
+					<object class="GtkLabel">
+						<property name="visible">True</property>
+						<property name="label" translatable="yes">Export .tex files with pdflatex</property>
+					</object>
+					<packing>
+						<property name="pack-type">start</property>
+					</packing>
+				</child>
+				<child>
+					<object class="GtkSwitch" id="pdflatexSwitch">
+						<property name="visible">True</property>
+					</object>
+					<packing>
+						<property name="pack-type">end</property>
+					</packing>
+				</child>
+			</object>
+		</child>
+	</object>
+	<object class="GtkBox" id="shortcuts_page">
+		<property name="visible">True</property>
+		<property name="spacing">20</property>
+		<property name="orientation">vertical</property>
+		<child>
+			<object class="GtkBox">
+				<property name="visible">True</property>
+				<property name="orientation">horizontal</property>
+				<child>
+					<object class="GtkLabel">
+						<property name="visible">True</property>
+						<property name="label" translatable="yes">TODO</property>
+					</object>
+					<packing>
+						<property name="pack-type">start</property>
+					</packing>
+				</child>
+			</object>
+		</child>
+	</object>
+</interface>
+

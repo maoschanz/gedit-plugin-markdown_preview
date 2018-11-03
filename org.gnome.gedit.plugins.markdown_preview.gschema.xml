@@ -16,6 +16,11 @@
 			<summary></summary>
 			<description></description>
 		</key>
+		<key type="s" name="export-options">
+			<default>''</default>
+			<summary></summary>
+			<description></description>
+		</key>
 		<key type="s" name="style">
 			<default>""</default>
 			<summary></summary>
