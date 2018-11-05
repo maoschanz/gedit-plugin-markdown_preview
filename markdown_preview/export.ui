@@ -1,47 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface domain="gedit-plugin-markdown-preview">
-	<object class="GtkDialog" id="export_dialog">
+	<object class="GtkBox" id="content-area">
 		<property name="visible">True</property>
-		<property name="modal">True</property>
-		<property name="use-header-bar">True</property>
-		<child type="content-area">
-			<object class="GtkBox">
+		<property name="orientation">vertical</property>
+		<child>
+			<object class="GtkStackSwitcher">
+				<property name="stack">export_stack</property>
 				<property name="visible">True</property>
-				<property name="orientation">vertical</property>
+			</object>
+			<packing>
+				<property name="pack-type">start</property>
+			</packing>
+		</child>
+		<child>
+			<object class="GtkStack" id="export_stack">
+				<property name="visible">True</property>
+				<property name="expand">True</property>
 				<child>
-					<object class="GtkStackSwitcher">
-						<property name="stack">export_stack</property>
+					<object class="GtkLabel">
+						<property name="label">export_stack</property>
 						<property name="visible">True</property>
 					</object>
 					<packing>
-						<property name="pack-type">start</property>
+						<property name="title">titre 1</property>
+						<property name="name">test1</property>
 					</packing>
 				</child>
 				<child>
-					<object class="GtkStack" id="export_stack">
+					<object class="GtkLabel">
+						<property name="label">export_stack</property>
 						<property name="visible">True</property>
-						<property name="expand">True</property>
-						<child>
-							<object class="GtkLabel">
-								<property name="label">export_stack</property>
-								<property name="visible">True</property>
-							</object>
-							<packing>
-								<property name="title">titre 1</property>
-								<property name="name">test1</property>
-							</packing>
-						</child>
-						<child>
-							<object class="GtkLabel">
-								<property name="label">export_stack</property>
-								<property name="visible">True</property>
-							</object>
-							<packing>
-								<property name="title">titre 2</property>
-								<property name="name">test2</property>
-							</packing>
-						</child>
 					</object>
+					<packing>
+						<property name="title">titre 2</property>
+						<property name="name">test2</property>
+					</packing>
 				</child>
 			</object>
 		</child>

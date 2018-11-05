@@ -132,6 +132,16 @@
 	</section>
 	<section>
 		<item>
+			<attribute name="label" translatable="yes">Unordered list</attribute>
+			<attribute name="action">win.md_prev_list_unordered</attribute>
+		</item>
+		<item>
+			<attribute name="label" translatable="yes">Ordered list</attribute>
+			<attribute name="action">win.md_prev_list_ordered</attribute>
+		</item>
+	</section>
+	<section>
+		<item>
 			<attribute name="label" translatable="yes">Insert an image</attribute>
 			<attribute name="action">win.md_prev_insert_picture</attribute>
 		</item>

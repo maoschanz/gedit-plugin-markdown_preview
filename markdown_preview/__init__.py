@@ -37,10 +37,11 @@ class MarkdownGeditPluginApp(GObject.Object, Gedit.AppActivatable):
 
 	def build_main_menu(self):
 		self.menu_ext = self.extend_menu('tools-section')
-		builder = Gtk.Builder().new_from_file(os.path.join(BASE_PATH, 'menu.ui'))
+		builder = Gtk.Builder().new_from_file(os.path.join(BASE_PATH, 'menus.ui'))
 #		menu = builder.get_object('md-preview-menu')
 #		self.menu_section = Gio.MenuItem.new_submenu(_("Markdown Preview"), menu)
 #		self.menu_ext.append_menu_item(self.menu_section)
+
 		# Show the zoom settings as a submenu here because it's ugly otherwise
 		menu = builder.get_object('md-preview-actions')
 		self.menu_section_actions = Gio.MenuItem.new_section(_("Markdown Preview"), menu)
@@ -67,6 +68,9 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		self.preview = MdPreviewBar(self)
 
 	def do_activate(self):
+		self._handlers = []
+		self._settings = Gio.Settings.new(MD_PREVIEW_KEY_BASE)
+		self.connect_actions()
 		self.preview.do_activate()
 
 	# This is called every time the gui is updated
@@ -76,14 +80,14 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 	def do_deactivate(self):
 		self.preview.do_deactivate()
 
-	# ?????? XXX
-	def connect_preview_menu(self):
+	def connect_actions(self):
 		action_export = Gio.SimpleAction(name='md_prev_export_doc')
 		action_print = Gio.SimpleAction(name='md_prev_print_doc')
 		action_insert = Gio.SimpleAction(name='md_prev_insert_picture')
 		action_export.connect('activate', self.export_doc)
 		action_print.connect('activate', self.print_doc)
 		action_insert.connect('activate', self.insert_picture)
+		
 		self.window.add_action(action_export)
 		self.window.add_action(action_print)
 		self.window.add_action(action_insert)
@@ -91,74 +95,74 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		action_zoom_in = Gio.SimpleAction(name='md_prev_zoom_in')
 		action_zoom_original = Gio.SimpleAction(name='md_prev_zoom_original')
 		action_zoom_out = Gio.SimpleAction(name='md_prev_zoom_out')
-		action_zoom_in.connect('activate', self.on_zoom_in)
-		action_zoom_original.connect('activate', self.on_zoom_original)
-		action_zoom_out.connect('activate', self.on_zoom_out)
+		action_zoom_in.connect('activate', self.preview.on_zoom_in)
+		action_zoom_original.connect('activate', self.preview.on_zoom_original)
+		action_zoom_out.connect('activate', self.preview.on_zoom_out)
+		
 		self.window.add_action(action_zoom_in)
 		self.window.add_action(action_zoom_original)
 		self.window.add_action(action_zoom_out)
 
 		action_paginated = Gio.SimpleAction().new_stateful('md_prev_set_paginated', \
 		None, GLib.Variant.new_boolean(False))
-		action_paginated.connect('change-state', self.on_set_paginated)
-		self.window.add_action(action_paginated)
+		action_paginated.connect('change-state', self.preview.on_set_paginated)
+		
+		action_next = Gio.SimpleAction(name='md_prev_next')
+		action_next.connect('activate', self.preview.on_next_page)
+		
+		action_previous = Gio.SimpleAction(name='md_prev_previous')
+		action_previous.connect('activate', self.preview.on_previous_page)
 
 		action_autoreload = Gio.SimpleAction().new_stateful('md_prev_set_autoreload', \
-		None, GLib.Variant.new_boolean(self.auto_reload))
-		action_autoreload.connect('change-state', self.on_set_reload)
-		self.window.add_action(action_autoreload)
+		None, GLib.Variant.new_boolean(self.preview.auto_reload))
+		action_autoreload.connect('change-state', self.preview.on_set_reload)
+		
+		self.action_reload_preview = Gio.SimpleAction(name='md_prev_reload')
+		self.action_reload_preview.connect('activate', self.preview.on_reload)
 
 		action_panel = Gio.SimpleAction().new_stateful('md_prev_panel', \
 		GLib.VariantType.new('s'), GLib.Variant.new_string(self._settings.get_string('position')))
-		action_panel.connect('change-state', self.on_change_panel_from_popover)
-		self.window.add_action(action_panel)
+		action_panel.connect('change-state', self.preview.on_change_panel_from_popover)
 
 		action_presentation = Gio.SimpleAction(name='md_prev_presentation')
-		action_presentation.connect('activate', self.on_presentation)
-		self.window.add_action(action_presentation)
+		action_presentation.connect('activate', self.preview.on_presentation)
 
 		action_hide = Gio.SimpleAction(name='md_prev_hide')
-		action_hide.connect('activate', self.on_hide_panel)
+		action_hide.connect('activate', self.preview.on_hide_panel)
+		
+		self.window.add_action(action_paginated)
+		self.window.add_action(action_next)
+		self.window.add_action(action_previous)
+		self.window.add_action(action_panel)
+		self.window.add_action(action_presentation)
 		self.window.add_action(action_hide)
-
-		self.action_reload_preview = Gio.SimpleAction(name='md_prev_reload')
-		self.action_reload_preview.connect('activate', self.on_reload)
+		self.window.add_action(action_autoreload)
 		self.window.add_action(self.action_reload_preview)
+	
+	def recognize_format(self):
+		doc = self.window.get_active_document()
+		# It will not load documents which are not .md/.html/.tex
+		name = doc.get_short_name_for_display()
+		temp = name.split('.')
+		self.preview.display_warning(False, '')
+		if temp[len(temp)-1] == 'md':
+			return 'md'
+		elif temp[len(temp)-1] == 'html':
+			self.window.lookup_action('md_prev_insert_picture').set_enabled(False)
+			return 'html'
+		elif temp[len(temp)-1] == 'tex':
+			self.window.lookup_action('md_prev_insert_picture').set_enabled(False)
+			return 'tex'
+		# The current content is not replaced, which allows document consulation while working on a file
+		self.window.lookup_action('md_prev_export_doc').set_enabled(False)
+		self.window.lookup_action('md_prev_print_doc').set_enabled(False)
+		self.window.lookup_action('md_prev_insert_picture').set_enabled(False)
+		if doc.is_untitled():
+			self.preview.display_warning(True, _("Can't preview an unsaved document"))
+		else:
+			self.preview.display_warning(True, _("Unsupported type of document: ") + name)
+		return 'error'
 
-	# ?????? XXX
-	def build_preview_ui(self):
-		ui_builder = Gtk.Builder().new_from_file(os.path.join(BASE_PATH, 'preview.ui'))
-		self.preview_bar = ui_builder.get_object('preview_bar')
-		
-		# This is the preview itself
-		self._webview = WebKit2.WebView()
-		self._webview.connect('context-menu', self.on_context_menu)
-		self.preview_bar.pack_start(self._webview, expand=True, fill=True, padding=0)
-
-		# Building UI elements
-		menuBtn = ui_builder.get_object('menu_btn')
-		menu_builder = Gtk.Builder().new_from_file(os.path.join(BASE_PATH, 'menu.ui'))
-		self.menu_popover = Gtk.Popover().new_from_model(menuBtn, menu_builder.get_object('md-preview-menu'))
-		menuBtn.set_popover(self.menu_popover)
-		
-		self.build_search_popover()
-		searchBtn = ui_builder.get_object('search_btn')
-		self._search_popover.set_relative_to(searchBtn)
-		searchBtn.set_popover(self._search_popover)
-
-		self.buttons_main_box = ui_builder.get_object('buttons_main_box')
-		self.pages_box = ui_builder.get_object('pages_box')
-		self.warning_icon = ui_builder.get_object('warning_icon')
-		refreshBtn = ui_builder.get_object('refresh_btn')
-		previousBtn = ui_builder.get_object('previous_btn')
-		nextBtn = ui_builder.get_object('next_btn')
-		refreshBtn.connect('clicked', self.on_reload)
-		previousBtn.connect('clicked', self.on_previous_page)
-		nextBtn.connect('clicked', self.on_next_page)
-
-		self.show_on_panel()
-
-	# ?????? XXX
 	def on_change_panel_from_popover(self, *args):
 		if GLib.Variant.new_string('side') == args[1]:
 			self._settings.set_string('position', 'side')
@@ -166,15 +170,6 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		else:
 			self._settings.set_string('position', 'bottom')
 			args[0].set_state(GLib.Variant.new_string('bottom'))
-
-	def on_set_reload(self, *args):
-		if not args[0].get_state():
-			self.auto_reload = True
-			self.on_reload()
-			args[0].set_state(GLib.Variant.new_boolean(True))
-		else:
-			self.auto_reload = False
-			args[0].set_state(GLib.Variant.new_boolean(False))
 
 	def on_hide_panel(self, *args):
 		if self._settings.get_string('position') == 'bottom':
@@ -308,14 +303,48 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		# Just return your box, PeasGtk will automatically pack it into a dialog and show it.
 		widget = MdConfigWidget(self.plugin_info.get_data_dir())
 		return widget
+	
+	def insert_picture(self, a, b):
+		# Guard clause: it will not load dialog if the file is not .md
+		if self.recognize_format() != 'md':
+			return
+
+		# Building a FileChooserDialog for pictures
+		file_chooser = Gtk.FileChooserDialog(_("Select a picture"), self.window,
+			Gtk.FileChooserAction.OPEN,
+			(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+			Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
+		onlyPictures = Gtk.FileFilter()
+		onlyPictures.set_name("Pictures")
+		onlyPictures.add_mime_type('image/*')
+		file_chooser.set_filter(onlyPictures)
+		response = file_chooser.run()
+
+		# It gets the chosen file's path
+		if response == Gtk.ResponseType.OK:
+			doc = self.window.get_active_document()
+			picture_path = '![](' + file_chooser.get_filename() + ')'
+			iter = doc.get_iter_at_mark(doc.get_insert())
+			doc.insert(iter, picture_path)
+		file_chooser.destroy()
 
 	def export_doc(self, a, b):
 		
-		
+		dialog = Gtk.Dialog(use_header_bar=True)
+		dialog.add_button(_("Cancel"), Gtk.ResponseType.CANCEL)
+		dialog.add_button(_("Next"), Gtk.ResponseType.OK)
 		builder = Gtk.Builder().new_from_file(os.path.join(BASE_PATH, 'export.ui'))
-		dialog = builder.get_object('export_dialog')
-		dialog.run()
-	
+		dialog.get_content_area().add(builder.get_object('content-area'))
+		response_id = dialog.run()
+		if response_id == Gtk.ResponseType.CANCEL:
+			dialog.destroy()
+			return
+		elif response_id == Gtk.ResponseType.OK:
+			
+			# TODO
+			dialog.destroy()
+		
+		# TODO
 	
 		if (self.recognize_format() == 'tex') and self._settings.get_boolean('pdflatex'): #FIXME mauvais path?
 			subprocess.run(['pdflatex', self.window.get_active_document().get_location().get_path()])
@@ -355,7 +384,7 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 			file_chooser.destroy()
 
 	def print_doc(self, a, b):
-		p = WebKit2.PrintOperation.new(self._webview)
+		p = WebKit2.PrintOperation.new(self.preview._webview)
 		p.run_dialog()
 
 ####### ####### #######
@@ -368,7 +397,7 @@ class MarkdownGeditPluginView(GObject.Object, Gedit.ViewActivatable):
 		GObject.Object.__init__(self)
 
 	def do_activate(self):
-		menu_builder = Gtk.Builder().new_from_file(os.path.join(BASE_PATH, 'menu.ui'))
+		menu_builder = Gtk.Builder().new_from_file(os.path.join(BASE_PATH, 'menus.ui'))
 		self.md_prev_menu = Gtk.Menu().new_from_model(menu_builder.get_object('right-click-menu'))
 		self.popup_handler_id = self.view.connect('populate-popup', self.populate_popup)
 
@@ -388,6 +417,8 @@ class MarkdownGeditPluginView(GObject.Object, Gedit.ViewActivatable):
 		item = Gtk.MenuItem(_("Markdown tags"))
 		item.set_submenu(self.md_prev_menu)
 		item.show()
+#		if pas_du_md: # TODO
+#			item.set_sensitive(False)
 		popup.append(item)
 
 ##################################################
