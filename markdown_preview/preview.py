@@ -113,7 +113,7 @@ class MdPreviewBar(Gtk.Box):
 		# Building UI elements
 		menuBtn = ui_builder.get_object('menu_btn')
 		menu_builder = Gtk.Builder().new_from_file(os.path.join(BASE_PATH, 'menu.ui'))
-		self.menu_popover = Gtk.Popover().new_from_model(menuBtn, menu_builder.get_object('preview-menu'))
+		self.menu_popover = Gtk.Popover().new_from_model(menuBtn, menu_builder.get_object('md-preview-menu'))
 		menuBtn.set_popover(self.menu_popover)
 		
 		self.build_search_popover()
@@ -408,6 +408,7 @@ class MdPreviewBar(Gtk.Box):
 		w = MdPreviewWindow(self)
 		w.window.present()
 
+	# XXX rien à foutre là
 	def insert_picture(self, a, b):
 		# Guard clause: it will not load dialog if the file is not .md
 		if self.recognize_format() != 'md':

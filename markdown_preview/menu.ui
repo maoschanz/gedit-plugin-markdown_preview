@@ -1,71 +1,148 @@
 <?xml version="1.0"?>
 <interface domain="gedit-plugin-markdown-preview">
-  <menu id="preview-menu">
-    <section>
-        <item>
-            <attribute name="label" translatable="yes">Export the preview</attribute>
-            <attribute name="action">win.md_prev_export_doc</attribute>
-        </item>
-        <item>
-            <attribute name="label" translatable="yes">Print the preview</attribute>
-            <attribute name="action">win.md_prev_print_doc</attribute>
-        </item>
-        <item>
-            <attribute name="label" translatable="yes">Insert an image</attribute>
-            <attribute name="action">win.md_prev_insert_picture</attribute>
-        </item>
-    </section>
-    <section id="zoom">
-        <attribute name="display-hint">horizontal-buttons</attribute>
-<!--        <attribute name="label" translatable="yes">Zoom</attribute>-->
-            <item>
-                <attribute name="label" translatable="yes">Zoom out</attribute>
-                <attribute name="action">win.md_prev_zoom_out</attribute>
-                <attribute name="verb-icon">zoom-out-symbolic</attribute>
-            </item>
-            <item>
-                <attribute name="action">win.md_prev_zoom_original</attribute>
-                <attribute name="label" translatable="yes">Original Zoom</attribute>
-                <attribute name="verb-icon">zoom-original-symbolic</attribute>
-            </item>
-            <item>
-                <attribute name="label" translatable="yes">Zoom in</attribute>
-                <attribute name="action">win.md_prev_zoom_in</attribute>
-                <attribute name="verb-icon">zoom-in-symbolic</attribute>
-            </item>
-    </section>
-    <section>
-        <item>
-            <attribute name="label" translatable="yes">Display only one page</attribute>
-            <attribute name="action">win.md_prev_set_paginated</attribute>
-        </item>
-        <item>
-            <attribute name="label" translatable="yes">Automatically reload</attribute>
-            <attribute name="action">win.md_prev_set_autoreload</attribute>
-        </item>
-    </section>
-    <submenu id="position">
-<!--    <section id="position">-->
-        <attribute name="label" translatable="yes">Position</attribute>
-        <item>
-            <attribute name="label" translatable="yes">Side Panel</attribute>
-            <attribute name="action">win.md_prev_panel</attribute>
-            <attribute name="target">side</attribute>
-        </item>
-        <item>
-            <attribute name="label" translatable="yes">Bottom Panel</attribute>
-            <attribute name="action">win.md_prev_panel</attribute>
-            <attribute name="target">bottom</attribute>
-        </item>
-        <item>
-            <attribute name="label" translatable="yes">Presentation</attribute>
-            <attribute name="action">win.md_prev_presentation</attribute>
-        </item>
-        <item>
-            <attribute name="label" translatable="yes">Hide the panel</attribute>
-            <attribute name="action">win.md_prev_hide</attribute>
-        </item>
-<!--    </section>-->
-    </submenu>
+  <menu id="md-preview-menu">
+	<section id="md-preview-actions">
+		<item>
+			<attribute name="label" translatable="yes">Export the preview</attribute>
+			<attribute name="action">win.md_prev_export_doc</attribute>
+		</item>
+		<item>
+			<attribute name="label" translatable="yes">Print the preview</attribute>
+			<attribute name="action">win.md_prev_print_doc</attribute>
+		</item>
+	</section>
+	<section id="md-preview-zoom">
+		<attribute name="display-hint">horizontal-buttons</attribute>
+			<item>
+				<attribute name="label" translatable="yes">Zoom out</attribute>
+				<attribute name="action">win.md_prev_zoom_out</attribute>
+				<attribute name="verb-icon">zoom-out-symbolic</attribute>
+			</item>
+			<item>
+				<attribute name="action">win.md_prev_zoom_original</attribute>
+				<attribute name="label" translatable="yes">Original Zoom</attribute>
+				<attribute name="verb-icon">zoom-original-symbolic</attribute>
+			</item>
+			<item>
+				<attribute name="label" translatable="yes">Zoom in</attribute>
+				<attribute name="action">win.md_prev_zoom_in</attribute>
+				<attribute name="verb-icon">zoom-in-symbolic</attribute>
+			</item>
+	</section>
+	<section id="md-preview-settings">
+		<item>
+			<attribute name="label" translatable="yes">Side Panel</attribute>
+			<attribute name="action">win.md_prev_panel</attribute>
+			<attribute name="target">side</attribute>
+		</item>
+		<item>
+			<attribute name="label" translatable="yes">Bottom Panel</attribute>
+			<attribute name="action">win.md_prev_panel</attribute>
+			<attribute name="target">bottom</attribute>
+		</item>
+		<item>
+			<attribute name="label" translatable="yes">Hide the panel</attribute>
+			<attribute name="action">win.md_prev_hide</attribute>
+		</item>
+		<submenu id="view-mode">
+			<attribute name="label" translatable="yes">View mode</attribute>
+			<section>
+				<item>
+					<attribute name="label" translatable="yes">Presentation</attribute>
+					<attribute name="action">win.md_prev_presentation</attribute>
+				</item>
+			</section>
+			<section>
+				<item>
+					<attribute name="label" translatable="yes">Whole document</attribute>
+		<!--			<attribute name="action">win.md_set_view_mode</attribute>-->
+		<!--			<attribute name="target">whole</attribute>-->
+				</item>
+				<item>
+					<attribute name="label" translatable="yes">Split at separators</attribute>
+		<!--			<attribute name="action">win.md_set_view_mode</attribute>-->
+		<!--			<attribute name="target">separators</attribute>-->
+					<attribute name="action">win.md_prev_set_paginated</attribute>
+				</item>
+				<item>
+					<attribute name="label" translatable="yes">Slideshow with reveal.js</attribute>
+		<!--			<attribute name="action">win.md_set_view_mode</attribute>-->
+		<!--			<attribute name="target">separators</attribute>-->
+				</item>
+			</section>
+		</submenu>
+		<item>
+			<attribute name="label" translatable="yes">Automatically reload</attribute>
+			<attribute name="action">win.md_prev_set_autoreload</attribute>
+		</item>
+	</section>
+  </menu>
+  
+  <menu id="right-click-menu">
+	<submenu id="view-mode">
+		<attribute name="label" translatable="yes">Title</attribute>
+		<item>
+			<attribute name="label" translatable="yes">1</attribute>
+<!--			<attribute name="action">win.md_prev_format_title</attribute>-->
+<!--			<attribute name="target">1</attribute>-->
+		</item>
+		<item>
+			<attribute name="label" translatable="yes">2</attribute>
+<!--			<attribute name="action">win.md_prev_format_title</attribute>-->
+<!--			<attribute name="target">1</attribute>-->
+		</item>
+		<item>
+			<attribute name="label" translatable="yes">3</attribute>
+<!--			<attribute name="action">win.md_prev_format_title</attribute>-->
+<!--			<attribute name="target">1</attribute>-->
+		</item>
+		<item>
+			<attribute name="label" translatable="yes">4</attribute>
+<!--			<attribute name="action">win.md_prev_format_title</attribute>-->
+<!--			<attribute name="target">1</attribute>-->
+		</item>
+		<item>
+			<attribute name="label" translatable="yes">5</attribute>
+<!--			<attribute name="action">win.md_prev_format_title</attribute>-->
+<!--			<attribute name="target">1</attribute>-->
+		</item>
+		<item>
+			<attribute name="label" translatable="yes">6</attribute>
+<!--			<attribute name="action">win.md_prev_format_title</attribute>-->
+<!--			<attribute name="target">1</attribute>-->
+		</item>
+	</submenu>
+	<section>
+		<item>
+			<attribute name="label" translatable="yes">Bold</attribute>
+<!--			<attribute name="action">win.md_prev_format_bold</attribute>-->
+		</item>
+		<item>
+			<attribute name="label" translatable="yes">Italic</attribute>
+<!--			<attribute name="action">win.md_prev_format_italic</attribute>-->
+		</item>
+		<item>
+			<attribute name="label" translatable="yes">Underline</attribute>
+<!--			<attribute name="action">win.md_prev_format_underline</attribute>-->
+		</item>
+		<item>
+			<attribute name="label" translatable="yes">Monospace</attribute>
+<!--			<attribute name="action">win.md_prev_format_monospace</attribute>-->
+		</item>
+	</section>
+	<section>
+		<item>
+			<attribute name="label" translatable="yes">Insert an image</attribute>
+			<attribute name="action">win.md_prev_insert_picture</attribute>
+		</item>
+		<item>
+			<attribute name="label" translatable="yes">Insert a link</attribute>
+<!--			<attribute name="action">win.md_prev_insert_link</attribute>-->
+		</item>
+		<item>
+			<attribute name="label" translatable="yes">Insert a table</attribute>
+<!--			<attribute name="action">win.md_prev_insert_table</attribute>-->
+		</item>
+	</section>
   </menu>
 </interface>

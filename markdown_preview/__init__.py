@@ -17,10 +17,10 @@ try:
 except:
 	_ = lambda s: s
 
-#################
-
 MD_PREVIEW_KEY_BASE = 'org.gnome.gedit.plugins.markdown_preview'
 BASE_TEMP_NAME = '/tmp/gedit_plugin_markdown_preview'
+
+####### ####### #######
 
 class MarkdownGeditPluginApp(GObject.Object, Gedit.AppActivatable):
 	__gtype_name__ = 'MarkdownGeditPluginApp'
@@ -38,13 +38,25 @@ class MarkdownGeditPluginApp(GObject.Object, Gedit.AppActivatable):
 	def build_main_menu(self):
 		self.menu_ext = self.extend_menu('tools-section')
 		builder = Gtk.Builder().new_from_file(os.path.join(BASE_PATH, 'menu.ui'))
-		menu = builder.get_object('preview-menu')
-		self.menu_section = Gio.MenuItem.new_section(_("Markdown Preview"), menu)
-		self.menu_ext.append_menu_item(self.menu_section)
+#		menu = builder.get_object('md-preview-menu')
+#		self.menu_section = Gio.MenuItem.new_submenu(_("Markdown Preview"), menu)
+#		self.menu_ext.append_menu_item(self.menu_section)
+		# Show the zoom settings as a submenu here because it's ugly otherwise
+		menu = builder.get_object('md-preview-actions')
+		self.menu_section_actions = Gio.MenuItem.new_section(_("Markdown Preview"), menu)
+		self.menu_ext.append_menu_item(self.menu_section_actions)
+		menu = builder.get_object('md-preview-zoom')
+		self.menu_section_zoom = Gio.MenuItem.new_submenu(_("Zoom"), menu)
+		self.menu_ext.append_menu_item(self.menu_section_zoom)
+		menu = builder.get_object('md-preview-settings')
+		self.menu_section_settings = Gio.MenuItem.new_section(None, menu)
+		self.menu_ext.append_menu_item(self.menu_section_settings)
 
 	def _remove_menu(self):
-		self.menu_ext = None
+		self.menu_ext = None # FIXME ?
 		self.menu_item = None
+
+####### ####### #######
 
 class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk.Configurable):
 	window = GObject.property(type=Gedit.Window)
@@ -126,7 +138,7 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		# Building UI elements
 		menuBtn = ui_builder.get_object('menu_btn')
 		menu_builder = Gtk.Builder().new_from_file(os.path.join(BASE_PATH, 'menu.ui'))
-		self.menu_popover = Gtk.Popover().new_from_model(menuBtn, menu_builder.get_object('preview-menu'))
+		self.menu_popover = Gtk.Popover().new_from_model(menuBtn, menu_builder.get_object('md-preview-menu'))
 		menuBtn.set_popover(self.menu_popover)
 		
 		self.build_search_popover()
@@ -345,5 +357,37 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 	def print_doc(self, a, b):
 		p = WebKit2.PrintOperation.new(self._webview)
 		p.run_dialog()
+
+####### ####### #######
+
+class MarkdownGeditPluginView(GObject.Object, Gedit.ViewActivatable):
+	view = GObject.Property(type=Gedit.View)
+
+	def __init__(self):
+		self.popup_handler_id = 0
+		GObject.Object.__init__(self)
+
+	def do_activate(self):
+		menu_builder = Gtk.Builder().new_from_file(os.path.join(BASE_PATH, 'menu.ui'))
+		self.md_prev_menu = Gtk.Menu().new_from_model(menu_builder.get_object('right-click-menu'))
+		self.popup_handler_id = self.view.connect('populate-popup', self.populate_popup)
+
+	def do_deactivate(self):
+		if self.popup_handler_id != 0:
+			self.view.disconnect(self.popup_handler_id)
+			self.popup_handler_id = 0
+
+	def populate_popup(self, view, popup):
+		if not isinstance(popup, Gtk.MenuShell):
+			return
+
+		item = Gtk.SeparatorMenuItem()
+		item.show()
+		popup.append(item)
+		
+		item = Gtk.MenuItem(_("Markdown tags"))
+		item.set_submenu(self.md_prev_menu)
+		item.show()
+		popup.append(item)
 
 ##################################################
