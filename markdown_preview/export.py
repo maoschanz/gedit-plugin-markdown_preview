@@ -9,7 +9,7 @@ class MdExportDialog(Gtk.Dialog):
 	__gtype_name__ = 'MdExportDialog'
 	
 	def __init__(self, file_format, gedit_window, settings, **kwargs):
-		super().__init__(use_header_bar=True, **kwargs)
+		super().__init__(use_header_bar=True, title=_("Export as…"), **kwargs)
 		self.file_format = file_format
 		self.gedit_window = gedit_window
 		self._settings = settings

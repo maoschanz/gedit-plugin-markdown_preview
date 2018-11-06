@@ -35,33 +35,99 @@
 				<property name="visible">True</property>
 				<property name="expand">True</property>
 				<child>
-					<object class="GtkLabel">
-						<property name="label">export_stack1</property>
+					<object class="GtkBox">
 						<property name="visible">True</property>
-					</object>
-					<packing>
-						<property name="title">PDF</property>
-						<property name="name">test1</property>
-					</packing>
-				</child>
-				<child>
-					<object class="GtkLabel">
-						<property name="label">export_stack2</property>
-						<property name="visible">True</property>
+						<property name="orientation">vertical</property>
+						<child>
+							<object class="GtkRadioButton">
+								<property name="visible">True</property>
+								<child>
+									<object class="GtkLabel">
+										<property name="label">export_stack_html</property>
+										<property name="visible">True</property>
+									</object>
+								</child>
+							</object>
+						</child>
+						<child>
+							<object class="GtkRadioButton">
+								<property name="visible">True</property>
+								<child>
+									<object class="GtkLabel">
+										<property name="label">export_stack_html</property>
+										<property name="visible">True</property>
+									</object>
+								</child>
+							</object>
+						</child>
 					</object>
 					<packing>
 						<property name="title">HTML</property>
-						<property name="name">test2</property>
+						<property name="name">export_html</property>
 					</packing>
 				</child>
 				<child>
-					<object class="GtkLabel">
-						<property name="label">export_stack3</property>
+					<object class="GtkBox">
 						<property name="visible">True</property>
+						<property name="orientation">vertical</property>
+						<child>
+							<object class="GtkRadioButton">
+								<property name="visible">True</property>
+								<child>
+									<object class="GtkLabel">
+										<property name="label">export_stack_pdf</property>
+										<property name="visible">True</property>
+									</object>
+								</child>
+							</object>
+						</child>
+						<child>
+							<object class="GtkRadioButton">
+								<property name="visible">True</property>
+								<child>
+									<object class="GtkLabel">
+										<property name="label">export_stack_pdf</property>
+										<property name="visible">True</property>
+									</object>
+								</child>
+							</object>
+						</child>
 					</object>
 					<packing>
-						<property name="title">ODT</property>
-						<property name="name">test3</property>
+						<property name="title">PDF</property>
+						<property name="name">export_pdf</property>
+					</packing>
+				</child>
+				<child>
+					<object class="GtkBox">
+						<property name="visible">True</property>
+						<property name="orientation">vertical</property>
+						<child>
+							<object class="GtkRadioButton">
+								<property name="visible">True</property>
+								<child>
+									<object class="GtkLabel">
+										<property name="label">export_stack_custom</property>
+										<property name="visible">True</property>
+									</object>
+								</child>
+							</object>
+						</child>
+						<child>
+							<object class="GtkRadioButton">
+								<property name="visible">True</property>
+								<child>
+									<object class="GtkLabel">
+										<property name="label">export_stack_custom</property>
+										<property name="visible">True</property>
+									</object>
+								</child>
+							</object>
+						</child>
+					</object>
+					<packing>
+						<property name="title">Custom</property>
+						<property name="name">export_custom</property>
 					</packing>
 				</child>
 			</object>

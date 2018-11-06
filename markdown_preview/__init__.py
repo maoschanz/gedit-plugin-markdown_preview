@@ -18,12 +18,10 @@ except:
 	_ = lambda s: s
 
 MD_PREVIEW_KEY_BASE = 'org.gnome.gedit.plugins.markdown_preview'
-BASE_TEMP_NAME = '/tmp/gedit_plugin_markdown_preview'
 
 ####### ####### #######
 
 class MarkdownGeditPluginApp(GObject.Object, Gedit.AppActivatable):
-#	__gtype_name__ = 'MarkdownGeditPluginApp'
 	app = GObject.property(type=Gedit.App)
 
 	def __init__(self):
@@ -38,26 +36,38 @@ class MarkdownGeditPluginApp(GObject.Object, Gedit.AppActivatable):
 		self.remove_accelerators()
 
 	def build_main_menu(self):
-		self.menu_ext = self.extend_menu('tools-section')
+		self.menu_ext_tools = self.extend_menu('tools-section')
+		self.menu_ext_view = self.extend_menu('view-section')
 		builder = Gtk.Builder().new_from_file(os.path.join(BASE_PATH, 'menus.ui'))
 #		menu = builder.get_object('md-preview-menu')
 #		self.menu_section = Gio.MenuItem.new_submenu(_("Markdown Preview"), menu)
 #		self.menu_ext.append_menu_item(self.menu_section)
 
 		# Show the zoom settings as a submenu here because it's ugly otherwise
+#		menu = builder.get_object('md-preview-actions')
+#		self.menu_section_actions = Gio.MenuItem.new_section(_("Markdown Preview"), menu)
+#		self.menu_ext.append_menu_item(self.menu_section_actions)
+#		menu = builder.get_object('md-preview-zoom')
+#		self.menu_section_zoom = Gio.MenuItem.new_submenu(_("Zoom"), menu)
+#		self.menu_ext.append_menu_item(self.menu_section_zoom)
+#		menu = builder.get_object('md-preview-settings')
+#		self.menu_section_settings = Gio.MenuItem.new_section(None, menu)
+#		self.menu_ext.append_menu_item(self.menu_section_settings)
+
+		# Show the zoom settings as a submenu here because it's ugly otherwise
 		menu = builder.get_object('md-preview-actions')
 		self.menu_section_actions = Gio.MenuItem.new_section(_("Markdown Preview"), menu)
-		self.menu_ext.append_menu_item(self.menu_section_actions)
+		self.menu_ext_tools.append_menu_item(self.menu_section_actions)
+		menu = builder.get_object('md-preview-settings')
+		self.menu_section_settings = Gio.MenuItem.new_section(_("Markdown Preview"), menu)
+		self.menu_ext_view.append_menu_item(self.menu_section_settings)
 		menu = builder.get_object('md-preview-zoom')
 		self.menu_section_zoom = Gio.MenuItem.new_submenu(_("Zoom"), menu)
-		self.menu_ext.append_menu_item(self.menu_section_zoom)
-		menu = builder.get_object('md-preview-settings')
-		self.menu_section_settings = Gio.MenuItem.new_section(None, menu)
-		self.menu_ext.append_menu_item(self.menu_section_settings)
+		self.menu_ext_view.append_menu_item(self.menu_section_zoom)
 
 	def remove_menu(self):
-		self.menu_ext = None # FIXME ?
-		self.menu_item = None
+		self.menu_ext_tools = None # FIXME ?
+		self.menu_ext_view = None # FIXME ?
 
 	def add_accelerators(self):
 		self.app.add_accelerator("<Primary>E", "win.md-prev-insert-picture", None)
@@ -65,7 +75,7 @@ class MarkdownGeditPluginApp(GObject.Object, Gedit.AppActivatable):
 		return
 
 	def remove_accelerators(self):
-#		self.app.remove_accelerator("win.md-prev-insert-picture", None)
+		self.app.remove_accelerator("win.md-prev-insert-picture", None)
 #		self.app.remove_accelerator("win.uncomment", None)
 		return
 
@@ -73,7 +83,6 @@ class MarkdownGeditPluginApp(GObject.Object, Gedit.AppActivatable):
 
 class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk.Configurable):
 	window = GObject.property(type=Gedit.Window)
-#	__gtype_name__ = 'MarkdownGeditPluginWindow'
 
 	def __init__(self):
 		GObject.Object.__init__(self)
@@ -93,17 +102,17 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		self.preview.do_deactivate()
 
 	def connect_actions(self):
-		action_export = Gio.SimpleAction(name='md_prev_export_doc')
-		action_print = Gio.SimpleAction(name='md_prev_print_doc')
+		action_export = Gio.SimpleAction(name='md-prev-export-doc')
+		action_print = Gio.SimpleAction(name='md-prev-print-doc')
 		action_export.connect('activate', self.export_doc)
 		action_print.connect('activate', self.print_doc)
 		
 		self.window.add_action(action_export)
 		self.window.add_action(action_print)
 
-		action_zoom_in = Gio.SimpleAction(name='md_prev_zoom_in')
-		action_zoom_original = Gio.SimpleAction(name='md_prev_zoom_original')
-		action_zoom_out = Gio.SimpleAction(name='md_prev_zoom_out')
+		action_zoom_in = Gio.SimpleAction(name='md-prev-zoom-in')
+		action_zoom_original = Gio.SimpleAction(name='md-prev-zoom-original')
+		action_zoom_out = Gio.SimpleAction(name='md-prev-zoom-out')
 		action_zoom_in.connect('activate', self.preview.on_zoom_in)
 		action_zoom_original.connect('activate', self.preview.on_zoom_original)
 		action_zoom_out.connect('activate', self.preview.on_zoom_out)
@@ -112,31 +121,31 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		self.window.add_action(action_zoom_original)
 		self.window.add_action(action_zoom_out)
 
-		action_paginated = Gio.SimpleAction().new_stateful('md_prev_set_paginated', \
+		action_paginated = Gio.SimpleAction().new_stateful('md-prev-set-paginated', \
 		None, GLib.Variant.new_boolean(False))
 		action_paginated.connect('change-state', self.preview.on_set_paginated)
 		
-		action_next = Gio.SimpleAction(name='md_prev_next')
+		action_next = Gio.SimpleAction(name='md-prev-next')
 		action_next.connect('activate', self.preview.on_next_page)
 		
-		action_previous = Gio.SimpleAction(name='md_prev_previous')
+		action_previous = Gio.SimpleAction(name='md-prev-previous')
 		action_previous.connect('activate', self.preview.on_previous_page)
 
-		action_autoreload = Gio.SimpleAction().new_stateful('md_prev_set_autoreload', \
+		action_autoreload = Gio.SimpleAction().new_stateful('md-prev-set-autoreload', \
 		None, GLib.Variant.new_boolean(self.preview.auto_reload))
 		action_autoreload.connect('change-state', self.preview.on_set_reload)
 		
-		self.action_reload_preview = Gio.SimpleAction(name='md_prev_reload')
+		self.action_reload_preview = Gio.SimpleAction(name='md-prev-reload')
 		self.action_reload_preview.connect('activate', self.preview.on_reload)
 
-		action_panel = Gio.SimpleAction().new_stateful('md_prev_panel', \
+		action_panel = Gio.SimpleAction().new_stateful('md-prev-panel', \
 		GLib.VariantType.new('s'), GLib.Variant.new_string(self._settings.get_string('position')))
 		action_panel.connect('change-state', self.preview.on_change_panel_from_popover)
 
-		action_presentation = Gio.SimpleAction(name='md_prev_presentation')
+		action_presentation = Gio.SimpleAction(name='md-prev-presentation')
 		action_presentation.connect('activate', self.preview.on_presentation)
 
-		action_hide = Gio.SimpleAction(name='md_prev_hide')
+		action_hide = Gio.SimpleAction(name='md-prev-hide')
 		action_hide.connect('activate', self.preview.on_hide_panel)
 		
 		self.window.add_action(action_paginated)
@@ -150,20 +159,20 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		
 		#-------------------------
 		
-		action_bold = Gio.SimpleAction(name='md_prev_format_bold')
+		action_bold = Gio.SimpleAction(name='md-prev-format-bold')
 		action_bold.connect('activate', lambda i, j: self.view_method('format_bold'))
-		action_italic = Gio.SimpleAction(name='md_prev_format_italic')
+		action_italic = Gio.SimpleAction(name='md-prev-format-italic')
 		action_italic.connect('activate', lambda i, j: self.view_method('format_italic'))
-		action_underline = Gio.SimpleAction(name='md_prev_format_underline')
+		action_underline = Gio.SimpleAction(name='md-prev-format-underline')
 		action_underline.connect('activate', lambda i, j: self.view_method('format_underline'))
-		action_monospace = Gio.SimpleAction(name='md_prev_format_monospace')
+		action_monospace = Gio.SimpleAction(name='md-prev-format-monospace')
 		action_monospace.connect('activate', lambda i, j: self.view_method('format_monospace'))
-		action_stroke = Gio.SimpleAction(name='md_prev_format_stroke')
+		action_stroke = Gio.SimpleAction(name='md-prev-format-stroke')
 		action_stroke.connect('activate', lambda i, j: self.view_method('format_stroke'))
 		# TODO
 		action_picture = Gio.SimpleAction(name='md-prev-insert-picture')
 		action_picture.connect('activate', lambda i, j: self.view_method('insert_picture'))
-		action_table = Gio.SimpleAction(name='md_prev_insert_table')
+		action_table = Gio.SimpleAction(name='md-prev-insert-table')
 		action_table.connect('activate', lambda i, j: self.view_method('insert_table'))
 		
 		self.window.add_action(action_bold)
@@ -219,8 +228,8 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 #			self.window.lookup_action('md-prev-insert-picture').set_enabled(False)
 			return 'tex'
 		# The current content is not replaced, which allows document consulation while working on a file
-		self.window.lookup_action('md_prev_export_doc').set_enabled(False)
-		self.window.lookup_action('md_prev_print_doc').set_enabled(False)
+		self.window.lookup_action('md-prev-export-doc').set_enabled(False)
+		self.window.lookup_action('md-prev-print-doc').set_enabled(False)
 #		self.window.lookup_action('md-prev-insert-picture').set_enabled(False)
 		if doc.is_untitled():
 			self.preview.display_warning(True, _("Can't preview an unsaved document"))

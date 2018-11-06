@@ -1,4 +1,4 @@
-**do not install the master version**
+**please do not install the master version**
 
 # Gedit Markdown Preview
 

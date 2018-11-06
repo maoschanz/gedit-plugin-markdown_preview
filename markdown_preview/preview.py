@@ -16,7 +16,6 @@ class MdPreviewBar(Gtk.Box):
 	def __init__(self, parent_plugin, **kwargs):
 		super().__init__(**kwargs)
 		self.auto_reload = False
-		self._compteur_laid = 0
 		self.parent_plugin = parent_plugin
 
 	def do_activate(self):
@@ -30,8 +29,6 @@ class MdPreviewBar(Gtk.Box):
 		self.page_index = 0
 		self.page_number = 1
 		self.temp_file_md = Gio.File.new_for_path(BASE_TEMP_NAME + '.md')
-		self.parent_plugin.window.lookup_action('md_prev_export_doc').set_enabled(False)
-		self.parent_plugin.window.lookup_action('md_prev_print_doc').set_enabled(False)
 
 	# This is called every time the gui is updated
 	def do_update_state(self):
@@ -39,11 +36,7 @@ class MdPreviewBar(Gtk.Box):
 			return
 		if self.parent_plugin.window.get_active_view() is not None:
 			if self.auto_reload:
-				if self._compteur_laid > 3:
-					self._compteur_laid = 0
-					self.on_reload()
-				else:
-					self._compteur_laid = self._compteur_laid + 1
+				self.on_reload()
 
 	def do_deactivate(self):
 		self._settings.disconnect(self._handlers[0])
@@ -154,15 +147,15 @@ class MdPreviewBar(Gtk.Box):
 	def on_set_paginated(self, *args):
 		if not args[0].get_state():
 			self.is_paginated = True
-			self.parent_plugin.window.lookup_action('md_prev_next').set_enabled(True)
-			self.parent_plugin.window.lookup_action('md_prev_previous').set_enabled(True)
+			self.parent_plugin.window.lookup_action('md-prev-next').set_enabled(True)
+			self.parent_plugin.window.lookup_action('md-prev-previous').set_enabled(True)
 			self.pages_box.props.visible = True
 			self.on_reload()
 			args[0].set_state(GLib.Variant.new_boolean(True))
 		else:
 			self.is_paginated = False
-			self.parent_plugin.window.lookup_action('md_prev_next').set_enabled(False)
-			self.parent_plugin.window.lookup_action('md_prev_previous').set_enabled(False)
+			self.parent_plugin.window.lookup_action('md-prev-next').set_enabled(False)
+			self.parent_plugin.window.lookup_action('md-prev-previous').set_enabled(False)
 			self.pages_box.props.visible = False
 			self.on_reload()
 			args[0].set_state(GLib.Variant.new_boolean(False))
@@ -249,8 +242,8 @@ class MdPreviewBar(Gtk.Box):
 		# The content is loaded
 		self._webview.load_bytes(bytes_content, 'text/html', 'UTF-8', dummy_uri)
 
-		self.parent_plugin.window.lookup_action('md_prev_export_doc').set_enabled(True)
-		self.parent_plugin.window.lookup_action('md_prev_print_doc').set_enabled(True)
+		self.parent_plugin.window.lookup_action('md-prev-export-doc').set_enabled(True)
+		self.parent_plugin.window.lookup_action('md-prev-print-doc').set_enabled(True)
 
 	def current_page(self, html_string):
 		# Guard clause

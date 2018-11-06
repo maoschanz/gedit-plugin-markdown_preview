@@ -2,7 +2,7 @@
 <schemalist>
 	<schema id="org.gnome.gedit.plugins.markdown_preview" path="/org/gnome/gedit/plugins/markdown_preview/">
 		<key type="s" name="position">
-			<default>"side"</default>
+			<default>'side'</default>
 			<summary></summary>
 			<description></description>
 		</key>
@@ -11,12 +11,22 @@
 			<summary></summary>
 			<description></description>
 		</key>
+		<key type="b" name="auto-reload">
+			<default>true</default>
+			<summary></summary>
+			<description></description>
+		</key>
 		<key type="b" name="pdflatex">
 			<default>false</default>
 			<summary></summary>
 			<description></description>
 		</key>
-		<key type="s" name="export-options">
+		<key type="s" name="backend">
+			<default>'python'</default>
+			<summary>Favorite backend for the preview</summary>
+			<description>python or pandoc</description>
+		</key>
+		<key type="s" name="custom-export">
 			<default>''</default>
 			<summary></summary>
 			<description></description>
