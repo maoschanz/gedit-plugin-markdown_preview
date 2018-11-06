@@ -1,3 +1,5 @@
+**do not install the master version**
+
 # Gedit Markdown Preview
 
 This is a plugin for the Gedit text editor, previewing .md files in the bottom or the side panel.
@@ -33,8 +35,9 @@ The preview can be displayed in the side panel or in the bottom panel, and this 
 ## Dependencies
 
 - `gedit` (of course)
+- `python3-markdown`
 - `pandoc`
-- `libwebkit2gtk-4.0-dev` (that's the name for .deb-based distros)
+- `libwebkit2gtk-4.0-dev` (that's the name for debian-based distros)
 
 ## Installation
 
@@ -47,5 +50,5 @@ The script `install.sh` can be executed as root (installation system-wide) or as
 ## Available languages
 
 - English
-- French
+- ~~French~~
 

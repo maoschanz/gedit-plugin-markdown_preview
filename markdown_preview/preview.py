@@ -32,7 +32,6 @@ class MdPreviewBar(Gtk.Box):
 		self.temp_file_md = Gio.File.new_for_path(BASE_TEMP_NAME + '.md')
 		self.parent_plugin.window.lookup_action('md_prev_export_doc').set_enabled(False)
 		self.parent_plugin.window.lookup_action('md_prev_print_doc').set_enabled(False)
-		self.parent_plugin.window.lookup_action('md_prev_insert_picture').set_enabled(False)
 
 	# This is called every time the gui is updated
 	def do_update_state(self):
@@ -99,7 +98,7 @@ class MdPreviewBar(Gtk.Box):
 			pass
 		else:
 			b.remove_all()
-		reloadItem = WebKit2.ContextMenuItem.new_from_gaction(self.action_reload_preview, _("Reload the preview"), None)
+		reloadItem = WebKit2.ContextMenuItem.new_from_gaction(self.parent_plugin.action_reload_preview, _("Reload the preview"), None)
 		b.append(reloadItem)
 		return False
 
@@ -252,7 +251,6 @@ class MdPreviewBar(Gtk.Box):
 
 		self.parent_plugin.window.lookup_action('md_prev_export_doc').set_enabled(True)
 		self.parent_plugin.window.lookup_action('md_prev_print_doc').set_enabled(True)
-		self.parent_plugin.window.lookup_action('md_prev_insert_picture').set_enabled(True)
 
 	def current_page(self, html_string):
 		# Guard clause

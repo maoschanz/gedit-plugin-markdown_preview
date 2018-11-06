@@ -79,7 +79,13 @@
   </menu>
   
   <menu id="right-click-menu">
-	<submenu id="view-mode">
+	<section>
+		<item>
+			<attribute name="label" translatable="yes">Remove all tags</attribute>
+<!--			<attribute name="action">win.md_prev_format_remove</attribute>-->
+		</item>
+	</section>
+	<submenu>
 		<attribute name="label" translatable="yes">Title</attribute>
 		<item>
 			<attribute name="label" translatable="yes">1</attribute>
@@ -115,19 +121,23 @@
 	<section>
 		<item>
 			<attribute name="label" translatable="yes">Bold</attribute>
-<!--			<attribute name="action">win.md_prev_format_bold</attribute>-->
+			<attribute name="action">win.md_prev_format_bold</attribute>
 		</item>
 		<item>
 			<attribute name="label" translatable="yes">Italic</attribute>
-<!--			<attribute name="action">win.md_prev_format_italic</attribute>-->
+			<attribute name="action">win.md_prev_format_italic</attribute>
 		</item>
 		<item>
 			<attribute name="label" translatable="yes">Underline</attribute>
-<!--			<attribute name="action">win.md_prev_format_underline</attribute>-->
+			<attribute name="action">win.md_prev_format_underline</attribute>
 		</item>
 		<item>
 			<attribute name="label" translatable="yes">Monospace</attribute>
-<!--			<attribute name="action">win.md_prev_format_monospace</attribute>-->
+			<attribute name="action">win.md_prev_format_monospace</attribute>
+		</item>
+		<item>
+			<attribute name="label" translatable="yes">Stroke</attribute>
+			<attribute name="action">win.md_prev_format_stroke</attribute>
 		</item>
 	</section>
 	<section>
@@ -143,7 +153,7 @@
 	<section>
 		<item>
 			<attribute name="label" translatable="yes">Insert an image</attribute>
-			<attribute name="action">win.md_prev_insert_picture</attribute>
+			<attribute name="action">win.md-prev-insert-picture</attribute>
 		</item>
 		<item>
 			<attribute name="label" translatable="yes">Insert a link</attribute>
@@ -151,7 +161,7 @@
 		</item>
 		<item>
 			<attribute name="label" translatable="yes">Insert a table</attribute>
-<!--			<attribute name="action">win.md_prev_insert_table</attribute>-->
+			<attribute name="action">win.md_prev_insert_table</attribute>
 		</item>
 	</section>
   </menu>
