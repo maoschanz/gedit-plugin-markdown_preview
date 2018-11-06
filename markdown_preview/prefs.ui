@@ -11,6 +11,30 @@
 				<child>
 					<object class="GtkLabel">
 						<property name="visible">True</property>
+						<property name="label" translatable="yes">HTML generation backend</property>
+					</object>
+					<packing>
+						<property name="pack-type">start</property>
+					</packing>
+				</child>
+				<child>
+					<object class="GtkComboBoxText" id="backendCombobox">
+						<property name="visible">True</property>
+					</object>
+					<packing>
+						<property name="pack-type">end</property>
+					</packing>
+				</child>
+			</object>
+		</child>
+		
+		<child>
+			<object class="GtkBox">
+				<property name="visible">True</property>
+				<property name="orientation">horizontal</property>
+				<child>
+					<object class="GtkLabel">
+						<property name="visible">True</property>
 						<property name="label" translatable="yes">Preview position</property>
 					</object>
 					<packing>

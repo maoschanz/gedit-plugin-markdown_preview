@@ -85,40 +85,40 @@
 			<attribute name="action">win.md-prev-format-remove</attribute>
 		</item>
 	</section>
-	<submenu>
-		<attribute name="label" translatable="yes">Title</attribute>
-		<item>
-			<attribute name="label" translatable="yes">1</attribute>
-<!--			<attribute name="action">win.md-prev-format-title</attribute>-->
-<!--			<attribute name="target">1</attribute>-->
-		</item>
-		<item>
-			<attribute name="label" translatable="yes">2</attribute>
-<!--			<attribute name="action">win.md-prev-format-title</attribute>-->
-<!--			<attribute name="target">1</attribute>-->
-		</item>
-		<item>
-			<attribute name="label" translatable="yes">3</attribute>
-<!--			<attribute name="action">win.md-prev-format-title</attribute>-->
-<!--			<attribute name="target">1</attribute>-->
-		</item>
-		<item>
-			<attribute name="label" translatable="yes">4</attribute>
-<!--			<attribute name="action">win.md-prev-format-title</attribute>-->
-<!--			<attribute name="target">1</attribute>-->
-		</item>
-		<item>
-			<attribute name="label" translatable="yes">5</attribute>
-<!--			<attribute name="action">win.md-prev-format-title</attribute>-->
-<!--			<attribute name="target">1</attribute>-->
-		</item>
-		<item>
-			<attribute name="label" translatable="yes">6</attribute>
-<!--			<attribute name="action">win.md-prev-format-title</attribute>-->
-<!--			<attribute name="target">1</attribute>-->
-		</item>
-	</submenu>
 	<section>
+		<submenu>
+			<attribute name="label" translatable="yes">Title</attribute>
+			<item>
+				<attribute name="label" translatable="yes">1</attribute>
+	<!--			<attribute name="action">win.md-prev-format-title</attribute>-->
+	<!--			<attribute name="target">1</attribute>-->
+			</item>
+			<item>
+				<attribute name="label" translatable="yes">2</attribute>
+	<!--			<attribute name="action">win.md-prev-format-title</attribute>-->
+	<!--			<attribute name="target">1</attribute>-->
+			</item>
+			<item>
+				<attribute name="label" translatable="yes">3</attribute>
+	<!--			<attribute name="action">win.md-prev-format-title</attribute>-->
+	<!--			<attribute name="target">1</attribute>-->
+			</item>
+			<item>
+				<attribute name="label" translatable="yes">4</attribute>
+	<!--			<attribute name="action">win.md-prev-format-title</attribute>-->
+	<!--			<attribute name="target">1</attribute>-->
+			</item>
+			<item>
+				<attribute name="label" translatable="yes">5</attribute>
+	<!--			<attribute name="action">win.md-prev-format-title</attribute>-->
+	<!--			<attribute name="target">1</attribute>-->
+			</item>
+			<item>
+				<attribute name="label" translatable="yes">6</attribute>
+	<!--			<attribute name="action">win.md-prev-format-title</attribute>-->
+	<!--			<attribute name="target">1</attribute>-->
+			</item>
+		</submenu>
 		<item>
 			<attribute name="label" translatable="yes">Bold</attribute>
 			<attribute name="action">win.md-prev-format-bold</attribute>
@@ -138,6 +138,10 @@
 		<item>
 			<attribute name="label" translatable="yes">Stroke</attribute>
 			<attribute name="action">win.md-prev-format-stroke</attribute>
+		</item>
+		<item>
+			<attribute name="label" translatable="yes">Quote</attribute>
+			<attribute name="action">win.md-prev-format-quote</attribute>
 		</item>
 	</section>
 	<section>

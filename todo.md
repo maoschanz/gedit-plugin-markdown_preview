@@ -1,16 +1,52 @@
 # À faire
 
+## 1 - Organisation du code
+
+- `__init__.py` création des 2 classes `MarkdownGeditPluginApp` et `MarkdownGeditPluginWindow`
+- `webview.py` classe d'extension de `Gtk.Box`
+- `export.py` classe pour le dialogue d'export 
+- `window.py` classe pour l'aperçu en plein écran
+- les fichiers `.ui` correspondants, et `menus.ui`
+
+renommer les classes, trier les imports
+
+## 2 - Menus
+
+reveal.js ??? "only one page" ??
+
+le "hide the panel" n'a aucun sens
+
+## 3 - Export
+
+stack présentable pour le format pdf
+
+## 4 - Raccourcis
+
+clé dconf ????
+
+bon défauts ???
+
+préférences ???
+
+
+
+
+
+
+
+
+
+-------
+
 ## Script d'installation
 
-- vérifier pandoc et libwebkit2gtk-4.0-dev
+- vérifier pandoc et libwebkit2gtk-4.0-dev et python3-markdown
 - vérifier le schéma après installation -> oulala mdr ça ne marche pas comme prévu
 
 ## Général
 
 - les traductions ??????
-- s'abstraire du fichier temporaire pour utiliser [le module pipes](https://docs.python.org/fr/3.6/library/pipes.html) ou bien mieux python-markdown
-
-- étendre le clic-droit pour ajouter gras/italique/liste/titre±
+- raccourcis clavier
 
 ### Support de Xed
 
@@ -33,33 +69,8 @@
 
 ## Préférences
 
-- utiliser un .ui
 - update le label
 - autohide si pas reconnu ?
-- sensibilité du compteur laid
-
-![](/home/roschan/Images/XHzRUpI.jpg)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

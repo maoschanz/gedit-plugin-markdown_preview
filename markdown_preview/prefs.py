@@ -38,6 +38,12 @@ class MdConfigWidget(Gtk.Box):
 		stack.add_titled(export_page, 'export', _("Export"))
 		stack.add_titled(shortcuts_page, 'shortcuts', _("Shortcuts"))
 		
+		backendCombobox = builder.get_object('backendCombobox')
+		backendCombobox.append('python', _("python3-markdown"))
+		backendCombobox.append('pandoc', _("pandoc"))
+		backendCombobox.set_active_id(self._settings.get_string('backend'))
+		backendCombobox.connect('changed', self.on_backend_changed)
+		#--------
 		positionCombobox = builder.get_object('positionCombobox')
 		positionCombobox.append('side', _("Side Panel"))
 		positionCombobox.append('bottom', _("Bottom Panel"))
@@ -86,6 +92,9 @@ class MdConfigWidget(Gtk.Box):
 		
 		self.add(switcher)
 		self.add(stack)
+		
+	def on_backend_changed(self, w):
+		self._settings.set_string('backend', w.get_active_id())
 		
 	def on_position_changed(self, w):
 		self._settings.set_string('position', w.get_active_id())

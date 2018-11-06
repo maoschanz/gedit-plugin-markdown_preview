@@ -22,7 +22,7 @@
 			<description></description>
 		</key>
 		<key type="s" name="backend">
-			<default>'python'</default>
+			<default>'pandoc'</default>
 			<summary>Favorite backend for the preview</summary>
 			<description>python or pandoc</description>
 		</key>

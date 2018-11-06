@@ -17,6 +17,7 @@ class MdPreviewBar(Gtk.Box):
 		super().__init__(**kwargs)
 		self.auto_reload = False
 		self.parent_plugin = parent_plugin
+		self.file_format = 'error'
 
 	def do_activate(self):
 		self._handlers = []
@@ -25,7 +26,6 @@ class MdPreviewBar(Gtk.Box):
 		self.is_paginated = False
 #		self.connect_preview_menu()
 		self.build_preview_ui()
-		self._handlers.append( self.parent_plugin.window.connect('active-tab-changed', self.on_reload) )
 		self.page_index = 0
 		self.page_number = 1
 		self.temp_file_md = Gio.File.new_for_path(BASE_TEMP_NAME + '.md')
@@ -40,7 +40,6 @@ class MdPreviewBar(Gtk.Box):
 
 	def do_deactivate(self):
 		self._settings.disconnect(self._handlers[0])
-		self.parent_plugin.window.disconnect(self._handlers[1])
 		self.delete_temp_file()
 		self.remove_from_panel()
 		self.preview_bar.destroy()
@@ -137,6 +136,7 @@ class MdPreviewBar(Gtk.Box):
 		else:
 			self.auto_reload = False
 			args[0].set_state(GLib.Variant.new_boolean(False))
+		self._settings.set_boolean('auto-reload', self.auto_reload)
 
 	def on_hide_panel(self, *args):
 		if self._settings.get_string('position') == 'bottom':
@@ -179,57 +179,29 @@ class MdPreviewBar(Gtk.Box):
 
 	def on_reload(self, *args):
 		# Guard clause: it will not load documents which are not .md
-		if self.parent_plugin.recognize_format() is 'error':
-			if len(self.panel.get_children()) is 1: # FIXME 1 pour bottom mais 2 pour side
-				self.panel.hide()
+		if self.file_format == 'error':
+			if self._settings.get_string('position') == 'bottom':
+				if len(self.panel.get_children()) is 1:
+					self.panel.hide()
+			else:
+				if len(self.panel.get_children()) is 2:
+					self.panel.hide()
 			return
 
-		elif self.parent_plugin.recognize_format() is 'html':
-			self.panel.show()
-			doc = self.parent_plugin.window.get_active_document()
-			start, end = doc.get_bounds()
-			html_string = doc.get_text(start, end, True)
-			pre_string = '<html><head><meta charset="utf-8" /></head><body>'
-			post_string = '</body></html>'
-			html_string = self.current_page(html_string)
-			html_content = pre_string + html_string + post_string
-
-		elif self.parent_plugin.recognize_format() is 'tex':
-			self.panel.show()
-			doc = self.parent_plugin.window.get_active_document()
-			file_path = doc.get_location().get_path()
-
-			# It uses pandoc to produce the html code
-			pre_string = '<html><head><meta charset="utf-8" /><link rel="stylesheet" href="' + \
-				self._settings.get_string('style') + '" /></head><body>'
-			post_string = '</body></html>'
-			result = subprocess.run(['pandoc', file_path], stdout=subprocess.PIPE)
-			html_string = result.stdout.decode('utf-8')
-			html_string = self.current_page(html_string)
-			html_content = pre_string + html_string + post_string
-
+		self.panel.show()
+		html_content = ''
+		if self.file_format == 'html':
+			print('html')
+			html_content = self.get_html_from_html()
+		elif self.file_format == 'tex':
+			print('tex (pandoc)')
+			html_content = self.get_html_from_tex()
+		elif self._settings.get_string('backend') == 'python':
+			html_content = self.get_html_from_md_python()
+			print('md (python)')
 		else:
-			self.panel.show()
-			# Get the current document, or the temporary document if requested
-			doc = self.parent_plugin.window.get_active_document()
-			if self.auto_reload:
-				start, end = doc.get_bounds()
-				unsaved_text = doc.get_text(start, end, True)
-				f = open(BASE_TEMP_NAME + '.md', 'w')
-				f.write(unsaved_text)
-				f.close()
-				file_path = self.temp_file_md.get_path()
-			else:
-				file_path = doc.get_location().get_path()
-
-			# It uses pandoc to produce the html code
-			pre_string = '<html><head><meta charset="utf-8" /><link rel="stylesheet" href="' + \
-				self._settings.get_string('style') + '" /></head><body>'
-			post_string = '</body></html>'
-			result = subprocess.run(['pandoc', file_path], stdout=subprocess.PIPE)
-			html_string = result.stdout.decode('utf-8')
-			html_string = self.current_page(html_string)
-			html_content = pre_string + html_string + post_string
+			html_content = self.get_html_from_md_pandoc()
+			print('md (pandoc)')
 
 		# The html code is converted into bytes
 		my_string = GLib.String()
@@ -241,9 +213,66 @@ class MdPreviewBar(Gtk.Box):
 
 		# The content is loaded
 		self._webview.load_bytes(bytes_content, 'text/html', 'UTF-8', dummy_uri)
+		
+	def get_html_from_html(self):
+		doc = self.parent_plugin.window.get_active_document()
+		start, end = doc.get_bounds()
+		html_string = doc.get_text(start, end, True)
+		pre_string = '<html><head><meta charset="utf-8" /></head><body>'
+		post_string = '</body></html>'
+		html_string = self.current_page(html_string)
+		html_content = pre_string + html_string + post_string
+		return html_content
+	
+	def get_html_from_tex(self):
+		doc = self.parent_plugin.window.get_active_document()
+		file_path = doc.get_location().get_path()
 
-		self.parent_plugin.window.lookup_action('md-prev-export-doc').set_enabled(True)
-		self.parent_plugin.window.lookup_action('md-prev-print-doc').set_enabled(True)
+		# It uses pandoc to produce the html code
+		pre_string = '<html><head><meta charset="utf-8" /><link rel="stylesheet" href="' + \
+			self._settings.get_string('style') + '" /></head><body>'
+		post_string = '</body></html>'
+		result = subprocess.run(['pandoc', file_path], stdout=subprocess.PIPE)
+		html_string = result.stdout.decode('utf-8')
+		html_string = self.current_page(html_string)
+		html_content = pre_string + html_string + post_string
+		return html_content
+		
+	def get_html_from_md_pandoc(self):
+		# Get the current document, or the temporary document if requested
+		doc = self.parent_plugin.window.get_active_document()
+		if self.auto_reload:
+			start, end = doc.get_bounds()
+			unsaved_text = doc.get_text(start, end, True)
+			f = open(BASE_TEMP_NAME + '.md', 'w')
+			f.write(unsaved_text)
+			f.close()
+			file_path = self.temp_file_md.get_path()
+		else:
+			file_path = doc.get_location().get_path()
+
+		# It uses pandoc to produce the html code
+		pre_string = '<html><head><meta charset="utf-8" /><link rel="stylesheet" href="' + \
+			self._settings.get_string('style') + '" /></head><body>'
+		post_string = '</body></html>'
+		result = subprocess.run(['pandoc', file_path], stdout=subprocess.PIPE)
+		html_string = result.stdout.decode('utf-8')
+		html_string = self.current_page(html_string)
+		html_content = pre_string + html_string + post_string
+		return html_content
+		
+	def get_html_from_md_python(self):
+		doc = self.parent_plugin.window.get_active_document()
+		start, end = doc.get_bounds()
+		unsaved_text = doc.get_text(start, end, True)
+		
+		pre_string = '<html><head><meta charset="utf-8" /><link rel="stylesheet" href="' + \
+			self._settings.get_string('style') + '" /></head><body>'
+		post_string = '</body></html>'
+		html_string = markdown.markdown(unsaved_text)
+		html_string = self.current_page(html_string)
+		html_content = pre_string + html_string + post_string
+		return html_content
 
 	def current_page(self, html_string):
 		# Guard clause

@@ -39,22 +39,6 @@ class MarkdownGeditPluginApp(GObject.Object, Gedit.AppActivatable):
 		self.menu_ext_tools = self.extend_menu('tools-section')
 		self.menu_ext_view = self.extend_menu('view-section')
 		builder = Gtk.Builder().new_from_file(os.path.join(BASE_PATH, 'menus.ui'))
-#		menu = builder.get_object('md-preview-menu')
-#		self.menu_section = Gio.MenuItem.new_submenu(_("Markdown Preview"), menu)
-#		self.menu_ext.append_menu_item(self.menu_section)
-
-		# Show the zoom settings as a submenu here because it's ugly otherwise
-#		menu = builder.get_object('md-preview-actions')
-#		self.menu_section_actions = Gio.MenuItem.new_section(_("Markdown Preview"), menu)
-#		self.menu_ext.append_menu_item(self.menu_section_actions)
-#		menu = builder.get_object('md-preview-zoom')
-#		self.menu_section_zoom = Gio.MenuItem.new_submenu(_("Zoom"), menu)
-#		self.menu_ext.append_menu_item(self.menu_section_zoom)
-#		menu = builder.get_object('md-preview-settings')
-#		self.menu_section_settings = Gio.MenuItem.new_section(None, menu)
-#		self.menu_ext.append_menu_item(self.menu_section_settings)
-
-		# Show the zoom settings as a submenu here because it's ugly otherwise
 		menu = builder.get_object('md-preview-actions')
 		self.menu_section_actions = Gio.MenuItem.new_section(_("Markdown Preview"), menu)
 		self.menu_ext_tools.append_menu_item(self.menu_section_actions)
@@ -66,8 +50,8 @@ class MarkdownGeditPluginApp(GObject.Object, Gedit.AppActivatable):
 		self.menu_ext_view.append_menu_item(self.menu_section_zoom)
 
 	def remove_menu(self):
-		self.menu_ext_tools = None # FIXME ?
-		self.menu_ext_view = None # FIXME ?
+		self.menu_ext_tools = None # XXX ?
+		self.menu_ext_view = None # XXX ?
 
 	def add_accelerators(self):
 		self.app.add_accelerator("<Primary>E", "win.md-prev-insert-picture", None)
@@ -91,6 +75,7 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 	def do_activate(self):
 		self._handlers = []
 		self._settings = Gio.Settings.new(MD_PREVIEW_KEY_BASE)
+		self._handlers.append( self.window.connect('active-tab-changed', self.on_file_changed) )
 		self.connect_actions()
 		self.preview.do_activate()
 
@@ -100,6 +85,7 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 
 	def do_deactivate(self):
 		self.preview.do_deactivate()
+		self.window.disconnect(self._handlers[0])
 
 	def connect_actions(self):
 		action_export = Gio.SimpleAction(name='md-prev-export-doc')
@@ -131,8 +117,10 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		action_previous = Gio.SimpleAction(name='md-prev-previous')
 		action_previous.connect('activate', self.preview.on_previous_page)
 
+		autoreload = self._settings.get_boolean('auto-reload')
+		self.preview.auto_reload = autoreload
 		action_autoreload = Gio.SimpleAction().new_stateful('md-prev-set-autoreload', \
-		None, GLib.Variant.new_boolean(self.preview.auto_reload))
+		None, GLib.Variant.new_boolean(autoreload))
 		action_autoreload.connect('change-state', self.preview.on_set_reload)
 		
 		self.action_reload_preview = Gio.SimpleAction(name='md-prev-reload')
@@ -169,6 +157,8 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		action_monospace.connect('activate', lambda i, j: self.view_method('format_monospace'))
 		action_stroke = Gio.SimpleAction(name='md-prev-format-stroke')
 		action_stroke.connect('activate', lambda i, j: self.view_method('format_stroke'))
+		action_quote = Gio.SimpleAction(name='md-prev-format-quote')
+		action_quote.connect('activate', lambda i, j: self.view_method('format_quote'))
 		# TODO
 		action_picture = Gio.SimpleAction(name='md-prev-insert-picture')
 		action_picture.connect('activate', lambda i, j: self.view_method('insert_picture'))
@@ -206,11 +196,17 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 			v.format_italic()
 		elif name == 'format_monospace':
 			v.format_monospace()
+		elif name == 'format_quote':
+			v.format_quote()
 		elif name == 'format_stroke':
 			v.format_stroke()
 		elif name == 'format_underline':
 			v.format_underline()
 		# TODO
+	
+	def on_file_changed(self, *args):
+		self.preview.file_format = self.recognize_format()
+		self.preview.on_reload()
 	
 	# XXX virer ou renommer ça
 	def recognize_format(self):
@@ -222,15 +218,9 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		if temp[len(temp)-1] == 'md':
 			return 'md'
 		elif temp[len(temp)-1] == 'html':
-#			self.window.lookup_action('md-prev-insert-picture').set_enabled(False)
 			return 'html'
 		elif temp[len(temp)-1] == 'tex':
-#			self.window.lookup_action('md-prev-insert-picture').set_enabled(False)
 			return 'tex'
-		# The current content is not replaced, which allows document consulation while working on a file
-		self.window.lookup_action('md-prev-export-doc').set_enabled(False)
-		self.window.lookup_action('md-prev-print-doc').set_enabled(False)
-#		self.window.lookup_action('md-prev-insert-picture').set_enabled(False)
 		if doc.is_untitled():
 			self.preview.display_warning(True, _("Can't preview an unsaved document"))
 		else:
@@ -359,6 +349,9 @@ class MarkdownGeditPluginView(GObject.Object, Gedit.ViewActivatable):
 	def format_stroke(self):
 		pass
 	
+	def format_quote(self):
+		pass
+		
 	def format_underline(self):
 		pass
 	
