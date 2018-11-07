@@ -128,13 +128,13 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 
 		action_panel = Gio.SimpleAction().new_stateful('md-prev-panel', \
 		GLib.VariantType.new('s'), GLib.Variant.new_string(self._settings.get_string('position')))
-		action_panel.connect('change-state', self.preview.on_change_panel_from_popover)
+		action_panel.connect('change-state', self.on_change_panel_from_popover)
 
 		action_presentation = Gio.SimpleAction(name='md-prev-presentation')
 		action_presentation.connect('activate', self.preview.on_presentation)
 
 		action_hide = Gio.SimpleAction(name='md-prev-hide')
-		action_hide.connect('activate', self.preview.on_hide_panel)
+		action_hide.connect('activate', self.on_hide_panel)
 		
 		self.window.add_action(action_paginated)
 		self.window.add_action(action_next)
@@ -208,7 +208,6 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		self.preview.file_format = self.recognize_format()
 		self.preview.on_reload()
 	
-	# XXX virer ou renommer ça
 	def recognize_format(self):
 		doc = self.window.get_active_document()
 		# It will not load documents which are not .md/.html/.tex
@@ -241,35 +240,8 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		else:
 			self.window.get_side_panel().set_property('visible', False)
 
-	def show_on_panel(self):
-		# Get the bottom bar (A Gtk.Stack), or the side bar, and add our bar to it.
-		if self._settings.get_string('position') == 'bottom':
-			self.panel = self.window.get_bottom_panel()
-			self.preview_bar.props.orientation = Gtk.Orientation.HORIZONTAL
-			self.buttons_main_box.props.orientation = Gtk.Orientation.VERTICAL
-		else:
-			self.panel = self.window.get_side_panel()
-			self.preview_bar.props.orientation = Gtk.Orientation.VERTICAL
-			self.buttons_main_box.props.orientation = Gtk.Orientation.HORIZONTAL
-		self.panel.add_titled(self.preview_bar, 'markdown_preview', _("Markdown Preview"))
-		self.panel.set_visible_child(self.preview_bar)
-		self.preview_bar.show_all()
-		self.pages_box.props.visible = self.is_paginated
-		if self.window.get_state() is 'STATE_NORMAL':
-			self.on_reload()
-
-	def remove_from_panel(self):
-		if self.panel is not None:
-			self.panel.remove(self.preview_bar)
-
 	########
 	
-	def change_panel(self, *args):
-		self.remove_from_panel()
-		self.show_on_panel()
-		self.do_update_state()
-		self.on_reload()
-
 	def do_create_configure_widget(self):
 		# Just return your box, PeasGtk will automatically pack it into a dialog and show it.
 		widget = MdConfigWidget(self.plugin_info.get_data_dir())

@@ -118,34 +118,6 @@
 			</object>
 		</child>
 	</object>
-	<object class="GtkBox" id="export_page">
-		<property name="visible">True</property>
-		<property name="spacing">20</property>
-		<property name="orientation">vertical</property>
-		<child>
-			<object class="GtkBox">
-				<property name="visible">True</property>
-				<property name="orientation">horizontal</property>
-				<child>
-					<object class="GtkLabel">
-						<property name="visible">True</property>
-						<property name="label" translatable="yes">Export .tex files with pdflatex</property>
-					</object>
-					<packing>
-						<property name="pack-type">start</property>
-					</packing>
-				</child>
-				<child>
-					<object class="GtkSwitch" id="pdflatexSwitch">
-						<property name="visible">True</property>
-					</object>
-					<packing>
-						<property name="pack-type">end</property>
-					</packing>
-				</child>
-			</object>
-		</child>
-	</object>
 	<object class="GtkBox" id="shortcuts_page">
 		<property name="visible">True</property>
 		<property name="spacing">20</property>

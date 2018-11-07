@@ -31,11 +31,9 @@ class MdConfigWidget(Gtk.Box):
 		switcher = Gtk.StackSwitcher(stack=stack, halign=Gtk.Align.CENTER)
 		
 		preview_page = builder.get_object('preview_page')
-		export_page = builder.get_object('export_page')
 		shortcuts_page = builder.get_object('shortcuts_page')
 		
 		stack.add_titled(preview_page, 'preview', _("Preview"))
-		stack.add_titled(export_page, 'export', _("Export"))
 		stack.add_titled(shortcuts_page, 'shortcuts', _("Shortcuts"))
 		
 		backendCombobox = builder.get_object('backendCombobox')
@@ -53,10 +51,6 @@ class MdConfigWidget(Gtk.Box):
 		relativePathsSwitch = builder.get_object('relativePathsSwitch')
 		relativePathsSwitch.set_state(self._settings.get_boolean('relative'))
 		relativePathsSwitch.connect('notify::active', self.on_relative_changed)
-		#--------
-		pdflatexSwitch = builder.get_object('pdflatexSwitch')
-		pdflatexSwitch.set_state(self._settings.get_boolean('pdflatex'))
-		pdflatexSwitch.connect('notify::active', self.on_pdflatex_changed)
 		#--------
 		self.styleLabel = builder.get_object('styleLabel')
 		if len(self._settings.get_string('style')) >= 37:
@@ -122,11 +116,5 @@ class MdConfigWidget(Gtk.Box):
 			self._settings.set_boolean('relative', True)
 		else:
 			self._settings.set_boolean('relative', False)
-		
-	def on_pdflatex_changed(self, w, a):
-		if w.get_state():
-			self._settings.set_boolean('pdflatex', True)
-		else:
-			self._settings.set_boolean('pdflatex', False)
 	
 ##################################################

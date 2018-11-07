@@ -120,14 +120,6 @@ class MdPreviewBar(Gtk.Box):
 		some_damn_box.show_all()
 		self._search_popover.add(some_damn_box)
 
-	def on_change_panel_from_popover(self, *args):
-		if GLib.Variant.new_string('side') == args[1]:
-			self._settings.set_string('position', 'side')
-			args[0].set_state(GLib.Variant.new_string('side'))
-		else:
-			self._settings.set_string('position', 'bottom')
-			args[0].set_state(GLib.Variant.new_string('bottom'))
-
 	def on_set_reload(self, *args):
 		if not args[0].get_state():
 			self.auto_reload = True
@@ -137,12 +129,6 @@ class MdPreviewBar(Gtk.Box):
 			self.auto_reload = False
 			args[0].set_state(GLib.Variant.new_boolean(False))
 		self._settings.set_boolean('auto-reload', self.auto_reload)
-
-	def on_hide_panel(self, *args):
-		if self._settings.get_string('position') == 'bottom':
-			self.parent_plugin.window.get_bottom_panel().set_property('visible', False)
-		else:
-			self.parent_plugin.window.get_side_panel().set_property('visible', False)
 
 	def on_set_paginated(self, *args):
 		if not args[0].get_state():
@@ -211,7 +197,6 @@ class MdPreviewBar(Gtk.Box):
 		# This uri will be used as a reference for links and images using relative paths
 		dummy_uri = self.get_dummy_uri()
 
-		# The content is loaded
 		self._webview.load_bytes(bytes_content, 'text/html', 'UTF-8', dummy_uri)
 		
 	def get_html_from_html(self):
@@ -265,11 +250,11 @@ class MdPreviewBar(Gtk.Box):
 		doc = self.parent_plugin.window.get_active_document()
 		start, end = doc.get_bounds()
 		unsaved_text = doc.get_text(start, end, True)
-		
+		md_extensions = ['extra', 'sane_lists', 'toc', 'codehilite'] # TODO il y a une dpendance pour codehilite
 		pre_string = '<html><head><meta charset="utf-8" /><link rel="stylesheet" href="' + \
 			self._settings.get_string('style') + '" /></head><body>'
 		post_string = '</body></html>'
-		html_string = markdown.markdown(unsaved_text)
+		html_string = markdown.markdown(unsaved_text, extensions=md_extensions)
 		html_string = self.current_page(html_string)
 		html_content = pre_string + html_string + post_string
 		return html_content
