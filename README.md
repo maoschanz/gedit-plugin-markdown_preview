@@ -1,24 +1,22 @@
-**please do not install the master version**
-
 # Gedit Markdown Preview
 
 This is a plugin for the Gedit text editor, previewing .md files in the bottom or the side panel.
 
-Main features (v0.6), for any .md or .html file:
+Main features (v0.7):
 
-- load a preview of a file
+- show a preview of a file
 - dynamically update the preview
 - zoom in or out on the preview
-- "slideshow" mode (preview your file section by section)
 - export your preview (to any format supported by [pandoc](https://pandoc.org/))
 - print your preview
 - search in the page
 
 Also:
 
-- it can insert an image in your file (markdown only)
+- it can insert an image in your file
+- it can insert markdown tags in your text
 - it can open most relative links (as an option, because WebKit2GTK can't load URIs with special characters)
-- it can apply a CSS stylesheet to the preview (markdown only)
+- it can apply a CSS stylesheet to the preview
 
 The preview can be displayed in the side panel or in the bottom panel, and this setting can be changed dynamically.
 

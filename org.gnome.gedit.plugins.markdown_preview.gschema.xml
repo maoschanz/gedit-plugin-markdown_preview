@@ -31,8 +31,8 @@
 			<summary></summary>
 			<description></description>
 		</key>
-		<key type="s" name="reveal-js">
-			<default>"http://lab.hakim.se/reveal-js"</default>
+		<key type="as" name="extensions">
+			<default>['extra', 'sane_lists', 'toc']</default>
 			<summary></summary>
 			<description></description>
 		</key>

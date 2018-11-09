@@ -3,7 +3,6 @@
 	<object class="GtkBox" id="content-area">
 		<property name="visible">True</property>
 		<property name="orientation">vertical</property>
-		<property name="height-request">300</property>
 		<property name="spacing">20</property>
 		<property name="margin">20</property>
 		<child>
@@ -12,7 +11,7 @@
 				<property name="spacing">20</property>
 				<child>
 					<object class="GtkLabel">
-						<property name="label" translatable="yes">Output file format:</property>
+						<property name="label" translatable="yes">Export file using:</property>
 						<property name="visible">True</property>
 					</object>
 					<packing>
@@ -31,6 +30,11 @@
 			</object>
 		</child>
 		<child>
+			<object class="GtkSeparator">
+				<property name="visible">True</property>
+			</object>
+		</child>
+		<child>
 			<object class="GtkStack" id="export_stack">
 				<property name="visible">True</property>
 				<property name="expand">True</property>
@@ -39,7 +43,150 @@
 						<property name="visible">True</property>
 						<property name="orientation">vertical</property>
 						<property name="spacing">12</property>
-						
+						<child>
+							<object class="GtkBox">
+								<property name="visible">True</property>
+								<child>
+									<object class="GtkLabel">
+										<property name="visible">True</property>
+										<property name="label" translatable="yes">Extensions for python3-markdown:</property>
+									</object>
+								</child>
+							</object>
+						</child>
+						<child>
+							<object class="GtkBox" id="plugins_box_1">
+								<property name="visible">True</property>
+								<property name="orientation">horizontal</property>
+								<child>
+									<object class="GtkCheckButton" id="plugins_extra">
+										<property name="visible">True</property>
+										<property name="draw-indicator">False</property>
+										<property name="label" translatable="yes">Extra</property>
+										<property name="tooltip_text" translatable="yes">??????? liste</property><!--TODO-->
+									</object>
+									<packing>
+										<property name="expand">True</property>
+									</packing>
+								</child>
+								<child>
+									<object class="GtkCheckButton" id="plugins_toc">
+										<property name="visible">True</property>
+										<property name="draw-indicator">False</property>
+										<property name="label" translatable="yes">Table of content</property>
+										<property name="tooltip_text" translatable="yes">???????</property><!--TODO-->
+									</object>
+									<packing>
+										<property name="expand">True</property>
+									</packing>
+								</child>
+								<child>
+									<object class="GtkCheckButton" id="plugins_codehilite">
+										<property name="visible">True</property>
+										<property name="draw-indicator">False</property>
+										<property name="label" translatable="yes">CodeHilite</property>
+										<property name="tooltip_text" translatable="yes">??????? explications</property><!--TODO-->
+									</object>
+									<packing>
+										<property name="expand">True</property>
+									</packing>
+								</child>
+								<child>
+									<object class="GtkCheckButton" id="plugins_nl2br">
+										<property name="visible">True</property>
+										<property name="draw-indicator">False</property>
+										<property name="label" translatable="yes">New Line To Break</property>
+										<property name="tooltip_text" translatable="yes">???????</property><!--TODO-->
+									</object>
+									<packing>
+										<property name="expand">True</property>
+									</packing>
+								</child>
+								<style>
+									<class name="linked"/>
+								</style>
+							</object>
+						</child>
+						<child>
+							<object class="GtkBox" id="plugins_box_2">
+								<property name="visible">True</property>
+								<property name="orientation">horizontal</property>
+								<child>
+									<object class="GtkCheckButton" id="plugins_smarty">
+										<property name="visible">True</property>
+										<property name="draw-indicator">False</property>
+										<property name="label" translatable="yes">SmartyPants</property>
+										<property name="tooltip_text" translatable="yes">??????? liste</property><!--TODO-->
+									</object>
+									<packing>
+										<property name="expand">True</property>
+									</packing>
+								</child>
+								<child>
+									<object class="GtkCheckButton" id="plugins_sanelists">
+										<property name="visible">True</property>
+										<property name="draw-indicator">False</property>
+										<property name="label" translatable="yes">SaneLists</property>
+										<property name="tooltip_text" translatable="yes">??????? explications</property><!--TODO-->
+									</object>
+									<packing>
+										<property name="expand">True</property>
+									</packing>
+								</child>
+								<child>
+									<object class="GtkCheckButton" id="plugins_admonition">
+										<property name="visible">True</property>
+										<property name="draw-indicator">False</property>
+										<property name="label" translatable="yes">Admonition</property>
+										<property name="tooltip_text" translatable="yes">???????</property><!--TODO-->
+									</object>
+									<packing>
+										<property name="expand">True</property>
+									</packing>
+								</child>
+								<child>
+									<object class="GtkCheckButton" id="plugins_wikilinks">
+										<property name="visible">True</property>
+										<property name="draw-indicator">False</property>
+										<property name="label" translatable="yes">WikiLinks</property>
+										<property name="tooltip_text" translatable="yes">??????? explications</property><!--TODO-->
+									</object>
+									<packing>
+										<property name="expand">True</property>
+									</packing>
+								</child>
+								<style>
+									<class name="linked"/>
+								</style>
+							</object>
+						</child>
+						<child>
+							<object class="GtkSeparator">
+								<property name="visible">True</property>
+							</object>
+						</child>
+						<child>
+							<object class="GtkBox">
+								<property name="visible">True</property>
+								<property name="orientation">horizontal</property>
+								<property name="spacing">12</property>
+								<child>
+									<object class="GtkLabel">
+										<property name="visible">True</property>
+										<property name="label" translatable="yes">Use a stylesheet:</property>
+									</object>
+								</child>
+								<child>
+									<object class="GtkSwitch" id="switch_css">
+										<property name="visible">True</property>
+										<property name="active">True</property>
+									</object>
+									<packing>
+										<property name="pack-type">end</property>
+									</packing>
+								</child>
+							</object>
+						</child>
 						<child>
 							<object class="GtkBox" id="css_box">
 								<property name="visible">True</property>
@@ -52,15 +199,6 @@
 									</object>
 								</child>
 								<child>
-									<object class="GtkSwitch" id="switch_css">
-										<property name="visible">True</property>
-										<property name="active">True</property>
-									</object>
-									<packing>
-										<property name="pack-type">end</property>
-									</packing>
-								</child>
-								<child>
 									<object class="GtkButton" id="file_chooser_btn_css">
 										<property name="visible">True</property>
 										<property name="label" translatable="yes">????????</property>
@@ -71,90 +209,55 @@
 								</child>
 							</object>
 						</child>
+					</object>
+					<packing>
+						<property name="title">python3-markdown</property>
+						<property name="name">export_python</property>
+					</packing>
+				</child>
+				<child>
+					<object class="GtkBox">
+						<property name="visible">True</property>
+						<property name="orientation">vertical</property>
+						<property name="spacing">12</property>
 						<child>
-							<object class="GtkBox" id="reveal_box">
+							<object class="GtkBox">
 								<property name="visible">True</property>
 								<property name="orientation">horizontal</property>
-								<property name="spacing">12</property>
 								<child>
 									<object class="GtkLabel">
 										<property name="visible">True</property>
-										<property name="label" translatable="yes">Use reveal.js from:</property>
+										<property name="label" translatable="yes">Output file format:</property>
 									</object>
+									<packing>
+										<property name="pack-type">start</property>
+									</packing>
 								</child>
 								<child>
-									<object class="GtkSwitch" id="switch_js">
+									<object class="GtkComboBoxText" id="format_combobox">
 										<property name="visible">True</property>
-										<property name="active">False</property>
 									</object>
 									<packing>
 										<property name="pack-type">end</property>
 									</packing>
 								</child>
-								<child>
-									<object class="GtkButton" id="file_chooser_btn_js">
-										<property name="visible">True</property>
-										<property name="label" translatable="yes">????????</property>
-									</object>
-									<packing>
-										<property name="pack-type">end</property>
-									</packing>
-								</child>
-							</object>
-						</child>
-						
-						<child>
-							<object class="GtkRadioButton" id="export_html_radiobtn">
-								<property name="visible">True</property>
-								<property name="label" translatable="yes">Export using python3-markdown</property>
 							</object>
 						</child>
 						<child>
 							<object class="GtkBox">
-								<property name="visible">True</property>
-								<child>
-									<object class="GtkLabel">
-										<property name="visible">True</property>
-										<property name="label" translatable="yes">Plugins for python3-markdown:</property>
-									</object>
-								</child>
-							</object>
-						</child>
-						<child>
-							<object class="GtkBox" id="html_plugins_box">
-								<property name="visible">True</property>
 								<property name="orientation">horizontal</property>
-								<property name="expand">True</property>
+										<property name="expand">False</property>
+								<property name="visible">True</property>
 								<child>
-									<object class="GtkCheckButton" id="html_plugins_extra">
+									<object class="GtkEntry" id="pandoc_command_entry">
 										<property name="visible">True</property>
-										<property name="draw-indicator">False</property>
-										<property name="label" translatable="yes">Extra</property>
-										<property name="tooltip_text" translatable="yes">??????? liste</property><!--TODO-->
+										<property name="expand">True</property>
 									</object>
 								</child>
 								<child>
-									<object class="GtkCheckButton" id="html_plugins_toc">
+									<object class="GtkButton" id="remember_button">
 										<property name="visible">True</property>
-										<property name="draw-indicator">False</property>
-										<property name="label" translatable="yes">Table of content</property>
-										<property name="tooltip_text" translatable="yes">???????</property><!--TODO-->
-									</object>
-								</child>
-								<child>
-									<object class="GtkCheckButton" id="html_plugins_codehilite">
-										<property name="visible">True</property>
-										<property name="draw-indicator">False</property>
-										<property name="label" translatable="yes">CodeHilite</property>
-										<property name="tooltip_text" translatable="yes">??????? explications</property><!--TODO-->
-									</object>
-								</child>
-								<child>
-									<object class="GtkCheckButton" id="html_plugins_sanelists">
-										<property name="visible">True</property>
-										<property name="draw-indicator">False</property>
-										<property name="label" translatable="yes">SaneLists</property>
-										<property name="tooltip_text" translatable="yes">??????? explications</property><!--TODO-->
+										<property name="label" translatable="yes">Remember</property>
 									</object>
 								</child>
 								<style>
@@ -162,113 +265,10 @@
 								</style>
 							</object>
 						</child>
-						<child>
-							<object class="GtkRadioButton" id="export_html_pandoc_radiobtn">
-								<property name="visible">True</property>
-								<property name="group">export_html_radiobtn</property>
-								<property name="label" translatable="yes">Export using pandoc</property>
-							</object>
-						</child>
-						<child>
-							<object class="GtkLabel">
-								<property name="visible">True</property>
-								<property name="label">[TODO : ????]</property>
-							</object>
-						</child>
 					</object>
 					<packing>
-						<property name="title">HTML</property>
-						<property name="name">export_html</property>
-					</packing>
-				</child>
-				<child>
-					<object class="GtkBox">
-						<property name="visible">True</property>
-						<property name="orientation">vertical</property>
-						<property name="spacing">12</property>
-						<child>
-							<object class="GtkRadioButton" id="export_pdf_radiobtn">
-								<property name="visible">True</property>
-								<property name="label" translatable="yes">Export with pandoc</property>
-							</object>
-						</child>
-						<child>
-							<object class="GtkEntry" id="export_pdf_pandoc_entry">
-								<property name="visible">True</property>
-							</object>
-						</child>
-						<child>
-							<object class="GtkRadioButton" id="export_pdf_pdflatex_radiobtn">
-								<property name="visible">True</property>
-								<property name="group">export_pdf_radiobtn</property>
-								<property name="label" translatable="yes">Export with pdflatex</property>
-							</object>
-						</child>
-						<child>
-							<object class="GtkEntry" id="export_pdf_pdflatex_entry">
-								<property name="visible">True</property>
-							</object>
-						</child>
-					</object>
-					<packing>
-						<property name="title">PDF</property>
-						<property name="name">export_pdf</property>
-					</packing>
-				</child>
-				<child>
-					<object class="GtkBox">
-						<property name="visible">True</property>
-						<property name="orientation">vertical</property>
-						<property name="spacing">12</property>
-						<child>
-							<object class="GtkRadioButton">
-								<property name="visible">True</property>
-								<property name="label">export_stack_custom</property>
-							</object>
-						</child>
-						<child>
-							<object class="GtkBox">
-								<property name="orientation">horizontal</property>
-								<property name="visible">True</property>
-								<child>
-									<object class="GtkLabel">
-										<property name="visible">True</property>
-										<property name="label">export_stack_custom</property>
-									</object>
-								</child>
-								<child>
-									<object class="GtkSwitch">
-										<property name="visible">True</property>
-									</object>
-								</child>
-							</object>
-						</child>
-						<child>
-							<object class="GtkRadioButton">
-								<property name="visible">True</property>
-								<property name="label">export_stack_custom</property>
-							</object>
-						</child>
-						<child>
-							<object class="GtkBox">
-								<property name="orientation">horizontal</property>
-								<property name="visible">True</property>
-								<child>
-									<object class="GtkEntry">
-										<property name="visible">True</property>
-									</object>
-								</child>
-								<child>
-									<object class="GtkButton">
-										<property name="visible">True</property>
-									</object>
-								</child>
-							</object>
-						</child>
-					</object>
-					<packing>
-						<property name="title">Custom</property>
-						<property name="name">export_custom</property>
+						<property name="title">pandoc</property>
+						<property name="name">export_pandoc</property>
 					</packing>
 				</child>
 			</object>

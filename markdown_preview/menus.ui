@@ -136,10 +136,6 @@
 			<attribute name="action">win.md-prev-format-monospace</attribute>
 		</item>
 		<item>
-			<attribute name="label" translatable="yes">Stroke</attribute>
-			<attribute name="action">win.md-prev-format-stroke</attribute>
-		</item>
-		<item>
 			<attribute name="label" translatable="yes">Quote</attribute>
 			<attribute name="action">win.md-prev-format-quote</attribute>
 		</item>

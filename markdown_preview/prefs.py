@@ -36,6 +36,8 @@ class MdConfigWidget(Gtk.Box):
 		stack.add_titled(preview_page, 'preview', _("Preview"))
 		stack.add_titled(shortcuts_page, 'shortcuts', _("Shortcuts"))
 		
+		### PREVIEW ###
+		
 		backendCombobox = builder.get_object('backendCombobox')
 		backendCombobox.append('python', _("python3-markdown"))
 		backendCombobox.append('pandoc', _("pandoc"))
@@ -53,36 +55,16 @@ class MdConfigWidget(Gtk.Box):
 		relativePathsSwitch.connect('notify::active', self.on_relative_changed)
 		#--------
 		self.styleLabel = builder.get_object('styleLabel')
-		if len(self._settings.get_string('style')) >= 37:
-			self.styleLabel.set_label("…" + self._settings.get_string('style')[-35:])
+		if len(self._settings.get_string('style')) >= 42:
+			self.styleLabel.set_label("…" + self._settings.get_string('style')[-40:])
 		else:
 			self.styleLabel.set_label(self._settings.get_string('style'))
 #		self.styleLabel = Gtk.Label(self._settings.get_string('style'))
 		styleButton = builder.get_object('styleButton')
 		styleButton.connect('clicked', self.on_choose_css)
-		# ------------------
-				
-#		ATTENTON UNE LIGNE D4IOPTINO PAR FORMAT !!!
-#		--toc
-#		
-#		Beamer
-#		
-#		-V revealjs-url=http://lab.hakim.se/reveal-js ---> HTML
-#		
-#		-V theme=/*thème beamer*/
-#		
-#		-V navigation=/*none, frame, vertical, horizontal*/
-#		
-#		LaTeX
-#		
-#		-V papersize.....
-#		
-#		-V fontsize.....
-#		
-#		-V geometry.......
-#		
-#		
-#		
+		
+		### SHORTCUTS ###
+#		TODO
 		
 		self.add(switcher)
 		self.add(stack)
@@ -108,7 +90,7 @@ class MdConfigWidget(Gtk.Box):
 		# It gets the chosen file's path
 		if response == Gtk.ResponseType.OK:
 			self.styleLabel.label = file_chooser.get_filename()
-			self._settings.set_string('style', file_chooser.get_filename())
+			self._settings.set_string('style', file_chooser.get_uri())
 		file_chooser.destroy()
 		
 	def on_relative_changed(self, w, a):

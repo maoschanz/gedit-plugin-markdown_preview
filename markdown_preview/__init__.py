@@ -155,8 +155,6 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		action_underline.connect('activate', lambda i, j: self.view_method('format_underline'))
 		action_monospace = Gio.SimpleAction(name='md-prev-format-monospace')
 		action_monospace.connect('activate', lambda i, j: self.view_method('format_monospace'))
-		action_stroke = Gio.SimpleAction(name='md-prev-format-stroke')
-		action_stroke.connect('activate', lambda i, j: self.view_method('format_stroke'))
 		action_quote = Gio.SimpleAction(name='md-prev-format-quote')
 		action_quote.connect('activate', lambda i, j: self.view_method('format_quote'))
 		# TODO
@@ -169,7 +167,6 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		self.window.add_action(action_italic)
 		self.window.add_action(action_underline)
 		self.window.add_action(action_monospace)
-		self.window.add_action(action_stroke)
 		# TODO
 		self.window.add_action(action_picture)
 		self.window.add_action(action_table)
@@ -198,8 +195,6 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 			v.format_monospace()
 		elif name == 'format_quote':
 			v.format_quote()
-		elif name == 'format_stroke':
-			v.format_stroke()
 		elif name == 'format_underline':
 			v.format_underline()
 		# TODO
@@ -316,9 +311,6 @@ class MarkdownGeditPluginView(GObject.Object, Gedit.ViewActivatable):
 		pass
 	
 	def format_monospace(self):
-		pass
-	
-	def format_stroke(self):
 		pass
 	
 	def format_quote(self):

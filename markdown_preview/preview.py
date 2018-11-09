@@ -177,17 +177,13 @@ class MdPreviewBar(Gtk.Box):
 		self.panel.show()
 		html_content = ''
 		if self.file_format == 'html':
-			print('html')
 			html_content = self.get_html_from_html()
 		elif self.file_format == 'tex':
-			print('tex (pandoc)')
 			html_content = self.get_html_from_tex()
 		elif self._settings.get_string('backend') == 'python':
 			html_content = self.get_html_from_md_python()
-			print('md (python)')
 		else:
 			html_content = self.get_html_from_md_pandoc()
-			print('md (pandoc)')
 
 		# The html code is converted into bytes
 		my_string = GLib.String()
@@ -250,7 +246,9 @@ class MdPreviewBar(Gtk.Box):
 		doc = self.parent_plugin.window.get_active_document()
 		start, end = doc.get_bounds()
 		unsaved_text = doc.get_text(start, end, True)
-		md_extensions = ['extra', 'sane_lists', 'toc', 'codehilite'] # TODO il y a une dpendance pour codehilite
+#		md_extensions = ['extra', 'sane_lists', 'toc', 'codehilite', 'admonition'] # TODO il y a une dpendance pour codehilite
+		# TODO https://github.com/Python-Markdown/markdown/wiki/Third-Party-Extensions omgggg
+		md_extensions = self._settings.get_strv('extensions')
 		pre_string = '<html><head><meta charset="utf-8" /><link rel="stylesheet" href="' + \
 			self._settings.get_string('style') + '" /></head><body>'
 		post_string = '</body></html>'
