@@ -11,6 +11,11 @@
 			<summary></summary>
 			<description></description>
 		</key>
+		<key type="b" name="auto-manage-panel">
+			<default>true</default>
+			<summary>Show/hide panel automatically</summary>
+			<description>If true, the panel will be shown/hidden automatically if no other plugin is active in it.</description>
+		</key>
 		<key type="b" name="auto-reload">
 			<default>true</default>
 			<summary></summary>

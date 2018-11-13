@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "Generating .pot file..."
-xgettext --files-from=POTFILES --output=markdown_preview/locale/gedit-plugin-markdown-preview.pot
+xgettext --files-from=POTFILES --from-code=UTF-8 --output=markdown_preview/locale/gedit-plugin-markdown-preview.pot
 
 IFS='
 '

@@ -134,16 +134,12 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 
 		action_presentation = Gio.SimpleAction(name='md-prev-presentation')
 		action_presentation.connect('activate', self.preview.on_presentation)
-
-		action_hide = Gio.SimpleAction(name='md-prev-hide')
-		action_hide.connect('activate', self.on_hide_panel)
 		
 		self.window.add_action(action_paginated)
 		self.window.add_action(action_next)
 		self.window.add_action(action_previous)
 		self.window.add_action(action_panel)
 		self.window.add_action(action_presentation)
-		self.window.add_action(action_hide)
 		self.window.add_action(action_autoreload)
 		self.window.add_action(self.action_reload_preview)
 		
@@ -283,12 +279,6 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		else:
 			self._settings.set_string('position', 'bottom')
 			args[0].set_state(GLib.Variant.new_string('bottom'))
-
-	def on_hide_panel(self, *args):
-		if self._settings.get_string('position') == 'bottom':
-			self.window.get_bottom_panel().set_property('visible', False)
-		else:
-			self.window.get_side_panel().set_property('visible', False)
 
 	########
 	

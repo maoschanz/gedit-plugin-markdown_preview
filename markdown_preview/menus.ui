@@ -44,10 +44,6 @@
 			<attribute name="action">win.md-prev-panel</attribute>
 			<attribute name="target">bottom</attribute>
 		</item>
-		<item>
-			<attribute name="label" translatable="yes">Hide the panel</attribute>
-			<attribute name="action">win.md-prev-hide</attribute>
-		</item>
 		<submenu id="view-mode">
 			<attribute name="label" translatable="yes">View mode</attribute>
 			<section>
@@ -59,6 +55,7 @@
 			<section>
 				<item>
 					<attribute name="label" translatable="yes">Whole document</attribute>
+					<attribute name="action">win.todo</attribute>
 		<!--			<attribute name="action">win.md-set-view-mode</attribute>-->
 		<!--			<attribute name="target">whole</attribute>-->
 				</item>
@@ -70,6 +67,7 @@
 				</item>
 				<item>
 					<attribute name="label" translatable="yes">Slideshow</attribute>
+					<attribute name="action">win.todo</attribute>
 		<!--			<attribute name="action">win.md-set-view-mode</attribute>-->
 		<!--			<attribute name="target">separators</attribute>-->
 				</item>

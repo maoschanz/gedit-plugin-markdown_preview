@@ -2,12 +2,13 @@
 <interface domain="gedit-plugin-markdown-preview">
 	<object class="GtkBox" id="preview_page">
 		<property name="visible">True</property>
-		<property name="spacing">20</property>
+		<property name="spacing">10</property>
 		<property name="orientation">vertical</property>
 		<child>
 			<object class="GtkBox">
 				<property name="visible">True</property>
 				<property name="orientation">horizontal</property>
+				<property name="spacing">20</property>
 				<child>
 					<object class="GtkLabel">
 						<property name="visible">True</property>
@@ -32,17 +33,18 @@
 			<object class="GtkBox">
 				<property name="visible">True</property>
 				<property name="orientation">horizontal</property>
+				<property name="spacing">20</property>
 				<child>
 					<object class="GtkLabel">
 						<property name="visible">True</property>
-						<property name="label" translatable="yes">Preview position</property>
+						<property name="label" translatable="yes">Automatically show/hide panel</property>
 					</object>
 					<packing>
 						<property name="pack-type">start</property>
 					</packing>
 				</child>
 				<child>
-					<object class="GtkComboBoxText" id="positionCombobox">
+					<object class="GtkSwitch" id="autoManageSwitch">
 						<property name="visible">True</property>
 					</object>
 					<packing>
@@ -56,6 +58,7 @@
 			<object class="GtkBox">
 				<property name="visible">True</property>
 				<property name="orientation">horizontal</property>
+				<property name="spacing">20</property>
 				<child>
 					<object class="GtkLabel">
 						<property name="visible">True</property>
@@ -80,7 +83,7 @@
 			<object class="GtkBox">
 				<property name="visible">True</property>
 				<property name="orientation">horizontal</property>
-				<property name="spacing">10</property>
+				<property name="spacing">20</property>
 				<child>
 					<object class="GtkLabel">
 						<property name="visible">True</property>
@@ -120,12 +123,13 @@
 	</object>
 	<object class="GtkBox" id="shortcuts_page">
 		<property name="visible">True</property>
-		<property name="spacing">20</property>
+		<property name="spacing">10</property>
 		<property name="orientation">vertical</property>
 		<child>
 			<object class="GtkBox">
 				<property name="visible">True</property>
 				<property name="orientation">horizontal</property>
+				<property name="spacing">20</property>
 				<child>
 					<object class="GtkLabel">
 						<property name="visible">True</property>

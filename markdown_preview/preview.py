@@ -12,7 +12,7 @@ BASE_TEMP_NAME = '/tmp/gedit_plugin_markdown_preview'
 
 class MdPreviewBar(Gtk.Box):
 	__gtype_name__ = 'MdPreviewBar'
-	
+
 	def __init__(self, parent_plugin, **kwargs):
 		super().__init__(**kwargs)
 		self.auto_reload = False
@@ -23,7 +23,9 @@ class MdPreviewBar(Gtk.Box):
 		self._handlers = []
 		self._settings = Gio.Settings.new(MD_PREVIEW_KEY_BASE)
 		self._handlers.append( self._settings.connect('changed::position', self.change_panel) )
+		self._handlers.append( self._settings.connect('changed::auto-manage-panel', self.set_auto_manage) )
 		self.is_paginated = False
+		self.set_auto_manage()
 #		self.connect_preview_menu()
 		self.build_preview_ui()
 		self.page_index = 0
@@ -39,15 +41,19 @@ class MdPreviewBar(Gtk.Box):
 				self.on_reload()
 
 	def do_deactivate(self):
+		self._settings.disconnect(self._handlers[1])
 		self._settings.disconnect(self._handlers[0])
 		self.delete_temp_file()
 		self.remove_from_panel()
 		self.preview_bar.destroy()
+		
+	def set_auto_manage(self, *args):
+		self.auto_manage_panel = self._settings.get_boolean('auto-manage-panel')
 
 	def build_preview_ui(self):
 		ui_builder = Gtk.Builder().new_from_file(os.path.join(BASE_PATH, 'preview.ui'))
 		self.preview_bar = ui_builder.get_object('preview_bar')
-		
+
 		# This is the preview itself
 		self._webview = WebKit2.WebView()
 		self._webview.connect('context-menu', self.on_context_menu)
@@ -58,7 +64,7 @@ class MdPreviewBar(Gtk.Box):
 		menu_builder = Gtk.Builder().new_from_file(os.path.join(BASE_PATH, 'menus.ui'))
 		self.menu_popover = Gtk.Popover().new_from_model(menuBtn, menu_builder.get_object('md-preview-menu'))
 		menuBtn.set_popover(self.menu_popover)
-		
+
 		self.build_search_popover()
 		searchBtn = ui_builder.get_object('search_btn')
 		self._search_popover.set_relative_to(searchBtn)
@@ -165,7 +171,7 @@ class MdPreviewBar(Gtk.Box):
 
 	def on_reload(self, *args):
 		# Guard clause: it will not load documents which are not .md
-		if self.file_format == 'error':
+		if self.file_format == 'error' or not self.auto_manage_panel:
 			if self._settings.get_string('position') == 'bottom':
 				if len(self.panel.get_children()) is 1:
 					self.panel.hide()
