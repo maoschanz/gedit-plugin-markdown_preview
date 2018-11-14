@@ -18,6 +18,7 @@ class MdPreviewBar(Gtk.Box):
 		self.auto_reload = False
 		self.parent_plugin = parent_plugin
 		self.file_format = 'error'
+		self.scroll_level = 0
 
 	def do_activate(self):
 		self._handlers = []
@@ -26,7 +27,6 @@ class MdPreviewBar(Gtk.Box):
 		self._handlers.append( self._settings.connect('changed::auto-manage-panel', self.set_auto_manage) )
 		self.is_paginated = False
 		self.set_auto_manage()
-#		self.connect_preview_menu()
 		self.build_preview_ui()
 		self.page_index = 0
 		self.page_number = 1
@@ -41,6 +41,9 @@ class MdPreviewBar(Gtk.Box):
 				self.on_reload()
 
 	def do_deactivate(self):
+		self._webview.disconnect(self._handlers[4])
+		self._webview.disconnect(self._handlers[3])
+		self._webview.disconnect(self._handlers[2])
 		self._settings.disconnect(self._handlers[1])
 		self._settings.disconnect(self._handlers[0])
 		self.delete_temp_file()
@@ -56,7 +59,10 @@ class MdPreviewBar(Gtk.Box):
 
 		# This is the preview itself
 		self._webview = WebKit2.WebView()
-		self._webview.connect('context-menu', self.on_context_menu)
+		self._webview.get_settings().set_property('enable_javascript', True)
+		self._handlers.append( self._webview.connect('context-menu', self.on_context_menu) )
+		self._handlers.append( self._webview.connect('mouse-target-changed', self.on_remember_scroll) )
+		self._handlers.append( self._webview.connect('load-changed', self.on_restore_scroll) )
 		self.preview_bar.pack_start(self._webview, expand=True, fill=True, padding=0)
 
 		# Building UI elements
@@ -81,6 +87,23 @@ class MdPreviewBar(Gtk.Box):
 		nextBtn.connect('clicked', self.on_next_page)
 
 		self.show_on_panel()
+		
+	def on_remember_scroll(self, *args):
+		js = 'window.document.body.scrollTop'
+		self._webview.run_javascript(js, None, self.javascript_finished, None)
+		return
+		
+	def on_restore_scroll(self, *args):
+		js = 'window.document.body.scrollTop = ' + str(self.scroll_level) + '; undefined;'
+		self._webview.run_javascript(js, None, None, None)
+		return
+		
+	def javascript_finished(self, webview, result, user_data):
+		js_result = webview.run_javascript_finish(result)
+		if js_result is not None:
+			value = js_result.get_js_value()
+			if not value.is_undefined():
+				self.scroll_level = value.to_int32()
 
 	def on_context_menu(self, a, b, c, d):
 		if d.context_is_link():
@@ -208,11 +231,11 @@ class MdPreviewBar(Gtk.Box):
 		dummy_uri = self.get_dummy_uri()
 
 		self._webview.load_bytes(bytes_content, 'text/html', 'UTF-8', dummy_uri)
-		
+
 	def get_html_from_html(self, unsaved_text):
 		pre_string = '<html><head><meta charset="utf-8" /></head><body>'
 		post_string = '</body></html>'
-		unsaved_text = self.current_page(unsaved_text) # FIXME sous-optimal
+		unsaved_text = self.current_page(unsaved_text, '<hr />')
 		html_content = pre_string + unsaved_text + post_string
 		return html_content
 	

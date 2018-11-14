@@ -80,7 +80,8 @@
 	<section>
 		<item>
 			<attribute name="label" translatable="yes">Remove all tags</attribute>
-			<attribute name="action">win.md-prev-remove-all</attribute>
+<!--			<attribute name="action">win.md-prev-remove-all</attribute>-->
+			<attribute name="action">win.todo</attribute>
 		</item>
 	</section>
 	<section>

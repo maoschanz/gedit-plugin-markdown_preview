@@ -47,6 +47,28 @@ class MdConfigWidget(Gtk.Box):
 		self.pandocCommandBox = builder.get_object('pandocCommandBox')
 		self.python3MarkdownPluginsBox = builder.get_object('python3MarkdownPluginsBox')
 		
+		self.pandocCommandEntry = builder.get_object('pandocCommandEntry')
+		
+		self.plugins_extra = builder.get_object('plugins_extra')
+		self.plugins_toc = builder.get_object('plugins_toc')
+		self.plugins_smarty = builder.get_object('plugins_smarty')
+		self.plugins_codehilite = builder.get_object('plugins_codehilite')
+		self.plugins_nl2br = builder.get_object('plugins_nl2br')
+		self.plugins_sanelists = builder.get_object('plugins_sanelists')
+		self.plugins_admonition = builder.get_object('plugins_admonition')
+		self.plugins_wikilinks = builder.get_object('plugins_wikilinks')
+		
+		self.load_plugins_list()
+		
+		self.plugins_extra.connect('clicked', self.update_plugins_list)
+		self.plugins_toc.connect('clicked', self.update_plugins_list)
+		self.plugins_smarty.connect('clicked', self.update_plugins_list)
+		self.plugins_codehilite.connect('clicked', self.update_plugins_list)
+		self.plugins_nl2br.connect('clicked', self.update_plugins_list)
+		self.plugins_sanelists.connect('clicked', self.update_plugins_list)
+		self.plugins_admonition.connect('clicked', self.update_plugins_list)
+		self.plugins_wikilinks.connect('clicked', self.update_plugins_list)
+		
 		#--------
 		relativePathsSwitch = builder.get_object('relativePathsSwitch')
 		relativePathsSwitch.set_state(self._settings.get_boolean('relative'))
@@ -70,26 +92,58 @@ class MdConfigWidget(Gtk.Box):
 		
 		self.add(switcher)
 		self.add(stack)
-	
-	def show_all(self):
-		super.show_all()
-		self.set_options_visibility(self._settings.get_string('backend'))
 		
+		self.connect('notify::visible', self.set_options_visibility)
+	
 	def on_backend_changed(self, w):
 		self._settings.set_string('backend', w.get_active_id())
-		self.set_options_visibility(w.get_active_id())
+		self.set_options_visibility()
 		
-	def set_options_visibility(self, backend):
-		if backend == 'pandoc':
-			self.python3MarkdownPluginsBox.set_sensitive(False)
-			self.pandocCommandBox.set_sensitive(True)
+	def update_plugins_list(self, *args):
+		array = []
+		if self.plugins_admonition.get_active():
+			array.append('admonition')
+		if self.plugins_codehilite.get_active():
+			array.append('codehilite')
+		if self.plugins_extra.get_active():
+			array.append('extra')
+		if self.plugins_nl2br.get_active():
+			array.append('nl2br')
+		if self.plugins_sanelists.get_active():
+			array.append('sane_lists')
+		if self.plugins_smarty.get_active():
+			array.append('smarty')
+		if self.plugins_toc.get_active():
+			array.append('toc')
+		if self.plugins_wikilinks.get_active():
+			array.append('wikilinks')
+		self._settings.set_strv('extensions', array)
 			
+	def load_plugins_list(self, *args):
+		array = self._settings.get_strv('extensions')
+		if array.count('admonition') != 0:
+			self.plugins_admonition.set_active(True)
+		if array.count('codehilite') != 0:
+			self.plugins_codehilite.set_active(True)
+		if array.count('extra') != 0:
+			self.plugins_extra.set_active(True)
+		if array.count('nl2br') != 0:
+			self.plugins_nl2br.set_active(True)
+		if array.count('sane_lists') != 0:
+			self.plugins_sanelists.set_active(True)
+		if array.count('smarty') != 0:
+			self.plugins_smarty.set_active(True)
+		if array.count('toc') != 0:
+			self.plugins_toc.set_active(True)
+		if array.count('wikilinks') != 0:
+			self.plugins_wikilinks.set_active(True)
+		
+	def set_options_visibility(self, *args):
+		backend = self._settings.get_string('backend')
+		if backend == 'pandoc':
 			self.python3MarkdownPluginsBox.set_visible(False)
 			self.pandocCommandBox.set_visible(True)
 		else:
-			self.pandocCommandBox.set_sensitive(False)
-			self.python3MarkdownPluginsBox.set_sensitive(True)
-			
 			self.pandocCommandBox.set_visible(False)
 			self.python3MarkdownPluginsBox.set_visible(True)
 		

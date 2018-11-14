@@ -2,23 +2,15 @@
 
 This is a plugin for the Gedit text editor, previewing .md files in the bottom or the side panel.
 
-Main features (v0.7):
+Main features (v0.8):
 
 - show a preview of a file
-- dynamically update the preview
+- dynamically update the preview (while remembering the position in the page)
 - zoom in or out on the preview
 - export your preview (to any format supported by [pandoc](https://pandoc.org/))
 - print your preview
-- search in the page
-
-Also:
-
-- it can insert an image in your file
-- it can insert markdown tags in your text
-- it can open most relative links (as an option, because WebKit2GTK can't load URIs with special characters)
-- it can apply a CSS stylesheet to the preview
-
-The preview can be displayed in the side panel or in the bottom panel, and this setting can be changed dynamically.
+- search in the preview
+- insert an image in your file or other markdown tags in your text
 
 ----
 
@@ -33,9 +25,9 @@ The preview can be displayed in the side panel or in the bottom panel, and this 
 ## Dependencies
 
 - `gedit` (of course)
-- `python3-markdown`
+- `python3-markdown` (that's the name for debian-based distros)
 - `pandoc`
-- `libwebkit2gtk-4.0-dev` (that's the name for debian-based distros)
+- maybe `libwebkit2gtk-4.0-dev` (that's the name for debian-based distros)
 
 ## Installation
 
@@ -45,8 +37,18 @@ The preview can be displayed in the side panel or in the bottom panel, and this 
 
 The script `install.sh` can be executed as root (installation system-wide) or as a normal user (installation user-wide, but it works only with some systems, weirdly).
 
+## Configuration
+
+In gedit's preferences → plugins, some settings are available:
+
+- The preview can be generated (and exported) with [pandoc](https://pandoc.org/) or [python-markdown](https://python-markdown.github.io/). A set of extensions is available with python-markdown.
+- A stylesheet (CSS file) can be applied to the preview.
+- Chose if you want the plugin to understand relative paths (for links and pictures). Not recommended if you use special characters in filenames (WebKit2GTK can't load URIs with special characters for some reason)
+
 ## Available languages
 
 - English
-- ~~French~~
+- Theorically french, but in fact it's broken
+
+
 

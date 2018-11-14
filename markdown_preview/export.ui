@@ -63,7 +63,7 @@
 										<property name="visible">True</property>
 										<property name="draw-indicator">False</property>
 										<property name="label">Extra</property>
-										<property name="tooltip_text" translatable="yes">??????? liste</property><!--TODO-->
+										<property name="tooltip_text" translatable="yes">A compilation of various extensions (Abbreviations, Attribute Lists, Definition Lists, Fenced Code Blocks, Footnotes, Tables).</property>
 									</object>
 									<packing>
 										<property name="expand">True</property>
@@ -74,7 +74,7 @@
 										<property name="visible">True</property>
 										<property name="draw-indicator">False</property>
 										<property name="label">Table of content</property>
-										<property name="tooltip_text" translatable="yes">???????</property><!--TODO-->
+										<property name="tooltip_text" translatable="yes">Show a clickable table of content with the [TOC] tag.</property>
 									</object>
 									<packing>
 										<property name="expand">True</property>
@@ -85,7 +85,7 @@
 										<property name="visible">True</property>
 										<property name="draw-indicator">False</property>
 										<property name="label">CodeHilite</property>
-										<property name="tooltip_text" translatable="yes">??????? explications</property><!--TODO-->
+										<property name="tooltip_text" translatable="yes">Highlight your code with a correct syntax coloration (it needs a set up and some dependencies).</property>
 									</object>
 									<packing>
 										<property name="expand">True</property>
@@ -96,7 +96,7 @@
 										<property name="visible">True</property>
 										<property name="draw-indicator">False</property>
 										<property name="label">New Line To Break</property>
-										<property name="tooltip_text" translatable="yes">???????</property><!--TODO-->
+										<property name="tooltip_text" translatable="yes">Add a line break at each new line.</property>
 									</object>
 									<packing>
 										<property name="expand">True</property>
@@ -116,7 +116,7 @@
 										<property name="visible">True</property>
 										<property name="draw-indicator">False</property>
 										<property name="label">SmartyPants</property>
-										<property name="tooltip_text" translatable="yes">??????? liste</property><!--TODO-->
+										<property name="tooltip_text" translatable="yes">Converts ASCII dashes, quotes and ellipses to their nice-looking equivalents.</property>
 									</object>
 									<packing>
 										<property name="expand">True</property>
@@ -127,7 +127,7 @@
 										<property name="visible">True</property>
 										<property name="draw-indicator">False</property>
 										<property name="label">SaneLists</property>
-										<property name="tooltip_text" translatable="yes">??????? explications</property><!--TODO-->
+										<property name="tooltip_text" translatable="yes">Alters the behavior of the lists syntax.</property><!--TODO-->
 									</object>
 									<packing>
 										<property name="expand">True</property>
@@ -149,7 +149,7 @@
 										<property name="visible">True</property>
 										<property name="draw-indicator">False</property>
 										<property name="label">WikiLinks</property>
-										<property name="tooltip_text" translatable="yes">??????? explications</property><!--TODO-->
+										<property name="tooltip_text" translatable="yes">???????</property><!--TODO-->
 									</object>
 									<packing>
 										<property name="expand">True</property>

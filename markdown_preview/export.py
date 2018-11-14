@@ -26,6 +26,17 @@ class MdExportDialog(Gtk.Dialog):
 		
 		self.export_stack = builder.get_object('export_stack')
 		
+		self.plugins_extra = builder.get_object('plugins_extra')
+		self.plugins_toc = builder.get_object('plugins_toc')
+		self.plugins_smarty = builder.get_object('plugins_smarty')
+		self.plugins_codehilite = builder.get_object('plugins_codehilite')
+		self.plugins_nl2br = builder.get_object('plugins_nl2br')
+		self.plugins_sanelists = builder.get_object('plugins_sanelists')
+		self.plugins_admonition = builder.get_object('plugins_admonition')
+		self.plugins_wikilinks = builder.get_object('plugins_wikilinks')
+		
+		self.load_plugins_list()
+		
 		self.switch_css = builder.get_object('switch_css')
 		self.switch_css.connect('notify::active', self.on_css_changed)
 		self.css_box = builder.get_object('css_box')
@@ -55,6 +66,25 @@ class MdExportDialog(Gtk.Dialog):
 		
 	def do_cancel_export(self):
 		self.destroy()
+		
+	def load_plugins_list(self, *args):
+		array = self._settings.get_strv('extensions')
+		if array.count('admonition') != 0:
+			self.plugins_admonition.set_active(True)
+		if array.count('codehilite') != 0:
+			self.plugins_codehilite.set_active(True)
+		if array.count('extra') != 0:
+			self.plugins_extra.set_active(True)
+		if array.count('nl2br') != 0:
+			self.plugins_nl2br.set_active(True)
+		if array.count('sane_lists') != 0:
+			self.plugins_sanelists.set_active(True)
+		if array.count('smarty') != 0:
+			self.plugins_smarty.set_active(True)
+		if array.count('toc') != 0:
+			self.plugins_toc.set_active(True)
+		if array.count('wikilinks') != 0:
+			self.plugins_wikilinks.set_active(True)
 		
 	def export_python(self):
 		file_chooser = self.launch_file_chooser()
