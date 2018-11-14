@@ -226,22 +226,20 @@ class MdPreviewBar(Gtk.Box):
 		post_string = '</body></html>'
 		result = subprocess.run(['pandoc', file_path], stdout=subprocess.PIPE)
 		html_string = result.stdout.decode('utf-8')
-		html_string = self.current_page(html_string) # FIXME sous-optimal
+		html_string = self.current_page(html_string, '<hr />')
 		html_content = pre_string + html_string + post_string
 		return html_content
 		
 	def get_html_from_md_pandoc(self):
 		# Get the current document, or the temporary document if requested
 		doc = self.parent_plugin.window.get_active_document()
-		if self.auto_reload:
-			start, end = doc.get_bounds()
-			unsaved_text = doc.get_text(start, end, True)
-			f = open(BASE_TEMP_NAME + '.md', 'w')
-			f.write(unsaved_text)
-			f.close()
-			file_path = self.temp_file_md.get_path()
-		else:
-			file_path = doc.get_location().get_path()
+		start, end = doc.get_bounds()
+		unsaved_text = doc.get_text(start, end, True)
+		unsaved_text = self.current_page(unsaved_text, '----')
+		f = open(BASE_TEMP_NAME + '.md', 'w')
+		f.write(unsaved_text)
+		f.close()
+		file_path = self.temp_file_md.get_path()
 
 		# It uses pandoc to produce the html code
 		pre_string = '<html><head><meta charset="utf-8" /><link rel="stylesheet" href="' + \
@@ -249,7 +247,7 @@ class MdPreviewBar(Gtk.Box):
 		post_string = '</body></html>'
 		result = subprocess.run(['pandoc', file_path], stdout=subprocess.PIPE)
 		html_string = result.stdout.decode('utf-8')
-		html_string = self.current_page(html_string) # FIXME sous-optimal
+		html_string = self.current_page(html_string, '<hr />')
 		html_content = pre_string + html_string + post_string
 		return html_content
 		
@@ -257,6 +255,7 @@ class MdPreviewBar(Gtk.Box):
 		doc = self.parent_plugin.window.get_active_document()
 		start, end = doc.get_bounds()
 		unsaved_text = doc.get_text(start, end, True)
+		unsaved_text = self.current_page(unsaved_text, '----')
 #		md_extensions = ['extra', 'sane_lists', 'toc', 'codehilite', 'admonition'] # TODO il y a une dpendance pour codehilite
 		# TODO https://github.com/Python-Markdown/markdown/wiki/Third-Party-Extensions omgggg
 		md_extensions = self._settings.get_strv('extensions')
@@ -264,21 +263,18 @@ class MdPreviewBar(Gtk.Box):
 			self._settings.get_string('style') + '" /></head><body>'
 		post_string = '</body></html>'
 		html_string = markdown.markdown(unsaved_text, extensions=md_extensions)
-		html_string = self.current_page(html_string) # FIXME sous-optimal
 		html_content = pre_string + html_string + post_string
 		return html_content
 
-	def current_page(self, html_string): # FIXME sous-optimal: couper le markdown et ne convertir que la section voulue
-		# Guard clause
+	def current_page(self, lang_string, splitter):
 		if not self.is_paginated:
-			return html_string
-
-		html_pages = html_string.split('<hr />')
-		self.page_number = len(html_pages)
+			return lang_string
+		lang_pages = lang_string.split(splitter)
+		self.page_number = len(lang_pages)
 		if self.page_index >= self.page_number:
 			self.page_index = self.page_number-1
-		html_current_page = html_pages[self.page_index]
-		return html_current_page
+		lang_current_page = lang_pages[self.page_index]
+		return lang_current_page
 
 	def get_dummy_uri(self):
 		# Support for relative paths is cool, but breaks CSS in many cases
