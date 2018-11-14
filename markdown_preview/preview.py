@@ -187,14 +187,17 @@ class MdPreviewBar(Gtk.Box):
 			return
 
 		html_content = ''
+		doc = self.parent_plugin.window.get_active_document()
+		start, end = doc.get_bounds()
+		unsaved_text = doc.get_text(start, end, True)
 		if self.file_format == 'html':
-			html_content = self.get_html_from_html()
+			html_content = self.get_html_from_html(unsaved_text)
 		elif self.file_format == 'tex':
 			html_content = self.get_html_from_tex()
 		elif self._settings.get_string('backend') == 'python':
-			html_content = self.get_html_from_md_python()
+			html_content = self.get_html_from_md_python(unsaved_text)
 		else:
-			html_content = self.get_html_from_md_pandoc()
+			html_content = self.get_html_from_md_pandoc(unsaved_text)
 
 		# The html code is converted into bytes
 		my_string = GLib.String()
@@ -206,14 +209,11 @@ class MdPreviewBar(Gtk.Box):
 
 		self._webview.load_bytes(bytes_content, 'text/html', 'UTF-8', dummy_uri)
 		
-	def get_html_from_html(self):
-		doc = self.parent_plugin.window.get_active_document()
-		start, end = doc.get_bounds()
-		html_string = doc.get_text(start, end, True)
+	def get_html_from_html(self, unsaved_text):
 		pre_string = '<html><head><meta charset="utf-8" /></head><body>'
 		post_string = '</body></html>'
-		html_string = self.current_page(html_string) # FIXME sous-optimal
-		html_content = pre_string + html_string + post_string
+		unsaved_text = self.current_page(unsaved_text) # FIXME sous-optimal
+		html_content = pre_string + unsaved_text + post_string
 		return html_content
 	
 	def get_html_from_tex(self):
@@ -230,11 +230,8 @@ class MdPreviewBar(Gtk.Box):
 		html_content = pre_string + html_string + post_string
 		return html_content
 		
-	def get_html_from_md_pandoc(self):
+	def get_html_from_md_pandoc(self, unsaved_text):
 		# Get the current document, or the temporary document if requested
-		doc = self.parent_plugin.window.get_active_document()
-		start, end = doc.get_bounds()
-		unsaved_text = doc.get_text(start, end, True)
 		unsaved_text = self.current_page(unsaved_text, '----')
 		f = open(BASE_TEMP_NAME + '.md', 'w')
 		f.write(unsaved_text)
@@ -247,16 +244,11 @@ class MdPreviewBar(Gtk.Box):
 		post_string = '</body></html>'
 		result = subprocess.run(['pandoc', file_path], stdout=subprocess.PIPE)
 		html_string = result.stdout.decode('utf-8')
-		html_string = self.current_page(html_string, '<hr />')
 		html_content = pre_string + html_string + post_string
 		return html_content
 		
-	def get_html_from_md_python(self):
-		doc = self.parent_plugin.window.get_active_document()
-		start, end = doc.get_bounds()
-		unsaved_text = doc.get_text(start, end, True)
+	def get_html_from_md_python(self, unsaved_text):
 		unsaved_text = self.current_page(unsaved_text, '----')
-#		md_extensions = ['extra', 'sane_lists', 'toc', 'codehilite', 'admonition'] # TODO il y a une dpendance pour codehilite
 		# TODO https://github.com/Python-Markdown/markdown/wiki/Third-Party-Extensions omgggg
 		md_extensions = self._settings.get_strv('extensions')
 		pre_string = '<html><head><meta charset="utf-8" /><link rel="stylesheet" href="' + \

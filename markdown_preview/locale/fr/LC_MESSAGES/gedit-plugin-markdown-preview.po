@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-14 10:03+0100\n"
+"POT-Creation-Date: 2018-11-14 12:54+0100\n"
 "PO-Revision-Date: 2018-03-05 16:47+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -14,7 +14,6 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: markdown_preview/export.py:18
-#, fuzzy
 msgid "Export as…"
 msgstr "Exporter sous…"
 
@@ -24,14 +23,14 @@ msgstr "Annuler"
 
 #: markdown_preview/export.py:23
 msgid "Next"
-msgstr "Suivante"
+msgstr "Suivant"
 
 #: markdown_preview/export.py:41
 msgid "LaTeX beamer slide show"
 msgstr ""
 
 #: markdown_preview/export.py:42
-msgid "Word docx"
+msgid "Microsoft Word (.docx)"
 msgstr ""
 
 #: markdown_preview/export.py:43
@@ -43,16 +42,16 @@ msgid "HTML5 (with custom CSS)"
 msgstr ""
 
 #: markdown_preview/export.py:45
-msgid "LaTeX"
+msgid "LaTeX (.tex)"
 msgstr ""
 
 #: markdown_preview/export.py:46
-msgid "OpenOffice text document"
+msgid "OpenOffice text document (.odt)"
 msgstr ""
 
 #: markdown_preview/export.py:47
-msgid "PDF"
-msgstr "PDF"
+msgid "Portable Document Format (.pdf)"
+msgstr ""
 
 #: markdown_preview/export.py:48
 msgid "plain text"
@@ -63,7 +62,7 @@ msgid "PowerPoint slide show"
 msgstr ""
 
 #: markdown_preview/export.py:50
-msgid "Rich Text Format"
+msgid "Rich Text Format (.rtf)"
 msgstr ""
 
 #: markdown_preview/export.py:51
@@ -79,7 +78,7 @@ msgid "Export the preview"
 msgstr "Exporter l'aperçu"
 
 #: markdown_preview/__init__.py:43 markdown_preview/__init__.py:46
-#: markdown_preview/preview.py:300 markdown_preview/window.py:22
+#: markdown_preview/preview.py:296 markdown_preview/window.py:22
 msgid "Markdown Preview"
 msgstr "Aperçu Markdown"
 
@@ -135,7 +134,7 @@ msgstr "Recharger l'aperçu"
 msgid "No result"
 msgstr "Pas de résultat"
 
-#: markdown_preview/preview.py:338
+#: markdown_preview/preview.py:334
 #, python-format
 msgid "%s results"
 msgstr "%s résultats"
@@ -148,16 +147,8 @@ msgstr ""
 msgid "Extensions for python3-markdown:"
 msgstr ""
 
-#: markdown_preview/export.ui:65
-msgid "Extra"
-msgstr ""
-
 #: markdown_preview/export.ui:66 markdown_preview/export.ui:119
 msgid "??????? liste"
-msgstr ""
-
-#: markdown_preview/export.ui:76
-msgid "Table of content"
 msgstr ""
 
 #: markdown_preview/export.ui:77 markdown_preview/export.ui:99
@@ -165,45 +156,18 @@ msgstr ""
 msgid "???????"
 msgstr ""
 
-#: markdown_preview/export.ui:87
-msgid "CodeHilite"
-msgstr ""
-
 #: markdown_preview/export.ui:88 markdown_preview/export.ui:130
 #: markdown_preview/export.ui:152
 msgid "??????? explications"
 msgstr ""
 
-#: markdown_preview/export.ui:98
-msgid "New Line To Break"
-msgstr ""
-
-#: markdown_preview/export.ui:118
-msgid "SmartyPants"
-msgstr ""
-
-#: markdown_preview/export.ui:129
-msgid "SaneLists"
-msgstr ""
-
-#: markdown_preview/export.ui:140
-#, fuzzy
-msgid "Admonition"
-msgstr "Position"
-
-#: markdown_preview/export.ui:151
-msgid "WikiLinks"
-msgstr ""
-
 #: markdown_preview/export.ui:176
-#, fuzzy
 msgid "Use a stylesheet:"
-msgstr "Feuille de style"
+msgstr "Utiliser une feuille de style"
 
 #: markdown_preview/export.ui:198
-#, fuzzy
 msgid "CSS file:"
-msgstr "Choisissez un fichier CSS"
+msgstr "Fichier CSS :"
 
 #: markdown_preview/export.ui:204
 msgid "????????"
@@ -247,7 +211,7 @@ msgstr "Panneau inférieur"
 
 #: markdown_preview/menus.ui:48
 msgid "View mode"
-msgstr ""
+msgstr "Mode d'affichage"
 
 #: markdown_preview/menus.ui:51
 msgid "Dedicated window"
@@ -271,39 +235,15 @@ msgstr ""
 
 #: markdown_preview/menus.ui:88
 msgid "Title"
-msgstr ""
-
-#: markdown_preview/menus.ui:90
-msgid "1"
-msgstr ""
-
-#: markdown_preview/menus.ui:94
-msgid "2"
-msgstr ""
-
-#: markdown_preview/menus.ui:98
-msgid "3"
-msgstr ""
-
-#: markdown_preview/menus.ui:102
-msgid "4"
-msgstr ""
-
-#: markdown_preview/menus.ui:106
-msgid "5"
-msgstr ""
-
-#: markdown_preview/menus.ui:110
-msgid "6"
-msgstr ""
+msgstr "Titre"
 
 #: markdown_preview/menus.ui:115
 msgid "Bold"
-msgstr ""
+msgstr "Gras"
 
 #: markdown_preview/menus.ui:119
 msgid "Italic"
-msgstr ""
+msgstr "Italique"
 
 #: markdown_preview/menus.ui:123
 msgid "Underline"
@@ -319,11 +259,11 @@ msgstr ""
 
 #: markdown_preview/menus.ui:137
 msgid "Unordered list"
-msgstr ""
+msgstr "Liste à puces"
 
 #: markdown_preview/menus.ui:141
 msgid "Ordered list"
-msgstr ""
+msgstr "Liste numérotée"
 
 #: markdown_preview/menus.ui:147
 msgid "Insert an image"
@@ -342,7 +282,6 @@ msgid "HTML generation backend"
 msgstr ""
 
 #: markdown_preview/prefs.ui:40
-#, fuzzy
 msgid "Automatically show/hide panel"
 msgstr "Montrer/masquer automatiquement le panneau"
 
@@ -369,24 +308,3 @@ msgstr "Plus d'options"
 #: markdown_preview/preview.ui:92
 msgid "Search"
 msgstr "Recherche"
-
-#~ msgid "Insert a picture"
-#~ msgstr "Insérer une image"
-
-#~ msgid "Preview position"
-#~ msgstr "Position de l'aperçu"
-
-#~ msgid "Export .tex files with pdflatex"
-#~ msgstr "Exporter les fichiers .tex avec pdflatex"
-
-#~ msgid "Print"
-#~ msgstr "Imprimer"
-
-#~ msgid "Display only one page"
-#~ msgstr "Afficher seulement une page"
-
-#~ msgid "Presentation"
-#~ msgstr "Présentation"
-
-#~ msgid "Hide the panel"
-#~ msgstr "Masquer le panneau"

@@ -62,7 +62,7 @@
 									<object class="GtkCheckButton" id="plugins_extra">
 										<property name="visible">True</property>
 										<property name="draw-indicator">False</property>
-										<property name="label" translatable="yes">Extra</property>
+										<property name="label">Extra</property>
 										<property name="tooltip_text" translatable="yes">??????? liste</property><!--TODO-->
 									</object>
 									<packing>
@@ -73,7 +73,7 @@
 									<object class="GtkCheckButton" id="plugins_toc">
 										<property name="visible">True</property>
 										<property name="draw-indicator">False</property>
-										<property name="label" translatable="yes">Table of content</property>
+										<property name="label">Table of content</property>
 										<property name="tooltip_text" translatable="yes">???????</property><!--TODO-->
 									</object>
 									<packing>
@@ -84,7 +84,7 @@
 									<object class="GtkCheckButton" id="plugins_codehilite">
 										<property name="visible">True</property>
 										<property name="draw-indicator">False</property>
-										<property name="label" translatable="yes">CodeHilite</property>
+										<property name="label">CodeHilite</property>
 										<property name="tooltip_text" translatable="yes">??????? explications</property><!--TODO-->
 									</object>
 									<packing>
@@ -95,7 +95,7 @@
 									<object class="GtkCheckButton" id="plugins_nl2br">
 										<property name="visible">True</property>
 										<property name="draw-indicator">False</property>
-										<property name="label" translatable="yes">New Line To Break</property>
+										<property name="label">New Line To Break</property>
 										<property name="tooltip_text" translatable="yes">???????</property><!--TODO-->
 									</object>
 									<packing>
@@ -115,7 +115,7 @@
 									<object class="GtkCheckButton" id="plugins_smarty">
 										<property name="visible">True</property>
 										<property name="draw-indicator">False</property>
-										<property name="label" translatable="yes">SmartyPants</property>
+										<property name="label">SmartyPants</property>
 										<property name="tooltip_text" translatable="yes">??????? liste</property><!--TODO-->
 									</object>
 									<packing>
@@ -126,7 +126,7 @@
 									<object class="GtkCheckButton" id="plugins_sanelists">
 										<property name="visible">True</property>
 										<property name="draw-indicator">False</property>
-										<property name="label" translatable="yes">SaneLists</property>
+										<property name="label">SaneLists</property>
 										<property name="tooltip_text" translatable="yes">??????? explications</property><!--TODO-->
 									</object>
 									<packing>
@@ -137,7 +137,7 @@
 									<object class="GtkCheckButton" id="plugins_admonition">
 										<property name="visible">True</property>
 										<property name="draw-indicator">False</property>
-										<property name="label" translatable="yes">Admonition</property>
+										<property name="label">Admonition</property>
 										<property name="tooltip_text" translatable="yes">???????</property><!--TODO-->
 									</object>
 									<packing>
@@ -148,7 +148,7 @@
 									<object class="GtkCheckButton" id="plugins_wikilinks">
 										<property name="visible">True</property>
 										<property name="draw-indicator">False</property>
-										<property name="label" translatable="yes">WikiLinks</property>
+										<property name="label">WikiLinks</property>
 										<property name="tooltip_text" translatable="yes">??????? explications</property><!--TODO-->
 									</object>
 									<packing>
@@ -173,7 +173,7 @@
 								<child>
 									<object class="GtkLabel">
 										<property name="visible">True</property>
-										<property name="label" translatable="yes">Use a stylesheet:</property>
+										<property name="label" translatable="yes">Use a stylesheet</property>
 									</object>
 								</child>
 								<child>
@@ -201,7 +201,7 @@
 								<child>
 									<object class="GtkButton" id="file_chooser_btn_css">
 										<property name="visible">True</property>
-										<property name="label" translatable="yes">????????</property>
+										<property name="label" translatable="yes">Select a CSS file</property>
 									</object>
 									<packing>
 										<property name="pack-type">end</property>

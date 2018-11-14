@@ -43,6 +43,10 @@ class MdConfigWidget(Gtk.Box):
 		backendCombobox.append('pandoc', _("pandoc"))
 		backendCombobox.set_active_id(self._settings.get_string('backend'))
 		backendCombobox.connect('changed', self.on_backend_changed)
+		
+		self.pandocCommandBox = builder.get_object('pandocCommandBox')
+		self.python3MarkdownPluginsBox = builder.get_object('python3MarkdownPluginsBox')
+		
 		#--------
 		relativePathsSwitch = builder.get_object('relativePathsSwitch')
 		relativePathsSwitch.set_state(self._settings.get_boolean('relative'))
@@ -66,9 +70,28 @@ class MdConfigWidget(Gtk.Box):
 		
 		self.add(switcher)
 		self.add(stack)
+	
+	def show_all(self):
+		super.show_all()
+		self.set_options_visibility(self._settings.get_string('backend'))
 		
 	def on_backend_changed(self, w):
 		self._settings.set_string('backend', w.get_active_id())
+		self.set_options_visibility(w.get_active_id())
+		
+	def set_options_visibility(self, backend):
+		if backend == 'pandoc':
+			self.python3MarkdownPluginsBox.set_sensitive(False)
+			self.pandocCommandBox.set_sensitive(True)
+			
+			self.python3MarkdownPluginsBox.set_visible(False)
+			self.pandocCommandBox.set_visible(True)
+		else:
+			self.pandocCommandBox.set_sensitive(False)
+			self.python3MarkdownPluginsBox.set_sensitive(True)
+			
+			self.pandocCommandBox.set_visible(False)
+			self.python3MarkdownPluginsBox.set_visible(True)
 		
 	def on_choose_css(self, w):
 		# Building a FileChooserDialog for CSS

@@ -30,6 +30,162 @@
 		</child>
 		
 		<child>
+			<object class="GtkBox" id="pandocCommandBox">
+				<property name="visible">False</property>
+				<property name="sensitive">False</property>
+				<property name="spacing">20</property>
+				<child>
+					<object class="GtkLabel">
+						<property name="visible">True</property>
+						<property name="label" translatable="yes">Pandoc command line:</property>
+					</object>
+				</child>
+				<child>
+					<object class="GtkEntry" id="pandocCommandEntry">
+						<property name="visible">True</property>
+<!--						<property name="hexpand">True</property>-->
+					</object>
+					<packing>
+						<property name="pack-type">end</property>
+						<property name="fill">True</property>
+					</packing>
+				</child>
+			</object>
+		</child>
+		
+		<child>
+			<object class="GtkBox" id="python3MarkdownPluginsBox">
+				<property name="visible">False</property>
+				<property name="sensitive">False</property>
+				<property name="orientation">vertical</property>
+				<property name="spacing">5</property>
+				<child>
+					<object class="GtkBox">
+						<property name="visible">True</property>
+						<child>
+							<object class="GtkLabel">
+								<property name="visible">True</property>
+								<property name="label" translatable="yes">Extensions for python3-markdown:</property>
+							</object>
+						</child>
+					</object>
+				</child>
+				<child>
+					<object class="GtkBox" id="plugins_box_1">
+						<property name="visible">True</property>
+						<property name="orientation">horizontal</property>
+						<child>
+							<object class="GtkCheckButton" id="plugins_extra">
+								<property name="visible">True</property>
+								<property name="draw-indicator">False</property>
+								<property name="label">Extra</property>
+								<property name="tooltip_text" translatable="yes">??????? liste</property><!--TODO-->
+							</object>
+							<packing>
+								<property name="expand">True</property>
+							</packing>
+						</child>
+						<child>
+							<object class="GtkCheckButton" id="plugins_toc">
+								<property name="visible">True</property>
+								<property name="draw-indicator">False</property>
+								<property name="label">Table of content</property>
+								<property name="tooltip_text" translatable="yes">???????</property><!--TODO-->
+							</object>
+							<packing>
+								<property name="expand">True</property>
+							</packing>
+						</child>
+						<child>
+							<object class="GtkCheckButton" id="plugins_codehilite">
+								<property name="visible">True</property>
+								<property name="draw-indicator">False</property>
+								<property name="label">CodeHilite</property>
+								<property name="tooltip_text" translatable="yes">??????? explications</property><!--TODO-->
+							</object>
+							<packing>
+								<property name="expand">True</property>
+							</packing>
+						</child>
+						<child>
+							<object class="GtkCheckButton" id="plugins_nl2br">
+								<property name="visible">True</property>
+								<property name="draw-indicator">False</property>
+								<property name="label">New Line To Break</property>
+								<property name="tooltip_text" translatable="yes">???????</property><!--TODO-->
+							</object>
+							<packing>
+								<property name="expand">True</property>
+							</packing>
+						</child>
+						<style>
+							<class name="linked"/>
+						</style>
+					</object>
+				</child>
+				<child>
+					<object class="GtkBox" id="plugins_box_2">
+						<property name="visible">True</property>
+						<property name="orientation">horizontal</property>
+						<child>
+							<object class="GtkCheckButton" id="plugins_smarty">
+								<property name="visible">True</property>
+								<property name="draw-indicator">False</property>
+								<property name="label">SmartyPants</property>
+								<property name="tooltip_text" translatable="yes">??????? liste</property><!--TODO-->
+							</object>
+							<packing>
+								<property name="expand">True</property>
+							</packing>
+						</child>
+						<child>
+							<object class="GtkCheckButton" id="plugins_sanelists">
+								<property name="visible">True</property>
+								<property name="draw-indicator">False</property>
+								<property name="label">SaneLists</property>
+								<property name="tooltip_text" translatable="yes">??????? explications</property><!--TODO-->
+							</object>
+							<packing>
+								<property name="expand">True</property>
+							</packing>
+						</child>
+						<child>
+							<object class="GtkCheckButton" id="plugins_admonition">
+								<property name="visible">True</property>
+								<property name="draw-indicator">False</property>
+								<property name="label">Admonition</property>
+								<property name="tooltip_text" translatable="yes">???????</property><!--TODO-->
+							</object>
+							<packing>
+								<property name="expand">True</property>
+							</packing>
+						</child>
+						<child>
+							<object class="GtkCheckButton" id="plugins_wikilinks">
+								<property name="visible">True</property>
+								<property name="draw-indicator">False</property>
+								<property name="label">WikiLinks</property>
+								<property name="tooltip_text" translatable="yes">??????? explications</property><!--TODO-->
+							</object>
+							<packing>
+								<property name="expand">True</property>
+							</packing>
+						</child>
+						<style>
+							<class name="linked"/>
+						</style>
+					</object>
+				</child>
+			</object>
+		</child>
+		
+		<child>
+			<object class="GtkSeparator">
+				<property name="visible">True</property>
+			</object>
+		</child>
+		
+		<child>
 			<object class="GtkBox">
 				<property name="visible">True</property>
 				<property name="orientation">horizontal</property>

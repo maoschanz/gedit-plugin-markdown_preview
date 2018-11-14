@@ -87,27 +87,27 @@
 		<submenu>
 			<attribute name="label" translatable="yes">Title</attribute>
 			<item>
-				<attribute name="label" translatable="yes">1</attribute>
+				<attribute name="label">1</attribute>
 				<attribute name="action">win.md-prev-format-title-1</attribute>
 			</item>
 			<item>
-				<attribute name="label" translatable="yes">2</attribute>
+				<attribute name="label">2</attribute>
 				<attribute name="action">win.md-prev-format-title-2</attribute>
 			</item>
 			<item>
-				<attribute name="label" translatable="yes">3</attribute>
+				<attribute name="label">3</attribute>
 				<attribute name="action">win.md-prev-format-title-3</attribute>
 			</item>
 			<item>
-				<attribute name="label" translatable="yes">4</attribute>
+				<attribute name="label">4</attribute>
 				<attribute name="action">win.md-prev-format-title-4</attribute>
 			</item>
 			<item>
-				<attribute name="label" translatable="yes">5</attribute>
+				<attribute name="label">5</attribute>
 				<attribute name="action">win.md-prev-format-title-5</attribute>
 			</item>
 			<item>
-				<attribute name="label" translatable="yes">6</attribute>
+				<attribute name="label">6</attribute>
 				<attribute name="action">win.md-prev-format-title-6</attribute>
 			</item>
 		</submenu>
