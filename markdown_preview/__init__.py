@@ -252,6 +252,7 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 
 	def on_file_changed(self, *args):
 		self.preview.file_format = self.recognize_format()
+		self.preview.update_visibility()
 		self.preview.on_reload()
 	
 	def recognize_format(self):

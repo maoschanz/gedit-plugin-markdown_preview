@@ -169,8 +169,7 @@ class MdPreviewBar(Gtk.Box):
 		self.warning_icon.set_tooltip_text(text)
 		self.warning_icon.props.visible = visible
 
-	def on_reload(self, *args):
-		# Guard clause: it will not load documents which are not .md
+	def update_visibility(self):
 		if self.file_format == 'error' or not self.auto_manage_panel:
 			if self._settings.get_string('position') == 'bottom':
 				if len(self.panel.get_children()) is 1:
@@ -179,8 +178,14 @@ class MdPreviewBar(Gtk.Box):
 				if len(self.panel.get_children()) is 2:
 					self.panel.hide()
 			return
+		else:
+			self.panel.show()
 
-		self.panel.show()
+	def on_reload(self, *args):
+		# Guard clause: it will not load documents which are not .md
+		if self.file_format == 'error' or not self.panel.props.visible:
+			return
+
 		html_content = ''
 		if self.file_format == 'html':
 			html_content = self.get_html_from_html()
@@ -207,7 +212,7 @@ class MdPreviewBar(Gtk.Box):
 		html_string = doc.get_text(start, end, True)
 		pre_string = '<html><head><meta charset="utf-8" /></head><body>'
 		post_string = '</body></html>'
-		html_string = self.current_page(html_string)
+		html_string = self.current_page(html_string) # FIXME sous-optimal
 		html_content = pre_string + html_string + post_string
 		return html_content
 	
@@ -221,7 +226,7 @@ class MdPreviewBar(Gtk.Box):
 		post_string = '</body></html>'
 		result = subprocess.run(['pandoc', file_path], stdout=subprocess.PIPE)
 		html_string = result.stdout.decode('utf-8')
-		html_string = self.current_page(html_string)
+		html_string = self.current_page(html_string) # FIXME sous-optimal
 		html_content = pre_string + html_string + post_string
 		return html_content
 		
@@ -244,7 +249,7 @@ class MdPreviewBar(Gtk.Box):
 		post_string = '</body></html>'
 		result = subprocess.run(['pandoc', file_path], stdout=subprocess.PIPE)
 		html_string = result.stdout.decode('utf-8')
-		html_string = self.current_page(html_string)
+		html_string = self.current_page(html_string) # FIXME sous-optimal
 		html_content = pre_string + html_string + post_string
 		return html_content
 		
@@ -259,11 +264,11 @@ class MdPreviewBar(Gtk.Box):
 			self._settings.get_string('style') + '" /></head><body>'
 		post_string = '</body></html>'
 		html_string = markdown.markdown(unsaved_text, extensions=md_extensions)
-		html_string = self.current_page(html_string)
+		html_string = self.current_page(html_string) # FIXME sous-optimal
 		html_content = pre_string + html_string + post_string
 		return html_content
 
-	def current_page(self, html_string):
+	def current_page(self, html_string): # FIXME sous-optimal: couper le markdown et ne convertir que la section voulue
 		# Guard clause
 		if not self.is_paginated:
 			return html_string
