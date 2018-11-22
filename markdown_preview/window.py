@@ -18,11 +18,10 @@ except:
 class MdPreviewWindow():
 	__gtype_name__ = 'MdPreviewWindow'
 
-	def __init__(self, gedit_window):
+	def __init__(self, preview_bar):
 		self.window = Gtk.Window(title=_("Markdown Preview"))
-		self.gedit_window = gedit_window
-		self.gedit_window.is_paginated = True
-		self.gedit_window.on_reload()
+		self.preview_bar = preview_bar
+		self.preview_bar.is_paginated = True
 		headerbar = Gtk.HeaderBar(show_close_button=False)
 		
 		zoom_box = Gtk.Box()
@@ -39,15 +38,20 @@ class MdPreviewWindow():
 		self.on_zoom_original()
 		headerbar.pack_start(zoom_box)
 		
-		self.adj = Gtk.Adjustment(lower=1, upper=10, step_increment=1, page_increment=1)
+		self.adj = Gtk.Adjustment(
+			lower=0,
+			upper=self.preview_bar.page_number+1,
+			step_increment=1,
+			page_increment=1)
 		page_box = Gtk.Box()
-#		page_box = Gtk.Box(spacing=5)
 		page_box.get_style_context().add_class('linked')
 		page_prev_btn = Gtk.Button().new_from_icon_name('go-previous-symbolic', Gtk.IconSize.BUTTON)
-		self.page_current = Gtk.ScaleButton(adjustment=self.adj, label='1/1', relief=Gtk.ReliefStyle.NORMAL, value=1)
+		self.page_current = Gtk.ScaleButton(adjustment=self.adj,
+			label='1/1',
+			relief=Gtk.ReliefStyle.NORMAL,
+			value=1)
 		self.page_current.connect('value-changed', self.cb_value_changed)
 		self.adj.connect('value-changed', self.cb_value_changed)
-#		self.page_current = Gtk.Label(label='1/1')
 		page_next_btn = Gtk.Button().new_from_icon_name('go-next-symbolic', Gtk.IconSize.BUTTON)
 		page_box.add(page_prev_btn)
 		page_box.add(self.page_current)
@@ -63,49 +67,50 @@ class MdPreviewWindow():
 		
 		headerbar.show_all()
 		self.window.set_titlebar(headerbar)
-		self.window.add(self.gedit_window._webview)
+		self.window.add(self.preview_bar._webview)
 		self.window.maximize()
 		self.window.connect('destroy', self.restore_preview)
+		
+		self.preview_bar.on_reload()
 		
 	def on_close(self, *args):
 		self.window.close()
 		
 	def on_zoom_original(self, *args):
-		self.gedit_window.on_zoom_original()
+		self.preview_bar.on_zoom_original()
 		self.zoom_current.set_label('100%')
 		
 	def on_zoom_in(self, *args):
-		self.zoom_current.set_label(str(int(self.gedit_window.on_zoom_in()*100)) + '%')
+		self.zoom_current.set_label(str(int(self.preview_bar.on_zoom_in()*100)) + '%')
 		
 	def on_zoom_out(self, *args):
-		self.zoom_current.set_label(str(int(self.gedit_window.on_zoom_out()*100)) + '%')
+		self.zoom_current.set_label(str(int(self.preview_bar.on_zoom_out()*100)) + '%')
 		
 	def cb_value_changed(self, *args):
-		self.adj.set_upper(self.gedit_window.page_number)
 		if len(args) == 2:
-			self.gedit_window.page_index = int(args[1])
-			self.gedit_window.on_reload()
+			self.preview_bar.page_index = int(args[1])
+			self.preview_bar.on_reload()
 			self.update_page_label()
 	
 	def on_page_previous(self, *args):
-		self.gedit_window.on_previous_page()
+		self.preview_bar.on_previous_page()
 		self.update_page_label()
-		self.page_current.set_value(self.gedit_window.page_index)
+		self.page_current.set_value(self.preview_bar.page_index)
 		
 	def on_page_next(self, *args):
-		self.gedit_window.on_next_page()
+		self.preview_bar.on_next_page()
 		self.update_page_label()
-		self.page_current.set_value(self.gedit_window.page_index)
+		self.page_current.set_value(self.preview_bar.page_index)
 		
 	def update_page_label(self):
-		self.page_current.set_label(str(int(self.gedit_window.page_index)+1) + '/' \
-			+ str(int(self.gedit_window.page_number)))
+		self.page_current.set_label(str(int(self.preview_bar.page_index)+1) + '/' \
+			+ str(int(self.preview_bar.page_number)))
 		
 	def restore_preview(self, *args):
-		self.window.remove(self.gedit_window._webview)
-		self.gedit_window.preview_bar.pack_start(self.gedit_window._webview, expand=True, fill=True, padding=0)
-		self.gedit_window._webview.show()
-		self.gedit_window.is_paginated = False
-		self.gedit_window.on_reload()
-		
+		self.window.remove(self.preview_bar._webview)
+		self.preview_bar.preview_bar.pack_start(self.preview_bar._webview, expand=True, fill=True, padding=0)
+		self.preview_bar._webview.show()
+		action = self.preview_bar.parent_plugin.window.lookup_action('md-set-view-mode')
+		self.preview_bar.parent_plugin.on_change_view_mode(action, GLib.Variant.new_string('whole'))
+
 ##################################################

@@ -77,7 +77,8 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 	def do_activate(self):
 		self._handlers = []
 		self._settings = Gio.Settings.new(MD_PREVIEW_KEY_BASE)
-		self._handlers.append( self.window.connect('active-tab-changed', self.on_file_changed) )
+		self._handlers.append( self.window.connect('active-tab-changed', self.preview.on_file_changed) )
+		self._handlers.append( self.window.connect('active-tab-state-changed', self.preview.on_file_changed) )
 		self.connect_actions()
 		self.preview.do_activate()
 
@@ -88,7 +89,8 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 	def do_deactivate(self):
 		self.preview.do_deactivate()
 		self.window.disconnect(self._handlers[0])
-
+		self.window.disconnect(self._handlers[1])
+		
 	def connect_actions(self):
 		action_export = Gio.SimpleAction(name='md-prev-export-doc')
 		action_print = Gio.SimpleAction(name='md-prev-print-doc')
@@ -109,9 +111,9 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		self.window.add_action(action_zoom_original)
 		self.window.add_action(action_zoom_out)
 
-		action_paginated = Gio.SimpleAction().new_stateful('md-prev-set-paginated', \
-		None, GLib.Variant.new_boolean(False))
-		action_paginated.connect('change-state', self.preview.on_set_paginated)
+		action_view_mode = Gio.SimpleAction().new_stateful('md-set-view-mode', \
+			GLib.VariantType.new('s'), GLib.Variant.new_string('whole'))
+		action_view_mode.connect('change-state', self.on_change_view_mode)
 		
 		action_next = Gio.SimpleAction(name='md-prev-next')
 		action_next.connect('activate', self.preview.on_next_page)
@@ -122,24 +124,20 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		autoreload = self._settings.get_boolean('auto-reload')
 		self.preview.auto_reload = autoreload
 		action_autoreload = Gio.SimpleAction().new_stateful('md-prev-set-autoreload', \
-		None, GLib.Variant.new_boolean(autoreload))
+			None, GLib.Variant.new_boolean(autoreload))
 		action_autoreload.connect('change-state', self.preview.on_set_reload)
 		
 		self.action_reload_preview = Gio.SimpleAction(name='md-prev-reload')
 		self.action_reload_preview.connect('activate', self.preview.on_reload)
 
-		action_panel = Gio.SimpleAction().new_stateful('md-prev-panel', \
-		GLib.VariantType.new('s'), GLib.Variant.new_string(self._settings.get_string('position')))
+		action_panel = Gio.SimpleAction().new_stateful('md-prev-panel', GLib.VariantType.new('s'), \
+			GLib.Variant.new_string(self._settings.get_string('position')))
 		action_panel.connect('change-state', self.on_change_panel_from_popover)
 
-		action_presentation = Gio.SimpleAction(name='md-prev-presentation')
-		action_presentation.connect('activate', self.preview.on_presentation)
-		
-		self.window.add_action(action_paginated)
+		self.window.add_action(action_view_mode)
 		self.window.add_action(action_next)
 		self.window.add_action(action_previous)
 		self.window.add_action(action_panel)
-		self.window.add_action(action_presentation)
 		self.window.add_action(action_autoreload)
 		self.window.add_action(self.action_reload_preview)
 		
@@ -201,9 +199,20 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		self.window.add_action(action_picture)
 		self.window.add_action(action_link)
 		self.window.add_action(action_table)
-	
+
+	def on_change_view_mode(self, *args):
+		if GLib.Variant.new_string('window') == args[1]:
+			args[0].set_state(GLib.Variant.new_string('window'))
+			self.preview.on_presentation()
+		elif GLib.Variant.new_string('separators') == args[1]:
+			args[0].set_state(GLib.Variant.new_string('separators'))
+			self.preview.on_set_paginated(False)
+		else:
+			args[0].set_state(GLib.Variant.new_string('whole'))
+			self.preview.on_set_paginated(True)
+
 	def view_method(self, name):
-		if self.recognize_format() != 'md':
+		if self.preview.recognize_format() != 'md':
 			return
 
 		view = self.window.get_active_view()
@@ -250,29 +259,6 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		elif name == 'format_title_6':
 			v.format_title(6)
 
-	def on_file_changed(self, *args):
-		self.preview.file_format = self.recognize_format()
-		self.preview.update_visibility()
-		self.preview.on_reload()
-	
-	def recognize_format(self):
-		doc = self.window.get_active_document()
-		# It will not load documents which are not .md/.html/.tex
-		name = doc.get_short_name_for_display()
-		temp = name.split('.')
-		self.preview.display_warning(False, '')
-		if temp[len(temp)-1] == 'md':
-			return 'md'
-		elif temp[len(temp)-1] == 'html':
-			return 'html'
-		elif temp[len(temp)-1] == 'tex':
-			return 'tex'
-		if doc.is_untitled():
-			self.preview.display_warning(True, _("Can't preview an unsaved document")) # FIXME
-		else:
-			self.preview.display_warning(True, _("Unsupported type of document: ") + name)
-		return 'error'
-
 	def on_change_panel_from_popover(self, *args):
 		if GLib.Variant.new_string('side') == args[1]:
 			self._settings.set_string('position', 'side')
@@ -289,7 +275,7 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		return widget
 
 	def export_doc(self, *args):
-		dialog = MdExportDialog(self.recognize_format(), self.window, self._settings)
+		dialog = MdExportDialog(self.preview.recognize_format(), self.window, self._settings)
 		response_id = dialog.run()
 		if response_id == Gtk.ResponseType.CANCEL:
 			dialog.do_cancel_export()

@@ -159,21 +159,19 @@ class MdPreviewBar(Gtk.Box):
 			args[0].set_state(GLib.Variant.new_boolean(False))
 		self._settings.set_boolean('auto-reload', self.auto_reload)
 
-	def on_set_paginated(self, *args):
-		if not args[0].get_state():
+	def on_set_paginated(self, state):
+		if not state:
 			self.is_paginated = True
 			self.parent_plugin.window.lookup_action('md-prev-next').set_enabled(True)
 			self.parent_plugin.window.lookup_action('md-prev-previous').set_enabled(True)
 			self.pages_box.props.visible = True
 			self.on_reload()
-			args[0].set_state(GLib.Variant.new_boolean(True))
 		else:
 			self.is_paginated = False
 			self.parent_plugin.window.lookup_action('md-prev-next').set_enabled(False)
 			self.parent_plugin.window.lookup_action('md-prev-previous').set_enabled(False)
 			self.pages_box.props.visible = False
 			self.on_reload()
-			args[0].set_state(GLib.Variant.new_boolean(False))
 
 	def on_previous_page(self, *args):
 		if self.page_index > 0:
@@ -203,9 +201,36 @@ class MdPreviewBar(Gtk.Box):
 			return
 		else:
 			self.panel.show()
+			
+	def on_file_changed(self, *args):
+		self.file_format = self.recognize_format()
+		self.update_visibility()
+		if self.file_format != 'error':
+			self.on_reload()
+
+	def recognize_format(self):
+		doc = self.parent_plugin.window.get_active_document()
+		# It will not load documents which are not .md/.html/.tex
+		name = doc.get_short_name_for_display()
+		temp = name.split('.')
+		if temp[len(temp)-1] == 'md':
+			self.display_warning(False, '')
+			return 'md'
+		elif temp[len(temp)-1] == 'html':
+			self.display_warning(False, '')
+			return 'html'
+		elif temp[len(temp)-1] == 'tex':
+			self.display_warning(False, '')
+			return 'tex'
+		if doc.is_untitled():
+			self.display_warning(True, _("Can't preview an unsaved document")) # FIXME
+		else:
+			self.display_warning(True, _("Unsupported type of document: ") + name)
+		return 'error'
 
 	def on_reload(self, *args):
-		# Guard clause: it will not load documents which are not .md
+		# Guard clause: it will not load documents which are not supported
+		self.file_format = self.recognize_format()
 		if self.file_format == 'error' or not self.panel.props.visible:
 			return
 
@@ -217,10 +242,13 @@ class MdPreviewBar(Gtk.Box):
 			html_content = self.get_html_from_html(unsaved_text)
 		elif self.file_format == 'tex':
 			html_content = self.get_html_from_tex()
-		elif self._settings.get_string('backend') == 'python':
-			html_content = self.get_html_from_md_python(unsaved_text)
+		elif self.file_format == 'md':
+			if self._settings.get_string('backend') == 'python':
+				html_content = self.get_html_from_md_python(unsaved_text)
+			else:
+				html_content = self.get_html_from_md_pandoc(unsaved_text)
 		else:
-			html_content = self.get_html_from_md_pandoc(unsaved_text)
+			return
 
 		# The html code is converted into bytes
 		my_string = GLib.String()
