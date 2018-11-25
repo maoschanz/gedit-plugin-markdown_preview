@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface domain="gedit-plugin-markdown-preview">
-	<object class="GtkBox" id="preview_page">
+	<object class="GtkBox" id="backend_page">
 		<property name="spacing">10</property>
 		<property name="orientation">vertical</property>
 		<child>
@@ -158,10 +158,11 @@
 				</child>
 			</object>
 		</child>
-		
-		<child>
-			<object class="GtkSeparator"></object>
-		</child>
+	</object>
+
+	<object class="GtkBox" id="preview_page">
+		<property name="spacing">10</property>
+		<property name="orientation">vertical</property>
 		
 		<child>
 			<object class="GtkBox">
@@ -244,7 +245,10 @@
 		<property name="spacing">10</property>
 		<property name="orientation">vertical</property>
 		<child>
-			<object class="GtkListBox" id="shortcuts_box"></object>
+			<object class="GtkTreeView" id="shortcuts_treeview">
+				<property name="enable_grid_lines">True</property>
+<!--				<property name="headers_visible">False</property>-->
+			</object>
 		</child>
 	</object>
 </interface>

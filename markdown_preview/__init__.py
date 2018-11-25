@@ -56,15 +56,19 @@ class MarkdownGeditPluginApp(GObject.Object, Gedit.AppActivatable):
 	def add_accelerators(self):
 		self.app.add_accelerator("<Primary>E", "win.md-prev-insert-picture", None)
 		self.app.add_accelerator("<Primary><Shift>B", "win.md-prev-format-bold", None) # FIXME ?????
-#		self.app.add_accelerator("<Primary>1", "win.md-prev-format-title-1", None) # ????????? XXX XXX
-#		self.app.add_accelerator("<Primary>2", "win.md-prev-format-title-2", None)
+		self.app.add_accelerator("<Primary>1", "win.md-prev-format-title-1", None) # ????????? XXX XXX
+		self.app.add_accelerator("<Primary>2", "win.md-prev-format-title-2", None)
+		self.app.add_accelerator("<Primary>3", "win.md-prev-format-title-3", None)
 		self.app.add_accelerator("<Primary>KP_1", "win.md-prev-format-title-1", None)
 		self.app.add_accelerator("<Primary>KP_2", "win.md-prev-format-title-2", None)
 		self.app.add_accelerator("<Primary>KP_3", "win.md-prev-format-title-3", None)
-#		self.app.add_accelerator("<Primary>3", "win.md-prev-format-title-3", None)
 		self.app.add_accelerator("<Primary>4", "win.md-prev-format-title-4", None)
 		self.app.add_accelerator("<Primary>5", "win.md-prev-format-title-5", None)
 		self.app.add_accelerator("<Primary>6", "win.md-prev-format-title-6", None)
+		self.app.add_accelerator("<Primary>KP_Add", "win.md-prev-format-title-upper", None)
+		self.app.add_accelerator("<Primary>KP_Subtract", "win.md-prev-format-title-lower", None)
+		self.app.add_accelerator("<Primary>plus", "win.md-prev-format-title-upper", None)
+		self.app.add_accelerator("<Primary>minus", "win.md-prev-format-title-lower", None)
 #		self.app.add_accelerator("<Primary><Shift>M", "win.uncomment", None)
 		return
 
@@ -77,6 +81,8 @@ class MarkdownGeditPluginApp(GObject.Object, Gedit.AppActivatable):
 		self.app.remove_accelerator("win.md-prev-format-title-4", None)
 		self.app.remove_accelerator("win.md-prev-format-title-5", None)
 		self.app.remove_accelerator("win.md-prev-format-title-6", None)
+		self.app.remove_accelerator("win.md-prev-format-title-upper", None)
+		self.app.remove_accelerator("win.md-prev-format-title-lower", None)
 #		self.app.remove_accelerator("win.uncomment", None)
 		return
 
@@ -169,59 +175,33 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		action_remove = Gio.SimpleAction(name='md-prev-remove-all')
 		action_remove.connect('activate', lambda i, j: self.view_method('remove_all'))
 		
-		action_title_1 = Gio.SimpleAction(name='md-prev-format-title-1')
-		action_title_1.connect('activate', lambda i, j: self.view_method('format_title_1'))
-		action_title_2 = Gio.SimpleAction(name='md-prev-format-title-2')
-		action_title_2.connect('activate', lambda i, j: self.view_method('format_title_2'))
-		action_title_3 = Gio.SimpleAction(name='md-prev-format-title-3')
-		action_title_3.connect('activate', lambda i, j: self.view_method('format_title_3'))
-		action_title_4 = Gio.SimpleAction(name='md-prev-format-title-4')
-		action_title_4.connect('activate', lambda i, j: self.view_method('format_title_4'))
-		action_title_5 = Gio.SimpleAction(name='md-prev-format-title-5')
-		action_title_5.connect('activate', lambda i, j: self.view_method('format_title_5'))
-		action_title_6 = Gio.SimpleAction(name='md-prev-format-title-6')
-		action_title_6.connect('activate', lambda i, j: self.view_method('format_title_6'))
+		self.add_format_action('md-prev-format-title-1', 'format_title_1')
+		self.add_format_action('md-prev-format-title-2', 'format_title_2')
+		self.add_format_action('md-prev-format-title-3', 'format_title_3')
+		self.add_format_action('md-prev-format-title-4', 'format_title_4')
+		self.add_format_action('md-prev-format-title-5', 'format_title_5')
+		self.add_format_action('md-prev-format-title-6', 'format_title_6')
 		
-		action_bold = Gio.SimpleAction(name='md-prev-format-bold')
-		action_bold.connect('activate', lambda i, j: self.view_method('format_bold'))
-		action_italic = Gio.SimpleAction(name='md-prev-format-italic')
-		action_italic.connect('activate', lambda i, j: self.view_method('format_italic'))
-		action_underline = Gio.SimpleAction(name='md-prev-format-underline')
-		action_underline.connect('activate', lambda i, j: self.view_method('format_underline'))
-		action_monospace = Gio.SimpleAction(name='md-prev-format-monospace')
-		action_monospace.connect('activate', lambda i, j: self.view_method('format_monospace'))
-		action_quote = Gio.SimpleAction(name='md-prev-format-quote')
-		action_quote.connect('activate', lambda i, j: self.view_method('format_quote'))
+		self.add_format_action('md-prev-format-title-upper', 'format_title_upper')
+		self.add_format_action('md-prev-format-title-lower', 'format_title_lower')
 		
-		action_unordered = Gio.SimpleAction(name='md-prev-list-unordered')
-		action_unordered.connect('activate', lambda i, j: self.view_method('list_unordered'))
-		action_ordered = Gio.SimpleAction(name='md-prev-list-ordered')
-		action_ordered.connect('activate', lambda i, j: self.view_method('list_ordered'))
+		self.add_format_action('md-prev-format-bold', 'format_bold')
+		self.add_format_action('md-prev-format-italic', 'format_italic')
+#		self.add_format_action('md-prev-format-underline', 'format_underline')
+#		self.add_format_action('md-prev-format-stroke', 'format_stroke')
+		self.add_format_action('md-prev-format-monospace', 'format_monospace')
+		self.add_format_action('md-prev-format-quote', 'format_quote')
 		
-		action_picture = Gio.SimpleAction(name='md-prev-insert-picture')
-		action_picture.connect('activate', lambda i, j: self.view_method('insert_picture'))
-		action_link = Gio.SimpleAction(name='md-prev-list-ordered')
-		action_link.connect('activate', lambda i, j: self.view_method('insert_link'))
-		action_table = Gio.SimpleAction(name='md-prev-insert-table')
-		action_table.connect('activate', lambda i, j: self.view_method('insert_table'))
+		self.add_format_action('md-prev-list-unordered', 'list_unordered')
+		self.add_format_action('md-prev-list-ordered', 'list_ordered')
+		self.add_format_action('md-prev-insert-picture', 'insert_picture')
+		self.add_format_action('md-prev-insert-link', 'insert_link')
+		self.add_format_action('md-prev-insert-table', 'insert_table')
 		
-		self.window.add_action(action_remove)
-		self.window.add_action(action_bold)
-		self.window.add_action(action_italic)
-		self.window.add_action(action_underline)
-		self.window.add_action(action_monospace)
-		self.window.add_action(action_quote)
-		self.window.add_action(action_unordered)
-		self.window.add_action(action_ordered)
-		self.window.add_action(action_title_1)
-		self.window.add_action(action_title_2)
-		self.window.add_action(action_title_3)
-		self.window.add_action(action_title_4)
-		self.window.add_action(action_title_5)
-		self.window.add_action(action_title_6)
-		self.window.add_action(action_picture)
-		self.window.add_action(action_link)
-		self.window.add_action(action_table)
+	def add_format_action(self, action_name, method_name):
+		action = Gio.SimpleAction(name=action_name)
+		action.connect('activate', lambda i, j: self.view_method(method_name))
+		self.window.add_action(action)
 
 	def on_change_view_mode(self, *args):
 		if GLib.Variant.new_string('window') == args[1]:
@@ -268,6 +248,11 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 			v.list_ordered()
 		elif name == 'list_unordered':
 			v.list_unordered()
+			
+		elif name == 'format_title_upper':
+			v.format_title_upper()
+		elif name == 'format_title_lower':
+			v.format_title_lower()
 			
 		elif name == 'format_title_1':
 			v.format_title(1)
@@ -362,22 +347,25 @@ class MarkdownGeditPluginView(GObject.Object, Gedit.ViewActivatable):
 	def add_block_tags(self, start_tag, end_tag):
 		pass
 	
-	def add_line_tags(self, start_tag, end_tag):
+	def remove_line_tags(self, start_tag, end_tag):
+		print('à faire')
+		
+	def add_line_tags(self, start_tag, end_tag): # FIXME ajouter l'espace si il n'est pas là ?
 		document = self.view.get_buffer()
 		selection = document.get_selection_bounds()
 		if selection != ():
 			(start, end) = selection
-			if start.ends_line():
-				start.forward_line()
-			elif not start.starts_line():
-				start.set_line_offset(0)
-			if end.starts_line():
-				end.backward_char()
-			elif not end.ends_line():
-				end.forward_to_line_end()
 		else:
 			start = document.get_iter_at_mark(document.get_insert())
 			end = document.get_iter_at_mark(document.get_insert())
+		if start.ends_line():
+			start.forward_line()
+		elif not start.starts_line():
+			start.set_line_offset(0)
+		if end.starts_line():
+			end.backward_char()
+		elif not end.ends_line():
+			end.forward_to_line_end()
 		new_code = self.add_tags_characters(document, start_tag, end_tag, start, end)
 	
 	def add_word_tags(self, start_tag, end_tag):
@@ -389,6 +377,12 @@ class MarkdownGeditPluginView(GObject.Object, Gedit.ViewActivatable):
 			return
 		new_code = self.add_tags_characters(document, start_tag, end_tag, start, end)
 	
+	def format_title_upper(self):
+		self.add_line_tags('#', '')
+		
+	def format_title_lower(self):
+		self.remove_line_tags('# ', ' #')
+		
 	def format_title(self, level):
 		self.add_line_tags('#'*level + ' ', '')
 		
@@ -412,6 +406,9 @@ class MarkdownGeditPluginView(GObject.Object, Gedit.ViewActivatable):
 		
 	def format_underline(self):
 		self.add_word_tags('__', '__')
+		
+	def format_stroke(self):
+		self.add_word_tags('~~', '~~')
 	
 	def insert_link(self, window):
 		pass

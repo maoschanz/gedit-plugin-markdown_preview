@@ -31,9 +31,11 @@ class MdConfigWidget(Gtk.Box):
 		switcher = Gtk.StackSwitcher(stack=stack, halign=Gtk.Align.CENTER)
 		
 		preview_page = builder.get_object('preview_page')
+		backend_page = builder.get_object('backend_page')
 		shortcuts_page = builder.get_object('shortcuts_page')
 		
 		stack.add_titled(preview_page, 'preview', _("Preview"))
+		stack.add_titled(backend_page, 'backend', _("Backend"))
 		stack.add_titled(shortcuts_page, 'shortcuts', _("Shortcuts"))
 		
 		### PREVIEW ###
@@ -89,9 +91,8 @@ class MdConfigWidget(Gtk.Box):
 		
 		### SHORTCUTS ###
 #		TODO
-		shortcuts_box = builder.get_object('shortcuts_box')
-		shortcuts_box.add(MdKeybindingWidget("test 1"))
-		shortcuts_box.add(MdKeybindingWidget("test 2"))
+		shortcuts_treeview = builder.get_object('shortcuts_treeview')
+		
 		
 #		https://github.com/GNOME/gtk/blob/master/gdk/keynames.txt
 		
@@ -184,43 +185,4 @@ class MdConfigWidget(Gtk.Box):
 			self._settings.set_boolean('auto-manage-panel', False)
 	
 ##################################################
-
-class MdKeybindingWidget(Gtk.ListBoxRow):
-	__gtype_name__ = "MdKeybindingWidget"
-	
-	def __init__(self, description, **kwargs):
-		super().__init__(can_focus=True, activatable=False, selectable=False)
-		row_box = Gtk.Box(spacing=12, orientation=Gtk.Orientation.HORIZONTAL)
-		self.add(row_box)
-		
-		description = Gtk.Label(label=description)
-		row_box.pack_start(description, expand=True, fill=True, padding=0)
-		
-		self.treeView = Gtk.TreeView(
-			enable_grid_lines=True,
-			headers_visible=False
-		)
-		self.accelCell = Gtk.CellRendererAccel(
-			accel_mode=Gtk.CellRendererAccelMode.GTK,
-			editable=True
-		)
-		accelCol = Gtk.TreeViewColumn();
-		accelCol.pack_end(self.accelCell, False);
-		accelCol.add_attribute(self.accelCell, "accel-key", 2);
-		accelCol.add_attribute(self.accelCell, "accel-mods", 3);
-		self.treeView.append_column(accelCol);
-		
-		row_box.pack_start(self.treeView, expand=True, fill=True, padding=0)
-		
-		
-		
-		self.accelCell.connect("accel-edited", self.accel_edited_cb)
-		
-		
-		self.show_all()
-		
-	def accel_edited_cb(self, *args):
-		print(args) # FIXME non ne marche pas
-		
-		
 

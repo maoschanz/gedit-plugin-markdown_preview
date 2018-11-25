@@ -7,17 +7,14 @@
 
 reveal.js ??? "only one page" ??
 
-## Export
-
-extensions
-
 ## Raccourcis
 
-clé dconf ????
-
-bon défauts ???
-
-préférences ???
+- titre +/- seulement ?
+- commentage de blocs ?
+- pourquoi ça plante ?
+- widgets adéquats
+- clés dconf
+- bon défauts
 
 -------
 
@@ -28,25 +25,27 @@ préférences ???
 
 ### Support de Xed
 
-- icônes dans les menus
 - identification des différences pour en garder trace
 - icône dans les panneaux
 
 ## Vue web
 
-- Rétablir le scroll
-- Ouverture des liens ?
 - Tooltips sur les liens et les images
-- webkitgtksettings 'auto-shrink-images' ??
+- webkitgtksettings 'auto-shrink-images' ?? -> trouver l'équivalent pour webkit2
 - correction orthographique ?
 
 ## Backends
 
 - [extensions](https://python-markdown.github.io/extensions/)
 - dépendance de codehilite ??
+- extensions tierces
 
-
-
+fygvhbkjnmlaerq
+abmqlhbaef
+####dbajbqdjeranmlfbknqe
+dbq
+dfbodfhombjùmbjog opqg opjpqjp q
+ qp d jdspj dpjq odf qd
 
 
 
