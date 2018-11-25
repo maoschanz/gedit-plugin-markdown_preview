@@ -244,18 +244,7 @@
 		<property name="spacing">10</property>
 		<property name="orientation">vertical</property>
 		<child>
-			<object class="GtkBox">
-				<property name="orientation">horizontal</property>
-				<property name="spacing">20</property>
-				<child>
-					<object class="GtkLabel">
-						<property name="label" translatable="yes">TODO</property>
-					</object>
-					<packing>
-						<property name="pack-type">start</property>
-					</packing>
-				</child>
-			</object>
+			<object class="GtkListBox" id="shortcuts_box"></object>
 		</child>
 	</object>
 </interface>

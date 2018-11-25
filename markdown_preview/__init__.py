@@ -55,13 +55,28 @@ class MarkdownGeditPluginApp(GObject.Object, Gedit.AppActivatable):
 
 	def add_accelerators(self):
 		self.app.add_accelerator("<Primary>E", "win.md-prev-insert-picture", None)
-		self.app.add_accelerator("<Primary>B", "win.md-prev-format-bold", None) # FIXME ?????
+		self.app.add_accelerator("<Primary><Shift>B", "win.md-prev-format-bold", None) # FIXME ?????
+#		self.app.add_accelerator("<Primary>1", "win.md-prev-format-title-1", None) # ????????? XXX XXX
+#		self.app.add_accelerator("<Primary>2", "win.md-prev-format-title-2", None)
+		self.app.add_accelerator("<Primary>KP_1", "win.md-prev-format-title-1", None)
+		self.app.add_accelerator("<Primary>KP_2", "win.md-prev-format-title-2", None)
+		self.app.add_accelerator("<Primary>KP_3", "win.md-prev-format-title-3", None)
+#		self.app.add_accelerator("<Primary>3", "win.md-prev-format-title-3", None)
+		self.app.add_accelerator("<Primary>4", "win.md-prev-format-title-4", None)
+		self.app.add_accelerator("<Primary>5", "win.md-prev-format-title-5", None)
+		self.app.add_accelerator("<Primary>6", "win.md-prev-format-title-6", None)
 #		self.app.add_accelerator("<Primary><Shift>M", "win.uncomment", None)
 		return
 
 	def remove_accelerators(self):
 		self.app.remove_accelerator("win.md-prev-insert-picture", None)
 		self.app.remove_accelerator("win.md-prev-format-bold", None)
+		self.app.remove_accelerator("win.md-prev-format-title-1", None)
+		self.app.remove_accelerator("win.md-prev-format-title-2", None)
+		self.app.remove_accelerator("win.md-prev-format-title-3", None)
+		self.app.remove_accelerator("win.md-prev-format-title-4", None)
+		self.app.remove_accelerator("win.md-prev-format-title-5", None)
+		self.app.remove_accelerator("win.md-prev-format-title-6", None)
 #		self.app.remove_accelerator("win.uncomment", None)
 		return
 
@@ -129,6 +144,12 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		
 		self.action_reload_preview = Gio.SimpleAction(name='md-prev-reload')
 		self.action_reload_preview.connect('activate', self.preview.on_reload)
+		
+		self.action_open_link_with = Gio.SimpleAction(name='md-prev-open-link-with')
+		self.action_open_link_with.connect('activate', self.preview.on_open_link_with)
+		
+		self.action_open_image_with = Gio.SimpleAction(name='md-prev-open-image-with')
+		self.action_open_image_with.connect('activate', self.preview.on_open_image_with)
 
 		action_panel = Gio.SimpleAction().new_stateful('md-prev-panel', GLib.VariantType.new('s'), \
 			GLib.Variant.new_string(self._settings.get_string('position')))
@@ -140,6 +161,8 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		self.window.add_action(action_panel)
 		self.window.add_action(action_autoreload)
 		self.window.add_action(self.action_reload_preview)
+		self.window.add_action(self.action_open_link_with)
+		self.window.add_action(self.action_open_image_with)
 		
 		#-------------------------
 		
@@ -367,8 +390,7 @@ class MarkdownGeditPluginView(GObject.Object, Gedit.ViewActivatable):
 		new_code = self.add_tags_characters(document, start_tag, end_tag, start, end)
 	
 	def format_title(self, level):
-		level = level + 1
-		self.add_line_tags('#'*level + ' ', ' ' + '#'*level)
+		self.add_line_tags('#'*level + ' ', '')
 		
 	def format_bold(self):
 		self.add_word_tags('**', '**')

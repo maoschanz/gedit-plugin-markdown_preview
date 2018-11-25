@@ -106,22 +106,44 @@ class MdPreviewBar(Gtk.Box):
 				self.scroll_level = value.to_int32()
 
 	def on_context_menu(self, a, b, c, d):
-		if d.context_is_link():
-			# It's not possible to...
+		special_items = False
+		openLinkWithItem = WebKit2.ContextMenuItem.new_from_gaction(self.parent_plugin.action_open_link_with, _("Open link in browser"), None)
+		openImageWithItem = WebKit2.ContextMenuItem.new_from_gaction(self.parent_plugin.action_open_image_with, _("Open image in browser"), None)
+		if d.context_is_link() and d.context_is_image():
+			special_items = True
+			b.remove(b.get_item_at_position(7)) # download its target
+			b.remove(b.get_item_at_position(6)) # open a link in a new window
+			b.remove(b.get_item_at_position(5)) # open an image in a new window
+			b.remove(b.get_item_at_position(2)) # open a link in a new window
+			b.remove(b.get_item_at_position(1)) # open an image in a new window
+			self.link_uri_to_open = d.get_link_uri()
+			self.image_uri_to_open = d.get_image_uri()
+			b.insert(openLinkWithItem, 2)
+			b.insert(openImageWithItem, 5)
+		elif d.context_is_link():
+			special_items = True
 			b.remove(b.get_item_at_position(2)) # download its target
 			b.remove(b.get_item_at_position(1)) # open a link in a new window
-			# TODO: open with gedit, open in defaut browser?
+			self.link_uri_to_open = d.get_link_uri()
+			b.append(openLinkWithItem)
 		elif d.context_is_image():
-			# It's not possible to...
-#			b.remove(b.get_item_at_position(1)) # "save [it] as"
+			special_items = True
 			b.remove(b.get_item_at_position(0)) # open an image in a new window
-		elif d.context_is_selection():
-			pass
-		else:
+			self.image_uri_to_open = d.get_image_uri()
+			b.append(openImageWithItem)
+
+		b.append(WebKit2.ContextMenuItem.new_separator())
+		if not special_items:
 			b.remove_all()
 		reloadItem = WebKit2.ContextMenuItem.new_from_gaction(self.parent_plugin.action_reload_preview, _("Reload the preview"), None)
 		b.append(reloadItem)
 		return False
+		
+	def on_open_link_with(self, *args):
+		Gtk.show_uri(None, self.link_uri_to_open, 0)
+		
+	def on_open_image_with(self, *args):
+		Gtk.show_uri(None, self.image_uri_to_open, 0)
 
 	def build_search_popover(self):
 		some_damn_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
@@ -300,7 +322,7 @@ class MdPreviewBar(Gtk.Box):
 		
 	def get_html_from_md_python(self, unsaved_text):
 		unsaved_text = self.current_page(unsaved_text, '----')
-		# TODO https://github.com/Python-Markdown/markdown/wiki/Third-Party-Extensions omgggg
+		# TODO https://github.com/Python-Markdown/markdown/wiki/Third-Party-Extensions
 		md_extensions = self._settings.get_strv('extensions')
 		pre_string = '<html><head><meta charset="utf-8" /><link rel="stylesheet" href="' + \
 			self._settings.get_string('style') + '" /></head><body>'

@@ -111,10 +111,14 @@
 			<attribute name="label" translatable="yes">Italic</attribute>
 			<attribute name="action">win.md-prev-format-italic</attribute>
 		</item>
-		<item>
-			<attribute name="label" translatable="yes">Underline</attribute>
-			<attribute name="action">win.md-prev-format-underline</attribute>
-		</item>
+<!--		<item>-->
+<!--			<attribute name="label" translatable="yes">Underline</attribute>-->
+<!--			<attribute name="action">win.md-prev-format-underline</attribute>-->
+<!--		</item>-->
+<!--		<item>-->
+<!--			<attribute name="label" translatable="yes">Stoke</attribute>-->
+<!--			<attribute name="action">win.md-prev-format-stroke</attribute>-->
+<!--		</item>-->
 		<item>
 			<attribute name="label" translatable="yes">Monospace</attribute>
 			<attribute name="action">win.md-prev-format-monospace</attribute>
