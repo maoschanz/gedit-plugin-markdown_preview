@@ -36,6 +36,8 @@ class MdPreviewBar(Gtk.Box):
 	def do_update_state(self):
 		if not self.panel.props.visible:
 			return
+		elif self.panel.get_visible_child() != self.preview_bar:
+			return
 		if self.parent_plugin.window.get_active_view() is not None:
 			if self.auto_reload:
 				self.on_reload()
@@ -214,13 +216,16 @@ class MdPreviewBar(Gtk.Box):
 
 	def update_visibility(self):
 		if self.file_format == 'error' or not self.auto_manage_panel:
-			if self._settings.get_string('position') == 'bottom':
-				if len(self.panel.get_children()) is 1:
+#			if self._settings.get_string('position') == 'bottom':
+#				if len(self.panel.get_children()) is 1:
+#					self.panel.hide()
+#			else:
+#				if len(self.panel.get_children()) is 2:
+#					self.panel.hide()
+#			return
+			if self.panel.props.visible:
+				if self.panel.get_visible_child() == self.preview_bar:
 					self.panel.hide()
-			else:
-				if len(self.panel.get_children()) is 2:
-					self.panel.hide()
-			return
 		else:
 			self.panel.show()
 			
@@ -253,7 +258,8 @@ class MdPreviewBar(Gtk.Box):
 	def on_reload(self, *args):
 		# Guard clause: it will not load documents which are not supported
 		self.file_format = self.recognize_format()
-		if self.file_format == 'error' or not self.panel.props.visible:
+		if self.file_format == 'error' or not self.preview_bar.props.visible:
+#		if self.file_format == 'error' or not self.panel.props.visible:
 			return
 
 		html_content = ''
