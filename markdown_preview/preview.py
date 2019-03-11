@@ -10,6 +10,8 @@ from .window import MdPreviewWindow
 MD_PREVIEW_KEY_BASE = 'org.gnome.gedit.plugins.markdown_preview'
 BASE_TEMP_NAME = '/tmp/gedit_plugin_markdown_preview'
 
+MARKDOWN_PAGE_SEPARATOR = '\n----'
+
 class MdPreviewBar(Gtk.Box):
 	__gtype_name__ = 'MdPreviewBar'
 
@@ -216,13 +218,6 @@ class MdPreviewBar(Gtk.Box):
 
 	def update_visibility(self):
 		if self.file_format == 'error' or not self.auto_manage_panel:
-#			if self._settings.get_string('position') == 'bottom':
-#				if len(self.panel.get_children()) is 1:
-#					self.panel.hide()
-#			else:
-#				if len(self.panel.get_children()) is 2:
-#					self.panel.hide()
-#			return
 			if self.panel.props.visible:
 				if self.panel.get_visible_child() == self.preview_bar:
 					self.panel.hide()
@@ -259,7 +254,8 @@ class MdPreviewBar(Gtk.Box):
 		# Guard clause: it will not load documents which are not supported
 		self.file_format = self.recognize_format()
 		if self.file_format == 'error' or not self.preview_bar.props.visible:
-#		if self.file_format == 'error' or not self.panel.props.visible:
+			return
+		elif self.panel.get_visible_child() != self.preview_bar:
 			return
 
 		html_content = ''
@@ -311,7 +307,7 @@ class MdPreviewBar(Gtk.Box):
 		
 	def get_html_from_md_pandoc(self, unsaved_text):
 		# Get the current document, or the temporary document if requested
-		unsaved_text = self.current_page(unsaved_text, '----')
+		unsaved_text = self.current_page(unsaved_text, MARKDOWN_PAGE_SEPARATOR)
 		f = open(BASE_TEMP_NAME + '.md', 'w')
 		f.write(unsaved_text)
 		f.close()
@@ -327,7 +323,7 @@ class MdPreviewBar(Gtk.Box):
 		return html_content
 		
 	def get_html_from_md_python(self, unsaved_text):
-		unsaved_text = self.current_page(unsaved_text, '----')
+		unsaved_text = self.current_page(unsaved_text, MARKDOWN_PAGE_SEPARATOR)
 		# TODO https://github.com/Python-Markdown/markdown/wiki/Third-Party-Extensions
 		md_extensions = self._settings.get_strv('extensions')
 		pre_string = '<html><head><meta charset="utf-8" /><link rel="stylesheet" href="' + \

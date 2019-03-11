@@ -27,16 +27,8 @@ class MdConfigWidget(Gtk.Box):
 		#--------
 		builder = Gtk.Builder().new_from_file(os.path.join(BASE_PATH, 'prefs.ui'))
 #		builder.set_translation_domain('gedit-plugin-markdown-preview') # ?????? FIXME
-		stack = Gtk.Stack(margin=10)
+		stack = builder.get_object('stack')
 		switcher = Gtk.StackSwitcher(stack=stack, halign=Gtk.Align.CENTER)
-		
-		preview_page = builder.get_object('preview_page')
-		backend_page = builder.get_object('backend_page')
-		shortcuts_page = builder.get_object('shortcuts_page')
-		
-		stack.add_titled(preview_page, 'preview', _("Preview"))
-		stack.add_titled(backend_page, 'backend', _("Backend"))
-		stack.add_titled(shortcuts_page, 'shortcuts', _("Shortcuts"))
 		
 		### PREVIEW ###
 		

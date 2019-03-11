@@ -3,18 +3,15 @@
 - renommer les classes, trier les imports
 - les traductions ??????
 
-## Menus
-
-reveal.js ??? "only one page" ??
-
 ## Raccourcis
 
-- titre +/- seulement ?
-- commentage de blocs ?
-- pourquoi ça plante ?
-- widgets adéquats
-- clés dconf
-- bon défauts
+- faire les bonnes clés dconf
+- comprendre comment faire l'interface des paramètres
+
+- retrait de tags (depuis `uncomment`)
+- commentage de blocs
+
+- se plaindre que ça plante
 
 -------
 
@@ -40,9 +37,13 @@ reveal.js ??? "only one page" ??
 - dépendance de codehilite ??
 - extensions tierces
 
+----
+
 fygvhbkjnmlaerq
 abmqlhbaef
-####dbajbqdjeranmlfbknqe
+
+### dbajbqdjeranmlfbknqe
+
 dbq
 dfbodfhombjùmbjog opqg opjpqjp q
  qp d jdspj dpjq odf qd

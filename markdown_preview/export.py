@@ -14,6 +14,8 @@ class MdExportDialog(Gtk.Dialog):
 	output_format = 'error'
 	file_format = 'md'
 	
+	# TODO c'est quand même con de reconstruire de manière dédoublée cette UI
+	
 	def __init__(self, file_format, gedit_window, settings, **kwargs):
 		super().__init__(use_header_bar=True, title=_("Export as…"), **kwargs)
 		self.file_format = file_format
@@ -165,16 +167,20 @@ class MdExportDialog(Gtk.Dialog):
 		self.remember_button.set_visible(output_format == 'custom')
 		
 		if output_format == 'pdf':
-			self.pandoc_command_entry.set_text('pandoc $INPUT_FILE -V geometry=right=2cm -V' \
-				' geometry=left=2cm -V geometry=bottom=2cm -V geometry=top=2cm -o $OUTPUT_FILE')
+			self.pandoc_command_entry.set_text('pandoc $INPUT_FILE -V geometry=right=2cm' \
+			    ' -V geometry=left=2cm -V geometry=bottom=2cm -V geometry=top=2cm' \
+			    ' -o $OUTPUT_FILE')
 		elif output_format == 'revealjs':
-			self.pandoc_command_entry.set_text('pandoc $INPUT_FILE -t revealjs -s -V revealjs-url=http://lab.hakim.se/reveal-js -o $OUTPUT_FILE')
+			self.pandoc_command_entry.set_text('pandoc $INPUT_FILE -t revealjs -s -V' \
+			    ' revealjs-url=http://lab.hakim.se/reveal-js -o $OUTPUT_FILE')
 		elif output_format == 'custom':
 			self.pandoc_command_entry.set_text(self._settings.get_string('custom-export'))
 		elif output_format == 'html_custom':
-			self.pandoc_command_entry.set_text('pandoc $INPUT_FILE -t html5 -s -c ' + self._settings.get_string('style') + ' -o $OUTPUT_FILE')
+			self.pandoc_command_entry.set_text('pandoc $INPUT_FILE -t html5 -s -c ' \
+			    + self._settings.get_string('style') + ' -o $OUTPUT_FILE')
 		else:
-			self.pandoc_command_entry.set_text('pandoc $INPUT_FILE -t ' + output_format + ' -o $OUTPUT_FILE')
+			self.pandoc_command_entry.set_text('pandoc $INPUT_FILE -t ' + output_format \
+			    + ' -o $OUTPUT_FILE')
 
 #################
 

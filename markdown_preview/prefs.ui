@@ -1,254 +1,262 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface domain="gedit-plugin-markdown-preview">
-	<object class="GtkBox" id="backend_page">
-		<property name="spacing">10</property>
-		<property name="orientation">vertical</property>
+	<object class="GtkStack" id="stack">
+		<property name="margin">10</property>
+		<property name="visible">True</property>
+		<property name="transition-type">crossfade</property>
+
 		<child>
 			<object class="GtkBox">
-				<property name="orientation">horizontal</property>
-				<property name="spacing">20</property>
-				<child>
-					<object class="GtkLabel">
-						<property name="label" translatable="yes">HTML generation backend</property>
-					</object>
-					<packing>
-						<property name="pack-type">start</property>
-					</packing>
-				</child>
-				<child>
-					<object class="GtkComboBoxText" id="backendCombobox"></object>
-					<packing>
-						<property name="pack-type">end</property>
-					</packing>
-				</child>
-			</object>
-		</child>
-		
-		<child>
-			<object class="GtkBox" id="pandocCommandBox">
-				<property name="visible">False</property>
-				<property name="sensitive">False</property>
-				<property name="spacing">20</property>
-				<child>
-					<object class="GtkLabel">
-						<property name="label" translatable="yes">Pandoc command line:</property>
-					</object>
-				</child>
-				<child>
-					<object class="GtkEntry" id="pandocCommandEntry">
-						<property name="placeholder-text">Not available yet</property>
-					</object>
-					<packing>
-						<property name="pack-type">end</property>
-						<property name="expand">True</property>
-					</packing>
-				</child>
-			</object>
-		</child>
-		
-		<child>
-			<object class="GtkBox" id="python3MarkdownPluginsBox">
-				<property name="visible">False</property>
+				<property name="spacing">10</property>
 				<property name="orientation">vertical</property>
-				<property name="spacing">5</property>
+				
 				<child>
 					<object class="GtkBox">
+						<property name="orientation">horizontal</property>
+						<property name="spacing">20</property>
 						<child>
 							<object class="GtkLabel">
-								<property name="label" translatable="yes">Extensions for python3-markdown:</property>
+								<property name="label" translatable="yes">Automatically show/hide panel</property>
 							</object>
+							<packing>
+								<property name="pack-type">start</property>
+							</packing>
+						</child>
+						<child>
+							<object class="GtkSwitch" id="autoManageSwitch"></object>
+							<packing>
+								<property name="pack-type">end</property>
+							</packing>
 						</child>
 					</object>
 				</child>
+				
 				<child>
 					<object class="GtkBox">
 						<property name="orientation">horizontal</property>
+						<property name="spacing">20</property>
 						<child>
-							<object class="GtkCheckButton" id="plugins_extra">
-								<property name="draw-indicator">False</property>
-								<property name="label">Extra</property>
-								<property name="tooltip_text" translatable="yes">A compilation of various extensions (Abbreviations, Attribute Lists, Definition Lists, Fenced Code Blocks, Footnotes, Tables).</property>
+							<object class="GtkLabel">
+								<property name="label" translatable="yes">Use relative paths</property>
 							</object>
 							<packing>
-								<property name="expand">True</property>
+								<property name="pack-type">start</property>
 							</packing>
 						</child>
 						<child>
-							<object class="GtkCheckButton" id="plugins_toc">
-								<property name="draw-indicator">False</property>
-								<property name="label">Table of content</property>
-								<property name="tooltip_text" translatable="yes">Show a clickable table of content with the [TOC] tag.</property>
-							</object>
+							<object class="GtkSwitch" id="relativePathsSwitch"></object>
 							<packing>
-								<property name="expand">True</property>
+								<property name="pack-type">end</property>
 							</packing>
 						</child>
-						<child>
-							<object class="GtkCheckButton" id="plugins_codehilite">
-								<property name="draw-indicator">False</property>
-								<property name="label">CodeHilite</property>
-								<property name="tooltip_text" translatable="yes">Highlight your code with a correct syntax coloration (it needs a set up and some dependencies).</property>
-							</object>
-							<packing>
-								<property name="expand">True</property>
-							</packing>
-						</child>
-						<child>
-							<object class="GtkCheckButton" id="plugins_nl2br">
-								<property name="draw-indicator">False</property>
-								<property name="label">New Line To Break</property>
-								<property name="tooltip_text" translatable="yes">Add a line break at each new line.</property>
-							</object>
-							<packing>
-								<property name="expand">True</property>
-							</packing>
-						</child>
-						<style>
-							<class name="linked"/>
-						</style>
 					</object>
 				</child>
+				
 				<child>
 					<object class="GtkBox">
 						<property name="orientation">horizontal</property>
+						<property name="spacing">20</property>
 						<child>
-							<object class="GtkCheckButton" id="plugins_smarty">
-								<property name="draw-indicator">False</property>
-								<property name="label">SmartyPants</property>
-								<property name="tooltip_text" translatable="yes">Converts ASCII dashes, quotes and ellipses to their nice-looking equivalents.</property>
+							<object class="GtkLabel">
+								<property name="label" translatable="yes">Stylesheet</property>
 							</object>
 							<packing>
-								<property name="expand">True</property>
+								<property name="pack-type">start</property>
 							</packing>
 						</child>
 						<child>
-							<object class="GtkCheckButton" id="plugins_sanelists">
-								<property name="draw-indicator">False</property>
-								<property name="label">Sane Lists</property>
-								<property name="tooltip_text" translatable="yes">Alters the behavior of the lists syntax.</property>
+							<object class="GtkButton" id="styleButton">
+								<child>
+									<object class="GtkBox">
+										<property name="spacing">5</property>
+										<child>
+											<object class="GtkLabel" id="styleLabel"></object>
+										</child>
+										<child>
+											<object class="GtkImage">
+												<property name="icon-name">document-open-symbolic</property>
+											</object>
+										</child>
+									</object>
+								</child>
 							</object>
 							<packing>
-								<property name="expand">True</property>
+								<property name="pack-type">end</property>
 							</packing>
 						</child>
-						<child>
-							<object class="GtkCheckButton" id="plugins_admonition">
-								<property name="draw-indicator">False</property>
-								<property name="label">Admonition</property>
-								<property name="tooltip_text" translatable="yes">???????</property><!--TODO-->
-							</object>
-							<packing>
-								<property name="expand">True</property>
-							</packing>
-						</child>
-						<child>
-							<object class="GtkCheckButton" id="plugins_wikilinks">
-								<property name="draw-indicator">False</property>
-								<property name="label">WikiLinks</property>
-								<property name="tooltip_text" translatable="yes">???????</property><!--TODO-->
-							</object>
-							<packing>
-								<property name="expand">True</property>
-							</packing>
-						</child>
-						<style>
-							<class name="linked"/>
-						</style>
 					</object>
 				</child>
 			</object>
+			<packing>
+				<property name="name">preview_page</property>
+				<property name="title" translatable="yes">Preview</property>
+			</packing>
 		</child>
-	</object>
 
-	<object class="GtkBox" id="preview_page">
-		<property name="spacing">10</property>
-		<property name="orientation">vertical</property>
-		
 		<child>
 			<object class="GtkBox">
-				<property name="orientation">horizontal</property>
-				<property name="spacing">20</property>
+				<property name="spacing">10</property>
+				<property name="orientation">vertical</property>
+
 				<child>
-					<object class="GtkLabel">
-						<property name="label" translatable="yes">Automatically show/hide panel</property>
+					<object class="GtkBox">
+						<property name="orientation">horizontal</property>
+						<property name="spacing">20</property>
+						<child>
+							<object class="GtkLabel">
+								<property name="label" translatable="yes">HTML generation backend</property>
+							</object>
+							<packing>
+								<property name="pack-type">start</property>
+							</packing>
+						</child>
+						<child>
+							<object class="GtkComboBoxText" id="backendCombobox"></object>
+							<packing>
+								<property name="pack-type">end</property>
+							</packing>
+						</child>
 					</object>
-					<packing>
-						<property name="pack-type">start</property>
-					</packing>
 				</child>
+				
 				<child>
-					<object class="GtkSwitch" id="autoManageSwitch"></object>
-					<packing>
-						<property name="pack-type">end</property>
-					</packing>
-				</child>
-			</object>
-		</child>
-		
-		<child>
-			<object class="GtkBox">
-				<property name="orientation">horizontal</property>
-				<property name="spacing">20</property>
-				<child>
-					<object class="GtkLabel">
-						<property name="label" translatable="yes">Use relative paths</property>
+					<object class="GtkBox" id="pandocCommandBox">
+						<property name="visible">False</property>
+						<property name="sensitive">False</property>
+						<property name="spacing">20</property>
+						<child>
+							<object class="GtkLabel">
+								<property name="label" translatable="yes">Pandoc command line:</property>
+							</object>
+						</child>
+						<child>
+							<object class="GtkEntry" id="pandocCommandEntry">
+								<property name="placeholder-text">Not available yet</property>
+							</object>
+							<packing>
+								<property name="pack-type">end</property>
+								<property name="expand">True</property>
+							</packing>
+						</child>
 					</object>
-					<packing>
-						<property name="pack-type">start</property>
-					</packing>
 				</child>
+				
 				<child>
-					<object class="GtkSwitch" id="relativePathsSwitch"></object>
-					<packing>
-						<property name="pack-type">end</property>
-					</packing>
-				</child>
-			</object>
-		</child>
-		
-		<child>
-			<object class="GtkBox">
-				<property name="orientation">horizontal</property>
-				<property name="spacing">20</property>
-				<child>
-					<object class="GtkLabel">
-						<property name="label" translatable="yes">Stylesheet</property>
-					</object>
-					<packing>
-						<property name="pack-type">start</property>
-					</packing>
-				</child>
-				<child>
-					<object class="GtkButton" id="styleButton">
+					<object class="GtkBox" id="python3MarkdownPluginsBox">
+						<property name="visible">False</property>
+						<property name="orientation">vertical</property>
+						<property name="spacing">5</property>
 						<child>
 							<object class="GtkBox">
-								<property name="spacing">5</property>
 								<child>
-									<object class="GtkLabel" id="styleLabel"></object>
-								</child>
-								<child>
-									<object class="GtkImage">
-										<property name="icon-name">document-open-symbolic</property>
+									<object class="GtkLabel">
+										<property name="label" translatable="yes">Extensions for python3-markdown:</property>
 									</object>
 								</child>
 							</object>
 						</child>
+						<child>
+							<object class="GtkBox">
+								<property name="orientation">vertical</property>
+								<child>
+									<object class="GtkCheckButton" id="plugins_extra">
+										<property name="label">Extra</property>
+										<property name="tooltip_text" translatable="yes">A compilation of various extensions (Abbreviations, Attribute Lists, Definition Lists, Fenced Code Blocks, Footnotes, Tables).</property>
+									</object>
+									<packing>
+										<property name="expand">True</property>
+									</packing>
+								</child>
+								<child>
+									<object class="GtkCheckButton" id="plugins_toc">
+										<property name="label">Table of content</property>
+										<property name="tooltip_text" translatable="yes">Show a clickable table of content with the [TOC] tag.</property>
+									</object>
+									<packing>
+										<property name="expand">True</property>
+									</packing>
+								</child>
+								<child>
+									<object class="GtkCheckButton" id="plugins_codehilite">
+		<!--								<property name="draw-indicator">False</property>-->
+										<property name="label">CodeHilite</property>
+										<property name="tooltip_text" translatable="yes">Highlight your code with a correct syntax coloration (it needs a set up and some dependencies).</property>
+									</object>
+									<packing>
+										<property name="expand">True</property>
+									</packing>
+								</child>
+								<child>
+									<object class="GtkCheckButton" id="plugins_nl2br">
+										<property name="label">New Line To Break</property>
+										<property name="tooltip_text" translatable="yes">Add a line break at each new line.</property>
+									</object>
+									<packing>
+										<property name="expand">True</property>
+									</packing>
+								</child>
+								<child>
+									<object class="GtkCheckButton" id="plugins_smarty">
+										<property name="label">SmartyPants</property>
+										<property name="tooltip_text" translatable="yes">Converts ASCII dashes, quotes and ellipses to their nice-looking equivalents.</property>
+									</object>
+									<packing>
+										<property name="expand">True</property>
+									</packing>
+								</child>
+								<child>
+									<object class="GtkCheckButton" id="plugins_sanelists">
+										<property name="label">Sane Lists</property>
+										<property name="tooltip_text" translatable="yes">Alters the behavior of the lists syntax.</property>
+									</object>
+									<packing>
+										<property name="expand">True</property>
+									</packing>
+								</child>
+								<child>
+									<object class="GtkCheckButton" id="plugins_admonition">
+										<property name="label">Admonition</property>
+										<property name="tooltip_text" translatable="yes">...</property><!--TODO-->
+									</object>
+									<packing>
+										<property name="expand">True</property>
+									</packing>
+								</child>
+								<child>
+									<object class="GtkCheckButton" id="plugins_wikilinks">
+										<property name="label">WikiLinks</property>
+										<property name="tooltip_text" translatable="yes">...</property><!--TODO-->
+									</object>
+									<packing>
+										<property name="expand">True</property>
+									</packing>
+								</child>
+							</object>
+						</child>
 					</object>
-					<packing>
-						<property name="pack-type">end</property>
-					</packing>
 				</child>
 			</object>
+			<packing>
+				<property name="name">backend_page</property>
+				<property name="title" translatable="yes">Backend</property>
+			</packing>
 		</child>
-	</object>
-	<object class="GtkBox" id="shortcuts_page">
-		<property name="spacing">10</property>
-		<property name="orientation">vertical</property>
+
 		<child>
-			<object class="GtkTreeView" id="shortcuts_treeview">
-				<property name="enable_grid_lines">True</property>
-<!--				<property name="headers_visible">False</property>-->
+			<object class="GtkBox" id="shortcuts_page">
+				<property name="spacing">10</property>
+				<property name="orientation">vertical</property>
+				<child>
+					<object class="GtkTreeView" id="shortcuts_treeview">
+						<property name="enable-grid-lines">True</property>
+						<property name="headers-visible">False</property>
+					</object>
+				</child>
 			</object>
+			<packing>
+				<property name="name">shortcuts_page</property>
+				<property name="title" translatable="yes">Shortcuts</property>
+			</packing>
 		</child>
 	</object>
 </interface>

@@ -376,10 +376,10 @@ class MarkdownGeditPluginView(GObject.Object, Gedit.ViewActivatable):
 			return
 		new_code = self.add_tags_characters(document, start_tag, end_tag, start, end)
 	
-	def format_title_upper(self):
+	def format_title_lower(self):
 		self.add_line_tags('#', '')
 		
-	def format_title_lower(self):
+	def format_title_upper(self):
 		self.remove_line_tags('# ', ' #')
 		
 	def format_title(self, level):

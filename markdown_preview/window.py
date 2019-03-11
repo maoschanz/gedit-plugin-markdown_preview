@@ -8,13 +8,13 @@ BASE_PATH = os.path.dirname(os.path.realpath(__file__))
 LOCALE_PATH = os.path.join(BASE_PATH, 'locale')
 
 try:
-    import gettext
-    gettext.bindtextdomain('gedit-plugin-markdown-preview', LOCALE_PATH)
-    gettext.textdomain('gedit-plugin-markdown-preview')
-    _ = gettext.gettext
+	import gettext
+	gettext.bindtextdomain('gedit-plugin-markdown-preview', LOCALE_PATH)
+	gettext.textdomain('gedit-plugin-markdown-preview')
+	_ = gettext.gettext
 except:
-    _ = lambda s: s
-    
+	_ = lambda s: s
+
 class MdPreviewWindow():
 	__gtype_name__ = 'MdPreviewWindow'
 
