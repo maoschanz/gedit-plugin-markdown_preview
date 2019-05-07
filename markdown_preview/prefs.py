@@ -8,16 +8,15 @@ BASE_PATH = os.path.dirname(os.path.realpath(__file__))
 LOCALE_PATH = os.path.join(BASE_PATH, 'locale')
 
 MD_PREVIEW_KEY_BASE = 'org.gnome.gedit.plugins.markdown_preview'
-BASE_TEMP_NAME = '/tmp/gedit_plugin_markdown_preview'
 
 try:
-    import gettext
-    gettext.bindtextdomain('gedit-plugin-markdown-preview', LOCALE_PATH)
-    gettext.textdomain('gedit-plugin-markdown-preview')
-    _ = gettext.gettext
+	import gettext
+	gettext.bindtextdomain('gedit-plugin-markdown-preview', LOCALE_PATH)
+	gettext.textdomain('gedit-plugin-markdown-preview')
+	_ = gettext.gettext
 except:
-    _ = lambda s: s
-    
+	_ = lambda s: s
+
 class MdConfigWidget(Gtk.Box):
 	__gtype_name__ = 'MdConfigWidget'
 
@@ -82,17 +81,57 @@ class MdConfigWidget(Gtk.Box):
 		styleButton.connect('clicked', self.on_choose_css)
 		
 		### SHORTCUTS ###
-#		TODO
-		shortcuts_treeview = builder.get_object('shortcuts_treeview')
 		
+		shortcuts_treeview = builder.get_object('shortcuts_treeview')
+		#--------
+		renderer1 = Gtk.CellRendererText()
+		column1 = Gtk.TreeViewColumn()
+		column1.set_expand(True)
+		column1.pack_start(renderer1, True)
+		column1.add_attribute(renderer1, 'text', 1);
+		shortcuts_treeview.append_column(column1)
+		#--------
+		renderer2 = Gtk.CellRendererAccel(editable=True, \
+		                               accel_mode=Gtk.CellRendererAccelMode.GTK)
+		renderer2.connect('accel-edited', self.on_accel_edited)
+		renderer2.connect('accel-cleared', self.on_accel_cleared)
+		column2 = Gtk.TreeViewColumn()
+		column2.pack_end(renderer2, False)
+		shortcuts_treeview.append_column(column2)
+		#--------
+		self.add_keybinding(shortcuts_treeview.get_model(), 'kb-italic', _("Italic"))
+		self.add_keybinding(shortcuts_treeview.get_model(), 'kb-bold', _("Bold"))
+		
+#		shortcuts_treeview.show_all()
 		
 #		https://github.com/GNOME/gtk/blob/master/gdk/keynames.txt
-		
 		
 		self.add(switcher)
 		self.add(stack)
 		
 		self.connect('notify::visible', self.set_options_visibility)
+	
+	def add_keybinding(self, model, setting_id, description):
+#		accelerator = self._settings.get_strv(setting_id)[0]
+#		if accelerator is None:
+#			[key, mods] = [0, 0]
+#		else:
+#			[key, mods] = Gtk.accelerator_parse(self._settings.get_strv(setting_id)[0])
+		key = 0
+		mods = 0
+		
+		row = model.insert(0, row=[setting_id, description, key, mods])
+		
+#		row = model.insert(100)
+#		model.set(row, \
+#		        [COLUMN_ID,  COLUMN_DESCRIPTION, COLUMN_KEY, COLUMN_MODS],
+#		        [setting_id, description,        key,        mods])
+	
+	def on_accel_edited(self, *args):
+		pass # TODO
+	
+	def on_accel_cleared(self, *args):
+		pass # TODO
 	
 	def on_backend_changed(self, w):
 		self._settings.set_string('backend', w.get_active_id())
