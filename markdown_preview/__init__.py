@@ -29,7 +29,7 @@ class MarkdownGeditPluginApp(GObject.Object, Gedit.AppActivatable):
 
 	def do_activate(self):
 		self.build_main_menu()
-		self.add_accelerators()
+		self.add_all_accelerators()
 
 	def do_deactivate(self):
 		self.remove_menu()
@@ -53,38 +53,49 @@ class MarkdownGeditPluginApp(GObject.Object, Gedit.AppActivatable):
 		self.menu_ext_tools = None # XXX ?
 		self.menu_ext_view = None # XXX ?
 
-	def add_accelerators(self):
-		self.app.add_accelerator("<Primary>E", "win.md-prev-insert-picture", None)
-		self.app.add_accelerator("<Primary><Shift>B", "win.md-prev-format-bold", None) # FIXME ?????
-		self.app.add_accelerator("<Primary>1", "win.md-prev-format-title-1", None) # ????????? XXX XXX
-		self.app.add_accelerator("<Primary>2", "win.md-prev-format-title-2", None)
-		self.app.add_accelerator("<Primary>3", "win.md-prev-format-title-3", None)
-		self.app.add_accelerator("<Primary>KP_1", "win.md-prev-format-title-1", None)
-		self.app.add_accelerator("<Primary>KP_2", "win.md-prev-format-title-2", None)
-		self.app.add_accelerator("<Primary>KP_3", "win.md-prev-format-title-3", None)
-		self.app.add_accelerator("<Primary>4", "win.md-prev-format-title-4", None)
-		self.app.add_accelerator("<Primary>5", "win.md-prev-format-title-5", None)
-		self.app.add_accelerator("<Primary>6", "win.md-prev-format-title-6", None)
-		self.app.add_accelerator("<Primary>KP_Add", "win.md-prev-format-title-upper", None)
-		self.app.add_accelerator("<Primary>KP_Subtract", "win.md-prev-format-title-lower", None)
-		self.app.add_accelerator("<Primary>plus", "win.md-prev-format-title-upper", None)
-		self.app.add_accelerator("<Primary>minus", "win.md-prev-format-title-lower", None)
-#		self.app.add_accelerator("<Primary><Shift>M", "win.uncomment", None)
-		return
+	def add_all_accelerators(self):
+		self._settings = Gio.Settings.new(MD_PREVIEW_KEY_BASE)
+		self.add_one_accelerator('kb-italic', 'win.md-prev-format-italic')
+		self.add_one_accelerator('kb-bold', 'win.md-prev-format-bold')
+		self.add_one_accelerator('kb-insert-picture', 'win.md-prev-insert-picture')
+#		self.add_one_accelerator('kb-', 'win.md-prev-')
+#		self.add_one_accelerator('kb-', 'win.md-prev-')
+#		self.add_one_accelerator('kb-', 'win.md-prev-')
+#		self.add_one_accelerator('kb-', 'win.md-prev-')
+#		self.add_one_accelerator('kb-', 'win.md-prev-')
+#		self.add_one_accelerator('kb-', 'win.md-prev-')
+#		self.add_one_accelerator('kb-', 'win.md-prev-')
+		
+#		self.app.add_accelerator("<Primary>1", "win.md-prev-format-title-1", None) # ????????? XXX XXX
+#		self.app.add_accelerator("<Primary>2", "win.md-prev-format-title-2", None)
+#		self.app.add_accelerator("<Primary>3", "win.md-prev-format-title-3", None)
+#		self.app.add_accelerator("<Primary>KP_1", "win.md-prev-format-title-1", None)
+#		self.app.add_accelerator("<Primary>KP_2", "win.md-prev-format-title-2", None)
+#		self.app.add_accelerator("<Primary>KP_3", "win.md-prev-format-title-3", None)
+#		self.app.add_accelerator("<Primary>4", "win.md-prev-format-title-4", None)
+#		self.app.add_accelerator("<Primary>5", "win.md-prev-format-title-5", None)
+#		self.app.add_accelerator("<Primary>6", "win.md-prev-format-title-6", None)
+#		self.app.add_accelerator("<Primary>KP_Add", "win.md-prev-format-title-upper", None)
+#		self.app.add_accelerator("<Primary>KP_Subtract", "win.md-prev-format-title-lower", None)
+#		self.app.add_accelerator("<Primary>plus", "win.md-prev-format-title-upper", None)
+#		self.app.add_accelerator("<Primary>minus", "win.md-prev-format-title-lower", None)
+
+	def add_one_accelerator(setting_key, action_name):
+		accels = self._settings.get_strv(setting_key)
+		if len(accels) > 0:
+			self.app.add_accelerator(accels[0], action_name, None)
 
 	def remove_accelerators(self):
-		self.app.remove_accelerator("win.md-prev-insert-picture", None)
-		self.app.remove_accelerator("win.md-prev-format-bold", None)
-		self.app.remove_accelerator("win.md-prev-format-title-1", None)
-		self.app.remove_accelerator("win.md-prev-format-title-2", None)
-		self.app.remove_accelerator("win.md-prev-format-title-3", None)
-		self.app.remove_accelerator("win.md-prev-format-title-4", None)
-		self.app.remove_accelerator("win.md-prev-format-title-5", None)
-		self.app.remove_accelerator("win.md-prev-format-title-6", None)
-		self.app.remove_accelerator("win.md-prev-format-title-upper", None)
-		self.app.remove_accelerator("win.md-prev-format-title-lower", None)
-#		self.app.remove_accelerator("win.uncomment", None)
-		return
+		self.app.remove_accelerator('win.md-prev-insert-picture', None)
+		self.app.remove_accelerator('win.md-prev-format-bold', None)
+		self.app.remove_accelerator('win.md-prev-format-title-1', None)
+		self.app.remove_accelerator('win.md-prev-format-title-2', None)
+		self.app.remove_accelerator('win.md-prev-format-title-3', None)
+		self.app.remove_accelerator('win.md-prev-format-title-4', None)
+		self.app.remove_accelerator('win.md-prev-format-title-5', None)
+		self.app.remove_accelerator('win.md-prev-format-title-6', None)
+		self.app.remove_accelerator('win.md-prev-format-title-upper', None)
+		self.app.remove_accelerator('win.md-prev-format-title-lower', None)
 
 ####### ####### #######
 
@@ -311,7 +322,7 @@ class MarkdownGeditPluginView(GObject.Object, Gedit.ViewActivatable):
 		if self.popup_handler_id != 0:
 			self.view.disconnect(self.popup_handler_id)
 			self.popup_handler_id = 0
-		delattr(self.view, "markdown_preview_view_activatable")
+		delattr(self.view, 'markdown_preview_view_activatable')
 
 	def populate_popup(self, view, popup):
 		if not isinstance(popup, Gtk.MenuShell):

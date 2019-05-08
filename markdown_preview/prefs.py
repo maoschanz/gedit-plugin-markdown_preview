@@ -89,6 +89,15 @@ class MdConfigWidget(Gtk.Box):
 #		https://github.com/GNOME/gtk/blob/master/gdk/keynames.txt
 		self.add_keybinding('kb-italic', _("Italic"))
 		self.add_keybinding('kb-bold', _("Bold"))
+		self.add_keybinding('kb-insert-picture', _("Insert a picture"))
+#		self.add_keybinding('kb-', _(""))
+#		self.add_keybinding('kb-', _(""))
+#		self.add_keybinding('kb-', _(""))
+#		self.add_keybinding('kb-', _(""))
+#		self.add_keybinding('kb-', _(""))
+#		self.add_keybinding('kb-', _(""))
+#		self.add_keybinding('kb-', _(""))
+#		self.add_keybinding('kb-', _(""))
 		
 		self.add(switcher)
 		self.add(stack)

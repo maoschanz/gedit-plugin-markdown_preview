@@ -41,7 +41,7 @@
 			<summary></summary>
 			<description></description>
 		</key>
-			
+
 		<key name="kb-italic" type="as">
 			<default><![CDATA[['<Primary>slash']]]></default>
 			<summary>Add italic markup</summary>
@@ -50,6 +50,11 @@
 		<key name="kb-bold" type="as">
 			<default><![CDATA[['<Primary><Shift>B']]]></default>
 			<summary>Add bold markup</summary>
+			<description></description>
+		</key>
+		<key name="kb-insert-picture" type="as">
+			<default><![CDATA[['<Primary><Shift>P']]]></default>
+			<summary>Insert an image</summary>
 			<description></description>
 		</key>
 	</schema>
