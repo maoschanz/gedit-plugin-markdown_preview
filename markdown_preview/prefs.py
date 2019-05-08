@@ -82,61 +82,44 @@ class MdConfigWidget(Gtk.Box):
 		
 		### SHORTCUTS ###
 		
-		shortcuts_treeview = builder.get_object('shortcuts_treeview')
-		#--------
-		renderer1 = Gtk.CellRendererText()
-		column1 = Gtk.TreeViewColumn()
-		column1.set_expand(True)
-		column1.pack_start(renderer1, True)
-		column1.add_attribute(renderer1, 'text', 1);
-		shortcuts_treeview.append_column(column1)
-		#--------
-		renderer2 = Gtk.CellRendererAccel(editable=True, \
-		                               accel_mode=Gtk.CellRendererAccelMode.GTK)
-		renderer2.connect('accel-edited', self.on_accel_edited)
-		renderer2.connect('accel-cleared', self.on_accel_cleared)
-		column2 = Gtk.TreeViewColumn()
-		column2.pack_end(renderer2, False)
-		shortcuts_treeview.append_column(column2)
-		#--------
-		self.add_keybinding(shortcuts_treeview.get_model(), 'kb-italic', _("Italic"))
-		self.add_keybinding(shortcuts_treeview.get_model(), 'kb-bold', _("Bold"))
-		
-#		shortcuts_treeview.show_all()
-		
+		self.shortcuts_treeview = builder.get_object('shortcuts_treeview')
+		renderer = builder.get_object('accel_renderer')
+		renderer.connect('accel-edited', self.on_accel_edited)
+		renderer.connect('accel-cleared', self.on_accel_cleared)
 #		https://github.com/GNOME/gtk/blob/master/gdk/keynames.txt
+		self.add_keybinding('kb-italic', _("Italic"))
+		self.add_keybinding('kb-bold', _("Bold"))
 		
 		self.add(switcher)
 		self.add(stack)
-		
 		self.connect('notify::visible', self.set_options_visibility)
-	
-	def add_keybinding(self, model, setting_id, description):
-#		accelerator = self._settings.get_strv(setting_id)[0]
-#		if accelerator is None:
-#			[key, mods] = [0, 0]
-#		else:
-#			[key, mods] = Gtk.accelerator_parse(self._settings.get_strv(setting_id)[0])
-		key = 0
-		mods = 0
-		
-		row = model.insert(0, row=[setting_id, description, key, mods])
-		
-#		row = model.insert(100)
-#		model.set(row, \
-#		        [COLUMN_ID,  COLUMN_DESCRIPTION, COLUMN_KEY, COLUMN_MODS],
-#		        [setting_id, description,        key,        mods])
-	
+
+	def add_keybinding(self, setting_id, description):
+		accelerator = self._settings.get_strv(setting_id)[0]
+		if accelerator is None:
+			[key, mods] = [0, 0]
+		else:
+			[key, mods] = Gtk.accelerator_parse(self._settings.get_strv(setting_id)[0])
+		row = self.shortcuts_treeview.get_model().insert(0, \
+		                               row=[setting_id, description, key, mods])
+
 	def on_accel_edited(self, *args):
-		pass # TODO
-	
+		tree_iter = self.shortcuts_treeview.get_model().get_iter_from_string(args[1])
+		self.shortcuts_treeview.get_model().set(tree_iter, [2, 3], [args[2], int(args[3])])
+		setting_id = self.shortcuts_treeview.get_model().get_value(tree_iter, 0)
+		accelString = Gtk.accelerator_name(args[2], args[3])
+		self._settings.set_strv(setting_id, [accelString])
+
 	def on_accel_cleared(self, *args):
-		pass # TODO
-	
+		tree_iter = self.shortcuts_treeview.get_model().get_iter_from_string(args[1])
+		self.shortcuts_treeview.get_model().set(tree_iter, [2, 3], [0, 0])
+		setting_id = self.shortcuts_treeview.get_model().get_value(tree_iter, 0)
+		self._settings.set_strv(setting_id, [])
+
 	def on_backend_changed(self, w):
 		self._settings.set_string('backend', w.get_active_id())
 		self.set_options_visibility()
-		
+
 	def update_plugins_list(self, *args):
 		array = []
 		if self.plugins_admonition.get_active():
