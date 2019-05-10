@@ -57,6 +57,16 @@
 			<summary>Insert an image</summary>
 			<description></description>
 		</key>
+		<key name="kb-title-lower" type="as">
+			<default><![CDATA[['<Primary>minus']]]></default>
+			<summary>Use a lower level of title by adding a "#" tag</summary>
+			<description></description>
+		</key>
+		<key name="kb-title-upper" type="as">
+			<default><![CDATA[['<Primary>plus']]]></default>
+			<summary>Use a upper level of title by removing a "#" tag</summary>
+			<description></description>
+		</key>
 	</schema>
 </schemalist>
 

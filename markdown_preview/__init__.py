@@ -58,8 +58,8 @@ class MarkdownGeditPluginApp(GObject.Object, Gedit.AppActivatable):
 		self.add_one_accelerator('kb-italic', 'win.md-prev-format-italic')
 		self.add_one_accelerator('kb-bold', 'win.md-prev-format-bold')
 		self.add_one_accelerator('kb-insert-picture', 'win.md-prev-insert-picture')
-#		self.add_one_accelerator('kb-', 'win.md-prev-')
-#		self.add_one_accelerator('kb-', 'win.md-prev-')
+		self.add_one_accelerator('kb-title-lower', 'win.md-prev-format-title-lower')
+		self.add_one_accelerator('kb-title-upper', 'win.md-prev-format-title-upper')
 #		self.add_one_accelerator('kb-', 'win.md-prev-')
 #		self.add_one_accelerator('kb-', 'win.md-prev-')
 #		self.add_one_accelerator('kb-', 'win.md-prev-')
@@ -77,10 +77,8 @@ class MarkdownGeditPluginApp(GObject.Object, Gedit.AppActivatable):
 #		self.app.add_accelerator("<Primary>6", "win.md-prev-format-title-6", None)
 #		self.app.add_accelerator("<Primary>KP_Add", "win.md-prev-format-title-upper", None)
 #		self.app.add_accelerator("<Primary>KP_Subtract", "win.md-prev-format-title-lower", None)
-#		self.app.add_accelerator("<Primary>plus", "win.md-prev-format-title-upper", None)
-#		self.app.add_accelerator("<Primary>minus", "win.md-prev-format-title-lower", None)
 
-	def add_one_accelerator(setting_key, action_name):
+	def add_one_accelerator(self, setting_key, action_name):
 		accels = self._settings.get_strv(setting_key)
 		if len(accels) > 0:
 			self.app.add_accelerator(accels[0], action_name, None)
