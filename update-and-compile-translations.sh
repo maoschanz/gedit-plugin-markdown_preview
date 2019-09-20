@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "Generating .pot file..."
+echo "Generating .pot file…"
 xgettext --files-from=POTFILES --from-code=UTF-8 --output=markdown_preview/locale/gedit-plugin-markdown-preview.pot
 
 IFS='
@@ -11,11 +11,13 @@ for dossier in $liste
 do
 	if [ "$dossier" != "gedit-plugin-markdown-preview.pot" ]; then
 		echo "Updating translation for: $dossier"
-		msgmerge ./markdown_preview/locale/$dossier/LC_MESSAGES/gedit-plugin-markdown-preview.po ./markdown_preview/locale/gedit-plugin-markdown-preview.pot > ./markdown_preview/locale/$dossier/LC_MESSAGES/gedit-plugin-markdown-preview.temp.po
-		mv ./markdown_preview/locale/$dossier/LC_MESSAGES/gedit-plugin-markdown-preview.temp.po ./markdown_preview/locale/$dossier/LC_MESSAGES/gedit-plugin-markdown-preview.po
+		filename="./markdown_preview/locale/$dossier/LC_MESSAGES/gedit-plugin-markdown-preview"
+		msgmerge $filename.po ./markdown_preview/locale/gedit-plugin-markdown-preview.pot > $filename.temp.po
+		mv $filename.temp.po $filename.po
 		echo "Compiling translation for: $dossier"
-		msgfmt ./markdown_preview/locale/$dossier/LC_MESSAGES/gedit-plugin-markdown-preview.po -o ./markdown_preview/locale/$dossier/LC_MESSAGES/gedit-plugin-markdown-preview.mo
+		msgfmt $filename.po -o $filename.mo
 	fi
 done
 
+echo "Done."
 exit 0

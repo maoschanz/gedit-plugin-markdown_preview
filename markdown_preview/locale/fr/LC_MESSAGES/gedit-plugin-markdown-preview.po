@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-14 12:54+0100\n"
+"POT-Creation-Date: 2019-09-20 20:30+0200\n"
 "PO-Revision-Date: 2018-03-05 16:47+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -13,169 +13,200 @@ msgstr ""
 "X-Generator: Poedit 1.8.11\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: markdown_preview/export.py:18
+#: markdown_preview/export.py:20
 msgid "Export as…"
 msgstr "Exporter sous…"
 
-#: markdown_preview/export.py:22
+#: markdown_preview/export.py:24
 msgid "Cancel"
 msgstr "Annuler"
 
-#: markdown_preview/export.py:23
+#: markdown_preview/export.py:25
 msgid "Next"
 msgstr "Suivant"
 
-#: markdown_preview/export.py:41
+#: markdown_preview/export.py:54
 msgid "LaTeX beamer slide show"
 msgstr ""
 
-#: markdown_preview/export.py:42
+#: markdown_preview/export.py:55
 msgid "Microsoft Word (.docx)"
 msgstr ""
 
-#: markdown_preview/export.py:43
+#: markdown_preview/export.py:56
 msgid "HTML5"
 msgstr ""
 
-#: markdown_preview/export.py:44
+#: markdown_preview/export.py:57
 msgid "HTML5 (with custom CSS)"
 msgstr ""
 
-#: markdown_preview/export.py:45
+#: markdown_preview/export.py:58
 msgid "LaTeX (.tex)"
 msgstr ""
 
-#: markdown_preview/export.py:46
+#: markdown_preview/export.py:59
 msgid "OpenOffice text document (.odt)"
 msgstr ""
 
-#: markdown_preview/export.py:47
+#: markdown_preview/export.py:60
 msgid "Portable Document Format (.pdf)"
 msgstr ""
 
-#: markdown_preview/export.py:48
+#: markdown_preview/export.py:61
 msgid "plain text"
 msgstr ""
 
-#: markdown_preview/export.py:49
+#: markdown_preview/export.py:62
 msgid "PowerPoint slide show"
 msgstr ""
 
-#: markdown_preview/export.py:50
+#: markdown_preview/export.py:63
 msgid "Rich Text Format (.rtf)"
 msgstr ""
 
-#: markdown_preview/export.py:51
+#: markdown_preview/export.py:64
 msgid "reveal.js HTML + Javascript slide show"
 msgstr ""
 
-#: markdown_preview/export.py:52
+#: markdown_preview/export.py:65
 msgid "Custom command line"
 msgstr "Ligne de commande personnalisée"
 
-#: markdown_preview/export.py:109 markdown_preview/menus.ui:6
+#: markdown_preview/export.py:141 markdown_preview/menus.ui:6
 msgid "Export the preview"
 msgstr "Exporter l'aperçu"
 
-#: markdown_preview/__init__.py:43 markdown_preview/__init__.py:46
-#: markdown_preview/preview.py:296 markdown_preview/window.py:22
+#: markdown_preview/__init__.py:46 markdown_preview/__init__.py:49
+#: markdown_preview/preview.py:346
 msgid "Markdown Preview"
 msgstr "Aperçu Markdown"
 
-#: markdown_preview/__init__.py:49
+#: markdown_preview/__init__.py:52
 msgid "Zoom"
 msgstr "Zoom"
 
-#: markdown_preview/__init__.py:271
-msgid "Can't preview an unsaved document"
-msgstr "Impossible de prévisualiser un document non-enregistré"
-
-#: markdown_preview/__init__.py:273
-msgid "Unsupported type of document: "
-msgstr "Type de document non-supporté : "
-
-#: markdown_preview/__init__.py:331
+#: markdown_preview/__init__.py:334
 msgid "Markdown tags"
 msgstr "Balises Markdown"
 
-#: markdown_preview/__init__.py:413
+#: markdown_preview/__init__.py:427
 msgid "Select a picture"
 msgstr "Choisissez une image"
 
-#: markdown_preview/prefs.py:36
-msgid "Preview"
-msgstr "Aperçu"
-
-#: markdown_preview/prefs.py:37
-msgid "Shortcuts"
-msgstr "Raccourcis"
-
-#: markdown_preview/prefs.py:42
+#: markdown_preview/prefs.py:35 markdown_preview/menus.ui:24
 msgid "python3-markdown"
 msgstr ""
 
-#: markdown_preview/prefs.py:43
+#: markdown_preview/prefs.py:36 markdown_preview/menus.ui:29
 msgid "pandoc"
 msgstr ""
 
-#: markdown_preview/prefs.py:75
+#: markdown_preview/prefs.py:90 markdown_preview/menus.ui:144
+msgid "Italic"
+msgstr "Italique"
+
+#: markdown_preview/prefs.py:91 markdown_preview/menus.ui:140
+msgid "Bold"
+msgstr "Gras"
+
+#: markdown_preview/prefs.py:92
+msgid "Insert a picture"
+msgstr "Insérer une image"
+
+#: markdown_preview/prefs.py:93
+msgid "Lower title"
+msgstr ""
+
+#: markdown_preview/prefs.py:94
+msgid "Upper title"
+msgstr ""
+
+#: markdown_preview/prefs.py:183 markdown_preview/export.ui:204
 msgid "Select a CSS file"
 msgstr "Choisissez un fichier CSS"
 
-#: markdown_preview/prefs.py:80 markdown_preview/prefs.ui:90
+#: markdown_preview/prefs.py:188 markdown_preview/prefs.ui:61
 msgid "Stylesheet"
 msgstr "Feuille de style"
 
-#: markdown_preview/preview.py:99 markdown_preview/preview.ui:16
+#: markdown_preview/preview.py:126
+msgid "Open link in browser"
+msgstr "Ouvrir le lien dans le navigateur"
+
+#: markdown_preview/preview.py:127
+msgid "Open image in browser"
+msgstr "Ouvrir l'image dans le navigateur"
+
+#: markdown_preview/preview.py:155 markdown_preview/preview.ui:16
 msgid "Reload the preview"
 msgstr "Recharger l'aperçu"
 
-#: markdown_preview/preview.py:122
-msgid "No result"
-msgstr "Pas de résultat"
+#: markdown_preview/preview.py:231
+msgid "Can't preview an unsaved document"
+msgstr "Impossible de prévisualiser un document non-enregistré"
 
-#: markdown_preview/preview.py:334
+#: markdown_preview/preview.py:233
+msgid "Unsupported type of document: "
+msgstr "Type de document non-supporté : "
+
+#: markdown_preview/preview.py:384
 #, python-format
 msgid "%s results"
 msgstr "%s résultats"
 
 #: markdown_preview/export.ui:14
 msgid "Export file using:"
-msgstr ""
+msgstr "Exporter le fichier avec :"
 
-#: markdown_preview/export.ui:52
+#: markdown_preview/export.ui:52 markdown_preview/prefs.ui:153
 msgid "Extensions for python3-markdown:"
 msgstr ""
 
-#: markdown_preview/export.ui:66 markdown_preview/export.ui:119
-msgid "??????? liste"
+#: markdown_preview/export.ui:66 markdown_preview/prefs.ui:164
+msgid ""
+"A compilation of various extensions (Abbreviations, Attribute Lists, "
+"Definition Lists, Fenced Code Blocks, Footnotes, Tables)."
 msgstr ""
 
-#: markdown_preview/export.ui:77 markdown_preview/export.ui:99
-#: markdown_preview/export.ui:141
+#: markdown_preview/export.ui:77 markdown_preview/prefs.ui:173
+msgid "Show a clickable table of content with the [TOC] tag."
+msgstr ""
+
+#: markdown_preview/export.ui:88 markdown_preview/prefs.ui:183
+msgid ""
+"Highlight your code with a correct syntax coloration (it needs a set up and "
+"some dependencies)."
+msgstr ""
+
+#: markdown_preview/export.ui:99 markdown_preview/prefs.ui:192
+msgid "Add a line break at each new line."
+msgstr ""
+
+#: markdown_preview/export.ui:119 markdown_preview/prefs.ui:201
+msgid ""
+"Converts ASCII dashes, quotes and ellipses to their nice-looking equivalents."
+msgstr ""
+
+#: markdown_preview/export.ui:130 markdown_preview/prefs.ui:210
+msgid "Alters the behavior of the lists syntax."
+msgstr ""
+
+#: markdown_preview/export.ui:141 markdown_preview/export.ui:152
 msgid "???????"
 msgstr ""
 
-#: markdown_preview/export.ui:88 markdown_preview/export.ui:130
-#: markdown_preview/export.ui:152
-msgid "??????? explications"
-msgstr ""
-
 #: markdown_preview/export.ui:176
-msgid "Use a stylesheet:"
+msgid "Use a stylesheet"
 msgstr "Utiliser une feuille de style"
 
 #: markdown_preview/export.ui:198
 msgid "CSS file:"
 msgstr "Fichier CSS :"
 
-#: markdown_preview/export.ui:204
-msgid "????????"
-msgstr ""
-
 #: markdown_preview/export.ui:230
 msgid "Output file format:"
-msgstr ""
+msgstr "Format du fichier exporté :"
 
 #: markdown_preview/export.ui:260
 msgid "Remember"
@@ -189,109 +220,122 @@ msgstr "Imprimer l'aperçu"
 msgid "Automatically reload"
 msgstr "Recharger automatiquement"
 
-#: markdown_preview/menus.ui:21
-msgid "Zoom out"
-msgstr "Dézoomer"
+#: markdown_preview/menus.ui:20
+#, fuzzy
+msgid "Options"
+msgstr "Plus d'options"
 
-#: markdown_preview/menus.ui:27
-msgid "Original Zoom"
-msgstr "Zoom original"
+#: markdown_preview/menus.ui:22
+msgid "Rendering"
+msgstr "Rendu"
 
-#: markdown_preview/menus.ui:31
-msgid "Zoom in"
-msgstr "Zoomer"
-
-#: markdown_preview/menus.ui:38
-msgid "Side Panel"
-msgstr "Panneau latéral"
-
-#: markdown_preview/menus.ui:43
-msgid "Bottom Panel"
-msgstr "Panneau inférieur"
-
-#: markdown_preview/menus.ui:48
-msgid "View mode"
-msgstr "Mode d'affichage"
-
-#: markdown_preview/menus.ui:51
-msgid "Dedicated window"
-msgstr ""
-
-#: markdown_preview/menus.ui:57
-msgid "Whole document"
-msgstr ""
-
-#: markdown_preview/menus.ui:63
-msgid "Split at separators"
-msgstr ""
-
-#: markdown_preview/menus.ui:69
-msgid "Slideshow"
-msgstr ""
-
-#: markdown_preview/menus.ui:82
-msgid "Remove all tags"
-msgstr ""
-
-#: markdown_preview/menus.ui:88
-msgid "Title"
-msgstr "Titre"
-
-#: markdown_preview/menus.ui:115
-msgid "Bold"
-msgstr "Gras"
-
-#: markdown_preview/menus.ui:119
-msgid "Italic"
-msgstr "Italique"
-
-#: markdown_preview/menus.ui:123
-msgid "Underline"
-msgstr ""
-
-#: markdown_preview/menus.ui:127
-msgid "Monospace"
-msgstr ""
-
-#: markdown_preview/menus.ui:131
-msgid "Quote"
-msgstr ""
-
-#: markdown_preview/menus.ui:137
-msgid "Unordered list"
-msgstr "Liste à puces"
-
-#: markdown_preview/menus.ui:141
-msgid "Ordered list"
-msgstr "Liste numérotée"
-
-#: markdown_preview/menus.ui:147
-msgid "Insert an image"
-msgstr "Insérer une image"
-
-#: markdown_preview/menus.ui:151
-msgid "Insert a link"
-msgstr "Insérer un lien"
-
-#: markdown_preview/menus.ui:155
-msgid "Insert a table"
-msgstr "Insérer un tableau"
-
-#: markdown_preview/prefs.ui:15
-msgid "HTML generation backend"
-msgstr ""
-
-#: markdown_preview/prefs.ui:40
-msgid "Automatically show/hide panel"
-msgstr "Montrer/masquer automatiquement le panneau"
-
-#: markdown_preview/prefs.ui:65
+#: markdown_preview/menus.ui:36 markdown_preview/prefs.ui:40
 msgid "Use relative paths"
 msgstr "Utiliser des chemins relatifs"
 
-#: markdown_preview/prefs.ui:136
-msgid "TODO"
+#: markdown_preview/menus.ui:45
+msgid "Zoom out"
+msgstr "Dézoomer"
+
+#: markdown_preview/menus.ui:51
+msgid "Original Zoom"
+msgstr "Zoom original"
+
+#: markdown_preview/menus.ui:55
+msgid "Zoom in"
+msgstr "Zoomer"
+
+#: markdown_preview/menus.ui:62
+msgid "Side Panel"
+msgstr "Panneau latéral"
+
+#: markdown_preview/menus.ui:67
+msgid "Bottom Panel"
+msgstr "Panneau inférieur"
+
+#: markdown_preview/menus.ui:72
+msgid "View mode"
+msgstr "Mode d'affichage"
+
+#: markdown_preview/menus.ui:75
+msgid "Whole document"
+msgstr "Document complet"
+
+#: markdown_preview/menus.ui:80
+msgid "Split at separators"
+msgstr "Utiliser les séparateurs"
+
+#: markdown_preview/menus.ui:94
+msgid "Remove all tags"
 msgstr ""
+
+#: markdown_preview/menus.ui:101
+msgid "Title"
+msgstr "Titre"
+
+#: markdown_preview/menus.ui:104
+msgid "Upper"
+msgstr ""
+
+#: markdown_preview/menus.ui:108
+msgid "Lower"
+msgstr ""
+
+#: markdown_preview/menus.ui:156
+msgid "Monospace"
+msgstr ""
+
+#: markdown_preview/menus.ui:160
+msgid "Quote"
+msgstr ""
+
+#: markdown_preview/menus.ui:166
+msgid "Unordered list"
+msgstr "Liste à puces"
+
+#: markdown_preview/menus.ui:170
+msgid "Ordered list"
+msgstr "Liste numérotée"
+
+#: markdown_preview/menus.ui:176
+msgid "Insert an image"
+msgstr "Insérer une image"
+
+#: markdown_preview/menus.ui:180
+msgid "Insert a link"
+msgstr "Insérer un lien"
+
+#: markdown_preview/menus.ui:184
+msgid "Insert a table"
+msgstr "Insérer un tableau"
+
+#: markdown_preview/prefs.ui:19
+msgid "Automatically show/hide panel"
+msgstr "Montrer/masquer automatiquement le panneau"
+
+#: markdown_preview/prefs.ui:92
+msgid "Preview"
+msgstr "Aperçu"
+
+#: markdown_preview/prefs.ui:107
+msgid "HTML generation backend"
+msgstr ""
+
+#: markdown_preview/prefs.ui:129
+msgid "Pandoc command line:"
+msgstr "Ligne de commande Pandoc :"
+
+#: markdown_preview/prefs.ui:219 markdown_preview/prefs.ui:228
+msgid "..."
+msgstr ""
+
+#: markdown_preview/prefs.ui:241
+msgid "Backend"
+msgstr ""
+
+#: markdown_preview/prefs.ui:286
+msgid "Shortcuts"
+msgstr "Raccourcis"
 
 #: markdown_preview/preview.ui:35
 msgid "Previous page"
@@ -301,10 +345,22 @@ msgstr "Page précédente"
 msgid "Next page"
 msgstr "Page suivante"
 
-#: markdown_preview/preview.ui:76
+#: markdown_preview/preview.ui:74
 msgid "More options"
 msgstr "Plus d'options"
 
-#: markdown_preview/preview.ui:92
+#: markdown_preview/preview.ui:91
 msgid "Search"
 msgstr "Recherche"
+
+#: markdown_preview/preview.ui:134
+msgid "Previous result"
+msgstr "Résultat précédent"
+
+#: markdown_preview/preview.ui:147
+msgid "Next result"
+msgstr "Résultat suivant"
+
+#: markdown_preview/preview.ui:164
+msgid "No result"
+msgstr "Pas de résultat"
