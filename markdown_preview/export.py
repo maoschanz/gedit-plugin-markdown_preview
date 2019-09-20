@@ -5,6 +5,14 @@ from gi.repository import GObject, Gtk, Gio, WebKit2, GLib, Gedit
 BASE_PATH = os.path.dirname(os.path.realpath(__file__))
 LOCALE_PATH = os.path.join(BASE_PATH, 'locale')
 
+try:
+	import gettext
+	gettext.bindtextdomain('gedit-plugin-markdown-preview', LOCALE_PATH)
+	gettext.textdomain('gedit-plugin-markdown-preview')
+	_ = gettext.gettext
+except:
+	_ = lambda s: s
+
 class MdExportDialog(Gtk.Dialog):
 	__gtype_name__ = 'MdExportDialog'
 	
@@ -65,10 +73,10 @@ class MdExportDialog(Gtk.Dialog):
 		self.format_combobox.append('custom', _("Custom command line"))
 		self.format_combobox.connect('changed', self.on_pandoc_format_changed)
 		self.format_combobox.set_active_id('pdf')
-		
+
 	def do_cancel_export(self):
 		self.destroy()
-		
+
 	def load_plugins_list(self, *args):
 		array = self._settings.get_strv('extensions')
 		if array.count('admonition') != 0:
@@ -87,7 +95,7 @@ class MdExportDialog(Gtk.Dialog):
 			self.plugins_toc.set_active(True)
 		if array.count('wikilinks') != 0:
 			self.plugins_wikilinks.set_active(True)
-		
+
 	def export_python(self):
 		file_chooser = self.launch_file_chooser()
 		if file_chooser is None:
@@ -105,7 +113,7 @@ class MdExportDialog(Gtk.Dialog):
 			f.close()
 		if self.switch_css.get_active():
 			pre_string = '<html><head><meta charset="utf-8" /><link rel="stylesheet" href="' + \
-				self._settings.get_string('style') + '" /></head><body>'
+			            self._settings.get_string('style') + '" /></head><body>'
 			post_string = '</body></html>'
 			with open(file_chooser.get_filename(), 'r+') as f:
 				content = f.read()
@@ -122,8 +130,9 @@ class MdExportDialog(Gtk.Dialog):
 		if file_chooser is None:
 			return
 		output_format = self.format_combobox.get_active_id()
+		doc_path = self.gedit_window.get_active_document().get_location().get_path()
 		if output_format == 'pdf':
-			subprocess.run(['pandoc', self.gedit_window.get_active_document().get_location().get_path(), \
+			subprocess.run(['pandoc', doc_path, \
 				'-V', 'geometry=right=2cm',
 				'-V', 'geometry=left=2cm',
 				'-V', 'geometry=bottom=2cm',
@@ -132,16 +141,17 @@ class MdExportDialog(Gtk.Dialog):
 		else:
 			cmd = self.pandoc_command_entry.get_text()
 			words = cmd.split()
-			words[words.index('$INPUT_FILE')] = self.gedit_window.get_active_document().get_location().get_path()
+			words[words.index('$INPUT_FILE')] = doc_path
 			words[words.index('$OUTPUT_FILE')] = file_chooser.get_filename()
 			subprocess.run(words)
 		file_chooser.destroy()
 
 	def launch_file_chooser(self):
-		file_chooser = Gtk.FileChooserDialog(_("Export the preview"), self.gedit_window,
+		file_chooser = Gtk.FileChooserDialog(_("Export the preview"),
+			self.gedit_window,
 			Gtk.FileChooserAction.SAVE,
 			(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
-			Gtk.STOCK_SAVE, Gtk.ResponseType.OK))
+			Gtk.STOCK_SAVE, Gtk.ResponseType.OK)) # TODO use a native file chooser
 		response = file_chooser.run()
 		if response == Gtk.ResponseType.OK:
 			return file_chooser
@@ -172,15 +182,16 @@ class MdExportDialog(Gtk.Dialog):
 			    ' -o $OUTPUT_FILE')
 		elif output_format == 'revealjs':
 			self.pandoc_command_entry.set_text('pandoc $INPUT_FILE -t revealjs -s -V' \
-			    ' revealjs-url=http://lab.hakim.se/reveal-js -o $OUTPUT_FILE')
+			      ' revealjs-url=http://lab.hakim.se/reveal-js -o $OUTPUT_FILE')
 		elif output_format == 'custom':
 			self.pandoc_command_entry.set_text(self._settings.get_string('custom-export'))
 		elif output_format == 'html_custom':
 			self.pandoc_command_entry.set_text('pandoc $INPUT_FILE -t html5 -s -c ' \
-			    + self._settings.get_string('style') + ' -o $OUTPUT_FILE')
+			          + self._settings.get_string('style') + ' -o $OUTPUT_FILE')
 		else:
-			self.pandoc_command_entry.set_text('pandoc $INPUT_FILE -t ' + output_format \
-			    + ' -o $OUTPUT_FILE')
+			self.pandoc_command_entry.set_text('pandoc $INPUT_FILE -t ' + \
+			                                 output_format + ' -o $OUTPUT_FILE')
 
-#################
+	############################################################################
+################################################################################
 

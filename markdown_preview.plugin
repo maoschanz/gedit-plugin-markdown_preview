@@ -1,11 +1,12 @@
 [Plugin]
+Name=Markdown Preview
+Name[fr]=Aperçu Markdown
+Description=Preview .md (and .html) files
+Description[fr]=Prévisualiser les fichiers .md (et .html)
+Icon=x-office-document-symbolic
 Loader=python3
 Module=markdown_preview
 IAge=3
-Name=Markdown Preview
-Icon=x-office-document-symbolic
-Description=Preview .md (and .html) files
-Description[fr]=Prévisualiser les fichiers .md (et .html)
 Authors=Romain F. T.
 Website=https://github.com/maoschanz/gedit-plugin-markdown_preview
-Version=0.8
+Version=0.9

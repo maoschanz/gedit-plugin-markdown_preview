@@ -1,8 +1,8 @@
 # Gedit Markdown Preview
 
-This is a plugin for the Gedit text editor, previewing .md files in the bottom or the side panel.
+This is a plugin for the Gedit text editor, previewing .md files in the side (`F9`) or the bottom (`Ctrl+F9`) panel.
 
-Main features (v0.8):
+Main features (version 0.8):
 
 - show a preview of a file
 - dynamically update the preview (while remembering the position in the page)
@@ -22,24 +22,42 @@ Main features (v0.8):
 
 ----
 
-## Dependencies
+## Installation
+
+### Dependencies
+
+Be sure to have these packages installed before trying to install the plugin:
 
 - `gedit` (of course)
 - `python3-markdown` (that's the name for debian-based distros)
 - `pandoc`
-- maybe `libwebkit2gtk-4.0-dev` (that's the name for debian-based distros)
+<!--- maybe `libwebkit2gtk-4.0-dev` (that's the name for debian-based distros)-->
 
-## Installation
+### Download
 
-- Download the project & extract the archive (or clone the repo).
-- Open the project's folder `gedit-plugin-markdown_preview-master` in a terminal
-- Run the `install.sh` script
+- Using the "**Clone or download**" button, download the project from github.
+- Extract the archive.
 
-The script `install.sh` can be executed as root (installation system-wide) or as a normal user (installation user-wide, but it works only with some systems, weirdly).
+(If you know how to do, you can also clone the repo with git.)
+
+### Plugin installation
+
+The script `install.sh` can be executed as root (system-wide installation) or as a normal user (user-wide installation, but that works only with some systems, weirdly).
+
+- Open the project's folder in a terminal.
+- Run `./install.sh`
+
+The plugin is now installed and has to be activated:
+
+- Open Gedit's preferences.
+- Go to the "Plugins" tab.
+- Enable the "Markdown Preview" plugin.
+
+----
 
 ## Configuration
 
-In gedit's preferences → plugins, some settings are available:
+In Gedit's preferences → Plugins, you can select the plugin to access its settings:
 
 - The preview can be generated (and exported) with [pandoc](https://pandoc.org/) or [python-markdown](https://python-markdown.github.io/). A set of extensions is available with python-markdown.
 - A stylesheet (CSS file) can be applied to the preview.
@@ -48,7 +66,6 @@ In gedit's preferences → plugins, some settings are available:
 ## Available languages
 
 - English
-- Theorically french, but in fact it's broken
-
+- French (theorically, but in fact it's broken)
 
 

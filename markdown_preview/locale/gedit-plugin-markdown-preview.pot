@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-20 20:30+0200\n"
+"POT-Creation-Date: 2019-09-20 21:14+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,67 +17,67 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: markdown_preview/export.py:20
+#: markdown_preview/export.py:28
 msgid "Export as…"
 msgstr ""
 
-#: markdown_preview/export.py:24
+#: markdown_preview/export.py:32
 msgid "Cancel"
 msgstr ""
 
-#: markdown_preview/export.py:25
+#: markdown_preview/export.py:33
 msgid "Next"
 msgstr ""
 
-#: markdown_preview/export.py:54
+#: markdown_preview/export.py:62
 msgid "LaTeX beamer slide show"
 msgstr ""
 
-#: markdown_preview/export.py:55
+#: markdown_preview/export.py:63
 msgid "Microsoft Word (.docx)"
 msgstr ""
 
-#: markdown_preview/export.py:56
+#: markdown_preview/export.py:64
 msgid "HTML5"
 msgstr ""
 
-#: markdown_preview/export.py:57
+#: markdown_preview/export.py:65
 msgid "HTML5 (with custom CSS)"
 msgstr ""
 
-#: markdown_preview/export.py:58
+#: markdown_preview/export.py:66
 msgid "LaTeX (.tex)"
 msgstr ""
 
-#: markdown_preview/export.py:59
+#: markdown_preview/export.py:67
 msgid "OpenOffice text document (.odt)"
 msgstr ""
 
-#: markdown_preview/export.py:60
+#: markdown_preview/export.py:68
 msgid "Portable Document Format (.pdf)"
 msgstr ""
 
-#: markdown_preview/export.py:61
+#: markdown_preview/export.py:69
 msgid "plain text"
 msgstr ""
 
-#: markdown_preview/export.py:62
+#: markdown_preview/export.py:70
 msgid "PowerPoint slide show"
 msgstr ""
 
-#: markdown_preview/export.py:63
+#: markdown_preview/export.py:71
 msgid "Rich Text Format (.rtf)"
 msgstr ""
 
-#: markdown_preview/export.py:64
+#: markdown_preview/export.py:72
 msgid "reveal.js HTML + Javascript slide show"
 msgstr ""
 
-#: markdown_preview/export.py:65
+#: markdown_preview/export.py:73
 msgid "Custom command line"
 msgstr ""
 
-#: markdown_preview/export.py:141 markdown_preview/menus.ui:6
+#: markdown_preview/export.py:150 markdown_preview/menus.ui:6
 msgid "Export the preview"
 msgstr ""
 
