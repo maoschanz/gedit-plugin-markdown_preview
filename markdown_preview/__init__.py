@@ -1,3 +1,6 @@
+# __init__.py
+# GPL v3
+
 import subprocess, gi, os, markdown
 gi.require_version('WebKit2', '4.0')
 from gi.repository import GObject, Gtk, Gedit, Gio, PeasGtk, WebKit2, GLib
@@ -19,7 +22,7 @@ except:
 
 MD_PREVIEW_KEY_BASE = 'org.gnome.gedit.plugins.markdown_preview'
 
-####### ####### #######
+################################################################################
 
 class MarkdownGeditPluginApp(GObject.Object, Gedit.AppActivatable):
 	app = GObject.property(type=Gedit.App)
@@ -95,7 +98,7 @@ class MarkdownGeditPluginApp(GObject.Object, Gedit.AppActivatable):
 		self.app.remove_accelerator('win.md-prev-format-title-upper', None)
 		self.app.remove_accelerator('win.md-prev-format-title-lower', None)
 
-####### ####### #######
+################################################################################
 
 class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk.Configurable):
 	window = GObject.property(type=Gedit.Window)
@@ -157,8 +160,8 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 			None, GLib.Variant.new_boolean(autoreload))
 		action_autoreload.connect('change-state', self.preview.on_set_reload)
 		
-		self.action_reload_preview = Gio.SimpleAction(name='md-prev-reload')
-		self.action_reload_preview.connect('activate', self.preview.on_reload)
+		self.action_reload = Gio.SimpleAction(name='md-prev-reload')
+		self.action_reload.connect('activate', self.preview.on_reload)
 		
 		self.action_open_link_with = Gio.SimpleAction(name='md-prev-open-link-with')
 		self.action_open_link_with.connect('activate', self.preview.on_open_link_with)
@@ -175,7 +178,7 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		self.window.add_action(action_previous)
 		self.window.add_action(action_panel)
 		self.window.add_action(action_autoreload)
-		self.window.add_action(self.action_reload_preview)
+		self.window.add_action(self.action_reload)
 		self.window.add_action(self.action_open_link_with)
 		self.window.add_action(self.action_open_image_with)
 		
@@ -214,9 +217,7 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 
 	def on_change_view_mode(self, *args):
 		mode = args[1].get_string()
-		if mode == 'window':
-			self.preview.on_presentation()
-		elif mode == 'separators':
+		if mode == 'separators':
 			self.preview.on_set_paginated(False)
 		else: # mode == 'whole'
 			self.preview.on_set_paginated(True)
@@ -302,7 +303,7 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		p = WebKit2.PrintOperation.new(self.preview._webview)
 		p.run_dialog()
 
-####### ####### #######
+################################################################################
 
 class MarkdownGeditPluginView(GObject.Object, Gedit.ViewActivatable):
 	view = GObject.Property(type=Gedit.View)
@@ -488,4 +489,5 @@ class MarkdownGeditPluginView(GObject.Object, Gedit.ViewActivatable):
 	def backward_tag(self, iter, tag):
 		iter.backward_chars(len(tag))
 
-##################################################
+################################################################################
+

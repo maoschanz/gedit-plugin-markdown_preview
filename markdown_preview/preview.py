@@ -1,3 +1,6 @@
+# preview.py
+# GPL v3
+
 import subprocess, gi, os, markdown
 gi.require_version('WebKit2', '4.0')
 from gi.repository import GObject, Gtk, Gedit, Gio, PeasGtk, WebKit2, GLib
@@ -5,7 +8,13 @@ from gi.repository import GObject, Gtk, Gedit, Gio, PeasGtk, WebKit2, GLib
 BASE_PATH = os.path.dirname(os.path.realpath(__file__))
 LOCALE_PATH = os.path.join(BASE_PATH, 'locale')
 
-from .window import MdPreviewWindow
+try:
+	import gettext
+	gettext.bindtextdomain('gedit-plugin-markdown-preview', LOCALE_PATH)
+	gettext.textdomain('gedit-plugin-markdown-preview')
+	_ = gettext.gettext
+except:
+	_ = lambda s: s
 
 MD_PREVIEW_KEY_BASE = 'org.gnome.gedit.plugins.markdown_preview'
 BASE_TEMP_NAME = '/tmp/gedit_plugin_markdown_preview'
@@ -72,13 +81,16 @@ class MdPreviewBar(Gtk.Box):
 		# Building UI elements
 		menuBtn = ui_builder.get_object('menu_btn')
 		menu_builder = Gtk.Builder().new_from_file(os.path.join(BASE_PATH, 'menus.ui'))
-		self.menu_popover = Gtk.Popover().new_from_model(menuBtn, menu_builder.get_object('md-preview-menu'))
-		menuBtn.set_popover(self.menu_popover)
+		menuBtn.set_menu_model(menu_builder.get_object('md-preview-menu'))
 
-		self.build_search_popover()
-		searchBtn = ui_builder.get_object('search_btn')
-		self._search_popover.set_relative_to(searchBtn)
-		searchBtn.set_popover(self._search_popover)
+		ui_builder.get_object('up_btn').connect('clicked', self.on_search_up)
+		ui_builder.get_object('down_btn').connect('clicked', self.on_search_down)
+
+		search_entry = ui_builder.get_object('search_entry')
+		search_entry.connect('search-changed', self.on_search_changed)
+		self.find_controller = self._webview.get_find_controller()
+		self.find_controller.connect('counted-matches', self.on_count_change)
+		self.count_label = ui_builder.get_object('count_label')
 
 		self.buttons_main_box = ui_builder.get_object('buttons_main_box')
 		self.pages_box = ui_builder.get_object('pages_box')
@@ -91,17 +103,17 @@ class MdPreviewBar(Gtk.Box):
 		nextBtn.connect('clicked', self.on_next_page)
 
 		self.show_on_panel()
-		
+
 	def on_remember_scroll(self, *args):
 		js = 'window.document.body.scrollTop'
 		self._webview.run_javascript(js, None, self.javascript_finished, None)
 		return
-		
+
 	def on_restore_scroll(self, *args):
 		js = 'window.document.body.scrollTop = ' + str(self.scroll_level) + '; undefined;'
 		self._webview.run_javascript(js, None, None, None)
 		return
-		
+
 	def javascript_finished(self, webview, result, user_data):
 		js_result = webview.run_javascript_finish(result)
 		if js_result is not None:
@@ -139,7 +151,8 @@ class MdPreviewBar(Gtk.Box):
 		b.append(WebKit2.ContextMenuItem.new_separator())
 		if not special_items:
 			b.remove_all()
-		reloadItem = WebKit2.ContextMenuItem.new_from_gaction(self.parent_plugin.action_reload_preview, _("Reload the preview"), None)
+		reloadItem = WebKit2.ContextMenuItem.new_from_gaction( \
+		        self.parent_plugin.action_reload, _("Reload the preview"), None)
 		b.append(reloadItem)
 		return False
 		
@@ -148,32 +161,6 @@ class MdPreviewBar(Gtk.Box):
 		
 	def on_open_image_with(self, *args):
 		Gtk.show_uri(None, self.image_uri_to_open, 0)
-
-	def build_search_popover(self):
-		some_damn_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-		self._search_popover = Gtk.Popover()
-		search_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, visible=True)
-
-		upBtn = Gtk.Button().new_from_icon_name('go-up-symbolic', Gtk.IconSize.BUTTON)
-		upBtn.connect('clicked', self.on_search_up)
-		downBtn = Gtk.Button().new_from_icon_name('go-down-symbolic', Gtk.IconSize.BUTTON)
-		downBtn.connect('clicked', self.on_search_down)
-
-		self._search_entry = Gtk.SearchEntry()
-		self._search_entry.connect('search-changed', self.on_search_changed)
-		search_box.add(self._search_entry)
-		search_box.add(upBtn)
-		search_box.add(downBtn)
-		search_box.get_style_context().add_class('linked')
-
-		self.find_controller = self._webview.get_find_controller()
-		self.find_controller.connect('counted-matches', self.on_count_change)
-		self.count_label = Gtk.Label(_("No result"))
-
-		some_damn_box.add(search_box)
-		some_damn_box.add(self.count_label)
-		some_damn_box.show_all()
-		self._search_popover.add(some_damn_box)
 
 	def on_set_reload(self, *args):
 		if not args[0].get_state():
@@ -186,18 +173,14 @@ class MdPreviewBar(Gtk.Box):
 		self._settings.set_boolean('auto-reload', self.auto_reload)
 
 	def on_set_paginated(self, state):
-		if not state:
-			self.is_paginated = True
-			self.parent_plugin.window.lookup_action('md-prev-next').set_enabled(True)
-			self.parent_plugin.window.lookup_action('md-prev-previous').set_enabled(True)
-			self.pages_box.props.visible = True
-			self.on_reload()
-		else:
-			self.is_paginated = False
-			self.parent_plugin.window.lookup_action('md-prev-next').set_enabled(False)
-			self.parent_plugin.window.lookup_action('md-prev-previous').set_enabled(False)
-			self.pages_box.props.visible = False
-			self.on_reload()
+		self.is_paginated = not state
+		self.set_action_enabled('md-prev-next', not state)
+		self.set_action_enabled('md-prev-previous', not state)
+		self.pages_box.props.visible = not state
+		self.on_reload()
+
+	def set_action_enabled(self, action_name, state):
+		self.parent_plugin.window.lookup_action(action_name).set_enabled(state)
 
 	def on_previous_page(self, *args):
 		if self.page_index > 0:
@@ -304,7 +287,7 @@ class MdPreviewBar(Gtk.Box):
 		html_string = self.current_page(html_string, '<hr />')
 		html_content = pre_string + html_string + post_string
 		return html_content
-		
+
 	def get_html_from_md_pandoc(self, unsaved_text):
 		# Get the current document, or the temporary document if requested
 		unsaved_text = self.current_page(unsaved_text, MARKDOWN_PAGE_SEPARATOR)
@@ -321,7 +304,7 @@ class MdPreviewBar(Gtk.Box):
 		html_string = result.stdout.decode('utf-8')
 		html_content = pre_string + html_string + post_string
 		return html_content
-		
+
 	def get_html_from_md_python(self, unsaved_text):
 		unsaved_text = self.current_page(unsaved_text, MARKDOWN_PAGE_SEPARATOR)
 		# TODO https://github.com/Python-Markdown/markdown/wiki/Third-Party-Extensions
@@ -384,10 +367,10 @@ class MdPreviewBar(Gtk.Box):
 	def on_zoom_original(self, *args):
 		self._webview.set_zoom_level(1)
 
-	########
+	############################################################################
 
-	def on_search_changed(self, a):
-		text = self._search_entry.get_text()
+	def on_search_changed(self, *args):
+		text = args[0].get_text()
 		self.find_controller.count_matches(text, WebKit2.FindOptions.CASE_INSENSITIVE, 100)
 		self.find_controller.search(text, WebKit2.FindOptions.CASE_INSENSITIVE, 100)
 
@@ -400,17 +383,13 @@ class MdPreviewBar(Gtk.Box):
 	def on_count_change(self, find_ctrl, number):
 		self.count_label.set_text(_("%s results") % number)
 
-	########
-	
+	############################################################################
+
 	def change_panel(self, *args):
 		self.remove_from_panel()
 		self.show_on_panel()
 		self.do_update_state()
 		self.on_reload()
-		
-	def on_presentation(self, *args):
-		self.preview_bar.remove(self._webview)
-		w = MdPreviewWindow(self)
-		w.window.present()
 
-##################################################
+	############################################################################
+################################################################################

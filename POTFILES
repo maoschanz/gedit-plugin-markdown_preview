@@ -2,7 +2,6 @@
 ./markdown_preview/__init__.py
 ./markdown_preview/prefs.py
 ./markdown_preview/preview.py
-./markdown_preview/window.py
 ./markdown_preview/export.ui
 ./markdown_preview/menus.ui
 ./markdown_preview/prefs.ui

@@ -1,192 +1,189 @@
 <?xml version="1.0"?>
 <interface domain="gedit-plugin-markdown-preview">
   <menu id="md-preview-menu">
-	<section id="md-preview-actions">
-		<item>
-			<attribute name="label" translatable="yes">Export the preview</attribute>
-			<attribute name="action">win.md-prev-export-doc</attribute>
-		</item>
-		<item>
-			<attribute name="label" translatable="yes">Print the preview</attribute>
-			<attribute name="action">win.md-prev-print-doc</attribute>
-		</item>
-		<item>
-			<attribute name="label" translatable="yes">Automatically reload</attribute>
-			<attribute name="action">win.md-prev-set-autoreload</attribute>
-		</item>
-	</section>
-	<section id="md-preview-options">
-		<submenu>
-			<attribute name="label" translatable="yes">Options</attribute>
-			<section>
-				<attribute name="label" translatable="yes">Rendering</attribute>
-				<item>
-					<attribute name="label" translatable="yes">python3-markdown</attribute>
-					<attribute name="action">win.md-prev-rendering</attribute>
-					<attribute name="target">p3md</attribute>
-				</item>
-				<item>
-					<attribute name="label" translatable="yes">pandoc</attribute>
-					<attribute name="action">win.md-prev-rendering</attribute>
-					<attribute name="target">pandoc</attribute>
-				</item>
-			</section>
-			<section>
-				<item>
-					<attribute name="label" translatable="yes">Use relative paths</attribute>
-					<attribute name="action">win.md-prev-relative-path</attribute>
-				</item>
-			</section>
-		</submenu>
-	</section>
-	<section id="md-preview-zoom">
-		<attribute name="display-hint">horizontal-buttons</attribute>
-			<item>
-				<attribute name="label" translatable="yes">Zoom out</attribute>
-				<attribute name="action">win.md-prev-zoom-out</attribute>
-				<attribute name="verb-icon">zoom-out-symbolic</attribute>
-			</item>
-			<item>
-				<attribute name="action">win.md-prev-zoom-original</attribute>
-				<attribute name="label" translatable="yes">Original Zoom</attribute>
-				<attribute name="verb-icon">zoom-original-symbolic</attribute>
-			</item>
-			<item>
-				<attribute name="label" translatable="yes">Zoom in</attribute>
-				<attribute name="action">win.md-prev-zoom-in</attribute>
-				<attribute name="verb-icon">zoom-in-symbolic</attribute>
-			</item>
-	</section>
-	<section id="md-preview-settings">
-		<item>
-			<attribute name="label" translatable="yes">Side Panel</attribute>
-			<attribute name="action">win.md-prev-panel</attribute>
-			<attribute name="target">side</attribute>
-		</item>
-		<item>
-			<attribute name="label" translatable="yes">Bottom Panel</attribute>
-			<attribute name="action">win.md-prev-panel</attribute>
-			<attribute name="target">bottom</attribute>
-		</item>
-		<submenu id="view-mode">
-			<attribute name="label" translatable="yes">View mode</attribute>
-			<section>
-				<item>
-					<attribute name="label" translatable="yes">Whole document</attribute>
-					<attribute name="action">win.md-set-view-mode</attribute>
-					<attribute name="target">whole</attribute>
-				</item>
-				<item>
-					<attribute name="label" translatable="yes">Split at separators</attribute>
-					<attribute name="action">win.md-set-view-mode</attribute>
-					<attribute name="target">separators</attribute>
-				</item>
-				<item>
-					<attribute name="label" translatable="yes">Dedicated window</attribute>
-					<attribute name="action">win.md-set-view-mode</attribute>
-					<attribute name="target">window</attribute>
-				</item>
-			</section>
-		</submenu>
-	</section>
+  <section id="md-preview-actions">
+    <item>
+      <attribute name="label" translatable="yes">Export the preview</attribute>
+      <attribute name="action">win.md-prev-export-doc</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">Print the preview</attribute>
+      <attribute name="action">win.md-prev-print-doc</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">Automatically reload</attribute>
+      <attribute name="action">win.md-prev-set-autoreload</attribute>
+    </item>
+  </section>
+  <section id="md-preview-options">
+    <submenu>
+      <attribute name="label" translatable="yes">Options</attribute>
+      <section>
+        <attribute name="label" translatable="yes">Rendering</attribute>
+        <item>
+          <attribute name="label" translatable="yes">python3-markdown</attribute>
+          <attribute name="action">win.md-prev-rendering</attribute>
+          <attribute name="target">p3md</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">pandoc</attribute>
+          <attribute name="action">win.md-prev-rendering</attribute>
+          <attribute name="target">pandoc</attribute>
+        </item>
+      </section>
+      <section>
+        <item>
+          <attribute name="label" translatable="yes">Use relative paths</attribute>
+          <attribute name="action">win.md-prev-relative-path</attribute>
+        </item>
+      </section>
+    </submenu>
+  </section>
+  <section id="md-preview-zoom">
+    <attribute name="display-hint">horizontal-buttons</attribute>
+      <item>
+        <attribute name="label" translatable="yes">Zoom out</attribute>
+        <attribute name="action">win.md-prev-zoom-out</attribute>
+        <attribute name="verb-icon">zoom-out-symbolic</attribute>
+      </item>
+      <item>
+        <attribute name="action">win.md-prev-zoom-original</attribute>
+        <attribute name="label" translatable="yes">Original Zoom</attribute>
+        <attribute name="verb-icon">zoom-original-symbolic</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Zoom in</attribute>
+        <attribute name="action">win.md-prev-zoom-in</attribute>
+        <attribute name="verb-icon">zoom-in-symbolic</attribute>
+      </item>
+  </section>
+  <section id="md-preview-settings">
+    <item>
+      <attribute name="label" translatable="yes">Side Panel</attribute>
+      <attribute name="action">win.md-prev-panel</attribute>
+      <attribute name="target">side</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">Bottom Panel</attribute>
+      <attribute name="action">win.md-prev-panel</attribute>
+      <attribute name="target">bottom</attribute>
+    </item>
+    <submenu id="view-mode">
+      <attribute name="label" translatable="yes">View mode</attribute>
+      <section>
+        <item>
+          <attribute name="label" translatable="yes">Whole document</attribute>
+          <attribute name="action">win.md-set-view-mode</attribute>
+          <attribute name="target">whole</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">Split at separators</attribute>
+          <attribute name="action">win.md-set-view-mode</attribute>
+          <attribute name="target">separators</attribute>
+        </item>
+      </section>
+    </submenu>
+  </section>
   </menu>
-  
+
+  <!-- * -->
+
   <menu id="right-click-menu">
-	<section>
-		<item>
-			<attribute name="label" translatable="yes">Remove all tags</attribute>
-<!--			<attribute name="action">win.md-prev-remove-all</attribute>-->
-			<attribute name="action">win.todo</attribute>
-		</item>
-	</section>
-	<section>
-		<submenu>
-			<attribute name="label" translatable="yes">Title</attribute>
-			<section>
-				<item>
-					<attribute name="label" translatable="yes">Upper</attribute>
-					<attribute name="action">win.md-prev-format-title-upper</attribute>
-				</item>
-				<item>
-					<attribute name="label" translatable="yes">Lower</attribute>
-					<attribute name="action">win.md-prev-format-title-lower</attribute>
-				</item>
-			</section>
-			<section>
-				<item>
-					<attribute name="label">1</attribute>
-					<attribute name="action">win.md-prev-format-title-1</attribute>
-				</item>
-				<item>
-					<attribute name="label">2</attribute>
-					<attribute name="action">win.md-prev-format-title-2</attribute>
-				</item>
-				<item>
-					<attribute name="label">3</attribute>
-					<attribute name="action">win.md-prev-format-title-3</attribute>
-				</item>
-				<item>
-					<attribute name="label">4</attribute>
-					<attribute name="action">win.md-prev-format-title-4</attribute>
-				</item>
-				<item>
-					<attribute name="label">5</attribute>
-					<attribute name="action">win.md-prev-format-title-5</attribute>
-				</item>
-				<item>
-					<attribute name="label">6</attribute>
-					<attribute name="action">win.md-prev-format-title-6</attribute>
-				</item>
-			</section>
-		</submenu>
-		<item>
-			<attribute name="label" translatable="yes">Bold</attribute>
-			<attribute name="action">win.md-prev-format-bold</attribute>
-		</item>
-		<item>
-			<attribute name="label" translatable="yes">Italic</attribute>
-			<attribute name="action">win.md-prev-format-italic</attribute>
-		</item>
-<!--		<item>-->
-<!--			<attribute name="label" translatable="yes">Underline</attribute>-->
-<!--			<attribute name="action">win.md-prev-format-underline</attribute>-->
-<!--		</item>-->
-<!--		<item>-->
-<!--			<attribute name="label" translatable="yes">Stoke</attribute>-->
-<!--			<attribute name="action">win.md-prev-format-stroke</attribute>-->
-<!--		</item>-->
-		<item>
-			<attribute name="label" translatable="yes">Monospace</attribute>
-			<attribute name="action">win.md-prev-format-monospace</attribute>
-		</item>
-		<item>
-			<attribute name="label" translatable="yes">Quote</attribute>
-			<attribute name="action">win.md-prev-format-quote</attribute>
-		</item>
-	</section>
-	<section>
-		<item>
-			<attribute name="label" translatable="yes">Unordered list</attribute>
-			<attribute name="action">win.md-prev-list-unordered</attribute>
-		</item>
-		<item>
-			<attribute name="label" translatable="yes">Ordered list</attribute>
-			<attribute name="action">win.md-prev-list-ordered</attribute>
-		</item>
-	</section>
-	<section>
-		<item>
-			<attribute name="label" translatable="yes">Insert an image</attribute>
-			<attribute name="action">win.md-prev-insert-picture</attribute>
-		</item>
-		<item>
-			<attribute name="label" translatable="yes">Insert a link</attribute>
-			<attribute name="action">win.md-prev-insert-link</attribute>
-		</item>
-		<item>
-			<attribute name="label" translatable="yes">Insert a table</attribute>
-			<attribute name="action">win.md-prev-insert-table</attribute>
-		</item>
-	</section>
+  <section>
+    <item>
+      <attribute name="label" translatable="yes">Remove all tags</attribute>
+<!--      <attribute name="action">win.md-prev-remove-all</attribute>-->
+      <attribute name="action">win.todo</attribute>
+    </item>
+  </section>
+  <section>
+    <submenu>
+      <attribute name="label" translatable="yes">Title</attribute>
+      <section>
+        <item>
+          <attribute name="label" translatable="yes">Upper</attribute>
+          <attribute name="action">win.md-prev-format-title-upper</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">Lower</attribute>
+          <attribute name="action">win.md-prev-format-title-lower</attribute>
+        </item>
+      </section>
+      <section>
+        <item>
+          <attribute name="label">1</attribute>
+          <attribute name="action">win.md-prev-format-title-1</attribute>
+        </item>
+        <item>
+          <attribute name="label">2</attribute>
+          <attribute name="action">win.md-prev-format-title-2</attribute>
+        </item>
+        <item>
+          <attribute name="label">3</attribute>
+          <attribute name="action">win.md-prev-format-title-3</attribute>
+        </item>
+        <item>
+          <attribute name="label">4</attribute>
+          <attribute name="action">win.md-prev-format-title-4</attribute>
+        </item>
+        <item>
+          <attribute name="label">5</attribute>
+          <attribute name="action">win.md-prev-format-title-5</attribute>
+        </item>
+        <item>
+          <attribute name="label">6</attribute>
+          <attribute name="action">win.md-prev-format-title-6</attribute>
+        </item>
+      </section>
+    </submenu>
+    <item>
+      <attribute name="label" translatable="yes">Bold</attribute>
+      <attribute name="action">win.md-prev-format-bold</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">Italic</attribute>
+      <attribute name="action">win.md-prev-format-italic</attribute>
+    </item>
+<!--    <item>-->
+<!--      <attribute name="label" translatable="yes">Underline</attribute>-->
+<!--      <attribute name="action">win.md-prev-format-underline</attribute>-->
+<!--    </item>-->
+<!--    <item>-->
+<!--      <attribute name="label" translatable="yes">Stoke</attribute>-->
+<!--      <attribute name="action">win.md-prev-format-stroke</attribute>-->
+<!--    </item>-->
+    <item>
+      <attribute name="label" translatable="yes">Monospace</attribute>
+      <attribute name="action">win.md-prev-format-monospace</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">Quote</attribute>
+      <attribute name="action">win.md-prev-format-quote</attribute>
+    </item>
+  </section>
+  <section>
+    <item>
+      <attribute name="label" translatable="yes">Unordered list</attribute>
+      <attribute name="action">win.md-prev-list-unordered</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">Ordered list</attribute>
+      <attribute name="action">win.md-prev-list-ordered</attribute>
+    </item>
+  </section>
+  <section>
+    <item>
+      <attribute name="label" translatable="yes">Insert an image</attribute>
+      <attribute name="action">win.md-prev-insert-picture</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">Insert a link</attribute>
+      <attribute name="action">win.md-prev-insert-link</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">Insert a table</attribute>
+      <attribute name="action">win.md-prev-insert-table</attribute>
+    </item>
+  </section>
   </menu>
 </interface>

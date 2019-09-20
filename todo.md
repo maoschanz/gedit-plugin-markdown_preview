@@ -18,7 +18,6 @@
 ## Script d'installation
 
 - vérifier pandoc et libwebkit2gtk-4.0-dev et python3-markdown
-- vérifier le schéma après installation -> oulala mdr ça ne marche pas comme prévu
 
 ### Support de Xed
 
@@ -38,15 +37,6 @@
 - extensions tierces
 
 ----
-
-fygvhbkjnmlaerq
-abmqlhbaef
-
-### dbajbqdjeranmlfbknqe
-
-dbq
-dfbodfhombjùmbjog opqg opjpqjp q
- qp d jdspj dpjq odf qd
 
 
 

@@ -1,111 +1,173 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface domain="gedit-plugin-markdown-preview">
-	<object class="GtkBox" id="preview_bar">
-		<property name="visible">True</property>
-		<property name="orientation">vertical</property>
-		<child>
-			<object class="GtkBox" id="buttons_main_box">
-				<property name="visible">True</property>
-				<property name="orientation">horizontal</property>
-				<property name="homogeneous">False</property>
-				<property name="margin">5</property>
-				<property name="spacing">2</property>
-				<child>
-					<object class="GtkButton" id="refresh_btn">
-						<property name="visible">True</property>
-						<property name="tooltip_text" translatable="yes">Reload the preview</property>
-						<child>
-							<object class="GtkImage">
-								<property name="visible">True</property>
-								<property name="icon-name">view-refresh-symbolic</property>
-							</object>
-						</child>
-					</object>
-					<packing>
-						<property name="pack-type">start</property>
-					</packing>
-				</child>
-				<child>
-					<object class="GtkBox" id="pages_box">
-						<property name="visible">True</property>
-						<property name="orientation">horizontal</property>
-						<child>
-							<object class="GtkButton" id="previous_btn">
-								<property name="visible">True</property>
-								<property name="tooltip_text" translatable="yes">Previous page</property>
-								<child>
-									<object class="GtkImage">
-										<property name="visible">True</property>
-										<property name="icon-name">go-previous-symbolic</property>
-									</object>
-								</child>
-							</object>
-						</child>
-						<child>
-							<object class="GtkButton" id="next_btn">
-								<property name="visible">True</property>
-								<property name="tooltip_text" translatable="yes">Next page</property>
-								<child>
-									<object class="GtkImage">
-										<property name="visible">True</property>
-										<property name="icon-name">go-next-symbolic</property>
-									</object>
-								</child>
-							</object>
-						</child>
-						<style>
-							<class name="linked"/>
-						</style>
-					</object>
-					<packing>
-						<property name="pack-type">start</property>
-					</packing>
-				</child>
-				<child>
-					<object class="GtkImage" id="warning_icon">
-						<property name="visible">True</property>
-						<property name="icon-name">dialog-warning-symbolic</property>
-					</object>
-					<packing>
-						<property name="pack-type">start</property>
-					</packing>
-				</child>
-				<child>
-					<object class="GtkMenuButton" id="menu_btn">
-						<property name="visible">True</property>
-						<property name="tooltip_text" translatable="yes">More options</property>
-						<child>
-							<object class="GtkImage">
-								<property name="visible">True</property>
-								<property name="icon-name">view-more-symbolic</property>
-							</object>
-						</child>
-					</object>
-					<packing>
-						<property name="pack-type">end</property>
-					</packing>
-				</child>
-				
-				<child>
-					<object class="GtkMenuButton" id="search_btn">
-						<property name="visible">True</property>
-						<property name="tooltip_text" translatable="yes">Search</property>
-						<child>
-							<object class="GtkImage">
-								<property name="visible">True</property>
-								<property name="icon-name">system-search-symbolic</property>
-							</object>
-						</child>
-					</object>
-					<packing>
-						<property name="pack-type">end</property>
-					</packing>
-				</child>
-			</object>
-			<packing>
-				<property name="pack-type">end</property>
-			</packing>
-		</child>
-	</object>
+  <object class="GtkBox" id="preview_bar">
+    <property name="visible">True</property>
+    <property name="orientation">vertical</property>
+    <child>
+      <object class="GtkBox" id="buttons_main_box">
+        <property name="visible">True</property>
+        <property name="orientation">horizontal</property>
+        <property name="homogeneous">False</property>
+        <property name="margin">5</property>
+        <property name="spacing">2</property>
+        <child>
+          <object class="GtkButton" id="refresh_btn">
+            <property name="visible">True</property>
+            <property name="tooltip_text" translatable="yes">Reload the preview</property>
+            <child>
+              <object class="GtkImage">
+                <property name="visible">True</property>
+                <property name="icon-name">view-refresh-symbolic</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="pack-type">start</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkBox" id="pages_box">
+            <property name="visible">True</property>
+            <property name="orientation">horizontal</property>
+            <child>
+              <object class="GtkButton" id="previous_btn">
+                <property name="visible">True</property>
+                <property name="tooltip_text" translatable="yes">Previous page</property>
+                <child>
+                  <object class="GtkImage">
+                    <property name="visible">True</property>
+                    <property name="icon-name">go-previous-symbolic</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="next_btn">
+                <property name="visible">True</property>
+                <property name="tooltip_text" translatable="yes">Next page</property>
+                <child>
+                  <object class="GtkImage">
+                    <property name="visible">True</property>
+                    <property name="icon-name">go-next-symbolic</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <style> <class name="linked"/> </style>
+          </object>
+          <packing>
+            <property name="pack-type">start</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkImage" id="warning_icon">
+            <property name="visible">True</property>
+            <property name="icon-name">dialog-warning-symbolic</property>
+          </object>
+          <packing>
+            <property name="pack-type">start</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkMenuButton" id="menu_btn">
+            <property name="visible">True</property>
+            <property name="tooltip_text" translatable="yes">More options</property>
+            <child>
+              <object class="GtkImage">
+                <property name="visible">True</property>
+                <property name="icon-name">view-more-symbolic</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="pack-type">end</property>
+          </packing>
+        </child>
+
+        <child>
+          <object class="GtkMenuButton">
+            <property name="visible">True</property>
+            <property name="popover">search_popover</property>
+            <property name="tooltip_text" translatable="yes">Search</property>
+            <child>
+              <object class="GtkImage">
+                <property name="visible">True</property>
+                <property name="icon-name">system-search-symbolic</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="pack-type">end</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="pack-type">end</property>
+      </packing>
+    </child>
+  </object>
+
+  <!-- * -->
+
+  <object class="GtkPopover" id="search_popover">
+    <property name="visible">False</property>
+    <child>
+      <object class="GtkBox">
+        <property name="visible">True</property>
+        <property name="margin">4</property>
+        <property name="spacing">4</property>
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkBox">
+            <property name="visible">True</property>
+            <property name="orientation">horizontal</property>
+
+            <child>
+              <object class="GtkSearchEntry" id="search_entry">
+                <property name="visible">True</property>
+              </object>
+            </child>
+
+            <child>
+              <object class="GtkButton" id="up_btn">
+                <property name="visible">True</property>
+                <property name="tooltip_text" translatable="yes">Previous result</property>
+                <child>
+                  <object class="GtkImage">
+                    <property name="visible">True</property>
+                    <property name="icon-name">go-up-symbolic</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+
+            <child>
+              <object class="GtkButton" id="down_btn">
+                <property name="visible">True</property>
+                <property name="tooltip_text" translatable="yes">Next result</property>
+                <child>
+                  <object class="GtkImage">
+                    <property name="visible">True</property>
+                    <property name="icon-name">go-down-symbolic</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+
+            <style> <class name="linked"/> </style>
+          </object>
+        </child>
+
+        <child>
+          <object class="GtkLabel" id="count_label">
+            <property name="visible">True</property>
+            <property name="label" translatable="yes">No result</property>
+          </object>
+        </child>
+
+      </object>
+    </child>
+  </object>
+
 </interface>
 
