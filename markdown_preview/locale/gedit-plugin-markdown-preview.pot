@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-20 21:14+0200\n"
+"POT-Creation-Date: 2019-09-21 02:11+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -29,55 +29,55 @@ msgstr ""
 msgid "Next"
 msgstr ""
 
-#: markdown_preview/export.py:62
+#: markdown_preview/export.py:71
 msgid "LaTeX beamer slide show"
 msgstr ""
 
-#: markdown_preview/export.py:63
+#: markdown_preview/export.py:72
 msgid "Microsoft Word (.docx)"
 msgstr ""
 
-#: markdown_preview/export.py:64
+#: markdown_preview/export.py:73
 msgid "HTML5"
 msgstr ""
 
-#: markdown_preview/export.py:65
+#: markdown_preview/export.py:74
 msgid "HTML5 (with custom CSS)"
 msgstr ""
 
-#: markdown_preview/export.py:66
+#: markdown_preview/export.py:75
 msgid "LaTeX (.tex)"
 msgstr ""
 
-#: markdown_preview/export.py:67
+#: markdown_preview/export.py:76
 msgid "OpenOffice text document (.odt)"
 msgstr ""
 
-#: markdown_preview/export.py:68
+#: markdown_preview/export.py:77
 msgid "Portable Document Format (.pdf)"
 msgstr ""
 
-#: markdown_preview/export.py:69
+#: markdown_preview/export.py:78
 msgid "plain text"
 msgstr ""
 
-#: markdown_preview/export.py:70
+#: markdown_preview/export.py:79
 msgid "PowerPoint slide show"
 msgstr ""
 
-#: markdown_preview/export.py:71
+#: markdown_preview/export.py:80
 msgid "Rich Text Format (.rtf)"
 msgstr ""
 
-#: markdown_preview/export.py:72
+#: markdown_preview/export.py:81
 msgid "reveal.js HTML + Javascript slide show"
 msgstr ""
 
-#: markdown_preview/export.py:73
+#: markdown_preview/export.py:82
 msgid "Custom command line"
 msgstr ""
 
-#: markdown_preview/export.py:150 markdown_preview/menus.ui:6
+#: markdown_preview/export.py:145 markdown_preview/menus.ui:6
 msgid "Export the preview"
 msgstr ""
 
@@ -98,39 +98,40 @@ msgstr ""
 msgid "Select a picture"
 msgstr ""
 
-#: markdown_preview/prefs.py:35 markdown_preview/menus.ui:24
+#: markdown_preview/prefs.py:72 markdown_preview/menus.ui:24
 msgid "python3-markdown"
 msgstr ""
 
-#: markdown_preview/prefs.py:36 markdown_preview/menus.ui:29
+#: markdown_preview/prefs.py:73 markdown_preview/menus.ui:29
 msgid "pandoc"
 msgstr ""
 
-#: markdown_preview/prefs.py:90 markdown_preview/menus.ui:144
+#: markdown_preview/prefs.py:102 markdown_preview/menus.ui:144
 msgid "Italic"
 msgstr ""
 
-#: markdown_preview/prefs.py:91 markdown_preview/menus.ui:140
+#: markdown_preview/prefs.py:103 markdown_preview/menus.ui:140
 msgid "Bold"
 msgstr ""
 
-#: markdown_preview/prefs.py:92
+#: markdown_preview/prefs.py:104
 msgid "Insert a picture"
 msgstr ""
 
-#: markdown_preview/prefs.py:93
+#: markdown_preview/prefs.py:105
 msgid "Lower title"
 msgstr ""
 
-#: markdown_preview/prefs.py:94
+#: markdown_preview/prefs.py:106
 msgid "Upper title"
 msgstr ""
 
-#: markdown_preview/prefs.py:183 markdown_preview/export.ui:204
+#: markdown_preview/prefs.py:163 markdown_preview/css_box.ui:45
+#: markdown_preview/css_box.ui:53
 msgid "Select a CSS file"
 msgstr ""
 
-#: markdown_preview/prefs.py:188 markdown_preview/prefs.ui:61
+#: markdown_preview/prefs.py:168
 msgid "Stylesheet"
 msgstr ""
 
@@ -159,61 +160,61 @@ msgstr ""
 msgid "%s results"
 msgstr ""
 
-#: markdown_preview/export.ui:14
+#: markdown_preview/backend_box.ui:15
 msgid "Export file using:"
 msgstr ""
 
-#: markdown_preview/export.ui:52 markdown_preview/prefs.ui:153
+#: markdown_preview/backend_box.ui:47
 msgid "Extensions for python3-markdown:"
 msgstr ""
 
-#: markdown_preview/export.ui:66 markdown_preview/prefs.ui:164
+#: markdown_preview/backend_box.ui:57
 msgid ""
 "A compilation of various extensions (Abbreviations, Attribute Lists, "
 "Definition Lists, Fenced Code Blocks, Footnotes, Tables)."
 msgstr ""
 
-#: markdown_preview/export.ui:77 markdown_preview/prefs.ui:173
+#: markdown_preview/backend_box.ui:66
 msgid "Show a clickable table of content with the [TOC] tag."
 msgstr ""
 
-#: markdown_preview/export.ui:88 markdown_preview/prefs.ui:183
+#: markdown_preview/backend_box.ui:75
 msgid ""
 "Highlight your code with a correct syntax coloration (it needs a set up and "
 "some dependencies)."
 msgstr ""
 
-#: markdown_preview/export.ui:99 markdown_preview/prefs.ui:192
+#: markdown_preview/backend_box.ui:84
 msgid "Add a line break at each new line."
 msgstr ""
 
-#: markdown_preview/export.ui:119 markdown_preview/prefs.ui:201
+#: markdown_preview/backend_box.ui:93
 msgid ""
 "Converts ASCII dashes, quotes and ellipses to their nice-looking equivalents."
 msgstr ""
 
-#: markdown_preview/export.ui:130 markdown_preview/prefs.ui:210
+#: markdown_preview/backend_box.ui:102
 msgid "Alters the behavior of the lists syntax."
 msgstr ""
 
-#: markdown_preview/export.ui:141 markdown_preview/export.ui:152
-msgid "???????"
+#: markdown_preview/backend_box.ui:111 markdown_preview/backend_box.ui:120
+msgid "..."
 msgstr ""
 
-#: markdown_preview/export.ui:176
-msgid "Use a stylesheet"
-msgstr ""
-
-#: markdown_preview/export.ui:198
-msgid "CSS file:"
-msgstr ""
-
-#: markdown_preview/export.ui:230
+#: markdown_preview/backend_box.ui:147
 msgid "Output file format:"
 msgstr ""
 
-#: markdown_preview/export.ui:260
+#: markdown_preview/backend_box.ui:177
 msgid "Remember"
+msgstr ""
+
+#: markdown_preview/css_box.ui:17
+msgid "Use a stylesheet"
+msgstr ""
+
+#: markdown_preview/css_box.ui:39
+msgid "CSS file:"
 msgstr ""
 
 #: markdown_preview/menus.ui:10
@@ -316,27 +317,19 @@ msgstr ""
 msgid "Automatically show/hide panel"
 msgstr ""
 
-#: markdown_preview/prefs.ui:92
+#: markdown_preview/prefs.ui:58
 msgid "Preview"
 msgstr ""
 
-#: markdown_preview/prefs.ui:107
+#: markdown_preview/prefs.ui:73
 msgid "HTML generation backend"
 msgstr ""
 
-#: markdown_preview/prefs.ui:129
-msgid "Pandoc command line:"
-msgstr ""
-
-#: markdown_preview/prefs.ui:219 markdown_preview/prefs.ui:228
-msgid "..."
-msgstr ""
-
-#: markdown_preview/prefs.ui:241
+#: markdown_preview/prefs.ui:91
 msgid "Backend"
 msgstr ""
 
-#: markdown_preview/prefs.ui:286
+#: markdown_preview/prefs.ui:136
 msgid "Shortcuts"
 msgstr ""
 

@@ -17,70 +17,82 @@ try:
 except:
 	_ = lambda s: s
 
+P3MD_PLUGINS = ['admonition', 'codehilite', 'extra', 'nl2br', 'sane_lists', \
+                                                   'smarty', 'toc', 'wikilinks']
+
 class MdConfigWidget(Gtk.Box):
 	__gtype_name__ = 'MdConfigWidget'
 
 	def __init__(self, datadir, **kwargs):
-		super().__init__(**kwargs, orientation=Gtk.Orientation.VERTICAL, spacing=10, margin=10)
+		super().__init__(**kwargs, orientation=Gtk.Orientation.VERTICAL, \
+		                                                  spacing=10, margin=10)
 		self._settings = Gio.Settings.new(MD_PREVIEW_KEY_BASE)
-		#--------
-		builder = Gtk.Builder().new_from_file(os.path.join(BASE_PATH, 'prefs.ui'))
-#		builder.set_translation_domain('gedit-plugin-markdown-preview') # ?????? FIXME
+		self.plugins = {}
+
+		builder = Gtk.Builder().new_from_file(BASE_PATH + '/prefs.ui')
+#		builder.set_translation_domain('gedit-plugin-markdown-preview') # FIXME
 		stack = builder.get_object('stack')
 		switcher = Gtk.StackSwitcher(stack=stack, halign=Gtk.Align.CENTER)
-		
-		### PREVIEW ###
-		
+
+		### PREVIEW ############################################################
+
+		preview_box = builder.get_object('preview_box')
+
+		relativePathsSwitch = builder.get_object('relativePathsSwitch')
+		relativePathsSwitch.set_state(self._settings.get_boolean('relative'))
+		relativePathsSwitch.connect('notify::active', self.on_relative_changed)
+
+		autoManageSwitch = builder.get_object('autoManageSwitch')
+		autoManageSwitch.set_state(self._settings.get_boolean('auto-manage-panel'))
+		autoManageSwitch.connect('notify::active', self.on_auto_manage_changed)
+
+		preview_box.add(Gtk.Separator(visible=True))
+
+		builder2 = Gtk.Builder().new_from_file(BASE_PATH + '/css_box.ui')
+		css_box = builder2.get_object('css_box')
+		preview_box.add(css_box)
+
+		# XXX marges/spacings irréguliers
+		# TODO récupérer et connecter le switch
+		self.styleLabel = builder2.get_object('styleLabel')
+		if self._settings.get_string('style') == '':
+			pass
+		elif len(self._settings.get_string('style')) >= 42:
+			self.styleLabel.set_label("…" + self._settings.get_string('style')[-40:])
+		else:
+			self.styleLabel.set_label(self._settings.get_string('style'))
+		styleButton = builder2.get_object('file_chooser_btn_css')
+		styleButton.connect('clicked', self.on_choose_css)
+
+		### BACKEND ############################################################
+
+		backend_box = builder.get_object('backend_box')
+
 		backendCombobox = builder.get_object('backendCombobox')
 		backendCombobox.append('python', _("python3-markdown"))
 		backendCombobox.append('pandoc', _("pandoc"))
 		backendCombobox.set_active_id(self._settings.get_string('backend'))
 		backendCombobox.connect('changed', self.on_backend_changed)
-		
-		self.pandocCommandBox = builder.get_object('pandocCommandBox')
-		self.python3MarkdownPluginsBox = builder.get_object('python3MarkdownPluginsBox')
-		
-		self.pandocCommandEntry = builder.get_object('pandocCommandEntry')
-		
-		self.plugins_extra = builder.get_object('plugins_extra')
-		self.plugins_toc = builder.get_object('plugins_toc')
-		self.plugins_smarty = builder.get_object('plugins_smarty')
-		self.plugins_codehilite = builder.get_object('plugins_codehilite')
-		self.plugins_nl2br = builder.get_object('plugins_nl2br')
-		self.plugins_sanelists = builder.get_object('plugins_sanelists')
-		self.plugins_admonition = builder.get_object('plugins_admonition')
-		self.plugins_wikilinks = builder.get_object('plugins_wikilinks')
-		
+
+		# XXX marges/spacings irréguliers
+		builder3 = Gtk.Builder().new_from_file(BASE_PATH + '/backend_box.ui')
+		backend_box2 = builder3.get_object('backend_box')
+		self.backend_stack = builder3.get_object('backend_stack')
+		builder3.get_object('switcher_box').destroy()
+		backend_box.add(backend_box2)
+		self.backend_stack.show_all() # XXX
+
+		self.pandoc_command_entry = builder3.get_object('pandoc_command_entry')
+
+		for plugin_id in P3MD_PLUGINS:
+			self.plugins[plugin_id] = builder3.get_object('plugins_'+plugin_id)
+
 		self.load_plugins_list()
-		
-		self.plugins_extra.connect('clicked', self.update_plugins_list)
-		self.plugins_toc.connect('clicked', self.update_plugins_list)
-		self.plugins_smarty.connect('clicked', self.update_plugins_list)
-		self.plugins_codehilite.connect('clicked', self.update_plugins_list)
-		self.plugins_nl2br.connect('clicked', self.update_plugins_list)
-		self.plugins_sanelists.connect('clicked', self.update_plugins_list)
-		self.plugins_admonition.connect('clicked', self.update_plugins_list)
-		self.plugins_wikilinks.connect('clicked', self.update_plugins_list)
-		
-		#--------
-		relativePathsSwitch = builder.get_object('relativePathsSwitch')
-		relativePathsSwitch.set_state(self._settings.get_boolean('relative'))
-		relativePathsSwitch.connect('notify::active', self.on_relative_changed)
-		#--------
-		autoManageSwitch = builder.get_object('autoManageSwitch')
-		autoManageSwitch.set_state(self._settings.get_boolean('auto-manage-panel'))
-		autoManageSwitch.connect('notify::active', self.on_auto_manage_changed)
-		#--------
-		self.styleLabel = builder.get_object('styleLabel')
-		if len(self._settings.get_string('style')) >= 42:
-			self.styleLabel.set_label("…" + self._settings.get_string('style')[-40:])
-		else:
-			self.styleLabel.set_label(self._settings.get_string('style'))
-#		self.styleLabel = Gtk.Label(self._settings.get_string('style'))
-		styleButton = builder.get_object('styleButton')
-		styleButton.connect('clicked', self.on_choose_css)
-		
-		### SHORTCUTS ###
+
+		for plugin_id in P3MD_PLUGINS:
+			self.plugins[plugin_id].connect('clicked', self.update_plugins_list)
+
+		### SHORTCUTS ##########################################################
 		
 		self.shortcuts_treeview = builder.get_object('shortcuts_treeview')
 		renderer = builder.get_object('accel_renderer')
@@ -109,9 +121,9 @@ class MdConfigWidget(Gtk.Box):
 		if accelerator is None:
 			[key, mods] = [0, 0]
 		else:
-			[key, mods] = Gtk.accelerator_parse(self._settings.get_strv(setting_id)[0])
-		row = self.shortcuts_treeview.get_model().insert(0, \
-		                               row=[setting_id, description, key, mods])
+			[key, mods] = Gtk.accelerator_parse(accelerator)
+		row_array = [setting_id, description, key, mods]
+		row = self.shortcuts_treeview.get_model().insert(0, row=row_array)
 
 	def on_accel_edited(self, *args):
 		tree_iter = self.shortcuts_treeview.get_model().get_iter_from_string(args[1])
@@ -132,52 +144,20 @@ class MdConfigWidget(Gtk.Box):
 
 	def update_plugins_list(self, *args):
 		array = []
-		if self.plugins_admonition.get_active():
-			array.append('admonition')
-		if self.plugins_codehilite.get_active():
-			array.append('codehilite')
-		if self.plugins_extra.get_active():
-			array.append('extra')
-		if self.plugins_nl2br.get_active():
-			array.append('nl2br')
-		if self.plugins_sanelists.get_active():
-			array.append('sane_lists')
-		if self.plugins_smarty.get_active():
-			array.append('smarty')
-		if self.plugins_toc.get_active():
-			array.append('toc')
-		if self.plugins_wikilinks.get_active():
-			array.append('wikilinks')
+		for plugin_id in P3MD_PLUGINS:
+			if self.plugins[plugin_id].get_active():
+				array.append(plugin_id)
 		self._settings.set_strv('extensions', array)
-			
+
 	def load_plugins_list(self, *args):
 		array = self._settings.get_strv('extensions')
-		if array.count('admonition') != 0:
-			self.plugins_admonition.set_active(True)
-		if array.count('codehilite') != 0:
-			self.plugins_codehilite.set_active(True)
-		if array.count('extra') != 0:
-			self.plugins_extra.set_active(True)
-		if array.count('nl2br') != 0:
-			self.plugins_nl2br.set_active(True)
-		if array.count('sane_lists') != 0:
-			self.plugins_sanelists.set_active(True)
-		if array.count('smarty') != 0:
-			self.plugins_smarty.set_active(True)
-		if array.count('toc') != 0:
-			self.plugins_toc.set_active(True)
-		if array.count('wikilinks') != 0:
-			self.plugins_wikilinks.set_active(True)
+		for plugin_id in array:
+			self.plugins[plugin_id].set_active(True)
 		
 	def set_options_visibility(self, *args):
 		backend = self._settings.get_string('backend')
-		if backend == 'pandoc':
-			self.python3MarkdownPluginsBox.set_visible(False)
-			self.pandocCommandBox.set_visible(True)
-		else:
-			self.pandocCommandBox.set_visible(False)
-			self.python3MarkdownPluginsBox.set_visible(True)
-		
+		self.backend_stack.set_visible_child_name('backend_' + backend)
+
 	def on_choose_css(self, w):
 		# Building a FileChooserDialog for CSS
 		file_chooser = Gtk.FileChooserDialog(_("Select a CSS file"), None, # FIXME
@@ -195,18 +175,13 @@ class MdConfigWidget(Gtk.Box):
 			self.styleLabel.label = file_chooser.get_filename()
 			self._settings.set_string('style', file_chooser.get_uri())
 		file_chooser.destroy()
-		
+
 	def on_relative_changed(self, w, a):
-		if w.get_state():
-			self._settings.set_boolean('relative', True)
-		else:
-			self._settings.set_boolean('relative', False)
-		
+		self._settings.set_boolean('relative', w.get_state())
+
 	def on_auto_manage_changed(self, w, a):
-		if w.get_state():
-			self._settings.set_boolean('auto-manage-panel', True)
-		else:
-			self._settings.set_boolean('auto-manage-panel', False)
-	
-##################################################
+		self._settings.set_boolean('auto-manage-panel', w.get_state())
+
+	############################################################################
+################################################################################
 

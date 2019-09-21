@@ -31,30 +31,39 @@ class MdExportDialog(Gtk.Dialog):
 		self._settings = settings
 		self.add_button(_("Cancel"), Gtk.ResponseType.CANCEL)
 		self.add_button(_("Next"), Gtk.ResponseType.OK)
-		builder = Gtk.Builder().new_from_file(os.path.join(BASE_PATH, 'export.ui'))
-		self.get_content_area().add(builder.get_object('content-area'))
-		
-		self.export_stack = builder.get_object('export_stack')
-		
+		# builder = Gtk.Builder().new_from_file(os.path.join(BASE_PATH, 'export.ui'))
+		# self.get_content_area().add(builder.get_object('content-area'))
+		builder = Gtk.Builder().new_from_file(BASE_PATH + '/backend_box.ui')
+		self.get_content_area().add(builder.get_object('backend_box'))
+
+		self.export_stack = builder.get_object('backend_stack')
+		self.export_stack.show_all() # XXX
+
+		# TODO for loop
 		self.plugins_extra = builder.get_object('plugins_extra')
 		self.plugins_toc = builder.get_object('plugins_toc')
 		self.plugins_smarty = builder.get_object('plugins_smarty')
 		self.plugins_codehilite = builder.get_object('plugins_codehilite')
 		self.plugins_nl2br = builder.get_object('plugins_nl2br')
-		self.plugins_sanelists = builder.get_object('plugins_sanelists')
+		self.plugins_sanelists = builder.get_object('plugins_sane_lists')
 		self.plugins_admonition = builder.get_object('plugins_admonition')
 		self.plugins_wikilinks = builder.get_object('plugins_wikilinks')
-		
+
 		self.load_plugins_list()
+
+		self.get_content_area().add(Gtk.Separator(visible=True))
+
+		builder2 = Gtk.Builder().new_from_file(BASE_PATH + '/css_box.ui')
+		self.get_content_area().add(builder2.get_object('css_box'))
 		
-		self.switch_css = builder.get_object('switch_css')
+		self.switch_css = builder2.get_object('switch_css')
 		self.switch_css.connect('notify::active', self.on_css_changed)
-		self.css_box = builder.get_object('css_box')
+		self.css_sensitive_box = builder2.get_object('css_sensitive_box')
 		self.css_path = self._settings.get_string('style')
-		self.file_chooser_btn_css = builder.get_object('file_chooser_btn_css')
+		self.file_chooser_btn_css = builder2.get_object('file_chooser_btn_css')
 		self.file_chooser_btn_css.set_label('…' + self.css_path[-50:])
 		
-		self.pandoc_command_entry = builder.get_object('pandoc_command_entry')
+		self.pandoc_cli_entry = builder.get_object('pandoc_command_entry')
 		self.remember_button = builder.get_object('remember_button')
 		self.remember_button.connect('clicked', self.on_remember)
 		
@@ -96,10 +105,59 @@ class MdExportDialog(Gtk.Dialog):
 		if array.count('wikilinks') != 0:
 			self.plugins_wikilinks.set_active(True)
 
+	def on_css_changed(self, w, a):
+		self.css_sensitive_box.set_sensitive(w.get_state())
+
+	def on_remember(self, b):
+		self._settings.set_string('custom-export', self.pandoc_command_entry.get_text())
+
+	def on_pandoc_format_changed(self, w):
+		output_format = w.get_active_id()
+		self.remember_button.set_visible(output_format == 'custom')
+
+		if output_format == 'pdf':
+			self.pandoc_cli_entry.set_text('pandoc $INPUT_FILE -V geometry=right=2cm' \
+			    ' -V geometry=left=2cm -V geometry=bottom=2cm -V geometry=top=2cm' \
+			    ' -o $OUTPUT_FILE')
+		elif output_format == 'revealjs':
+			self.pandoc_cli_entry.set_text('pandoc $INPUT_FILE -t revealjs -s -V' \
+			      ' revealjs-url=http://lab.hakim.se/reveal-js -o $OUTPUT_FILE')
+		elif output_format == 'custom':
+			self.pandoc_cli_entry.set_text(self._settings.get_string('custom-export'))
+		elif output_format == 'html_custom':
+			self.pandoc_cli_entry.set_text('pandoc $INPUT_FILE -t html5 -s -c ' \
+			          + self._settings.get_string('style') + ' -o $OUTPUT_FILE')
+		else:
+			self.pandoc_cli_entry.set_text('pandoc $INPUT_FILE -t ' + \
+			                                 output_format + ' -o $OUTPUT_FILE')
+
+	############################################################################
+
+	def do_next(self):
+		if self.export_stack.get_visible_child_name() == 'export_python':
+			exported = self.export_python()
+		else: #if self.export_stack.get_visible_child_name() == 'export_pandoc':
+			exported = self.export_pandoc()
+		if exported:
+			self.destroy()
+
+	def launch_file_chooser(self):
+		file_chooser = Gtk.FileChooserDialog(_("Export the preview"),
+			self.gedit_window,
+			Gtk.FileChooserAction.SAVE,
+			(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+			Gtk.STOCK_SAVE, Gtk.ResponseType.OK)) # TODO use a native file chooser
+		response = file_chooser.run()
+		if response == Gtk.ResponseType.OK:
+			return file_chooser
+		else:
+			file_chooser.destroy()
+			return None
+
 	def export_python(self):
 		file_chooser = self.launch_file_chooser()
 		if file_chooser is None:
-			return
+			return False
 			
 		# TODO les plugins
 		md_extensions = self._settings.get_strv('extensions') # XXX temporairement
@@ -124,11 +182,13 @@ class MdExportDialog(Gtk.Dialog):
 			f.write(post_string)
 			f.close()
 		file_chooser.destroy()
+		return True
 
 	def export_pandoc(self):
 		file_chooser = self.launch_file_chooser()
 		if file_chooser is None:
-			return
+			return False
+
 		output_format = self.format_combobox.get_active_id()
 		doc_path = self.gedit_window.get_active_document().get_location().get_path()
 		if output_format == 'pdf':
@@ -139,58 +199,13 @@ class MdExportDialog(Gtk.Dialog):
 				'-V', 'geometry=top=2cm',
 				'-o', file_chooser.get_filename()])
 		else:
-			cmd = self.pandoc_command_entry.get_text()
+			cmd = self.pandoc_cli_entry.get_text()
 			words = cmd.split()
 			words[words.index('$INPUT_FILE')] = doc_path
 			words[words.index('$OUTPUT_FILE')] = file_chooser.get_filename()
 			subprocess.run(words)
 		file_chooser.destroy()
-
-	def launch_file_chooser(self):
-		file_chooser = Gtk.FileChooserDialog(_("Export the preview"),
-			self.gedit_window,
-			Gtk.FileChooserAction.SAVE,
-			(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
-			Gtk.STOCK_SAVE, Gtk.ResponseType.OK)) # TODO use a native file chooser
-		response = file_chooser.run()
-		if response == Gtk.ResponseType.OK:
-			return file_chooser
-		else:
-			file_chooser.destroy()
-			return None
-
-	def do_next(self):
-		if self.export_stack.get_visible_child_name() == 'export_python':
-			self.export_python()
-		elif self.export_stack.get_visible_child_name() == 'export_pandoc':
-			self.export_pandoc()
-		self.destroy()
-
-	def on_css_changed(self, w, a):
-		self.css_box.set_visible(w.get_state())
-
-	def on_remember(self, b):
-		self._settings.set_string('custom-export', self.pandoc_command_entry.get_text())
-
-	def on_pandoc_format_changed(self, w):
-		output_format = w.get_active_id()
-		self.remember_button.set_visible(output_format == 'custom')
-		
-		if output_format == 'pdf':
-			self.pandoc_command_entry.set_text('pandoc $INPUT_FILE -V geometry=right=2cm' \
-			    ' -V geometry=left=2cm -V geometry=bottom=2cm -V geometry=top=2cm' \
-			    ' -o $OUTPUT_FILE')
-		elif output_format == 'revealjs':
-			self.pandoc_command_entry.set_text('pandoc $INPUT_FILE -t revealjs -s -V' \
-			      ' revealjs-url=http://lab.hakim.se/reveal-js -o $OUTPUT_FILE')
-		elif output_format == 'custom':
-			self.pandoc_command_entry.set_text(self._settings.get_string('custom-export'))
-		elif output_format == 'html_custom':
-			self.pandoc_command_entry.set_text('pandoc $INPUT_FILE -t html5 -s -c ' \
-			          + self._settings.get_string('style') + ' -o $OUTPUT_FILE')
-		else:
-			self.pandoc_command_entry.set_text('pandoc $INPUT_FILE -t ' + \
-			                                 output_format + ' -o $OUTPUT_FILE')
+		return True
 
 	############################################################################
 ################################################################################
