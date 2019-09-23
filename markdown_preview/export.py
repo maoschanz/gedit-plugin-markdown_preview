@@ -13,6 +13,9 @@ try:
 except:
 	_ = lambda s: s
 
+P3MD_PLUGINS = ['admonition', 'codehilite', 'extra', 'nl2br', 'sane_lists', \
+                                                   'smarty', 'toc', 'wikilinks']
+
 class MdExportDialog(Gtk.Dialog):
 	__gtype_name__ = 'MdExportDialog'
 	
@@ -29,6 +32,7 @@ class MdExportDialog(Gtk.Dialog):
 		self.file_format = file_format
 		self.gedit_window = gedit_window
 		self._settings = settings
+		self.plugins = {}
 		self.add_button(_("Cancel"), Gtk.ResponseType.CANCEL)
 		self.add_button(_("Next"), Gtk.ResponseType.OK)
 		# builder = Gtk.Builder().new_from_file(os.path.join(BASE_PATH, 'export.ui'))
@@ -39,30 +43,28 @@ class MdExportDialog(Gtk.Dialog):
 		self.export_stack = builder.get_object('backend_stack')
 		self.export_stack.show_all() # XXX
 
-		# TODO for loop
-		self.plugins_extra = builder.get_object('plugins_extra')
-		self.plugins_toc = builder.get_object('plugins_toc')
-		self.plugins_smarty = builder.get_object('plugins_smarty')
-		self.plugins_codehilite = builder.get_object('plugins_codehilite')
-		self.plugins_nl2br = builder.get_object('plugins_nl2br')
-		self.plugins_sanelists = builder.get_object('plugins_sane_lists')
-		self.plugins_admonition = builder.get_object('plugins_admonition')
-		self.plugins_wikilinks = builder.get_object('plugins_wikilinks')
+		for plugin_id in P3MD_PLUGINS:
+			self.plugins[plugin_id] = builder.get_object('plugins_' + plugin_id)
 
 		self.load_plugins_list()
 
 		self.get_content_area().add(Gtk.Separator(visible=True))
 
 		builder2 = Gtk.Builder().new_from_file(BASE_PATH + '/css_box.ui')
-		self.get_content_area().add(builder2.get_object('css_box'))
-		
+		css_box = builder2.get_object('css_box')
+		css_box.set_margin_left(20)
+		css_box.set_margin_right(20)
+		css_box.set_margin_top(20)
+		css_box.set_margin_bottom(20)
+		self.get_content_area().add(css_box)
+
 		self.switch_css = builder2.get_object('switch_css')
 		self.switch_css.connect('notify::active', self.on_css_changed)
 		self.css_sensitive_box = builder2.get_object('css_sensitive_box')
 		self.css_path = self._settings.get_string('style')
 		self.file_chooser_btn_css = builder2.get_object('file_chooser_btn_css')
 		self.file_chooser_btn_css.set_label('…' + self.css_path[-50:])
-		
+
 		self.pandoc_cli_entry = builder.get_object('pandoc_command_entry')
 		self.remember_button = builder.get_object('remember_button')
 		self.remember_button.connect('clicked', self.on_remember)
@@ -88,22 +90,8 @@ class MdExportDialog(Gtk.Dialog):
 
 	def load_plugins_list(self, *args):
 		array = self._settings.get_strv('extensions')
-		if array.count('admonition') != 0:
-			self.plugins_admonition.set_active(True)
-		if array.count('codehilite') != 0:
-			self.plugins_codehilite.set_active(True)
-		if array.count('extra') != 0:
-			self.plugins_extra.set_active(True)
-		if array.count('nl2br') != 0:
-			self.plugins_nl2br.set_active(True)
-		if array.count('sane_lists') != 0:
-			self.plugins_sanelists.set_active(True)
-		if array.count('smarty') != 0:
-			self.plugins_smarty.set_active(True)
-		if array.count('toc') != 0:
-			self.plugins_toc.set_active(True)
-		if array.count('wikilinks') != 0:
-			self.plugins_wikilinks.set_active(True)
+		for plugin_id in array:
+			self.plugins[plugin_id].set_active(True)
 
 	def on_css_changed(self, w, a):
 		self.css_sensitive_box.set_sensitive(w.get_state())

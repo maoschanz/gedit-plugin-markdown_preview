@@ -15,29 +15,12 @@
       <attribute name="action">win.md-prev-set-autoreload</attribute>
     </item>
   </section>
-  <section id="md-preview-options">
-    <submenu>
+  <section>
+    <item>
       <attribute name="label" translatable="yes">Options</attribute>
-      <section>
-        <attribute name="label" translatable="yes">Rendering</attribute>
-        <item>
-          <attribute name="label" translatable="yes">python3-markdown</attribute>
-          <attribute name="action">win.md-prev-rendering</attribute>
-          <attribute name="target">p3md</attribute>
-        </item>
-        <item>
-          <attribute name="label" translatable="yes">pandoc</attribute>
-          <attribute name="action">win.md-prev-rendering</attribute>
-          <attribute name="target">pandoc</attribute>
-        </item>
-      </section>
-      <section>
-        <item>
-          <attribute name="label" translatable="yes">Use relative paths</attribute>
-          <attribute name="action">win.md-prev-relative-path</attribute>
-        </item>
-      </section>
-    </submenu>
+      <attribute name="action">win.md-prev-options</attribute>
+      <attribute name="verb-icon">preferences-system-symbolic</attribute>
+    </item>
   </section>
   <section id="md-preview-zoom">
     <attribute name="display-hint">horizontal-buttons</attribute>

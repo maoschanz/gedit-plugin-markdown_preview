@@ -145,7 +145,7 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		self.window.add_action(action_zoom_out)
 
 		action_view_mode = Gio.SimpleAction().new_stateful('md-set-view-mode', \
-			GLib.VariantType.new('s'), GLib.Variant.new_string('whole'))
+		            GLib.VariantType.new('s'), GLib.Variant.new_string('whole'))
 		action_view_mode.connect('change-state', self.on_change_view_mode)
 		
 		action_next = Gio.SimpleAction(name='md-prev-next')
@@ -157,20 +157,24 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		autoreload = self._settings.get_boolean('auto-reload')
 		self.preview.auto_reload = autoreload
 		action_autoreload = Gio.SimpleAction().new_stateful('md-prev-set-autoreload', \
-			None, GLib.Variant.new_boolean(autoreload))
+		                             None, GLib.Variant.new_boolean(autoreload))
 		action_autoreload.connect('change-state', self.preview.on_set_reload)
-		
+
+		action_options = Gio.SimpleAction(name='md-prev-options')
+		action_options.connect('activate', self.on_open_prefs)
+
 		self.action_reload = Gio.SimpleAction(name='md-prev-reload')
 		self.action_reload.connect('activate', self.preview.on_reload)
-		
+
 		self.action_open_link_with = Gio.SimpleAction(name='md-prev-open-link-with')
 		self.action_open_link_with.connect('activate', self.preview.on_open_link_with)
-		
+
 		self.action_open_image_with = Gio.SimpleAction(name='md-prev-open-image-with')
 		self.action_open_image_with.connect('activate', self.preview.on_open_image_with)
 
-		action_panel = Gio.SimpleAction().new_stateful('md-prev-panel', GLib.VariantType.new('s'), \
-			GLib.Variant.new_string(self._settings.get_string('position')))
+		position = self._settings.get_string('position')
+		action_panel = Gio.SimpleAction().new_stateful('md-prev-panel', \
+		           GLib.VariantType.new('s'), GLib.Variant.new_string(position))
 		action_panel.connect('change-state', self.on_change_panel_from_popover)
 
 		self.window.add_action(action_view_mode)
@@ -178,38 +182,39 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		self.window.add_action(action_previous)
 		self.window.add_action(action_panel)
 		self.window.add_action(action_autoreload)
+		self.window.add_action(action_options)
 		self.window.add_action(self.action_reload)
 		self.window.add_action(self.action_open_link_with)
 		self.window.add_action(self.action_open_image_with)
-		
-		#-------------------------
-		
+
+		########################################################################
+
 		action_remove = Gio.SimpleAction(name='md-prev-remove-all')
 		action_remove.connect('activate', lambda i, j: self.view_method('remove_all'))
-		
+
 		self.add_format_action('md-prev-format-title-1', 'format_title_1')
 		self.add_format_action('md-prev-format-title-2', 'format_title_2')
 		self.add_format_action('md-prev-format-title-3', 'format_title_3')
 		self.add_format_action('md-prev-format-title-4', 'format_title_4')
 		self.add_format_action('md-prev-format-title-5', 'format_title_5')
 		self.add_format_action('md-prev-format-title-6', 'format_title_6')
-		
+
 		self.add_format_action('md-prev-format-title-upper', 'format_title_upper')
 		self.add_format_action('md-prev-format-title-lower', 'format_title_lower')
-		
+
 		self.add_format_action('md-prev-format-bold', 'format_bold')
 		self.add_format_action('md-prev-format-italic', 'format_italic')
 #		self.add_format_action('md-prev-format-underline', 'format_underline')
 #		self.add_format_action('md-prev-format-stroke', 'format_stroke')
 		self.add_format_action('md-prev-format-monospace', 'format_monospace')
 		self.add_format_action('md-prev-format-quote', 'format_quote')
-		
+
 		self.add_format_action('md-prev-list-unordered', 'list_unordered')
 		self.add_format_action('md-prev-list-ordered', 'list_ordered')
 		self.add_format_action('md-prev-insert-picture', 'insert_picture')
 		self.add_format_action('md-prev-insert-link', 'insert_link')
 		self.add_format_action('md-prev-insert-table', 'insert_table')
-		
+
 	def add_format_action(self, action_name, method_name):
 		action = Gio.SimpleAction(name=action_name)
 		action.connect('activate', lambda i, j: self.view_method(method_name))
@@ -284,12 +289,19 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 			self._settings.set_string('position', 'bottom')
 			args[0].set_state(GLib.Variant.new_string('bottom'))
 
-	########
+	############################################################################
 	
 	def do_create_configure_widget(self):
 		# Just return a box, PeasGtk will automatically pack it into a dialog and show it.
 		widget = MdConfigWidget(self.plugin_info.get_data_dir())
 		return widget
+
+	def on_open_prefs(self, *args):
+		w = Gtk.Window(title=_("Markdown Preview"))
+		widget = MdConfigWidget(self.plugin_info.get_data_dir())
+		w.add(widget)
+		w.present()
+		w.show_all()
 
 	def export_doc(self, *args):
 		dialog = MdExportDialog(self.preview.recognize_format(), self.window, self._settings)

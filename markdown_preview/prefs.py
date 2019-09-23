@@ -26,6 +26,7 @@ class MdConfigWidget(Gtk.Box):
 	def __init__(self, datadir, **kwargs):
 		super().__init__(**kwargs, orientation=Gtk.Orientation.VERTICAL, \
 		                                                  spacing=10, margin=10)
+		# XXX c quoi datadir ??
 		self._settings = Gio.Settings.new(MD_PREVIEW_KEY_BASE)
 		self.plugins = {}
 

@@ -13,6 +13,7 @@
         <child>
           <object class="GtkButton" id="refresh_btn">
             <property name="visible">True</property>
+            <property name="action-name">win.md-prev-reload</property>
             <property name="tooltip_text" translatable="yes">Reload the preview</property>
             <child>
               <object class="GtkImage">
