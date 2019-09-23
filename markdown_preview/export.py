@@ -1,6 +1,5 @@
 import subprocess, gi, os, markdown
-gi.require_version('WebKit2', '4.0')
-from gi.repository import GObject, Gtk, Gio, WebKit2, GLib, Gedit
+from gi.repository import Gtk
 
 BASE_PATH = os.path.dirname(os.path.realpath(__file__))
 LOCALE_PATH = os.path.join(BASE_PATH, 'locale')

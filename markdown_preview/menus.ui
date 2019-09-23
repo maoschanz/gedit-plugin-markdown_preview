@@ -64,6 +64,11 @@
           <attribute name="action">win.md-set-view-mode</attribute>
           <attribute name="target">separators</attribute>
         </item>
+        <!-- <item> -->
+        <!--   <attribute name="label" translatable="yes">Split at level 2 titles</attribute> -->
+        <!--   <attribute name="action">win.md-set-view-mode</attribute> -->
+        <!--   <attribute name="target">level2</attribute> -->
+        <!-- </item> -->
       </section>
     </submenu>
   </section>

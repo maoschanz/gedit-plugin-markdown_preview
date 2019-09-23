@@ -1,8 +1,7 @@
 import subprocess
 import gi
 import os
-gi.require_version('WebKit2', '4.0')
-from gi.repository import GObject, Gtk, Gedit, Gio, PeasGtk, WebKit2, GLib
+from gi.repository import Gtk, Gio
 
 BASE_PATH = os.path.dirname(os.path.realpath(__file__))
 LOCALE_PATH = os.path.join(BASE_PATH, 'locale')
@@ -70,8 +69,8 @@ class MdConfigWidget(Gtk.Box):
 		backend_box = builder.get_object('backend_box')
 
 		backendCombobox = builder.get_object('backendCombobox')
-		backendCombobox.append('python', _("python3-markdown"))
-		backendCombobox.append('pandoc', _("pandoc"))
+		backendCombobox.append('python', "python3-markdown")
+		backendCombobox.append('pandoc', "pandoc")
 		backendCombobox.set_active_id(self._settings.get_string('backend'))
 		backendCombobox.connect('changed', self.on_backend_changed)
 

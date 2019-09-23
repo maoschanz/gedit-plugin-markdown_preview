@@ -2,8 +2,7 @@
 # GPL v3
 
 import subprocess, gi, os, markdown
-gi.require_version('WebKit2', '4.0')
-from gi.repository import GObject, Gtk, Gedit, Gio, PeasGtk, WebKit2, GLib
+from gi.repository import GObject, Gtk, Gedit, Gio, PeasGtk, GLib
 
 BASE_PATH = os.path.dirname(os.path.realpath(__file__))
 LOCALE_PATH = os.path.join(BASE_PATH, 'locale')
@@ -128,7 +127,7 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		action_export = Gio.SimpleAction(name='md-prev-export-doc')
 		action_print = Gio.SimpleAction(name='md-prev-print-doc')
 		action_export.connect('activate', self.export_doc)
-		action_print.connect('activate', self.print_doc)
+		action_print.connect('activate', self.preview.print_doc)
 		
 		self.window.add_action(action_export)
 		self.window.add_action(action_print)
@@ -310,10 +309,6 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 			dialog.do_cancel_export()
 		elif response_id == Gtk.ResponseType.OK:
 			dialog.do_next()
-
-	def print_doc(self, *args):
-		p = WebKit2.PrintOperation.new(self.preview._webview)
-		p.run_dialog()
 
 ################################################################################
 

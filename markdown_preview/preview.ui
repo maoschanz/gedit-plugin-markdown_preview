@@ -3,6 +3,45 @@
   <object class="GtkBox" id="preview_bar">
     <property name="visible">True</property>
     <property name="orientation">vertical</property>
+
+    <child>
+      <object class="GtkBox" id="preview_box">
+        <property name="visible">True</property>
+        <property name="expand">True</property>
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkInfoBar" id="info_bar">
+            <property name="visible">True</property>
+            <property name="show-close-button">True</property>
+            <property name="revealed">True</property>
+            <property name="message-type">error</property>
+            <child internal-child="content_area">
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="spacing">10</property>
+                <child>
+                  <object class="GtkImage">
+                    <property name="visible">True</property>
+                    <property name="icon-name">dialog-error-symbolic</property>
+                  </object>
+                  <packing>
+                    <property name="pack-type">start</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="notification_label">
+                    <property name="visible">True</property>
+                    <property name="wrap">True</property>
+                    <property name="label"></property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <!-- here will come the webview -->
+      </object>
+    </child>
     <child>
       <object class="GtkBox" id="buttons_main_box">
         <property name="visible">True</property>
@@ -10,6 +49,7 @@
         <property name="homogeneous">False</property>
         <property name="margin">5</property>
         <property name="spacing">2</property>
+
         <child>
           <object class="GtkButton" id="refresh_btn">
             <property name="visible">True</property>
@@ -26,6 +66,7 @@
             <property name="pack-type">start</property>
           </packing>
         </child>
+
         <child>
           <object class="GtkBox" id="pages_box">
             <property name="visible">True</property>
@@ -60,15 +101,7 @@
             <property name="pack-type">start</property>
           </packing>
         </child>
-        <child>
-          <object class="GtkImage" id="warning_icon">
-            <property name="visible">True</property>
-            <property name="icon-name">dialog-warning-symbolic</property>
-          </object>
-          <packing>
-            <property name="pack-type">start</property>
-          </packing>
-        </child>
+
         <child>
           <object class="GtkMenuButton" id="menu_btn">
             <property name="visible">True</property>
@@ -128,7 +161,6 @@
                 <property name="visible">True</property>
               </object>
             </child>
-
             <child>
               <object class="GtkButton" id="up_btn">
                 <property name="visible">True</property>
@@ -141,7 +173,6 @@
                 </child>
               </object>
             </child>
-
             <child>
               <object class="GtkButton" id="down_btn">
                 <property name="visible">True</property>
@@ -158,14 +189,12 @@
             <style> <class name="linked"/> </style>
           </object>
         </child>
-
         <child>
           <object class="GtkLabel" id="count_label">
             <property name="visible">True</property>
             <property name="label" translatable="yes">No result</property>
           </object>
         </child>
-
       </object>
     </child>
   </object>

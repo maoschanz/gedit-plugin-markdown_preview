@@ -3,7 +3,7 @@
 
 import subprocess, gi, os, markdown
 gi.require_version('WebKit2', '4.0')
-from gi.repository import GObject, Gtk, Gedit, Gio, PeasGtk, WebKit2, GLib
+from gi.repository import Gtk, Gio, WebKit2, GLib
 
 BASE_PATH = os.path.dirname(os.path.realpath(__file__))
 LOCALE_PATH = os.path.join(BASE_PATH, 'locale')
@@ -20,6 +20,7 @@ MD_PREVIEW_KEY_BASE = 'org.gnome.gedit.plugins.markdown_preview'
 BASE_TEMP_NAME = '/tmp/gedit_plugin_markdown_preview'
 
 MARKDOWN_PAGE_SEPARATOR = '\n----'
+MARKDOWN_PAGE_SEPARATOR2 = '\n## ' # TODO
 
 class MdPreviewBar(Gtk.Box):
 	__gtype_name__ = 'MdPreviewBar'
@@ -54,7 +55,7 @@ class MdPreviewBar(Gtk.Box):
 				self.on_reload()
 
 	def do_deactivate(self):
-		self._webview.disconnect(self._handlers[4])
+		self._webview.disconnect(self._handlers[4]) # XXX if useful, use elsewhere
 		self._webview.disconnect(self._handlers[3])
 		self._webview.disconnect(self._handlers[2])
 		self._settings.disconnect(self._handlers[1])
@@ -62,13 +63,47 @@ class MdPreviewBar(Gtk.Box):
 		self.delete_temp_file()
 		self.remove_from_panel()
 		self.preview_bar.destroy()
-		
+
+	############################################################################
+	# Misc #####################################################################
+
+	def on_set_reload(self, *args):
+		if not args[0].get_state():
+			self.auto_reload = True
+			self.on_reload()
+			args[0].set_state(GLib.Variant.new_boolean(True))
+		else:
+			self.auto_reload = False
+			args[0].set_state(GLib.Variant.new_boolean(False))
+		self._settings.set_boolean('auto-reload', self.auto_reload)
+
 	def set_auto_manage(self, *args):
 		self.auto_manage_panel = self._settings.get_boolean('auto-manage-panel')
+
+	def set_action_enabled(self, action_name, state):
+		self.parent_plugin.window.lookup_action(action_name).set_enabled(state)
+
+	def print_doc(self, *args):
+		p = WebKit2.PrintOperation.new(self._webview)
+		p.run_dialog()
+
+	############################################################################
+
+	def close_warning(self, *args):
+		self.notification_label.set_label('')
+		self.info_bar.set_visible(False)
+
+	def display_warning(self, text):
+		self.notification_label.set_label(text)
+		self.info_bar.set_visible(True)
+
+	############################################################################
 
 	def build_preview_ui(self):
 		ui_builder = Gtk.Builder().new_from_file(os.path.join(BASE_PATH, 'preview.ui'))
 		self.preview_bar = ui_builder.get_object('preview_bar')
+		preview_box = ui_builder.get_object('preview_box')
+		self.buttons_main_box = ui_builder.get_object('buttons_main_box')
 
 		# This is the preview itself
 		self._webview = WebKit2.WebView()
@@ -76,33 +111,42 @@ class MdPreviewBar(Gtk.Box):
 		self._handlers.append( self._webview.connect('context-menu', self.on_context_menu) )
 		self._handlers.append( self._webview.connect('mouse-target-changed', self.on_remember_scroll) )
 		self._handlers.append( self._webview.connect('load-changed', self.on_restore_scroll) )
-		self.preview_bar.pack_start(self._webview, expand=True, fill=True, padding=0)
+		preview_box.pack_start(self._webview, expand=True, fill=True, padding=0)
 
-		# Building UI elements
+		# Displaying error messages
+		self.info_bar = ui_builder.get_object('info_bar')
+		self.notification_label = ui_builder.get_object('notification_label')
+		self.info_bar.connect('close', self.close_warning)
+		self.info_bar.connect('response', self.close_warning)
+
+		# Plugin's main menu
 		menuBtn = ui_builder.get_object('menu_btn')
 		menu_builder = Gtk.Builder().new_from_file(os.path.join(BASE_PATH, 'menus.ui'))
 		menuBtn.set_menu_model(menu_builder.get_object('md-preview-menu'))
 
+		# Search popover
+		search_entry = ui_builder.get_object('search_entry')
+		search_entry.connect('search-changed', self.on_search_changed)
+
 		ui_builder.get_object('up_btn').connect('clicked', self.on_search_up)
 		ui_builder.get_object('down_btn').connect('clicked', self.on_search_down)
 
-		search_entry = ui_builder.get_object('search_entry')
-		search_entry.connect('search-changed', self.on_search_changed)
 		self.find_controller = self._webview.get_find_controller()
 		self.find_controller.connect('counted-matches', self.on_count_change)
 		self.count_label = ui_builder.get_object('count_label')
 
-		self.buttons_main_box = ui_builder.get_object('buttons_main_box')
+		# Navigation between pages
 		self.pages_box = ui_builder.get_object('pages_box')
 		self.warning_icon = ui_builder.get_object('warning_icon')
-		refreshBtn = ui_builder.get_object('refresh_btn')
 		previousBtn = ui_builder.get_object('previous_btn')
 		nextBtn = ui_builder.get_object('next_btn')
-		refreshBtn.connect('clicked', self.on_reload)
 		previousBtn.connect('clicked', self.on_previous_page)
 		nextBtn.connect('clicked', self.on_next_page)
 
 		self.show_on_panel()
+
+	############################################################################
+	# Webview ##################################################################
 
 	def on_remember_scroll(self, *args):
 		js = 'window.document.body.scrollTop'
@@ -123,8 +167,12 @@ class MdPreviewBar(Gtk.Box):
 
 	def on_context_menu(self, a, b, c, d):
 		special_items = False
-		openLinkWithItem = WebKit2.ContextMenuItem.new_from_gaction(self.parent_plugin.action_open_link_with, _("Open link in browser"), None)
-		openImageWithItem = WebKit2.ContextMenuItem.new_from_gaction(self.parent_plugin.action_open_image_with, _("Open image in browser"), None)
+		openLinkWithItem = WebKit2.ContextMenuItem.new_from_gaction( \
+		                             self.parent_plugin.action_open_link_with, \
+		                                        _("Open link in browser"), None)
+		openImageWithItem = WebKit2.ContextMenuItem.new_from_gaction( \
+		                            self.parent_plugin.action_open_image_with, \
+		                                       _("Open image in browser"), None)
 		if d.context_is_link() and d.context_is_image():
 			special_items = True
 			b.remove(b.get_item_at_position(7)) # download its target
@@ -149,8 +197,8 @@ class MdPreviewBar(Gtk.Box):
 			b.append(openImageWithItem)
 
 		b.append(WebKit2.ContextMenuItem.new_separator())
-		if not special_items:
-			b.remove_all()
+		# if not special_items:
+		# 	b.remove_all() # XXX Pertinent when no selection, harmful otherwise
 		reloadItem = WebKit2.ContextMenuItem.new_from_gaction( \
 		        self.parent_plugin.action_reload, _("Reload the preview"), None)
 		b.append(reloadItem)
@@ -162,15 +210,7 @@ class MdPreviewBar(Gtk.Box):
 	def on_open_image_with(self, *args):
 		Gtk.show_uri(None, self.image_uri_to_open, 0)
 
-	def on_set_reload(self, *args):
-		if not args[0].get_state():
-			self.auto_reload = True
-			self.on_reload()
-			args[0].set_state(GLib.Variant.new_boolean(True))
-		else:
-			self.auto_reload = False
-			args[0].set_state(GLib.Variant.new_boolean(False))
-		self._settings.set_boolean('auto-reload', self.auto_reload)
+	############################################################################
 
 	def on_set_paginated(self, state):
 		self.is_paginated = not state
@@ -178,9 +218,6 @@ class MdPreviewBar(Gtk.Box):
 		self.set_action_enabled('md-prev-previous', not state)
 		self.pages_box.props.visible = not state
 		self.on_reload()
-
-	def set_action_enabled(self, action_name, state):
-		self.parent_plugin.window.lookup_action(action_name).set_enabled(state)
 
 	def on_previous_page(self, *args):
 		if self.page_index > 0:
@@ -191,22 +228,12 @@ class MdPreviewBar(Gtk.Box):
 		self.page_index = self.page_index +1
 		self.on_reload()
 
+	############################################################################
+
 	def delete_temp_file(self):
 		if self.temp_file_md.query_exists():
 			self.temp_file_md.delete()
 
-	def display_warning(self, visible, text):
-		self.warning_icon.set_tooltip_text(text)
-		self.warning_icon.props.visible = visible
-
-	def update_visibility(self):
-		if self.file_format == 'error' or not self.auto_manage_panel:
-			if self.panel.props.visible:
-				if self.panel.get_visible_child() == self.preview_bar:
-					self.panel.hide()
-		else:
-			self.panel.show()
-			
 	def on_file_changed(self, *args):
 		self.file_format = self.recognize_format()
 		self.update_visibility()
@@ -217,20 +244,20 @@ class MdPreviewBar(Gtk.Box):
 		doc = self.parent_plugin.window.get_active_document()
 		# It will not load documents which are not .md/.html/.tex
 		name = doc.get_short_name_for_display()
-		temp = name.split('.')
-		if temp[len(temp)-1] == 'md':
-			self.display_warning(False, '')
+		temp = name.split('.')[-1]
+		if temp == 'md':
+			self.close_warning()
 			return 'md'
-		elif temp[len(temp)-1] == 'html':
-			self.display_warning(False, '')
+		elif temp == 'html':
+			self.close_warning()
 			return 'html'
-		elif temp[len(temp)-1] == 'tex':
-			self.display_warning(False, '')
+		elif temp == 'tex':
+			self.close_warning()
 			return 'tex'
 		if doc.is_untitled():
-			self.display_warning(True, _("Can't preview an unsaved document")) # FIXME
+			self.display_warning(_("Can't preview an unsaved document")) # FIXME
 		else:
-			self.display_warning(True, _("Unsupported type of document: ") + name)
+			self.display_warning(_("Unsupported type of document: ") + name)
 		return 'error'
 
 	def on_reload(self, *args):
@@ -268,6 +295,7 @@ class MdPreviewBar(Gtk.Box):
 		self._webview.load_bytes(bytes_content, 'text/html', 'UTF-8', dummy_uri)
 
 	def get_html_from_html(self, unsaved_text):
+		# FIXME is bad idea if the document already has these tags
 		pre_string = '<html><head><meta charset="utf-8" /></head><body>'
 		post_string = '</body></html>'
 		unsaved_text = self.current_page(unsaved_text, '<hr />')
@@ -298,7 +326,7 @@ class MdPreviewBar(Gtk.Box):
 
 		# It uses pandoc to produce the html code
 		pre_string = '<html><head><meta charset="utf-8" /><link rel="stylesheet" href="' + \
-			self._settings.get_string('style') + '" /></head><body>'
+		                self._settings.get_string('style') + '" /></head><body>'
 		post_string = '</body></html>'
 		result = subprocess.run(['pandoc', file_path], stdout=subprocess.PIPE)
 		html_string = result.stdout.decode('utf-8')
@@ -310,7 +338,7 @@ class MdPreviewBar(Gtk.Box):
 		# TODO https://github.com/Python-Markdown/markdown/wiki/Third-Party-Extensions
 		md_extensions = self._settings.get_strv('extensions')
 		pre_string = '<html><head><meta charset="utf-8" /><link rel="stylesheet" href="' + \
-			self._settings.get_string('style') + '" /></head><body>'
+		                self._settings.get_string('style') + '" /></head><body>'
 		post_string = '</body></html>'
 		html_string = markdown.markdown(unsaved_text, extensions=md_extensions)
 		html_content = pre_string + html_string + post_string
@@ -333,6 +361,9 @@ class MdPreviewBar(Gtk.Box):
 		else:
 			return 'file://'
 
+	############################################################################
+	# Panels ###################################################################
+
 	def show_on_panel(self):
 		# Get the bottom bar (A Gtk.Stack), or the side bar, and add our bar to it.
 		if self._settings.get_string('position') == 'bottom':
@@ -354,6 +385,23 @@ class MdPreviewBar(Gtk.Box):
 		if self.panel is not None:
 			self.panel.remove(self.preview_bar)
 
+	def change_panel(self, *args):
+		self.remove_from_panel()
+		self.show_on_panel()
+		self.do_update_state()
+		self.on_reload()
+
+	def update_visibility(self):
+		if self.file_format == 'error' or not self.auto_manage_panel:
+			if self.panel.props.visible:
+				if self.panel.get_visible_child() == self.preview_bar:
+					self.panel.hide()
+		else:
+			self.panel.show()
+
+	############################################################################
+	# Zoom #####################################################################
+
 	def on_zoom_in(self, *args):
 		if self._webview.get_zoom_level() < 10:
 			self._webview.set_zoom_level(self._webview.get_zoom_level() + 0.1)
@@ -368,6 +416,7 @@ class MdPreviewBar(Gtk.Box):
 		self._webview.set_zoom_level(1)
 
 	############################################################################
+	# Search ###################################################################
 
 	def on_search_changed(self, *args):
 		text = args[0].get_text()
@@ -382,14 +431,6 @@ class MdPreviewBar(Gtk.Box):
 
 	def on_count_change(self, find_ctrl, number):
 		self.count_label.set_text(_("%s results") % number)
-
-	############################################################################
-
-	def change_panel(self, *args):
-		self.remove_from_panel()
-		self.show_on_panel()
-		self.do_update_state()
-		self.on_reload()
 
 	############################################################################
 ################################################################################
