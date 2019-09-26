@@ -14,7 +14,7 @@
             <property name="visible">True</property>
             <property name="show-close-button">True</property>
             <property name="revealed">True</property>
-            <property name="message-type">error</property>
+            <property name="message-type">warning</property>
             <child internal-child="content_area">
               <object class="GtkBox">
                 <property name="visible">True</property>
@@ -22,7 +22,7 @@
                 <child>
                   <object class="GtkImage">
                     <property name="visible">True</property>
-                    <property name="icon-name">dialog-error-symbolic</property>
+                    <property name="icon-name">dialog-warning-symbolic</property>
                   </object>
                   <packing>
                     <property name="pack-type">start</property>

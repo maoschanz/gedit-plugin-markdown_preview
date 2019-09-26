@@ -1,7 +1,22 @@
 # preview.py
 # GPL v3
 
-import subprocess, gi, os, markdown
+import subprocess, gi, os
+
+BACKEND_P3MD_AVAILABLE = True
+BACKEND_PANDOC_AVAILABLE = True
+try:
+	import markdown
+except Exception:
+	print("Package python3-markdown not installed")
+	BACKEND_P3MD_AVAILABLE = False
+
+try:
+	subprocess.call(['which', 'pandoc'])
+except Exception:
+	print("Package pandoc not installed")
+	BACKEND_PANDOC_AVAILABLE = False
+
 gi.require_version('WebKit2', '4.0')
 from gi.repository import Gtk, Gio, WebKit2, GLib
 
@@ -22,6 +37,8 @@ BASE_TEMP_NAME = '/tmp/gedit_plugin_markdown_preview'
 MARKDOWN_PAGE_SEPARATOR = '\n----'
 MARKDOWN_PAGE_SEPARATOR2 = '\n## ' # TODO
 
+################################################################################
+
 class MdPreviewBar(Gtk.Box):
 	__gtype_name__ = 'MdPreviewBar'
 
@@ -35,14 +52,25 @@ class MdPreviewBar(Gtk.Box):
 	def do_activate(self):
 		self._handlers = []
 		self._settings = Gio.Settings.new(MD_PREVIEW_KEY_BASE)
-		self._handlers.append( self._settings.connect('changed::position', self.change_panel) )
-		self._handlers.append( self._settings.connect('changed::auto-manage-panel', self.set_auto_manage) )
+		id1 = self._settings.connect('changed::position', self.change_panel)
+		id2 = self._settings.connect('changed::auto-manage-panel', self.set_auto_manage)
+		self._handlers.append(id1)
+		self._handlers.append(id2)
 		self.is_paginated = False
 		self.set_auto_manage()
 		self.build_preview_ui()
 		self.page_index = 0
 		self.page_number = 1
 		self.temp_file_md = Gio.File.new_for_path(BASE_TEMP_NAME + '.md')
+		self.fix_backend_setting()
+
+	def fix_backend_setting(self):
+		if not BACKEND_P3MD_AVAILABLE and not BACKEND_PANDOC_AVAILABLE:
+			self.display_warning(_("Error: please install pandoc or python3-markdown"))
+		elif not BACKEND_P3MD_AVAILABLE:
+			self._settings.set_string('backend', 'pandoc')
+		elif not BACKEND_PANDOC_AVAILABLE:
+			self._settings.set_string('backend', 'python')
 
 	# This is called every time the gui is updated
 	def do_update_state(self):
@@ -165,7 +193,7 @@ class MdPreviewBar(Gtk.Box):
 			if not value.is_undefined():
 				self.scroll_level = value.to_int32()
 
-	def on_context_menu(self, a, b, c, d):
+	def on_context_menu(self, a, context_menu, c, hit_test_result):
 		special_items = False
 		openLinkWithItem = WebKit2.ContextMenuItem.new_from_gaction( \
 		                             self.parent_plugin.action_open_link_with, \
@@ -173,35 +201,37 @@ class MdPreviewBar(Gtk.Box):
 		openImageWithItem = WebKit2.ContextMenuItem.new_from_gaction( \
 		                            self.parent_plugin.action_open_image_with, \
 		                                       _("Open image in browser"), None)
-		if d.context_is_link() and d.context_is_image():
+		if hit_test_result.context_is_link() and hit_test_result.context_is_image():
 			special_items = True
-			b.remove(b.get_item_at_position(7)) # download its target
-			b.remove(b.get_item_at_position(6)) # open a link in a new window
-			b.remove(b.get_item_at_position(5)) # open an image in a new window
-			b.remove(b.get_item_at_position(2)) # open a link in a new window
-			b.remove(b.get_item_at_position(1)) # open an image in a new window
-			self.link_uri_to_open = d.get_link_uri()
-			self.image_uri_to_open = d.get_image_uri()
-			b.insert(openLinkWithItem, 2)
-			b.insert(openImageWithItem, 5)
-		elif d.context_is_link():
+			context_menu.remove(context_menu.get_item_at_position(7)) # download its target
+			context_menu.remove(context_menu.get_item_at_position(6)) # open a link in a new window
+			context_menu.remove(context_menu.get_item_at_position(5)) # open an image in a new window
+			context_menu.remove(context_menu.get_item_at_position(2)) # open a link in a new window
+			context_menu.remove(context_menu.get_item_at_position(1)) # open an image in a new window
+			self.link_uri_to_open = hit_test_result.get_link_uri()
+			self.image_uri_to_open = hit_test_result.get_image_uri()
+			context_menu.insert(openLinkWithItem, 2)
+			context_menu.insert(openImageWithItem, 5)
+		elif hit_test_result.context_is_link():
 			special_items = True
-			b.remove(b.get_item_at_position(2)) # download its target
-			b.remove(b.get_item_at_position(1)) # open a link in a new window
-			self.link_uri_to_open = d.get_link_uri()
-			b.append(openLinkWithItem)
-		elif d.context_is_image():
+			context_menu.remove(context_menu.get_item_at_position(2)) # download its target
+			context_menu.remove(context_menu.get_item_at_position(1)) # open a link in a new window
+			self.link_uri_to_open = hit_test_result.get_link_uri()
+			context_menu.append(openLinkWithItem)
+		elif hit_test_result.context_is_image():
 			special_items = True
-			b.remove(b.get_item_at_position(0)) # open an image in a new window
-			self.image_uri_to_open = d.get_image_uri()
-			b.append(openImageWithItem)
+			context_menu.remove(context_menu.get_item_at_position(0)) # open an image in a new window
+			self.image_uri_to_open = hit_test_result.get_image_uri()
+			context_menu.append(openImageWithItem)
+		elif hit_test_result.context_is_selection():
+			special_items = True
 
-		b.append(WebKit2.ContextMenuItem.new_separator())
-		# if not special_items:
-		# 	b.remove_all() # XXX Pertinent when no selection, harmful otherwise
+		context_menu.append(WebKit2.ContextMenuItem.new_separator())
+		if not special_items:
+			context_menu.remove_all()
 		reloadItem = WebKit2.ContextMenuItem.new_from_gaction( \
 		        self.parent_plugin.action_reload, _("Reload the preview"), None)
-		b.append(reloadItem)
+		context_menu.append(reloadItem)
 		return False
 		
 	def on_open_link_with(self, *args):

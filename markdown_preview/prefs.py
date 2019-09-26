@@ -1,6 +1,7 @@
-import subprocess
-import gi
-import os
+# prefs.py
+# GPL v3
+
+import subprocess, gi, os
 from gi.repository import Gtk, Gio
 
 BASE_PATH = os.path.dirname(os.path.realpath(__file__))
@@ -34,7 +35,7 @@ class MdConfigWidget(Gtk.Box):
 		stack = builder.get_object('stack')
 		switcher = Gtk.StackSwitcher(stack=stack, halign=Gtk.Align.CENTER)
 
-		### PREVIEW ############################################################
+		### PREVIEW PAGE #######################################################
 
 		preview_box = builder.get_object('preview_box')
 
@@ -64,10 +65,11 @@ class MdConfigWidget(Gtk.Box):
 		styleButton = builder2.get_object('file_chooser_btn_css')
 		styleButton.connect('clicked', self.on_choose_css)
 
-		### BACKEND ############################################################
+		### BACKEND PAGE #######################################################
 
 		backend_box = builder.get_object('backend_box')
 
+		# TODO remove unavailable backend (if any)
 		backendCombobox = builder.get_object('backendCombobox')
 		backendCombobox.append('python', "python3-markdown")
 		backendCombobox.append('pandoc', "pandoc")
@@ -92,8 +94,8 @@ class MdConfigWidget(Gtk.Box):
 		for plugin_id in P3MD_PLUGINS:
 			self.plugins[plugin_id].connect('clicked', self.update_plugins_list)
 
-		### SHORTCUTS ##########################################################
-		
+		### SHORTCUTS PAGE #####################################################
+
 		self.shortcuts_treeview = builder.get_object('shortcuts_treeview')
 		renderer = builder.get_object('accel_renderer')
 		renderer.connect('accel-edited', self.on_accel_edited)
@@ -111,10 +113,12 @@ class MdConfigWidget(Gtk.Box):
 #		self.add_keybinding('kb-', _(""))
 #		self.add_keybinding('kb-', _(""))
 #		self.add_keybinding('kb-', _(""))
-		
+
 		self.add(switcher)
 		self.add(stack)
 		self.connect('notify::visible', self.set_options_visibility)
+
+	############################################################################
 
 	def add_keybinding(self, setting_id, description):
 		accelerator = self._settings.get_strv(setting_id)[0]
@@ -138,6 +142,8 @@ class MdConfigWidget(Gtk.Box):
 		setting_id = self.shortcuts_treeview.get_model().get_value(tree_iter, 0)
 		self._settings.set_strv(setting_id, [])
 
+	############################################################################
+
 	def on_backend_changed(self, w):
 		self._settings.set_string('backend', w.get_active_id())
 		self.set_options_visibility()
@@ -153,7 +159,7 @@ class MdConfigWidget(Gtk.Box):
 		array = self._settings.get_strv('extensions')
 		for plugin_id in array:
 			self.plugins[plugin_id].set_active(True)
-		
+
 	def set_options_visibility(self, *args):
 		backend = self._settings.get_string('backend')
 		self.backend_stack.set_visible_child_name('backend_' + backend)

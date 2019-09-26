@@ -1,7 +1,7 @@
 # __init__.py
 # GPL v3
 
-import subprocess, gi, os, markdown
+import subprocess, gi, os
 from gi.repository import GObject, Gtk, Gedit, Gio, PeasGtk, GLib
 
 BASE_PATH = os.path.dirname(os.path.realpath(__file__))

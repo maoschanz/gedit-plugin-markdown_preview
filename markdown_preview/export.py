@@ -1,5 +1,22 @@
-import subprocess, gi, os, markdown
+# __init__.py
+# GPL v3
+
+import subprocess, gi, os
 from gi.repository import Gtk
+
+BACKEND_P3MD_AVAILABLE = True
+BACKEND_PANDOC_AVAILABLE = True
+try:
+	import markdown
+except Exception:
+	print("Package python3-markdown not installed")
+	BACKEND_P3MD_AVAILABLE = False
+
+try:
+	subprocess.call(['which', 'pandoc'])
+except Exception:
+	print("Package pandoc not installed")
+	BACKEND_PANDOC_AVAILABLE = False
 
 BASE_PATH = os.path.dirname(os.path.realpath(__file__))
 LOCALE_PATH = os.path.join(BASE_PATH, 'locale')
@@ -23,9 +40,7 @@ class MdExportDialog(Gtk.Dialog):
 	use_pandoc = False
 	output_format = 'error'
 	file_format = 'md'
-	
-	# TODO c'est quand même con de reconstruire de manière dédoublée cette UI
-	
+
 	def __init__(self, file_format, gedit_window, settings, **kwargs):
 		super().__init__(use_header_bar=True, title=_("Export as…"), **kwargs)
 		self.file_format = file_format
@@ -34,21 +49,34 @@ class MdExportDialog(Gtk.Dialog):
 		self.plugins = {}
 		self.add_button(_("Cancel"), Gtk.ResponseType.CANCEL)
 		self.add_button(_("Next"), Gtk.ResponseType.OK)
-		# builder = Gtk.Builder().new_from_file(os.path.join(BASE_PATH, 'export.ui'))
-		# self.get_content_area().add(builder.get_object('content-area'))
+
+		if not BACKEND_P3MD_AVAILABLE and not BACKEND_PANDOC_AVAILABLE:
+			error_label = Gtk.Label(label=_("Error: please install pandoc or python3-markdown"))
+			self.get_content_area().add(error_label)
+			return
+
 		builder = Gtk.Builder().new_from_file(BASE_PATH + '/backend_box.ui')
 		self.get_content_area().add(builder.get_object('backend_box'))
-
 		self.export_stack = builder.get_object('backend_stack')
 		self.export_stack.show_all() # XXX
 
+		if not BACKEND_P3MD_AVAILABLE:
+			self.export_stack.set_visible_child_name('backend_pandoc')
+			builder.get_object('switcher_box').set_visible(False)
+		elif not BACKEND_PANDOC_AVAILABLE:
+			self.export_stack.set_visible_child_name('backend_python')
+			builder.get_object('switcher_box').set_visible(False)
+		else:
+			active_backend = self._settings.get_string('backend')
+			self.export_stack.set_visible_child_name('backend_' + active_backend)
+
+		# Load UI for the python3-markdown backend
 		for plugin_id in P3MD_PLUGINS:
 			self.plugins[plugin_id] = builder.get_object('plugins_' + plugin_id)
-
 		self.load_plugins_list()
-
 		self.get_content_area().add(Gtk.Separator(visible=True))
 
+		# Using a stylesheet is possible with both backends
 		builder2 = Gtk.Builder().new_from_file(BASE_PATH + '/css_box.ui')
 		css_box = builder2.get_object('css_box')
 		css_box.set_margin_left(20)
@@ -56,7 +84,6 @@ class MdExportDialog(Gtk.Dialog):
 		css_box.set_margin_top(20)
 		css_box.set_margin_bottom(20)
 		self.get_content_area().add(css_box)
-
 		self.switch_css = builder2.get_object('switch_css')
 		self.switch_css.connect('notify::active', self.on_css_changed)
 		self.css_sensitive_box = builder2.get_object('css_sensitive_box')
@@ -64,11 +91,14 @@ class MdExportDialog(Gtk.Dialog):
 		self.file_chooser_btn_css = builder2.get_object('file_chooser_btn_css')
 		self.file_chooser_btn_css.set_label('…' + self.css_path[-50:])
 
+		# Load UI for the pandoc backend
 		self.pandoc_cli_entry = builder.get_object('pandoc_command_entry')
 		self.remember_button = builder.get_object('remember_button')
 		self.remember_button.connect('clicked', self.on_remember)
-		
 		self.format_combobox = builder.get_object('format_combobox')
+		self.fill_combobox()
+
+	def fill_combobox(self):
 		self.format_combobox.append('beamer', _("LaTeX beamer slide show"))
 		self.format_combobox.append('docx', _("Microsoft Word (.docx)"))
 		self.format_combobox.append('html5', _("HTML5"))
@@ -145,10 +175,10 @@ class MdExportDialog(Gtk.Dialog):
 		file_chooser = self.launch_file_chooser()
 		if file_chooser is None:
 			return False
-			
+
 		# TODO les plugins
 		md_extensions = self._settings.get_strv('extensions') # XXX temporairement
-		
+
 		doc = self.gedit_window.get_active_document()
 		start, end = doc.get_bounds()
 		unsaved_text = doc.get_text(start, end, True)
