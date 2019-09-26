@@ -10,12 +10,12 @@
       <attribute name="label" translatable="yes">Print the preview</attribute>
       <attribute name="action">win.md-prev-print-doc</attribute>
     </item>
+  </section>
+  <section>
     <item>
       <attribute name="label" translatable="yes">Automatically reload</attribute>
       <attribute name="action">win.md-prev-set-autoreload</attribute>
     </item>
-  </section>
-  <section>
     <item>
       <attribute name="label" translatable="yes">Options</attribute>
       <attribute name="action">win.md-prev-options</attribute>

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-26 23:18+0200\n"
+"POT-Creation-Date: 2019-09-27 00:12+0200\n"
 "PO-Revision-Date: 2019-08-05 13:48+0200\n"
 "Last-Translator: Heimen Stoffels <vistausss@outlook.com>\n"
 "Language-Team: \n"
@@ -22,7 +22,7 @@ msgstr ""
 msgid "Export as…"
 msgstr "Exporteren als…"
 
-#: markdown_preview/export.py:47 markdown_preview/export.py:176
+#: markdown_preview/export.py:47 markdown_preview/export.py:175
 msgid "Cancel"
 msgstr "Annuleren"
 
@@ -30,73 +30,73 @@ msgstr "Annuleren"
 msgid "Next"
 msgstr "Volgende"
 
-#: markdown_preview/export.py:51 markdown_preview/preview.py:69
+#: markdown_preview/export.py:52 markdown_preview/preview.py:69
 #, fuzzy
 msgid "Error: please install pandoc or python3-markdown"
 msgstr "Uitbreidingen voor python3-markdown:"
 
-#: markdown_preview/export.py:99
+#: markdown_preview/export.py:100
 #, fuzzy
-msgid "LaTeX beamer slide show (.tex)"
+msgid "LaTeX beamer slideshow (.tex)"
 msgstr "LaTeX-beamer-diavoorstelling"
 
-#: markdown_preview/export.py:100
+#: markdown_preview/export.py:101
 msgid "Microsoft Word (.docx)"
 msgstr "Microsoft Word (.docx)"
 
-#: markdown_preview/export.py:101
+#: markdown_preview/export.py:102
 msgid "HTML5"
 msgstr "HTML5"
 
-#: markdown_preview/export.py:102
+#: markdown_preview/export.py:103
 msgid "HTML5 (with custom CSS)"
 msgstr "HTML5 (met aangepaste CSS)"
 
-#: markdown_preview/export.py:103
+#: markdown_preview/export.py:104
 msgid "LaTeX (.tex)"
 msgstr "LaTeX (.tex)"
 
-#: markdown_preview/export.py:104
+#: markdown_preview/export.py:105
 msgid "OpenOffice text document (.odt)"
 msgstr "OpenOffice-tekstdocument (.odt)"
 
-#: markdown_preview/export.py:105
+#: markdown_preview/export.py:106
 msgid "Portable Document Format (.pdf)"
 msgstr "Portable Document Format (.pdf)"
 
-#: markdown_preview/export.py:106
+#: markdown_preview/export.py:107
 #, fuzzy
 msgid "plain text (.txt)"
 msgstr "Platte tekst"
 
-#: markdown_preview/export.py:107
+#: markdown_preview/export.py:108
 #, fuzzy
-msgid "PowerPoint slide show (.pptx)"
+msgid "PowerPoint slideshow (.pptx)"
 msgstr "PowerPoint-diavoorstelling"
 
-#: markdown_preview/export.py:108
+#: markdown_preview/export.py:109
 msgid "Rich Text Format (.rtf)"
 msgstr "Rich Text Format (.rtf)"
 
-#: markdown_preview/export.py:109
+#: markdown_preview/export.py:110
 #, fuzzy
-msgid "reveal.js (HTML with Javascript)"
+msgid "reveal.js slideshow (HTML with Javascript)"
 msgstr "reveal.js HTML + Javascript-diavoorstelling"
 
-#: markdown_preview/export.py:110
+#: markdown_preview/export.py:111
 msgid "Custom command line"
 msgstr "Aangepaste opdrachtregel"
 
-#: markdown_preview/export.py:174 markdown_preview/menus.ui:6
+#: markdown_preview/export.py:173 markdown_preview/menus.ui:6
 msgid "Export the preview"
 msgstr "Voorbeeld exporteren"
 
-#: markdown_preview/export.py:176
+#: markdown_preview/export.py:175
 #, fuzzy
 msgid "Export"
 msgstr "Exporteren als…"
 
-#: markdown_preview/export.py:179
+#: markdown_preview/export.py:178
 msgid "(exported)"
 msgstr ""
 
@@ -234,7 +234,7 @@ msgstr "CSS-bestand:"
 msgid "Print the preview"
 msgstr "Voorbeeld afdrukken"
 
-#: markdown_preview/menus.ui:14
+#: markdown_preview/menus.ui:16
 msgid "Automatically reload"
 msgstr "Automatisch herladen"
 

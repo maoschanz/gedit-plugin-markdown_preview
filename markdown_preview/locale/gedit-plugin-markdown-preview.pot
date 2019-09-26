@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-26 23:18+0200\n"
+"POT-Creation-Date: 2019-09-27 00:12+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,7 +21,7 @@ msgstr ""
 msgid "Export as…"
 msgstr ""
 
-#: markdown_preview/export.py:47 markdown_preview/export.py:176
+#: markdown_preview/export.py:47 markdown_preview/export.py:175
 msgid "Cancel"
 msgstr ""
 
@@ -29,67 +29,67 @@ msgstr ""
 msgid "Next"
 msgstr ""
 
-#: markdown_preview/export.py:51 markdown_preview/preview.py:69
+#: markdown_preview/export.py:52 markdown_preview/preview.py:69
 msgid "Error: please install pandoc or python3-markdown"
 msgstr ""
 
-#: markdown_preview/export.py:99
-msgid "LaTeX beamer slide show (.tex)"
-msgstr ""
-
 #: markdown_preview/export.py:100
-msgid "Microsoft Word (.docx)"
+msgid "LaTeX beamer slideshow (.tex)"
 msgstr ""
 
 #: markdown_preview/export.py:101
-msgid "HTML5"
+msgid "Microsoft Word (.docx)"
 msgstr ""
 
 #: markdown_preview/export.py:102
-msgid "HTML5 (with custom CSS)"
+msgid "HTML5"
 msgstr ""
 
 #: markdown_preview/export.py:103
-msgid "LaTeX (.tex)"
+msgid "HTML5 (with custom CSS)"
 msgstr ""
 
 #: markdown_preview/export.py:104
-msgid "OpenOffice text document (.odt)"
+msgid "LaTeX (.tex)"
 msgstr ""
 
 #: markdown_preview/export.py:105
-msgid "Portable Document Format (.pdf)"
+msgid "OpenOffice text document (.odt)"
 msgstr ""
 
 #: markdown_preview/export.py:106
-msgid "plain text (.txt)"
+msgid "Portable Document Format (.pdf)"
 msgstr ""
 
 #: markdown_preview/export.py:107
-msgid "PowerPoint slide show (.pptx)"
+msgid "plain text (.txt)"
 msgstr ""
 
 #: markdown_preview/export.py:108
-msgid "Rich Text Format (.rtf)"
+msgid "PowerPoint slideshow (.pptx)"
 msgstr ""
 
 #: markdown_preview/export.py:109
-msgid "reveal.js (HTML with Javascript)"
+msgid "Rich Text Format (.rtf)"
 msgstr ""
 
 #: markdown_preview/export.py:110
+msgid "reveal.js slideshow (HTML with Javascript)"
+msgstr ""
+
+#: markdown_preview/export.py:111
 msgid "Custom command line"
 msgstr ""
 
-#: markdown_preview/export.py:174 markdown_preview/menus.ui:6
+#: markdown_preview/export.py:173 markdown_preview/menus.ui:6
 msgid "Export the preview"
 msgstr ""
 
-#: markdown_preview/export.py:176
+#: markdown_preview/export.py:175
 msgid "Export"
 msgstr ""
 
-#: markdown_preview/export.py:179
+#: markdown_preview/export.py:178
 msgid "(exported)"
 msgstr ""
 
@@ -225,7 +225,7 @@ msgstr ""
 msgid "Print the preview"
 msgstr ""
 
-#: markdown_preview/menus.ui:14
+#: markdown_preview/menus.ui:16
 msgid "Automatically reload"
 msgstr ""
 

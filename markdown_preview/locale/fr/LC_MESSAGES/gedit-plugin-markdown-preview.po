@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-26 23:18+0200\n"
+"POT-Creation-Date: 2019-09-27 00:12+0200\n"
 "PO-Revision-Date: 2018-03-05 16:47+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -17,7 +17,7 @@ msgstr ""
 msgid "Export as…"
 msgstr "Exporter sous…"
 
-#: markdown_preview/export.py:47 markdown_preview/export.py:176
+#: markdown_preview/export.py:47 markdown_preview/export.py:175
 msgid "Cancel"
 msgstr "Annuler"
 
@@ -25,67 +25,67 @@ msgstr "Annuler"
 msgid "Next"
 msgstr "Suivant"
 
-#: markdown_preview/export.py:51 markdown_preview/preview.py:69
+#: markdown_preview/export.py:52 markdown_preview/preview.py:69
 msgid "Error: please install pandoc or python3-markdown"
 msgstr "Erreur : veuillez installer pandoc ou python3-markdown"
 
-#: markdown_preview/export.py:99
-msgid "LaTeX beamer slide show (.tex)"
+#: markdown_preview/export.py:100
+msgid "LaTeX beamer slideshow (.tex)"
 msgstr "Présentation LaTeX beamer (.tex)"
 
-#: markdown_preview/export.py:100
+#: markdown_preview/export.py:101
 msgid "Microsoft Word (.docx)"
 msgstr ""
 
-#: markdown_preview/export.py:101
+#: markdown_preview/export.py:102
 msgid "HTML5"
 msgstr "HTML5"
 
-#: markdown_preview/export.py:102
+#: markdown_preview/export.py:103
 msgid "HTML5 (with custom CSS)"
 msgstr "HTML5 (avec CSS personnalisé)"
 
-#: markdown_preview/export.py:103
+#: markdown_preview/export.py:104
 msgid "LaTeX (.tex)"
 msgstr ""
 
-#: markdown_preview/export.py:104
+#: markdown_preview/export.py:105
 msgid "OpenOffice text document (.odt)"
 msgstr ""
 
-#: markdown_preview/export.py:105
+#: markdown_preview/export.py:106
 msgid "Portable Document Format (.pdf)"
 msgstr ""
 
-#: markdown_preview/export.py:106
+#: markdown_preview/export.py:107
 msgid "plain text (.txt)"
 msgstr "texte brut (.txt)"
 
-#: markdown_preview/export.py:107
-msgid "PowerPoint slide show (.pptx)"
+#: markdown_preview/export.py:108
+msgid "PowerPoint slideshow (.pptx)"
 msgstr "Présentation PowerPoint (.pptx)"
 
-#: markdown_preview/export.py:108
+#: markdown_preview/export.py:109
 msgid "Rich Text Format (.rtf)"
 msgstr ""
 
-#: markdown_preview/export.py:109
-msgid "reveal.js (HTML with Javascript)"
-msgstr "reveal.js (HTML avec du Javascript)"
-
 #: markdown_preview/export.py:110
+msgid "reveal.js slideshow (HTML with Javascript)"
+msgstr "Présentation reveal.js (HTML avec du Javascript)"
+
+#: markdown_preview/export.py:111
 msgid "Custom command line"
 msgstr "Ligne de commande personnalisée"
 
-#: markdown_preview/export.py:174 markdown_preview/menus.ui:6
+#: markdown_preview/export.py:173 markdown_preview/menus.ui:6
 msgid "Export the preview"
 msgstr "Exporter l'aperçu"
 
-#: markdown_preview/export.py:176
+#: markdown_preview/export.py:175
 msgid "Export"
 msgstr "Exporter"
 
-#: markdown_preview/export.py:179
+#: markdown_preview/export.py:178
 msgid "(exported)"
 msgstr "(exporté)"
 
@@ -221,7 +221,7 @@ msgstr "Fichier CSS :"
 msgid "Print the preview"
 msgstr "Imprimer l'aperçu"
 
-#: markdown_preview/menus.ui:14
+#: markdown_preview/menus.ui:16
 msgid "Automatically reload"
 msgstr "Recharger automatiquement"
 

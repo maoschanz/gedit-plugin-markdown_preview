@@ -48,7 +48,8 @@ class MdExportDialog(Gtk.Dialog):
 		self.add_button(_("Next"), Gtk.ResponseType.OK)
 
 		if not BACKEND_P3MD_AVAILABLE and not BACKEND_PANDOC_AVAILABLE:
-			error_label = Gtk.Label(label=_("Error: please install pandoc or python3-markdown"))
+			error_label = Gtk.Label(visible=True, \
+			        label=_("Error: please install pandoc or python3-markdown"))
 			self.get_content_area().add(error_label)
 			return
 
@@ -96,7 +97,7 @@ class MdExportDialog(Gtk.Dialog):
 		self.fill_combobox()
 
 	def fill_combobox(self):
-		self.format_combobox.append('beamer', _("LaTeX beamer slide show (.tex)"))
+		self.format_combobox.append('beamer', _("LaTeX beamer slideshow (.tex)"))
 		self.format_combobox.append('docx', _("Microsoft Word (.docx)"))
 		self.format_combobox.append('html5', _("HTML5"))
 		self.format_combobox.append('html_custom', _("HTML5 (with custom CSS)"))
@@ -104,9 +105,9 @@ class MdExportDialog(Gtk.Dialog):
 		self.format_combobox.append('odt', _("OpenOffice text document (.odt)"))
 		self.format_combobox.append('pdf', _("Portable Document Format (.pdf)"))
 		self.format_combobox.append('plain', _("plain text (.txt)"))
-		self.format_combobox.append('pptx', _("PowerPoint slide show (.pptx)"))
+		self.format_combobox.append('pptx', _("PowerPoint slideshow (.pptx)"))
 		self.format_combobox.append('rtf', _("Rich Text Format (.rtf)"))
-		self.format_combobox.append('revealjs', _("reveal.js (HTML with Javascript)"))
+		self.format_combobox.append('revealjs', _("reveal.js slideshow (HTML with Javascript)"))
 		self.format_combobox.append('custom', _("Custom command line"))
 		self.format_combobox.connect('changed', self.on_pandoc_format_changed)
 		self.format_combobox.set_active_id('pdf')
@@ -166,8 +167,6 @@ class MdExportDialog(Gtk.Dialog):
 			exported = self.export_python()
 		else: # if self.export_stack.get_visible_child_name() == 'backend_pandoc':
 			exported = self.export_pandoc()
-		# if exported: # XXX doesn't work as expected
-		#	self.destroy()
 		self.destroy()
 
 	def launch_file_chooser(self, output_extension):
@@ -190,17 +189,20 @@ class MdExportDialog(Gtk.Dialog):
 		if file_chooser is None:
 			return False
 
-		# TODO réellement prendre en compte les plugins
-		md_extensions = self._settings.get_strv('extensions') # XXX temporairement
+		md_extensions = []
+		for plugin_id in P3MD_PLUGINS:
+			if self.plugins[plugin_id].get_active():
+				md_extensions.append(plugin_id)
 
 		doc = self.gedit_window.get_active_document()
 		start, end = doc.get_bounds()
 		unsaved_text = doc.get_text(start, end, True)
-		content = markdown.markdown(unsaved_text, extensions=[]) #TODO
+		content = markdown.markdown(unsaved_text, extensions=md_extensions)
 		with open(file_chooser.get_filename(), 'w') as f:
 			f.write(content)
 		if self.switch_css.get_active():
-			pre_string = '<html><head><meta charset="utf-8" /><link rel="stylesheet" href="' + \
+			pre_string = '<html><head><meta charset="utf-8" />' + \
+			             '<link rel="stylesheet" href="' + \
 			            self._settings.get_string('style') + '" /></head><body>'
 			post_string = '</body></html>'
 			with open(file_chooser.get_filename(), 'r+') as f:
@@ -221,10 +223,8 @@ class MdExportDialog(Gtk.Dialog):
 		doc_path = self.gedit_window.get_active_document().get_location().get_path()
 		if output_format == 'pdf':
 			subprocess.run(['pandoc', doc_path, \
-				'-V', 'geometry=right=2cm',
-				'-V', 'geometry=left=2cm',
-				'-V', 'geometry=bottom=2cm',
-				'-V', 'geometry=top=2cm',
+				'-V', 'geometry=right=2cm', '-V', 'geometry=left=2cm', \
+				'-V', 'geometry=bottom=2cm', '-V', 'geometry=top=2cm', \
 				'-o', file_chooser.get_filename()])
 		else:
 			cmd = self.pandoc_cli_entry.get_text()
