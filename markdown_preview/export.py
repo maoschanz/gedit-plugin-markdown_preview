@@ -34,12 +34,9 @@ P3MD_PLUGINS = ['admonition', 'codehilite', 'extra', 'nl2br', 'sane_lists', \
 
 class MdExportDialog(Gtk.Dialog):
 	__gtype_name__ = 'MdExportDialog'
-	
-	use_css = False
-	use_reveal = False
-	use_pandoc = False
-	output_format = 'error'
+
 	file_format = 'md'
+	output_extension = '.pdf'
 
 	def __init__(self, file_format, gedit_window, settings, **kwargs):
 		super().__init__(use_header_bar=True, title=_("Export as…"), **kwargs)
@@ -99,17 +96,17 @@ class MdExportDialog(Gtk.Dialog):
 		self.fill_combobox()
 
 	def fill_combobox(self):
-		self.format_combobox.append('beamer', _("LaTeX beamer slide show"))
+		self.format_combobox.append('beamer', _("LaTeX beamer slide show (.tex)"))
 		self.format_combobox.append('docx', _("Microsoft Word (.docx)"))
 		self.format_combobox.append('html5', _("HTML5"))
 		self.format_combobox.append('html_custom', _("HTML5 (with custom CSS)"))
 		self.format_combobox.append('latex', _("LaTeX (.tex)"))
 		self.format_combobox.append('odt', _("OpenOffice text document (.odt)"))
 		self.format_combobox.append('pdf', _("Portable Document Format (.pdf)"))
-		self.format_combobox.append('plain', _("plain text"))
-		self.format_combobox.append('pptx', _("PowerPoint slide show"))
+		self.format_combobox.append('plain', _("plain text (.txt)"))
+		self.format_combobox.append('pptx', _("PowerPoint slide show (.pptx)"))
 		self.format_combobox.append('rtf', _("Rich Text Format (.rtf)"))
-		self.format_combobox.append('revealjs', _("reveal.js HTML + Javascript slide show"))
+		self.format_combobox.append('revealjs', _("reveal.js (HTML with Javascript)"))
 		self.format_combobox.append('custom', _("Custom command line"))
 		self.format_combobox.connect('changed', self.on_pandoc_format_changed)
 		self.format_combobox.set_active_id('pdf')
@@ -130,53 +127,70 @@ class MdExportDialog(Gtk.Dialog):
 
 	def on_pandoc_format_changed(self, w):
 		output_format = w.get_active_id()
-		self.remember_button.set_visible(output_format == 'custom')
 
+		self.remember_button.set_visible(output_format == 'custom')
+		if output_format == 'custom':
+			command = self._settings.get_string('custom-export')
+			self.pandoc_cli_entry.set_text(command)
+			self.output_extension = '.pdf'
+			return
+
+		command = 'pandoc $INPUT_FILE %s -o $OUTPUT_FILE'
+		options = ''
 		if output_format == 'pdf':
-			self.pandoc_cli_entry.set_text('pandoc $INPUT_FILE -V geometry=right=2cm' \
-			    ' -V geometry=left=2cm -V geometry=bottom=2cm -V geometry=top=2cm' \
-			    ' -o $OUTPUT_FILE')
+			options = '-V geometry=right=2cm -V geometry=left=2cm -V ' \
+			                          'geometry=bottom=2cm -V geometry=top=2cm'
+			self.output_extension = '.pdf'
 		elif output_format == 'revealjs':
-			self.pandoc_cli_entry.set_text('pandoc $INPUT_FILE -t revealjs -s -V' \
-			      ' revealjs-url=http://lab.hakim.se/reveal-js -o $OUTPUT_FILE')
-		elif output_format == 'custom':
-			self.pandoc_cli_entry.set_text(self._settings.get_string('custom-export'))
+			options = '-t revealjs -s -V revealjs-url=http://lab.hakim.se/reveal-js'
+			self.output_extension = '.html'
 		elif output_format == 'html_custom':
-			self.pandoc_cli_entry.set_text('pandoc $INPUT_FILE -t html5 -s -c ' \
-			          + self._settings.get_string('style') + ' -o $OUTPUT_FILE')
+			options = '-t html5 -s -c ' + self._settings.get_string('style')
+			self.output_extension = '.html'
 		else:
-			self.pandoc_cli_entry.set_text('pandoc $INPUT_FILE -t ' + \
-			                                 output_format + ' -o $OUTPUT_FILE')
+			options = '-t ' + output_format
+			if output_format == 'beamer' or output_format == 'latex':
+				self.output_extension = '.tex'
+			elif output_format == 'html5':
+				self.output_extension = '.html'
+			elif output_format == 'plain':
+				self.output_extension = '.txt'
+			else:
+				self.output_extension = '.' + output_format
+		self.pandoc_cli_entry.set_text(command % options)
 
 	############################################################################
 
 	def do_next(self):
-		if self.export_stack.get_visible_child_name() == 'export_python':
+		if self.export_stack.get_visible_child_name() == 'backend_python':
 			exported = self.export_python()
-		else: #if self.export_stack.get_visible_child_name() == 'export_pandoc':
+		else: # if self.export_stack.get_visible_child_name() == 'backend_pandoc':
 			exported = self.export_pandoc()
-		if exported:
-			self.destroy()
+		# if exported: # XXX doesn't work as expected
+		#	self.destroy()
+		self.destroy()
 
-	def launch_file_chooser(self):
-		file_chooser = Gtk.FileChooserDialog(_("Export the preview"),
-			self.gedit_window,
-			Gtk.FileChooserAction.SAVE,
-			(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
-			Gtk.STOCK_SAVE, Gtk.ResponseType.OK)) # TODO use a native file chooser
+	def launch_file_chooser(self, output_extension):
+		file_chooser = Gtk.FileChooserNative.new(_("Export the preview"), \
+		                        self.gedit_window, Gtk.FileChooserAction.SAVE, \
+		                                               _("Export"), _("Cancel"))
+		name = self.gedit_window.get_active_document().get_short_name_for_display()
+		# TODO retirer l'ancienne extension ?
+		name = str(name + ' ' + _("(exported)") + output_extension)
+		file_chooser.set_current_name(name)
 		response = file_chooser.run()
-		if response == Gtk.ResponseType.OK:
+		if response == Gtk.ResponseType.ACCEPT:
 			return file_chooser
 		else:
 			file_chooser.destroy()
 			return None
 
 	def export_python(self):
-		file_chooser = self.launch_file_chooser()
+		file_chooser = self.launch_file_chooser('.html')
 		if file_chooser is None:
 			return False
 
-		# TODO les plugins
+		# TODO réellement prendre en compte les plugins
 		md_extensions = self._settings.get_strv('extensions') # XXX temporairement
 
 		doc = self.gedit_window.get_active_document()
@@ -185,7 +199,6 @@ class MdExportDialog(Gtk.Dialog):
 		content = markdown.markdown(unsaved_text, extensions=[]) #TODO
 		with open(file_chooser.get_filename(), 'w') as f:
 			f.write(content)
-			f.close()
 		if self.switch_css.get_active():
 			pre_string = '<html><head><meta charset="utf-8" /><link rel="stylesheet" href="' + \
 			            self._settings.get_string('style') + '" /></head><body>'
@@ -194,15 +207,13 @@ class MdExportDialog(Gtk.Dialog):
 				content = f.read()
 				f.seek(0, 0)
 				f.write(pre_string.rstrip('\r\n') + '\n' + content)
-				f.close()
-			f=open(file_chooser.get_filename(),'a')
-			f.write(post_string)
-			f.close()
+			with open(file_chooser.get_filename(), 'a') as f:
+				f.write(post_string)
 		file_chooser.destroy()
 		return True
 
 	def export_pandoc(self):
-		file_chooser = self.launch_file_chooser()
+		file_chooser = self.launch_file_chooser(self.output_extension)
 		if file_chooser is None:
 			return False
 

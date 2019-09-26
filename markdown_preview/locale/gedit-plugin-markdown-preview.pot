@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-23 23:51+0200\n"
+"POT-Creation-Date: 2019-09-26 23:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,72 +17,84 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: markdown_preview/export.py:30
+#: markdown_preview/export.py:42
 msgid "Export as…"
 msgstr ""
 
-#: markdown_preview/export.py:35
+#: markdown_preview/export.py:47 markdown_preview/export.py:176
 msgid "Cancel"
 msgstr ""
 
-#: markdown_preview/export.py:36
+#: markdown_preview/export.py:48
 msgid "Next"
 msgstr ""
 
-#: markdown_preview/export.py:72
-msgid "LaTeX beamer slide show"
+#: markdown_preview/export.py:51 markdown_preview/preview.py:69
+msgid "Error: please install pandoc or python3-markdown"
 msgstr ""
 
-#: markdown_preview/export.py:73
+#: markdown_preview/export.py:99
+msgid "LaTeX beamer slide show (.tex)"
+msgstr ""
+
+#: markdown_preview/export.py:100
 msgid "Microsoft Word (.docx)"
 msgstr ""
 
-#: markdown_preview/export.py:74
+#: markdown_preview/export.py:101
 msgid "HTML5"
 msgstr ""
 
-#: markdown_preview/export.py:75
+#: markdown_preview/export.py:102
 msgid "HTML5 (with custom CSS)"
 msgstr ""
 
-#: markdown_preview/export.py:76
+#: markdown_preview/export.py:103
 msgid "LaTeX (.tex)"
 msgstr ""
 
-#: markdown_preview/export.py:77
+#: markdown_preview/export.py:104
 msgid "OpenOffice text document (.odt)"
 msgstr ""
 
-#: markdown_preview/export.py:78
+#: markdown_preview/export.py:105
 msgid "Portable Document Format (.pdf)"
 msgstr ""
 
-#: markdown_preview/export.py:79
-msgid "plain text"
+#: markdown_preview/export.py:106
+msgid "plain text (.txt)"
 msgstr ""
 
-#: markdown_preview/export.py:80
-msgid "PowerPoint slide show"
+#: markdown_preview/export.py:107
+msgid "PowerPoint slide show (.pptx)"
 msgstr ""
 
-#: markdown_preview/export.py:81
+#: markdown_preview/export.py:108
 msgid "Rich Text Format (.rtf)"
 msgstr ""
 
-#: markdown_preview/export.py:82
-msgid "reveal.js HTML + Javascript slide show"
+#: markdown_preview/export.py:109
+msgid "reveal.js (HTML with Javascript)"
 msgstr ""
 
-#: markdown_preview/export.py:83
+#: markdown_preview/export.py:110
 msgid "Custom command line"
 msgstr ""
 
-#: markdown_preview/export.py:132 markdown_preview/menus.ui:6
+#: markdown_preview/export.py:174 markdown_preview/menus.ui:6
 msgid "Export the preview"
 msgstr ""
 
+#: markdown_preview/export.py:176
+msgid "Export"
+msgstr ""
+
+#: markdown_preview/export.py:179
+msgid "(exported)"
+msgstr ""
+
 #: markdown_preview/__init__.py:45 markdown_preview/__init__.py:48
-#: markdown_preview/__init__.py:299 markdown_preview/preview.py:377
+#: markdown_preview/__init__.py:299 markdown_preview/preview.py:407
 msgid "Markdown Preview"
 msgstr ""
 
@@ -98,56 +110,56 @@ msgstr ""
 msgid "Select a picture"
 msgstr ""
 
-#: markdown_preview/prefs.py:102 markdown_preview/menus.ui:132
+#: markdown_preview/prefs.py:104 markdown_preview/menus.ui:132
 msgid "Italic"
 msgstr ""
 
-#: markdown_preview/prefs.py:103 markdown_preview/menus.ui:128
+#: markdown_preview/prefs.py:105 markdown_preview/menus.ui:128
 msgid "Bold"
 msgstr ""
 
-#: markdown_preview/prefs.py:104
+#: markdown_preview/prefs.py:106
 msgid "Insert a picture"
 msgstr ""
 
-#: markdown_preview/prefs.py:105
+#: markdown_preview/prefs.py:107
 msgid "Lower title"
 msgstr ""
 
-#: markdown_preview/prefs.py:106
+#: markdown_preview/prefs.py:108
 msgid "Upper title"
 msgstr ""
 
-#: markdown_preview/prefs.py:163 markdown_preview/css_box.ui:44
+#: markdown_preview/prefs.py:169 markdown_preview/css_box.ui:44
 #: markdown_preview/css_box.ui:52
 msgid "Select a CSS file"
 msgstr ""
 
-#: markdown_preview/prefs.py:168
+#: markdown_preview/prefs.py:174
 msgid "Stylesheet"
 msgstr ""
 
-#: markdown_preview/preview.py:172
+#: markdown_preview/preview.py:200
 msgid "Open link in browser"
 msgstr ""
 
-#: markdown_preview/preview.py:175
+#: markdown_preview/preview.py:203
 msgid "Open image in browser"
 msgstr ""
 
-#: markdown_preview/preview.py:203 markdown_preview/preview.ui:57
+#: markdown_preview/preview.py:233 markdown_preview/preview.ui:57
 msgid "Reload the preview"
 msgstr ""
 
-#: markdown_preview/preview.py:258
+#: markdown_preview/preview.py:288
 msgid "Can't preview an unsaved document"
 msgstr ""
 
-#: markdown_preview/preview.py:260
+#: markdown_preview/preview.py:290
 msgid "Unsupported type of document: "
 msgstr ""
 
-#: markdown_preview/preview.py:433
+#: markdown_preview/preview.py:463
 #, python-format
 msgid "%s results"
 msgstr ""
