@@ -9,6 +9,7 @@ Main features (version 0.8):
 	- dynamically update the preview
 	- zoom in or out on the preview
 	- search in the preview
+	- open links and image
 - Exporting:
 	- print the preview
 	- export to any file format supported by [pandoc](https://pandoc.org/)
@@ -69,6 +70,7 @@ Available settings include:
 
 - English
 - French
+- Dutch
 
 ----
 

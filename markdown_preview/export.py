@@ -32,6 +32,8 @@ except:
 P3MD_PLUGINS = ['admonition', 'codehilite', 'extra', 'nl2br', 'sane_lists', \
                                                    'smarty', 'toc', 'wikilinks']
 
+################################################################################
+
 class MdExportDialog(Gtk.Dialog):
 	__gtype_name__ = 'MdExportDialog'
 

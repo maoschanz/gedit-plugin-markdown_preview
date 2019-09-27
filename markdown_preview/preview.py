@@ -34,8 +34,8 @@ except:
 MD_PREVIEW_KEY_BASE = 'org.gnome.gedit.plugins.markdown_preview'
 BASE_TEMP_NAME = '/tmp/gedit_plugin_markdown_preview'
 
-MARKDOWN_PAGE_SEPARATOR = '\n----'
-MARKDOWN_PAGE_SEPARATOR2 = '\n## ' # TODO
+MARKDOWN_SPLITTERS = ['\n----', '\n# ', '\n## ']
+HTML_SPLITTERS = ['<hr />', '<h1>', '<h2>']
 
 ################################################################################
 
@@ -56,7 +56,7 @@ class MdPreviewBar(Gtk.Box):
 		id2 = self._settings.connect('changed::auto-manage-panel', self.set_auto_manage)
 		self._handlers.append(id1)
 		self._handlers.append(id2)
-		self.is_paginated = False
+		self.pagination_mode = 'whole'
 		self.set_auto_manage()
 		self.build_preview_ui()
 		self.page_index = 0
@@ -242,11 +242,12 @@ class MdPreviewBar(Gtk.Box):
 
 	############################################################################
 
-	def on_set_paginated(self, state):
-		self.is_paginated = not state
-		self.set_action_enabled('md-prev-next', not state)
-		self.set_action_enabled('md-prev-previous', not state)
-		self.pages_box.props.visible = not state
+	def on_set_paginated(self, mode):
+		self.pagination_mode = mode
+		is_whole = (self.pagination_mode == 'whole')
+		self.set_action_enabled('md-prev-next', not is_whole)
+		self.set_action_enabled('md-prev-previous', not is_whole)
+		self.pages_box.props.visible = not is_whole
 		self.on_reload()
 
 	def on_previous_page(self, *args):
@@ -321,14 +322,13 @@ class MdPreviewBar(Gtk.Box):
 
 		# This uri will be used as a reference for links and images using relative paths
 		dummy_uri = self.get_dummy_uri()
-
 		self._webview.load_bytes(bytes_content, 'text/html', 'UTF-8', dummy_uri)
 
 	def get_html_from_html(self, unsaved_text):
 		# FIXME is bad idea if the document already has these tags
 		pre_string = '<html><head><meta charset="utf-8" /></head><body>'
 		post_string = '</body></html>'
-		unsaved_text = self.current_page(unsaved_text, '<hr />')
+		unsaved_text = self.current_page(unsaved_text, HTML_SPLITTERS)
 		html_content = pre_string + unsaved_text + post_string
 		return html_content
 	
@@ -342,13 +342,13 @@ class MdPreviewBar(Gtk.Box):
 		post_string = '</body></html>'
 		result = subprocess.run(['pandoc', file_path], stdout=subprocess.PIPE)
 		html_string = result.stdout.decode('utf-8')
-		html_string = self.current_page(html_string, '<hr />')
+		html_string = self.current_page(html_string, HTML_SPLITTERS)
 		html_content = pre_string + html_string + post_string
 		return html_content
 
 	def get_html_from_md_pandoc(self, unsaved_text):
 		# Get the current document, or the temporary document if requested
-		unsaved_text = self.current_page(unsaved_text, MARKDOWN_PAGE_SEPARATOR)
+		unsaved_text = self.current_page(unsaved_text, MARKDOWN_SPLITTERS)
 		f = open(BASE_TEMP_NAME + '.md', 'w')
 		f.write(unsaved_text)
 		f.close()
@@ -364,7 +364,7 @@ class MdPreviewBar(Gtk.Box):
 		return html_content
 
 	def get_html_from_md_python(self, unsaved_text):
-		unsaved_text = self.current_page(unsaved_text, MARKDOWN_PAGE_SEPARATOR)
+		unsaved_text = self.current_page(unsaved_text, MARKDOWN_SPLITTERS)
 		# TODO https://github.com/Python-Markdown/markdown/wiki/Third-Party-Extensions
 		md_extensions = self._settings.get_strv('extensions')
 		pre_string = '<html><head><meta charset="utf-8" /><link rel="stylesheet" href="' + \
@@ -374,14 +374,32 @@ class MdPreviewBar(Gtk.Box):
 		html_content = pre_string + html_string + post_string
 		return html_content
 
-	def current_page(self, lang_string, splitter):
-		if not self.is_paginated:
+	def current_page(self, lang_string, splitters_array):
+		if self.pagination_mode == 'whole':
 			return lang_string
-		lang_pages = lang_string.split(splitter)
+		elif self.pagination_mode == 'h1':
+			correct_splitter = splitters_array[1]
+		elif self.pagination_mode == 'h2':
+			correct_splitter = splitters_array[2]
+		else: # self.pagination_mode == 'hr':
+			correct_splitter = splitters_array[0]
+
+		# The document is (as much as possible) splitted in its original
+		# language. It avoid converting markdown to html which wouldn't be
+		# rendered anyway.
+		lang_pages = lang_string.split(correct_splitter)
 		self.page_number = len(lang_pages)
 		if self.page_index >= self.page_number:
 			self.page_index = self.page_number-1
+			# TODO remember the page index in the Gedit.View object
 		lang_current_page = lang_pages[self.page_index]
+
+		if self.page_index == 0:
+			pass
+		elif self.pagination_mode == 'h1':
+			lang_current_page = splitters_array[1] + lang_current_page
+		elif self.pagination_mode == 'h2':
+			lang_current_page = splitters_array[2] + lang_current_page
 		return lang_current_page
 
 	def get_dummy_uri(self):
@@ -407,7 +425,7 @@ class MdPreviewBar(Gtk.Box):
 		self.panel.add_titled(self.preview_bar, 'markdown_preview', _("Markdown Preview"))
 		self.panel.set_visible_child(self.preview_bar)
 		self.preview_bar.show_all()
-		self.pages_box.props.visible = self.is_paginated
+		self.pages_box.props.visible = (self.pagination_mode != 'whole')
 		if self.parent_plugin.window.get_state() is 'STATE_NORMAL':
 			self.on_reload()
 

@@ -221,10 +221,7 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 
 	def on_change_view_mode(self, *args):
 		mode = args[1].get_string()
-		if mode == 'separators':
-			self.preview.on_set_paginated(False)
-		else: # mode == 'whole'
-			self.preview.on_set_paginated(True)
+		self.preview.on_set_paginated(mode)
 		args[0].set_state(GLib.Variant.new_string(mode))
 
 	def view_method(self, name):

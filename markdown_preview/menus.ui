@@ -55,20 +55,25 @@
       <attribute name="label" translatable="yes">View mode</attribute>
       <section>
         <item>
+          <attribute name="label" translatable="yes">Split at separators</attribute>
+          <attribute name="action">win.md-set-view-mode</attribute>
+          <attribute name="target">hr</attribute>
+        </item>
+        <item>
           <attribute name="label" translatable="yes">Whole document</attribute>
           <attribute name="action">win.md-set-view-mode</attribute>
           <attribute name="target">whole</attribute>
         </item>
         <item>
-          <attribute name="label" translatable="yes">Split at separators</attribute>
+          <attribute name="label" translatable="yes">Split at level 1 titles</attribute>
           <attribute name="action">win.md-set-view-mode</attribute>
-          <attribute name="target">separators</attribute>
+          <attribute name="target">h1</attribute>
         </item>
-        <!-- <item> -->
-        <!--   <attribute name="label" translatable="yes">Split at level 2 titles</attribute> -->
-        <!--   <attribute name="action">win.md-set-view-mode</attribute> -->
-        <!--   <attribute name="target">level2</attribute> -->
-        <!-- </item> -->
+        <item>
+          <attribute name="label" translatable="yes">Split at level 2 titles</attribute>
+          <attribute name="action">win.md-set-view-mode</attribute>
+          <attribute name="target">h2</attribute>
+        </item>
       </section>
     </submenu>
   </section>
