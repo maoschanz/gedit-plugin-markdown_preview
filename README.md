@@ -26,9 +26,9 @@ Main features (version 0.8):
 
 Be sure to have these packages installed before trying to install the plugin:
 
-- `gedit` (of course)
+- `gedit` (≥3.22)
 - `python3-markdown` or `pandoc`
-<!--- maybe `libwebkit2gtk-4.0-dev` (that's the name for debian-based distros)-->
+- maybe `libwebkit2gtk-4.0-37`
 
 ### Download
 

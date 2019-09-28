@@ -84,13 +84,23 @@ class MdConfigWidget(Gtk.Box):
 		backend_box.add(backend_box2)
 		self.backend_stack.show_all() # XXX
 
+		# Load UI for the pandoc backend
 		self.pandoc_command_entry = builder3.get_object('pandoc_command_entry')
+		self.remember_button = builder3.get_object('remember_button')
+		self.remember_button.connect('clicked', self.on_remember)
 
+		self.format_combobox = builder3.get_object('format_combobox')
+		self.format_combobox.append('html5', _("HTML5"))
+		self.format_combobox.append('html_custom', _("HTML5 (with custom CSS)"))
+		self.format_combobox.append('revealjs', _("reveal.js slideshow (HTML with Javascript)"))
+		self.format_combobox.append('custom', _("Custom command line"))
+		self.format_combobox.connect('changed', self.on_pandoc_format_changed)
+		self.format_combobox.set_active_id('html_custom') # FIXME
+
+		# Load UI for the python3-markdown backend
 		for plugin_id in P3MD_PLUGINS:
 			self.plugins[plugin_id] = builder3.get_object('plugins_'+plugin_id)
-
 		self.load_plugins_list()
-
 		for plugin_id in P3MD_PLUGINS:
 			self.plugins[plugin_id].connect('clicked', self.update_plugins_list)
 
@@ -187,6 +197,14 @@ class MdConfigWidget(Gtk.Box):
 
 	def on_auto_manage_changed(self, w, a):
 		self._settings.set_boolean('auto-manage-panel', w.get_state())
+
+	def on_pandoc_format_changed(self, w):
+		output_format = w.get_active_id()
+		# TODO
+
+	def on_remember(self, b):
+		new_command = self.pandoc_command_entry.get_text()
+		self._settings.set_string('custom-export', new_command)
 
 	############################################################################
 ################################################################################

@@ -49,6 +49,12 @@ class MdExportDialog(Gtk.Dialog):
 		self.add_button(_("Cancel"), Gtk.ResponseType.CANCEL)
 		self.add_button(_("Next"), Gtk.ResponseType.OK)
 
+		self.get_content_area().set_margin_left(20)
+		self.get_content_area().set_margin_right(20)
+		self.get_content_area().set_margin_top(20)
+		self.get_content_area().set_margin_bottom(20)
+		self.get_content_area().set_spacing(20)
+
 		if not BACKEND_P3MD_AVAILABLE and not BACKEND_PANDOC_AVAILABLE:
 			error_label = Gtk.Label(visible=True, \
 			        label=_("Error: please install pandoc or python3-markdown"))
@@ -79,10 +85,6 @@ class MdExportDialog(Gtk.Dialog):
 		# Using a stylesheet is possible with both backends
 		builder2 = Gtk.Builder().new_from_file(BASE_PATH + '/css_box.ui')
 		css_box = builder2.get_object('css_box')
-		css_box.set_margin_left(20)
-		css_box.set_margin_right(20)
-		css_box.set_margin_top(20)
-		css_box.set_margin_bottom(20)
 		self.get_content_area().add(css_box)
 		self.switch_css = builder2.get_object('switch_css')
 		self.switch_css.connect('notify::active', self.on_css_changed)
@@ -126,7 +128,8 @@ class MdExportDialog(Gtk.Dialog):
 		self.css_sensitive_box.set_sensitive(w.get_state())
 
 	def on_remember(self, b):
-		self._settings.set_string('custom-export', self.pandoc_command_entry.get_text())
+		new_command = self.pandoc_command_entry.get_text()
+		self._settings.set_string('custom-export', new_command)
 
 	def on_pandoc_format_changed(self, w):
 		output_format = w.get_active_id()

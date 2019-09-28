@@ -193,34 +193,37 @@ class MdPreviewBar(Gtk.Box):
 			if not value.is_undefined():
 				self.scroll_level = value.to_int32()
 
+	def build_context_item(self, name, gio_action):
+		return WebKit2.ContextMenuItem.new_from_gaction(gio_action, name, None)
+
+	def remove_at_position(self, context_menu, position):
+		context_menu.remove( context_menu.get_item_at_position(position) )
+
 	def on_context_menu(self, a, context_menu, c, hit_test_result):
 		special_items = False
-		openLinkWithItem = WebKit2.ContextMenuItem.new_from_gaction( \
-		                             self.parent_plugin.action_open_link_with, \
-		                                        _("Open link in browser"), None)
-		openImageWithItem = WebKit2.ContextMenuItem.new_from_gaction( \
-		                            self.parent_plugin.action_open_image_with, \
-		                                       _("Open image in browser"), None)
+		openLinkWithItem = self.build_context_item(_("Open link in browser"), \
+		                               self.parent_plugin.action_open_link_with)
+		openImageWithItem = self.build_context_item(_("Open image in browser"), \
+		                              self.parent_plugin.action_open_image_with)
 		if hit_test_result.context_is_link() and hit_test_result.context_is_image():
 			special_items = True
-			context_menu.remove(context_menu.get_item_at_position(7)) # download its target
-			context_menu.remove(context_menu.get_item_at_position(6)) # open a link in a new window
-			context_menu.remove(context_menu.get_item_at_position(5)) # open an image in a new window
-			context_menu.remove(context_menu.get_item_at_position(2)) # open a link in a new window
-			context_menu.remove(context_menu.get_item_at_position(1)) # open an image in a new window
+			self.remove_at_position(context_menu, 6) # save image as
+			self.remove_at_position(context_menu, 5) # open image in a new window
+			self.remove_at_position(context_menu, 2) # download link target
+			self.remove_at_position(context_menu, 1) # open link in new window
 			self.link_uri_to_open = hit_test_result.get_link_uri()
 			self.image_uri_to_open = hit_test_result.get_image_uri()
 			context_menu.insert(openLinkWithItem, 2)
-			context_menu.insert(openImageWithItem, 5)
+			context_menu.insert(openImageWithItem, 6)
 		elif hit_test_result.context_is_link():
 			special_items = True
-			context_menu.remove(context_menu.get_item_at_position(2)) # download its target
-			context_menu.remove(context_menu.get_item_at_position(1)) # open a link in a new window
+			self.remove_at_position(context_menu, 2) # download link target
+			self.remove_at_position(context_menu, 1) # open link in new window
 			self.link_uri_to_open = hit_test_result.get_link_uri()
 			context_menu.append(openLinkWithItem)
 		elif hit_test_result.context_is_image():
 			special_items = True
-			context_menu.remove(context_menu.get_item_at_position(0)) # open an image in a new window
+			self.remove_at_position(context_menu, 0) # open image in a new window
 			self.image_uri_to_open = hit_test_result.get_image_uri()
 			context_menu.append(openImageWithItem)
 		elif hit_test_result.context_is_selection():
@@ -229,14 +232,14 @@ class MdPreviewBar(Gtk.Box):
 		context_menu.append(WebKit2.ContextMenuItem.new_separator())
 		if not special_items:
 			context_menu.remove_all()
-		reloadItem = WebKit2.ContextMenuItem.new_from_gaction( \
-		        self.parent_plugin.action_reload, _("Reload the preview"), None)
+		reloadItem = self.build_context_item(_("Reload the preview"), \
+		                                       self.parent_plugin.action_reload)
 		context_menu.append(reloadItem)
 		return False
-		
+
 	def on_open_link_with(self, *args):
 		Gtk.show_uri(None, self.link_uri_to_open, 0)
-		
+
 	def on_open_image_with(self, *args):
 		Gtk.show_uri(None, self.image_uri_to_open, 0)
 
