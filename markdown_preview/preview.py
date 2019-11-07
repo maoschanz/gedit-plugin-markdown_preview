@@ -12,7 +12,8 @@ except Exception:
 	BACKEND_P3MD_AVAILABLE = False
 
 try:
-	subprocess.call(['which', 'pandoc'])
+	status = subprocess.call(['which', 'pandoc'])
+	assert(status == 0)
 except Exception:
 	print("Package pandoc not installed")
 	BACKEND_PANDOC_AVAILABLE = False
