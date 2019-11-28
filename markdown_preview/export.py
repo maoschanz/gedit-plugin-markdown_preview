@@ -143,10 +143,12 @@ class MdExportDialog(Gtk.Dialog):
 			return
 
 		command = 'pandoc $INPUT_FILE %s -o $OUTPUT_FILE'
+		css = self._settings.get_string('style')
 		options = ''
 		if output_format == 'pdf':
 			options = '-V geometry=right=2cm -V geometry=left=2cm -V ' \
-			                          'geometry=bottom=2cm -V geometry=top=2cm'
+			                 'geometry=bottom=2cm -V geometry=top=2cm -c ' + css
+			# TODO pandoc has an option --css
 			self.output_extension = '.pdf'
 		elif output_format == 'revealjs':
 			options = '-t revealjs -s -V revealjs-url=http://lab.hakim.se/reveal-js'
@@ -170,7 +172,7 @@ class MdExportDialog(Gtk.Dialog):
 
 	def do_next(self):
 		if self.export_stack.get_visible_child_name() == 'backend_python':
-			exported = self.export_python()
+			exported = self.export_p3md()
 		else: # if self.export_stack.get_visible_child_name() == 'backend_pandoc':
 			exported = self.export_pandoc()
 		self.destroy()
@@ -180,7 +182,7 @@ class MdExportDialog(Gtk.Dialog):
 		                        self.gedit_window, Gtk.FileChooserAction.SAVE, \
 		                                               _("Export"), _("Cancel"))
 		name = self.gedit_window.get_active_document().get_short_name_for_display()
-		# TODO retirer l'ancienne extension ?
+		# retirer l'ancienne extension ?
 		name = str(name + ' ' + _("(exported)") + output_extension)
 		file_chooser.set_current_name(name)
 		response = file_chooser.run()
@@ -190,7 +192,7 @@ class MdExportDialog(Gtk.Dialog):
 			file_chooser.destroy()
 			return None
 
-	def export_python(self):
+	def export_p3md(self):
 		file_chooser = self.launch_file_chooser('.html')
 		if file_chooser is None:
 			return False

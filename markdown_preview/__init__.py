@@ -10,6 +10,8 @@ LOCALE_PATH = os.path.join(BASE_PATH, 'locale')
 from .prefs import MdConfigWidget
 from .preview import MdPreviewBar
 from .export import MdExportDialog
+from .kb_acc_data import ACTIONS_NAMES
+from .kb_acc_data import SETTINGS_KEYS
 
 try:
 	import gettext
@@ -57,28 +59,8 @@ class MarkdownGeditPluginApp(GObject.Object, Gedit.AppActivatable):
 
 	def add_all_accelerators(self):
 		self._settings = Gio.Settings.new(MD_PREVIEW_KEY_BASE)
-		self.add_one_accelerator('kb-italic', 'win.md-prev-format-italic')
-		self.add_one_accelerator('kb-bold', 'win.md-prev-format-bold')
-		self.add_one_accelerator('kb-insert-picture', 'win.md-prev-insert-picture')
-		self.add_one_accelerator('kb-title-lower', 'win.md-prev-format-title-lower')
-		self.add_one_accelerator('kb-title-upper', 'win.md-prev-format-title-upper')
-#		self.add_one_accelerator('kb-', 'win.md-prev-')
-#		self.add_one_accelerator('kb-', 'win.md-prev-')
-#		self.add_one_accelerator('kb-', 'win.md-prev-')
-#		self.add_one_accelerator('kb-', 'win.md-prev-')
-#		self.add_one_accelerator('kb-', 'win.md-prev-')
-		
-#		self.app.add_accelerator("<Primary>1", "win.md-prev-format-title-1", None) # ????????? XXX XXX
-#		self.app.add_accelerator("<Primary>2", "win.md-prev-format-title-2", None)
-#		self.app.add_accelerator("<Primary>3", "win.md-prev-format-title-3", None)
-#		self.app.add_accelerator("<Primary>KP_1", "win.md-prev-format-title-1", None)
-#		self.app.add_accelerator("<Primary>KP_2", "win.md-prev-format-title-2", None)
-#		self.app.add_accelerator("<Primary>KP_3", "win.md-prev-format-title-3", None)
-#		self.app.add_accelerator("<Primary>4", "win.md-prev-format-title-4", None)
-#		self.app.add_accelerator("<Primary>5", "win.md-prev-format-title-5", None)
-#		self.app.add_accelerator("<Primary>6", "win.md-prev-format-title-6", None)
-#		self.app.add_accelerator("<Primary>KP_Add", "win.md-prev-format-title-upper", None)
-#		self.app.add_accelerator("<Primary>KP_Subtract", "win.md-prev-format-title-lower", None)
+		for i in range(len(SETTINGS_KEYS)):
+			self.add_one_accelerator(SETTINGS_KEYS[i], ACTIONS_NAMES[i])
 
 	def add_one_accelerator(self, setting_key, action_name):
 		accels = self._settings.get_strv(setting_key)
@@ -86,16 +68,8 @@ class MarkdownGeditPluginApp(GObject.Object, Gedit.AppActivatable):
 			self.app.add_accelerator(accels[0], action_name, None)
 
 	def remove_accelerators(self):
-		self.app.remove_accelerator('win.md-prev-insert-picture', None)
-		self.app.remove_accelerator('win.md-prev-format-bold', None)
-		self.app.remove_accelerator('win.md-prev-format-title-1', None)
-		self.app.remove_accelerator('win.md-prev-format-title-2', None)
-		self.app.remove_accelerator('win.md-prev-format-title-3', None)
-		self.app.remove_accelerator('win.md-prev-format-title-4', None)
-		self.app.remove_accelerator('win.md-prev-format-title-5', None)
-		self.app.remove_accelerator('win.md-prev-format-title-6', None)
-		self.app.remove_accelerator('win.md-prev-format-title-upper', None)
-		self.app.remove_accelerator('win.md-prev-format-title-lower', None)
+		for i in range(len(SETTINGS_KEYS)):
+			self.app.remove_accelerator(SETTINGS_KEYS[i], None)
 
 ################################################################################
 

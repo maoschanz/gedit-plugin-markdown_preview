@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-27 00:12+0200\n"
+"POT-Creation-Date: 2019-11-28 10:18+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,191 +17,191 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: markdown_preview/export.py:42
+#: markdown_preview/export.py:45
 msgid "Export as…"
 msgstr ""
 
-#: markdown_preview/export.py:47 markdown_preview/export.py:175
+#: markdown_preview/export.py:50 markdown_preview/export.py:183
 msgid "Cancel"
 msgstr ""
 
-#: markdown_preview/export.py:48
+#: markdown_preview/export.py:51
 msgid "Next"
 msgstr ""
 
-#: markdown_preview/export.py:52 markdown_preview/preview.py:69
+#: markdown_preview/export.py:61 markdown_preview/preview.py:70
 msgid "Error: please install pandoc or python3-markdown"
 msgstr ""
 
-#: markdown_preview/export.py:100
+#: markdown_preview/export.py:105
 msgid "LaTeX beamer slideshow (.tex)"
 msgstr ""
 
-#: markdown_preview/export.py:101
+#: markdown_preview/export.py:106
 msgid "Microsoft Word (.docx)"
 msgstr ""
 
-#: markdown_preview/export.py:102
+#: markdown_preview/export.py:107 markdown_preview/prefs.py:103
 msgid "HTML5"
 msgstr ""
 
-#: markdown_preview/export.py:103
+#: markdown_preview/export.py:108 markdown_preview/prefs.py:104
 msgid "HTML5 (with custom CSS)"
 msgstr ""
 
-#: markdown_preview/export.py:104
+#: markdown_preview/export.py:109
 msgid "LaTeX (.tex)"
 msgstr ""
 
-#: markdown_preview/export.py:105
+#: markdown_preview/export.py:110
 msgid "OpenOffice text document (.odt)"
 msgstr ""
 
-#: markdown_preview/export.py:106
+#: markdown_preview/export.py:111
 msgid "Portable Document Format (.pdf)"
 msgstr ""
 
-#: markdown_preview/export.py:107
+#: markdown_preview/export.py:112
 msgid "plain text (.txt)"
 msgstr ""
 
-#: markdown_preview/export.py:108
+#: markdown_preview/export.py:113
 msgid "PowerPoint slideshow (.pptx)"
 msgstr ""
 
-#: markdown_preview/export.py:109
+#: markdown_preview/export.py:114
 msgid "Rich Text Format (.rtf)"
 msgstr ""
 
-#: markdown_preview/export.py:110
+#: markdown_preview/export.py:115 markdown_preview/prefs.py:105
 msgid "reveal.js slideshow (HTML with Javascript)"
 msgstr ""
 
-#: markdown_preview/export.py:111
+#: markdown_preview/export.py:116 markdown_preview/prefs.py:106
 msgid "Custom command line"
 msgstr ""
 
-#: markdown_preview/export.py:173 markdown_preview/menus.ui:6
+#: markdown_preview/export.py:181 markdown_preview/menus.ui:6
 msgid "Export the preview"
 msgstr ""
 
-#: markdown_preview/export.py:175
+#: markdown_preview/export.py:183
 msgid "Export"
 msgstr ""
 
-#: markdown_preview/export.py:178
+#: markdown_preview/export.py:186
 msgid "(exported)"
 msgstr ""
 
-#: markdown_preview/__init__.py:45 markdown_preview/__init__.py:48
-#: markdown_preview/__init__.py:299 markdown_preview/preview.py:407
+#: markdown_preview/__init__.py:47 markdown_preview/__init__.py:50
+#: markdown_preview/__init__.py:270 markdown_preview/preview.py:429
 msgid "Markdown Preview"
 msgstr ""
 
-#: markdown_preview/__init__.py:51
+#: markdown_preview/__init__.py:53
 msgid "Zoom"
 msgstr ""
 
-#: markdown_preview/__init__.py:341
+#: markdown_preview/__init__.py:312
 msgid "Markdown tags"
 msgstr ""
 
-#: markdown_preview/__init__.py:434
+#: markdown_preview/__init__.py:405
 msgid "Select a picture"
 msgstr ""
 
-#: markdown_preview/prefs.py:104 markdown_preview/menus.ui:132
+#: markdown_preview/kb_acc_data.py:36 markdown_preview/menus.ui:137
 msgid "Italic"
 msgstr ""
 
-#: markdown_preview/prefs.py:105 markdown_preview/menus.ui:128
+#: markdown_preview/kb_acc_data.py:37 markdown_preview/menus.ui:133
 msgid "Bold"
 msgstr ""
 
-#: markdown_preview/prefs.py:106
+#: markdown_preview/kb_acc_data.py:38
 msgid "Insert a picture"
 msgstr ""
 
-#: markdown_preview/prefs.py:107
+#: markdown_preview/kb_acc_data.py:39
 msgid "Lower title"
 msgstr ""
 
-#: markdown_preview/prefs.py:108
+#: markdown_preview/kb_acc_data.py:40
 msgid "Upper title"
 msgstr ""
 
-#: markdown_preview/prefs.py:169 markdown_preview/css_box.ui:44
+#: markdown_preview/prefs.py:171 markdown_preview/css_box.ui:44
 #: markdown_preview/css_box.ui:52
 msgid "Select a CSS file"
 msgstr ""
 
-#: markdown_preview/prefs.py:174
+#: markdown_preview/prefs.py:176
 msgid "Stylesheet"
 msgstr ""
 
-#: markdown_preview/preview.py:200
+#: markdown_preview/preview.py:205
 msgid "Open link in browser"
 msgstr ""
 
-#: markdown_preview/preview.py:203
+#: markdown_preview/preview.py:207
 msgid "Open image in browser"
 msgstr ""
 
-#: markdown_preview/preview.py:233 markdown_preview/preview.ui:57
+#: markdown_preview/preview.py:236 markdown_preview/preview.ui:57
 msgid "Reload the preview"
 msgstr ""
 
-#: markdown_preview/preview.py:288
+#: markdown_preview/preview.py:293
 msgid "Can't preview an unsaved document"
 msgstr ""
 
-#: markdown_preview/preview.py:290
+#: markdown_preview/preview.py:295
 msgid "Unsupported type of document: "
 msgstr ""
 
-#: markdown_preview/preview.py:463
+#: markdown_preview/preview.py:485
 #, python-format
 msgid "%s results"
 msgstr ""
 
-#: markdown_preview/backend_box.ui:15
+#: markdown_preview/backend_box.ui:14
 msgid "Export file using:"
 msgstr ""
 
-#: markdown_preview/backend_box.ui:47
+#: markdown_preview/backend_box.ui:46
 msgid "Extensions for python3-markdown:"
 msgstr ""
 
-#: markdown_preview/backend_box.ui:57
+#: markdown_preview/backend_box.ui:56
 msgid ""
 "A compilation of various extensions (Abbreviations, Attribute Lists, "
 "Definition Lists, Fenced Code Blocks, Footnotes, Tables)."
 msgstr ""
 
-#: markdown_preview/backend_box.ui:66
+#: markdown_preview/backend_box.ui:65
 msgid "Show a clickable table of content with the [TOC] tag."
 msgstr ""
 
-#: markdown_preview/backend_box.ui:75
+#: markdown_preview/backend_box.ui:74
 msgid ""
 "Highlight your code with a correct syntax coloration (it needs a set up and "
 "some dependencies)."
 msgstr ""
 
-#: markdown_preview/backend_box.ui:84
+#: markdown_preview/backend_box.ui:83
 msgid "Add a line break at each new line."
 msgstr ""
 
-#: markdown_preview/backend_box.ui:93
+#: markdown_preview/backend_box.ui:92
 msgid ""
 "Converts ASCII dashes, quotes and ellipses to their nice-looking equivalents."
 msgstr ""
 
-#: markdown_preview/backend_box.ui:102
+#: markdown_preview/backend_box.ui:101
 msgid "Alters the behavior of the lists syntax."
 msgstr ""
 
-#: markdown_preview/backend_box.ui:111 markdown_preview/backend_box.ui:120
+#: markdown_preview/backend_box.ui:110 markdown_preview/backend_box.ui:119
 msgid "..."
 msgstr ""
 
@@ -258,54 +258,62 @@ msgid "View mode"
 msgstr ""
 
 #: markdown_preview/menus.ui:58
-msgid "Whole document"
-msgstr ""
-
-#: markdown_preview/menus.ui:63
 msgid "Split at separators"
 msgstr ""
 
-#: markdown_preview/menus.ui:82
+#: markdown_preview/menus.ui:63
+msgid "Whole document"
+msgstr ""
+
+#: markdown_preview/menus.ui:68
+msgid "Split at level 1 titles"
+msgstr ""
+
+#: markdown_preview/menus.ui:73
+msgid "Split at level 2 titles"
+msgstr ""
+
+#: markdown_preview/menus.ui:87
 msgid "Remove all tags"
 msgstr ""
 
-#: markdown_preview/menus.ui:89
+#: markdown_preview/menus.ui:94
 msgid "Title"
 msgstr ""
 
-#: markdown_preview/menus.ui:92
+#: markdown_preview/menus.ui:97
 msgid "Upper"
 msgstr ""
 
-#: markdown_preview/menus.ui:96
+#: markdown_preview/menus.ui:101
 msgid "Lower"
 msgstr ""
 
-#: markdown_preview/menus.ui:144
+#: markdown_preview/menus.ui:149
 msgid "Monospace"
 msgstr ""
 
-#: markdown_preview/menus.ui:148
+#: markdown_preview/menus.ui:153
 msgid "Quote"
 msgstr ""
 
-#: markdown_preview/menus.ui:154
+#: markdown_preview/menus.ui:159
 msgid "Unordered list"
 msgstr ""
 
-#: markdown_preview/menus.ui:158
+#: markdown_preview/menus.ui:163
 msgid "Ordered list"
 msgstr ""
 
-#: markdown_preview/menus.ui:164
+#: markdown_preview/menus.ui:169
 msgid "Insert an image"
 msgstr ""
 
-#: markdown_preview/menus.ui:168
+#: markdown_preview/menus.ui:173
 msgid "Insert a link"
 msgstr ""
 
-#: markdown_preview/menus.ui:172
+#: markdown_preview/menus.ui:177
 msgid "Insert a table"
 msgstr ""
 

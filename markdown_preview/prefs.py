@@ -7,6 +7,9 @@ from gi.repository import Gtk, Gio
 BASE_PATH = os.path.dirname(os.path.realpath(__file__))
 LOCALE_PATH = os.path.join(BASE_PATH, 'locale')
 
+from .kb_acc_data import LABELS
+from .kb_acc_data import SETTINGS_KEYS
+
 MD_PREVIEW_KEY_BASE = 'org.gnome.gedit.plugins.markdown_preview'
 
 try:
@@ -84,6 +87,13 @@ class MdConfigWidget(Gtk.Box):
 		backend_box.add(backend_box2)
 		self.backend_stack.show_all() # XXX
 
+		# Load UI for the python3-markdown backend
+		for plugin_id in P3MD_PLUGINS:
+			self.plugins[plugin_id] = builder3.get_object('plugins_'+plugin_id)
+		self.load_plugins_list()
+		for plugin_id in P3MD_PLUGINS:
+			self.plugins[plugin_id].connect('clicked', self.update_plugins_list)
+
 		# Load UI for the pandoc backend
 		self.pandoc_command_entry = builder3.get_object('pandoc_command_entry')
 		self.remember_button = builder3.get_object('remember_button')
@@ -97,13 +107,6 @@ class MdConfigWidget(Gtk.Box):
 		self.format_combobox.connect('changed', self.on_pandoc_format_changed)
 		self.format_combobox.set_active_id('html_custom') # FIXME
 
-		# Load UI for the python3-markdown backend
-		for plugin_id in P3MD_PLUGINS:
-			self.plugins[plugin_id] = builder3.get_object('plugins_'+plugin_id)
-		self.load_plugins_list()
-		for plugin_id in P3MD_PLUGINS:
-			self.plugins[plugin_id].connect('clicked', self.update_plugins_list)
-
 		### SHORTCUTS PAGE #####################################################
 
 		self.shortcuts_treeview = builder.get_object('shortcuts_treeview')
@@ -111,19 +114,8 @@ class MdConfigWidget(Gtk.Box):
 		renderer.connect('accel-edited', self.on_accel_edited)
 		renderer.connect('accel-cleared', self.on_accel_cleared)
 #		https://github.com/GNOME/gtk/blob/master/gdk/keynames.txt
-		self.add_keybinding('kb-italic', _("Italic"))
-		self.add_keybinding('kb-bold', _("Bold"))
-		self.add_keybinding('kb-insert-picture', _("Insert a picture"))
-		self.add_keybinding('kb-title-lower', _("Lower title"))
-		self.add_keybinding('kb-title-upper', _("Upper title"))
-#		self.add_keybinding('kb-', _(""))
-#		self.add_keybinding('kb-', _(""))
-#		self.add_keybinding('kb-', _(""))
-#		self.add_keybinding('kb-', _(""))
-#		self.add_keybinding('kb-', _(""))
-#		self.add_keybinding('kb-', _(""))
-#		self.add_keybinding('kb-', _(""))
-
+		for i in range(len(SETTINGS_KEYS)):
+			self.add_keybinding(SETTINGS_KEYS[i], LABELS[i])
 		self.add(switcher)
 		self.add(stack)
 		self.connect('notify::visible', self.set_options_visibility)

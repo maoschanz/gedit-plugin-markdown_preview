@@ -22,6 +22,8 @@ Main features (version 0.8):
 
 ## Installation
 
+this plugin is **work in progress**, there is no stable release yet
+
 ### Dependencies
 
 Be sure to have these packages installed before trying to install the plugin:

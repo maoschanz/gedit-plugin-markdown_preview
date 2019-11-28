@@ -1,7 +1,9 @@
 ./markdown_preview/export.py
 ./markdown_preview/__init__.py
+./markdown_preview/kb_acc_data.py
 ./markdown_preview/prefs.py
 ./markdown_preview/preview.py
+
 ./markdown_preview/backend_box.ui
 ./markdown_preview/css_box.ui
 ./markdown_preview/menus.ui
