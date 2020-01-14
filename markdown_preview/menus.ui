@@ -42,6 +42,11 @@
   </section>
   <section id="md-preview-settings">
     <item>
+      <attribute name="label" translatable="yes">Automatic</attribute>
+      <attribute name="action">win.md-prev-panel</attribute>
+      <attribute name="target">auto</attribute>
+    </item>
+    <item>
       <attribute name="label" translatable="yes">Side Panel</attribute>
       <attribute name="action">win.md-prev-panel</attribute>
       <attribute name="target">side</attribute>

@@ -90,9 +90,10 @@ class MdExportDialog(Gtk.Dialog):
 		self.switch_css = builder2.get_object('switch_css')
 		self.switch_css.connect('notify::active', self.on_css_changed)
 		self.css_sensitive_box = builder2.get_object('css_sensitive_box')
-		self.css_path = self._settings.get_string('style')
 		self.file_chooser_btn_css = builder2.get_object('file_chooser_btn_css')
-		self.file_chooser_btn_css.set_label('…' + self.css_path[-50:])
+		self.css_path = self._settings.get_string('style')
+		self.update_file_chooser_btn_label()
+		self.file_chooser_btn_css.connect('clicked', self.on_choose_css)
 
 		# Load UI for the pandoc backend
 		self.pandoc_cli_entry = builder.get_object('pandoc_command_entry')
@@ -105,7 +106,6 @@ class MdExportDialog(Gtk.Dialog):
 		self.format_combobox.append('beamer', _("LaTeX beamer slideshow (.tex)"))
 		self.format_combobox.append('docx', _("Microsoft Word (.docx)"))
 		self.format_combobox.append('html5', _("HTML5"))
-		self.format_combobox.append('html_custom', _("HTML5 (with custom CSS)"))
 		self.format_combobox.append('latex', _("LaTeX (.tex)"))
 		self.format_combobox.append('odt', _("OpenOffice text document (.odt)"))
 		self.format_combobox.append('pdf', _("Portable Document Format (.pdf)"))
@@ -116,6 +116,30 @@ class MdExportDialog(Gtk.Dialog):
 		self.format_combobox.append('custom', _("Custom command line"))
 		self.format_combobox.connect('changed', self.on_pandoc_format_changed)
 		self.format_combobox.set_active_id('pdf')
+
+	def update_file_chooser_btn_label(self):
+		label = self.css_path
+		if len(label) > 50:
+			label = '…' + label[-50:]
+		self.file_chooser_btn_css.set_label(label)
+
+	def on_choose_css(self, w):
+		# Building a FileChooserDialog for CSS
+		file_chooser = Gtk.FileChooserDialog(_("Select a CSS file"), None, # FIXME
+			Gtk.FileChooserAction.OPEN,
+			(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+			Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
+		onlyCSS = Gtk.FileFilter()
+		onlyCSS.set_name(_("Stylesheet"))
+		onlyCSS.add_mime_type('text/css')
+		file_chooser.set_filter(onlyCSS)
+		response = file_chooser.run()
+		
+		# It gets the chosen file's path
+		if response == Gtk.ResponseType.OK:
+			self.css_path = file_chooser.get_uri()
+			self.update_file_chooser_btn_label()
+		file_chooser.destroy()
 
 	def do_cancel_export(self):
 		self.destroy()
@@ -129,7 +153,7 @@ class MdExportDialog(Gtk.Dialog):
 		self.css_sensitive_box.set_sensitive(w.get_state())
 
 	def on_remember(self, b):
-		new_command = self.pandoc_command_entry.get_text()
+		new_command = self.pandoc_command_entry.get_buffer().get_text()
 		self._settings.set_string('custom-export', new_command)
 
 	def on_pandoc_format_changed(self, w):
@@ -138,35 +162,38 @@ class MdExportDialog(Gtk.Dialog):
 		self.remember_button.set_visible(output_format == 'custom')
 		if output_format == 'custom':
 			command = self._settings.get_string('custom-export')
-			self.pandoc_cli_entry.set_text(command)
+			self.pandoc_cli_entry.get_buffer().set_text(command)
 			self.output_extension = '.pdf'
 			return
 
 		command = 'pandoc $INPUT_FILE %s -o $OUTPUT_FILE'
-		css = self._settings.get_string('style')
 		options = ''
+		accept_css = True
 		if output_format == 'pdf':
 			options = '-V geometry=right=2cm -V geometry=left=2cm -V ' \
-			                 'geometry=bottom=2cm -V geometry=top=2cm -c ' + css
-			# TODO pandoc has an option --css
+			                 'geometry=bottom=2cm -V geometry=top=2cm'
 			self.output_extension = '.pdf'
 		elif output_format == 'revealjs':
 			options = '-t revealjs -s -V revealjs-url=http://lab.hakim.se/reveal-js'
+			# TODO slide numbers ??
 			self.output_extension = '.html'
-		elif output_format == 'html_custom':
-			options = '-t html5 -s -c ' + self._settings.get_string('style')
-			self.output_extension = '.html'
+			# accept_css = False # XXX ?
 		else:
 			options = '-t ' + output_format
 			if output_format == 'beamer' or output_format == 'latex':
 				self.output_extension = '.tex'
+				# accept_css = False # XXX ?
 			elif output_format == 'html5':
+				options = options + ' -s'
 				self.output_extension = '.html'
 			elif output_format == 'plain':
 				self.output_extension = '.txt'
+				accept_css = False
 			else:
 				self.output_extension = '.' + output_format
-		self.pandoc_cli_entry.set_text(command % options)
+		if self.switch_css.get_state() and accept_css:
+			options = options + ' -c ' + self.css_path
+		self.pandoc_cli_entry.get_buffer().set_text(command % options)
 
 	############################################################################
 
@@ -209,9 +236,8 @@ class MdExportDialog(Gtk.Dialog):
 		with open(file_chooser.get_filename(), 'w') as f:
 			f.write(content)
 		if self.switch_css.get_active():
-			pre_string = '<html><head><meta charset="utf-8" />' + \
-			             '<link rel="stylesheet" href="' + \
-			            self._settings.get_string('style') + '" /></head><body>'
+			pre_string = '<html><head><meta charset="utf-8" /><link rel="st' + \
+			            'ylesheet" href="' + self.css_path + '" /></head><body>'
 			post_string = '</body></html>'
 			with open(file_chooser.get_filename(), 'r+') as f:
 				content = f.read()
@@ -229,17 +255,11 @@ class MdExportDialog(Gtk.Dialog):
 
 		output_format = self.format_combobox.get_active_id()
 		doc_path = self.gedit_window.get_active_document().get_location().get_path()
-		if output_format == 'pdf':
-			subprocess.run(['pandoc', doc_path, \
-				'-V', 'geometry=right=2cm', '-V', 'geometry=left=2cm', \
-				'-V', 'geometry=bottom=2cm', '-V', 'geometry=top=2cm', \
-				'-o', file_chooser.get_filename()])
-		else:
-			cmd = self.pandoc_cli_entry.get_text()
-			words = cmd.split()
-			words[words.index('$INPUT_FILE')] = doc_path
-			words[words.index('$OUTPUT_FILE')] = file_chooser.get_filename()
-			subprocess.run(words)
+		cmd = self.pandoc_cli_entry.get_buffer().get_text()
+		words = cmd.split()
+		words[words.index('$INPUT_FILE')] = doc_path
+		words[words.index('$OUTPUT_FILE')] = file_chooser.get_filename()
+		subprocess.run(words)
 		file_chooser.destroy()
 		return True
 

@@ -96,16 +96,17 @@ class MdConfigWidget(Gtk.Box):
 
 		# Load UI for the pandoc backend
 		self.pandoc_command_entry = builder3.get_object('pandoc_command_entry')
+		command = self._settings.get_string('custom-export')
+		self.pandoc_command_entry.get_buffer().set_text(command)
 		self.remember_button = builder3.get_object('remember_button')
 		self.remember_button.connect('clicked', self.on_remember)
 
 		self.format_combobox = builder3.get_object('format_combobox')
 		self.format_combobox.append('html5', _("HTML5"))
-		self.format_combobox.append('html_custom', _("HTML5 (with custom CSS)"))
 		self.format_combobox.append('revealjs', _("reveal.js slideshow (HTML with Javascript)"))
 		self.format_combobox.append('custom', _("Custom command line"))
 		self.format_combobox.connect('changed', self.on_pandoc_format_changed)
-		self.format_combobox.set_active_id('html_custom') # FIXME
+		self.format_combobox.set_active_id('html5')
 
 		### SHORTCUTS PAGE #####################################################
 
@@ -192,10 +193,11 @@ class MdConfigWidget(Gtk.Box):
 
 	def on_pandoc_format_changed(self, w):
 		output_format = w.get_active_id()
-		# TODO
+		self.remember_button.set_visible(output_format == 'custom')
+		# TODO TODO TODO
 
 	def on_remember(self, b):
-		new_command = self.pandoc_command_entry.get_text()
+		new_command = self.pandoc_command_entry.get_buffer().get_text()
 		self._settings.set_string('custom-export', new_command)
 
 	############################################################################

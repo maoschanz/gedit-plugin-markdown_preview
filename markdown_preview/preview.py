@@ -302,6 +302,8 @@ class MdPreviewBar(Gtk.Box):
 			return
 		elif self.panel.get_visible_child() != self.preview_bar:
 			return
+		if self.parent_plugin._auto_position:
+			self.auto_change_panel()
 
 		html_content = ''
 		doc = self.parent_plugin.window.get_active_document()
@@ -416,16 +418,37 @@ class MdPreviewBar(Gtk.Box):
 	############################################################################
 	# Panels ###################################################################
 
+	def auto_change_panel(self):
+		position = self.get_wanted_position()
+		window = self.parent_plugin.window
+		# Get the bottom bar (A Gtk.Stack), or the side bar, and add our box to it.
+		if position == 'bottom' and self.panel != window.get_bottom_panel():
+			self.change_panel()
+		elif position == 'side' and self.panel != window.get_side_panel():
+			self.change_panel()
+
+	def get_wanted_position(self):
+		position = self._settings.get_string('position')
+		window = self.parent_plugin.window
+		if position == 'auto':
+			ratio = window.get_allocated_width()/window.get_allocated_height()
+			if ratio < 1.2:
+				position = 'bottom'
+			else:
+				position = 'side'
+		return position
+
 	def show_on_panel(self):
-		# Get the bottom bar (A Gtk.Stack), or the side bar, and add our bar to it.
-		if self._settings.get_string('position') == 'bottom':
-			self.panel = self.parent_plugin.window.get_bottom_panel()
-			self.preview_bar.props.orientation = Gtk.Orientation.HORIZONTAL
-			self.buttons_main_box.props.orientation = Gtk.Orientation.VERTICAL
-		else:
+		position = self.get_wanted_position()
+		# Get the bottom bar (A Gtk.Stack), or the side bar, and add our box to it.
+		if position == 'side':
 			self.panel = self.parent_plugin.window.get_side_panel()
 			self.preview_bar.props.orientation = Gtk.Orientation.VERTICAL
 			self.buttons_main_box.props.orientation = Gtk.Orientation.HORIZONTAL
+		else: # if position == 'bottom':
+			self.panel = self.parent_plugin.window.get_bottom_panel()
+			self.preview_bar.props.orientation = Gtk.Orientation.HORIZONTAL
+			self.buttons_main_box.props.orientation = Gtk.Orientation.VERTICAL
 		self.panel.add_titled(self.preview_bar, 'markdown_preview', _("Markdown Preview"))
 		self.panel.set_visible_child(self.preview_bar)
 		self.preview_bar.show_all()

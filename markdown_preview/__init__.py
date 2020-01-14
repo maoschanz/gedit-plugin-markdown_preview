@@ -78,6 +78,7 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 
 	def __init__(self):
 		GObject.Object.__init__(self)
+		self._auto_position = False # XXX
 		self.preview = MdPreviewBar(self)
 
 	def do_activate(self):
@@ -146,6 +147,7 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		self.action_open_image_with.connect('activate', self.preview.on_open_image_with)
 
 		position = self._settings.get_string('position')
+		self._auto_position = position == 'auto'
 		action_panel = Gio.SimpleAction().new_stateful('md-prev-panel', \
 		           GLib.VariantType.new('s'), GLib.Variant.new_string(position))
 		action_panel.connect('change-state', self.on_change_panel_from_popover)
@@ -207,7 +209,7 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 			v = view.markdown_preview_view_activatable
 		else:
 			return
-			
+		
 		print('action : ' + name)
 		
 		if name == 'insert_table':
@@ -216,7 +218,7 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 			v.insert_picture(self.window)
 		elif name == 'insert_link':
 			v.insert_link(self.window)
-			
+		
 		elif name == 'format_bold':
 			v.format_bold()
 		elif name == 'format_italic':
@@ -227,17 +229,17 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 			v.format_quote()
 		elif name == 'format_underline':
 			v.format_underline()
-			
+		
 		elif name == 'list_ordered':
 			v.list_ordered()
 		elif name == 'list_unordered':
 			v.list_unordered()
-			
+		
 		elif name == 'format_title_upper':
 			v.format_title_upper()
 		elif name == 'format_title_lower':
 			v.format_title_lower()
-			
+		
 		elif name == 'format_title_1':
 			v.format_title(1)
 		elif name == 'format_title_2':
@@ -252,12 +254,17 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 			v.format_title(6)
 
 	def on_change_panel_from_popover(self, *args):
+		self._auto_position = False
 		if GLib.Variant.new_string('side') == args[1]:
 			self._settings.set_string('position', 'side')
 			args[0].set_state(GLib.Variant.new_string('side'))
-		else:
+		elif GLib.Variant.new_string('bottom') == args[1]:
 			self._settings.set_string('position', 'bottom')
 			args[0].set_state(GLib.Variant.new_string('bottom'))
+		else:
+			self._auto_position = True
+			self._settings.set_string('position', 'auto')
+			args[0].set_state(GLib.Variant.new_string('auto'))
 
 	############################################################################
 	
@@ -467,5 +474,6 @@ class MarkdownGeditPluginView(GObject.Object, Gedit.ViewActivatable):
 	def backward_tag(self, iter, tag):
 		iter.backward_chars(len(tag))
 
+	############################################################################
 ################################################################################
 
