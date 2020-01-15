@@ -4,7 +4,7 @@
   <object class="GtkBox" id="css_box">
     <property name="visible">True</property>
     <property name="orientation">vertical</property>
-    <property name="spacing">20</property>
+    <property name="spacing">12</property>
     <child>
       <object class="GtkBox">
         <property name="visible">True</property>

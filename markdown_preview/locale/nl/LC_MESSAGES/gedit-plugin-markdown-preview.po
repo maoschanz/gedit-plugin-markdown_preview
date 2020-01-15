@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-28 10:18+0100\n"
+"POT-Creation-Date: 2020-01-15 16:50+0100\n"
 "PO-Revision-Date: 2019-08-05 13:48+0200\n"
 "Last-Translator: Heimen Stoffels <vistausss@outlook.com>\n"
 "Language-Team: \n"
@@ -22,7 +22,7 @@ msgstr ""
 msgid "Export as…"
 msgstr "Exporteren als…"
 
-#: markdown_preview/export.py:50 markdown_preview/export.py:183
+#: markdown_preview/export.py:50 markdown_preview/export.py:210
 msgid "Cancel"
 msgstr "Annuleren"
 
@@ -35,22 +35,18 @@ msgstr "Volgende"
 msgid "Error: please install pandoc or python3-markdown"
 msgstr "Uitbreidingen voor python3-markdown:"
 
-#: markdown_preview/export.py:105
+#: markdown_preview/export.py:106
 #, fuzzy
 msgid "LaTeX beamer slideshow (.tex)"
 msgstr "LaTeX-beamer-diavoorstelling"
 
-#: markdown_preview/export.py:106
+#: markdown_preview/export.py:107
 msgid "Microsoft Word (.docx)"
 msgstr "Microsoft Word (.docx)"
 
-#: markdown_preview/export.py:107 markdown_preview/prefs.py:103
+#: markdown_preview/export.py:108 markdown_preview/prefs.py:112
 msgid "HTML5"
 msgstr "HTML5"
-
-#: markdown_preview/export.py:108 markdown_preview/prefs.py:104
-msgid "HTML5 (with custom CSS)"
-msgstr "HTML5 (met aangepaste CSS)"
 
 #: markdown_preview/export.py:109
 msgid "LaTeX (.tex)"
@@ -78,30 +74,39 @@ msgstr "PowerPoint-diavoorstelling"
 msgid "Rich Text Format (.rtf)"
 msgstr "Rich Text Format (.rtf)"
 
-#: markdown_preview/export.py:115 markdown_preview/prefs.py:105
+#: markdown_preview/export.py:115 markdown_preview/prefs.py:113
 #, fuzzy
 msgid "reveal.js slideshow (HTML with Javascript)"
 msgstr "reveal.js HTML + Javascript-diavoorstelling"
 
-#: markdown_preview/export.py:116 markdown_preview/prefs.py:106
+#: markdown_preview/export.py:116 markdown_preview/prefs.py:114
 msgid "Custom command line"
 msgstr "Aangepaste opdrachtregel"
 
-#: markdown_preview/export.py:181 markdown_preview/menus.ui:6
+#: markdown_preview/export.py:128 markdown_preview/prefs.py:179
+#: markdown_preview/css_box.ui:44 markdown_preview/css_box.ui:52
+msgid "Select a CSS file"
+msgstr "Kies een CSS-bestand"
+
+#: markdown_preview/export.py:133 markdown_preview/prefs.py:184
+msgid "Stylesheet"
+msgstr "Stijlblad"
+
+#: markdown_preview/export.py:208 markdown_preview/menus.ui:6
 msgid "Export the preview"
 msgstr "Voorbeeld exporteren"
 
-#: markdown_preview/export.py:183
+#: markdown_preview/export.py:210
 #, fuzzy
 msgid "Export"
 msgstr "Exporteren als…"
 
-#: markdown_preview/export.py:186
+#: markdown_preview/export.py:213
 msgid "(exported)"
 msgstr ""
 
 #: markdown_preview/__init__.py:47 markdown_preview/__init__.py:50
-#: markdown_preview/__init__.py:270 markdown_preview/preview.py:429
+#: markdown_preview/__init__.py:277 markdown_preview/preview.py:458
 msgid "Markdown Preview"
 msgstr "Markdown-voorbeeld"
 
@@ -109,19 +114,19 @@ msgstr "Markdown-voorbeeld"
 msgid "Zoom"
 msgstr "Zoomen"
 
-#: markdown_preview/__init__.py:312
+#: markdown_preview/__init__.py:319
 msgid "Markdown tags"
 msgstr "Markdown-labels"
 
-#: markdown_preview/__init__.py:405
+#: markdown_preview/__init__.py:412
 msgid "Select a picture"
 msgstr "Kies een afbeelding"
 
-#: markdown_preview/kb_acc_data.py:36 markdown_preview/menus.ui:137
+#: markdown_preview/kb_acc_data.py:36 markdown_preview/menus.ui:142
 msgid "Italic"
 msgstr "Cursief"
 
-#: markdown_preview/kb_acc_data.py:37 markdown_preview/menus.ui:133
+#: markdown_preview/kb_acc_data.py:37 markdown_preview/menus.ui:138
 msgid "Bold"
 msgstr "Vetgedrukt"
 
@@ -138,14 +143,18 @@ msgstr ""
 msgid "Upper title"
 msgstr ""
 
-#: markdown_preview/prefs.py:171 markdown_preview/css_box.ui:44
-#: markdown_preview/css_box.ui:52
-msgid "Select a CSS file"
-msgstr "Kies een CSS-bestand"
+#: markdown_preview/prefs.py:46 markdown_preview/menus.ui:45
+#, fuzzy
+msgid "Automatic"
+msgstr "Automatisch herladen"
 
-#: markdown_preview/prefs.py:176
-msgid "Stylesheet"
-msgstr "Stijlblad"
+#: markdown_preview/prefs.py:47 markdown_preview/menus.ui:50
+msgid "Side Panel"
+msgstr "Paneel aan de zijkant"
+
+#: markdown_preview/prefs.py:48 markdown_preview/menus.ui:55
+msgid "Bottom Panel"
+msgstr "Paneel onderaan"
 
 #: markdown_preview/preview.py:205
 msgid "Open link in browser"
@@ -167,7 +176,7 @@ msgstr "Kan geen voorbeeld tonen van een niet-opgeslagen document"
 msgid "Unsupported type of document: "
 msgstr "Geen ondersteuning voor dit soort documenten: "
 
-#: markdown_preview/preview.py:485
+#: markdown_preview/preview.py:514
 #, python-format
 msgid "%s results"
 msgstr "%s resultaten"
@@ -217,7 +226,7 @@ msgstr ""
 msgid "Output file format:"
 msgstr "Bestandsformaat:"
 
-#: markdown_preview/backend_box.ui:177
+#: markdown_preview/backend_box.ui:186
 msgid "Remember"
 msgstr "Onthouden"
 
@@ -255,99 +264,105 @@ msgstr "Oorspronkelijk zoomniveau"
 msgid "Zoom in"
 msgstr "Inzoomen"
 
-#: markdown_preview/menus.ui:45
-msgid "Side Panel"
-msgstr "Paneel aan de zijkant"
-
-#: markdown_preview/menus.ui:50
-msgid "Bottom Panel"
-msgstr "Paneel onderaan"
-
-#: markdown_preview/menus.ui:55
+#: markdown_preview/menus.ui:60
 msgid "View mode"
 msgstr "Weergavemodus"
 
-#: markdown_preview/menus.ui:58
+#: markdown_preview/menus.ui:63
 msgid "Split at separators"
 msgstr "Splitsen bij scheidingen"
 
-#: markdown_preview/menus.ui:63
+#: markdown_preview/menus.ui:68
 msgid "Whole document"
 msgstr "Gehele document"
 
-#: markdown_preview/menus.ui:68
+#: markdown_preview/menus.ui:73
 msgid "Split at level 1 titles"
 msgstr ""
 
-#: markdown_preview/menus.ui:73
+#: markdown_preview/menus.ui:78
 msgid "Split at level 2 titles"
 msgstr ""
 
-#: markdown_preview/menus.ui:87
+#: markdown_preview/menus.ui:92
 msgid "Remove all tags"
 msgstr "Alle labels verwijderen"
 
-#: markdown_preview/menus.ui:94
+#: markdown_preview/menus.ui:99
 msgid "Title"
 msgstr "Titel"
 
-#: markdown_preview/menus.ui:97
+#: markdown_preview/menus.ui:102
 msgid "Upper"
 msgstr ""
 
-#: markdown_preview/menus.ui:101
+#: markdown_preview/menus.ui:106
 msgid "Lower"
 msgstr ""
 
-#: markdown_preview/menus.ui:149
+#: markdown_preview/menus.ui:154
 msgid "Monospace"
 msgstr "Vaste breedte"
 
-#: markdown_preview/menus.ui:153
+#: markdown_preview/menus.ui:158
 msgid "Quote"
 msgstr "Citaat"
 
-#: markdown_preview/menus.ui:159
+#: markdown_preview/menus.ui:164
 msgid "Unordered list"
 msgstr "Ongeordende lijst"
 
-#: markdown_preview/menus.ui:163
+#: markdown_preview/menus.ui:168
 msgid "Ordered list"
 msgstr "Geordende lijst"
 
-#: markdown_preview/menus.ui:169
+#: markdown_preview/menus.ui:174
 msgid "Insert an image"
 msgstr "Afbeelding invoegen"
 
-#: markdown_preview/menus.ui:173
+#: markdown_preview/menus.ui:178
 msgid "Insert a link"
 msgstr "Link invoegen"
 
-#: markdown_preview/menus.ui:177
+#: markdown_preview/menus.ui:182
 msgid "Insert a table"
 msgstr "Tabel invoegen"
 
 #: markdown_preview/prefs.ui:19
+#, fuzzy
+msgid "Preview position"
+msgstr "Voorbeeld"
+
+#: markdown_preview/prefs.ui:40
 msgid "Automatically show/hide panel"
 msgstr "Paneel automatisch tonen/verbergen"
 
-#: markdown_preview/prefs.ui:40
+#: markdown_preview/prefs.ui:61
 msgid "Use relative paths"
 msgstr "Relatieve paden gebruiken"
 
-#: markdown_preview/prefs.ui:58
+#: markdown_preview/prefs.ui:79
 msgid "Preview"
 msgstr "Voorbeeld"
 
-#: markdown_preview/prefs.ui:73
+#: markdown_preview/prefs.ui:94
 msgid "HTML generation backend"
 msgstr "HTML-genereerbackend"
 
-#: markdown_preview/prefs.ui:91
+#: markdown_preview/prefs.ui:112
 msgid "Backend"
 msgstr ""
 
-#: markdown_preview/prefs.ui:136
+#: markdown_preview/prefs.ui:130
+msgid "Description"
+msgstr ""
+
+#: markdown_preview/prefs.ui:142
+#, fuzzy
+msgid "Shortcut"
+msgstr "Sneltoetsen"
+
+#: markdown_preview/prefs.ui:162
 msgid "Shortcuts"
 msgstr "Sneltoetsen"
 
@@ -380,6 +395,9 @@ msgstr "Geen resultaat"
 #: markdown_preview/preview.ui:195
 msgid "No result"
 msgstr "Geen resultaat"
+
+#~ msgid "HTML5 (with custom CSS)"
+#~ msgstr "HTML5 (met aangepaste CSS)"
 
 #~ msgid "Dedicated window"
 #~ msgstr "Los venster"

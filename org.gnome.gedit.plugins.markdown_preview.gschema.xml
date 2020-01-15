@@ -1,73 +1,75 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
-	<schema id="org.gnome.gedit.plugins.markdown_preview" path="/org/gnome/gedit/plugins/markdown_preview/">
-		<key type="s" name="position">
-			<default>'side'</default>
-			<summary></summary>
-			<description></description>
-		</key>
-		<key type="b" name="relative">
-			<default>false</default>
-			<summary></summary>
-			<description></description>
-		</key>
-		<key type="b" name="auto-manage-panel">
-			<default>true</default>
-			<summary>Show/hide panel automatically</summary>
-			<description>If true, the panel will be shown/hidden automatically if no other plugin is active in it.</description>
-		</key>
-		<key type="b" name="auto-reload">
-			<default>true</default>
-			<summary></summary>
-			<description></description>
-		</key>
-		<key type="s" name="backend">
-			<default>'pandoc'</default>
-			<summary>Favorite backend for the preview</summary>
-			<description>python or pandoc</description>
-		</key>
-		<key type="s" name="custom-export">
-			<default>''</default>
-			<summary></summary>
-			<description></description>
-		</key>
-		<key type="s" name="style">
-			<default>""</default>
-			<summary></summary>
-			<description></description>
-		</key>
-		<key type="as" name="extensions">
-			<default>['extra', 'sane_lists', 'toc']</default>
-			<summary></summary>
-			<description></description>
-		</key>
+  <schema id="org.gnome.gedit.plugins.markdown_preview" path="/org/gnome/gedit/plugins/markdown_preview/">
+    <key type="s" name="position">
+      <default>'side'</default>
+      <summary>The position of the preview within the window</summary>
+      <description>Can be 'side', 'bottom', or 'auto'.</description>
+    </key>
+    <key type="b" name="relative">
+      <default>false</default>
+      <summary></summary>
+      <description></description>
+    </key>
+    <key type="b" name="auto-manage-panel">
+      <default>true</default>
+      <summary>Show/hide panel automatically</summary>
+      <description>If true, the panel will be shown/hidden automatically if no
+      other plugin is active in it.</description>
+    </key>
+    <key type="b" name="auto-reload">
+      <default>true</default>
+      <summary></summary>
+      <description></description>
+    </key>
+    <key type="s" name="backend">
+      <default>'pandoc'</default>
+      <summary>Favorite backend for the preview</summary>
+      <description>python or pandoc</description>
+    </key>
+    <key type="s" name="custom-export">
+      <default>''</default>
+      <summary></summary>
+      <description></description>
+    </key>
+    <key type="s" name="style">
+      <default>""</default>
+      <summary></summary>
+      <description></description>
+    </key>
+    <key type="as" name="extensions">
+      <default>['extra', 'sane_lists', 'toc']</default>
+      <summary></summary>
+      <description></description>
+    </key>
 
-		<key name="kb-italic" type="as">
-			<default><![CDATA[['<Primary>slash']]]></default>
-			<summary>Add italic markup</summary>
-			<description></description>
-		</key>
-		<key name="kb-bold" type="as">
-			<default><![CDATA[['<Primary><Shift>B']]]></default>
-			<summary>Add bold markup</summary>
-			<description></description>
-		</key>
-		<key name="kb-insert-picture" type="as">
-			<default><![CDATA[['<Primary><Shift>P']]]></default>
-			<summary>Insert an image</summary>
-			<description></description>
-		</key>
-		<key name="kb-title-lower" type="as">
-			<default><![CDATA[['<Primary>minus']]]></default>
-			<summary>Use a lower level of title by adding a "#" tag</summary>
-			<description></description>
-		</key>
-		<key name="kb-title-upper" type="as">
-			<default><![CDATA[['<Primary>plus']]]></default>
-			<summary>Use a upper level of title by removing a "#" tag</summary>
-			<description></description>
-		</key>
-	</schema>
+    <!-- Keyboard shortcuts -->
+    <key name="kb-italic" type="as">
+      <default><![CDATA[['<Primary>slash']]]></default>
+      <summary>Add italic markup</summary>
+      <description></description>
+    </key>
+    <key name="kb-bold" type="as">
+      <default><![CDATA[['<Primary><Shift>B']]]></default>
+      <summary>Add bold markup</summary>
+      <description></description>
+    </key>
+    <key name="kb-insert-picture" type="as">
+      <default><![CDATA[['<Primary><Shift>P']]]></default>
+      <summary>Insert an image</summary>
+      <description></description>
+    </key>
+    <key name="kb-title-lower" type="as">
+      <default><![CDATA[['<Primary>minus']]]></default>
+      <summary>Use a lower level of title by adding a "#" tag</summary>
+      <description></description>
+    </key>
+    <key name="kb-title-upper" type="as">
+      <default><![CDATA[['<Primary>plus']]]></default>
+      <summary>Use a upper level of title by removing a "#" tag</summary>
+      <description></description>
+    </key>
+  </schema>
 </schemalist>
 
 

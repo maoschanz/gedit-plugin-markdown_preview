@@ -1,5 +1,17 @@
 # Gedit Markdown Preview
 
+<!--TODO-->
+
+<!--	- compléter les descriptions des schémas-->
+<!--	- se souvenir du splitter-->
+<!--	- ajouter le réglage pour le splitter dans les préférences-->
+<!--	- ajouter le réglage pour la position dans les préférences-->
+<!--	- utiliser encore + le même UI pour le backend dans export.py et dans prefs.py-->
+<!--	- factoriser des trucs de export.py et de prefs.py-->
+<!--	- interdire le redimensionnement de l'entrée de texte quand on change le format-->
+
+<!--TODO-->
+
 This is a plugin for the Gedit text editor, previewing .md files in the side (`F9`) or the bottom (`Ctrl+F9`) panel.
 
 Main features (version 0.8):

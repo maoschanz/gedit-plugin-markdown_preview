@@ -424,31 +424,37 @@ class MdPreviewBar(Gtk.Box):
 		# Get the bottom bar (A Gtk.Stack), or the side bar, and add our box to it.
 		if position == 'bottom' and self.panel != window.get_bottom_panel():
 			self.change_panel()
+			self.update_visibility()
+			if self.auto_manage_panel:
+				window.get_side_panel().hide()
 		elif position == 'side' and self.panel != window.get_side_panel():
 			self.change_panel()
+			self.update_visibility()
+			if self.auto_manage_panel:
+				window.get_bottom_panel().hide()
 
 	def get_wanted_position(self):
 		position = self._settings.get_string('position')
 		window = self.parent_plugin.window
 		if position == 'auto':
-			ratio = window.get_allocated_width()/window.get_allocated_height()
-			if ratio < 1.2:
-				position = 'bottom'
-			else:
+			ratio = window.get_allocated_width() / window.get_allocated_height()
+			if ratio > 1.2:
 				position = 'side'
+			else:
+				position = 'bottom'
 		return position
 
 	def show_on_panel(self):
 		position = self.get_wanted_position()
 		# Get the bottom bar (A Gtk.Stack), or the side bar, and add our box to it.
-		if position == 'side':
-			self.panel = self.parent_plugin.window.get_side_panel()
-			self.preview_bar.props.orientation = Gtk.Orientation.VERTICAL
-			self.buttons_main_box.props.orientation = Gtk.Orientation.HORIZONTAL
-		else: # if position == 'bottom':
+		if position == 'bottom':
 			self.panel = self.parent_plugin.window.get_bottom_panel()
 			self.preview_bar.props.orientation = Gtk.Orientation.HORIZONTAL
 			self.buttons_main_box.props.orientation = Gtk.Orientation.VERTICAL
+		else: # if position == 'side':
+			self.panel = self.parent_plugin.window.get_side_panel()
+			self.preview_bar.props.orientation = Gtk.Orientation.VERTICAL
+			self.buttons_main_box.props.orientation = Gtk.Orientation.HORIZONTAL
 		self.panel.add_titled(self.preview_bar, 'markdown_preview', _("Markdown Preview"))
 		self.panel.set_visible_child(self.preview_bar)
 		self.preview_bar.show_all()
@@ -467,7 +473,7 @@ class MdPreviewBar(Gtk.Box):
 		self.on_reload()
 
 	def update_visibility(self):
-		if self.file_format == 'error' or not self.auto_manage_panel:
+		if not self.auto_manage_panel or self.file_format == 'error':
 			if self.panel.props.visible:
 				if self.panel.get_visible_child() == self.preview_bar:
 					self.panel.hide()

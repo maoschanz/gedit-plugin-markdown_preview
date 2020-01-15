@@ -42,6 +42,13 @@ class MdConfigWidget(Gtk.Box):
 
 		preview_box = builder.get_object('preview_box')
 
+		positionCombobox = builder.get_object('positionCombobox')
+		positionCombobox.append('auto', _("Automatic"))
+		positionCombobox.append('side', _("Side Panel"))
+		positionCombobox.append('bottom', _("Bottom Panel"))
+		positionCombobox.set_active_id(self._settings.get_string('position'))
+		positionCombobox.connect('changed', self.on_position_changed)
+
 		relativePathsSwitch = builder.get_object('relativePathsSwitch')
 		relativePathsSwitch.set_state(self._settings.get_boolean('relative'))
 		relativePathsSwitch.connect('notify::active', self.on_relative_changed)
@@ -187,6 +194,10 @@ class MdConfigWidget(Gtk.Box):
 
 	def on_relative_changed(self, w, a):
 		self._settings.set_boolean('relative', w.get_state())
+
+	def on_position_changed(self, w):
+		position = w.get_active_id()
+		self._settings.set_string('position', position)
 
 	def on_auto_manage_changed(self, w, a):
 		self._settings.set_boolean('auto-manage-panel', w.get_state())
