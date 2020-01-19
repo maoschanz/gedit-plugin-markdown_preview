@@ -11,7 +11,7 @@
         <property name="spacing">20</property>
         <child>
           <object class="GtkLabel" id="combo_label">
-            <property name="label" translatable="yes">Export file using:</property>
+            <property name="label" translatable="yes">HTML generation backend</property>
             <property name="visible">True</property>
           </object>
           <packing>
