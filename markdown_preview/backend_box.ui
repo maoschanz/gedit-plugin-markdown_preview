@@ -10,7 +10,7 @@
         <property name="visible">True</property>
         <property name="spacing">20</property>
         <child>
-          <object class="GtkLabel">
+          <object class="GtkLabel" id="combo_label">
             <property name="label" translatable="yes">Export file using:</property>
             <property name="visible">True</property>
           </object>
@@ -19,8 +19,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkStackSwitcher">
-            <property name="stack">backend_stack</property>
+          <object class="GtkComboBoxText" id="backend_combobox">
             <property name="visible">True</property>
           </object>
           <packing>
@@ -47,81 +46,9 @@
               </object>
             </child>
             <child>
-              <object class="GtkFlowBox">
+              <object class="GtkFlowBox" id="extensions_flowbox">
                 <property name="visible">True</property>
                 <property name="selection_mode">none</property>
-                <child>
-                  <object class="GtkCheckButton" id="plugins_extra">
-                    <property name="label">Extra</property>
-                    <property name="tooltip_text" translatable="yes">A compilation of various extensions (Abbreviations, Attribute Lists, Definition Lists, Fenced Code Blocks, Footnotes, Tables).</property>
-                  </object>
-                  <packing>
-                    <property name="expand">True</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="plugins_toc">
-                    <property name="label">Table of content</property>
-                    <property name="tooltip_text" translatable="yes">Show a clickable table of content with the [TOC] tag.</property>
-                  </object>
-                  <packing>
-                    <property name="expand">True</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="plugins_codehilite">
-                    <property name="label">CodeHilite</property>
-                    <property name="tooltip_text" translatable="yes">Highlight your code with a correct syntax coloration (it needs a set up and some dependencies).</property>
-                  </object>
-                  <packing>
-                    <property name="expand">True</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="plugins_nl2br">
-                    <property name="label">New Line To Break</property>
-                    <property name="tooltip_text" translatable="yes">Add a line break at each new line.</property>
-                  </object>
-                  <packing>
-                    <property name="expand">True</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="plugins_smarty">
-                    <property name="label">SmartyPants</property>
-                    <property name="tooltip_text" translatable="yes">Converts ASCII dashes, quotes and ellipses to their nice-looking equivalents.</property>
-                  </object>
-                  <packing>
-                    <property name="expand">True</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="plugins_sane_lists">
-                    <property name="label">Sane Lists</property>
-                    <property name="tooltip_text" translatable="yes">Alters the behavior of the lists syntax.</property>
-                  </object>
-                  <packing>
-                    <property name="expand">True</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="plugins_admonition">
-                    <property name="label">Admonition</property>
-                    <property name="tooltip_text" translatable="yes">...</property><!--TODO-->
-                  </object>
-                  <packing>
-                    <property name="expand">True</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="plugins_wikilinks">
-                    <property name="label">WikiLinks</property>
-                    <property name="tooltip_text" translatable="yes">...</property><!--TODO-->
-                  </object>
-                  <packing>
-                    <property name="expand">True</property>
-                  </packing>
-                </child>
               </object>
             </child>
           </object>

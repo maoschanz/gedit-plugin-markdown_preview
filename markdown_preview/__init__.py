@@ -7,9 +7,8 @@ from gi.repository import GObject, Gtk, Gedit, Gio, PeasGtk, GLib
 BASE_PATH = os.path.dirname(os.path.realpath(__file__))
 LOCALE_PATH = os.path.join(BASE_PATH, 'locale')
 
-from .prefs import MdConfigWidget
 from .preview import MdPreviewBar
-from .export import MdExportDialog
+from .export import MdExportDialog, MdConfigWidget
 from .kb_acc_data import ACTIONS_NAMES
 from .kb_acc_data import SETTINGS_KEYS
 

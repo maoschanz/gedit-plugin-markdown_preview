@@ -2,6 +2,8 @@
 
 <!--TODO-->
 
+<!--	- use FileChooserNative for the CSS -->
+<!--	- cesser les zouaveries avec pandoc et les pre-strings/post-strings, il y a de vraies options -->
 <!--	- compléter les descriptions des schémas-->
 <!--	- se souvenir du splitter-->
 <!--	- ajouter le réglage pour le splitter dans les préférences-->

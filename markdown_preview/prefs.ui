@@ -86,24 +86,7 @@
         <property name="orientation">vertical</property>
 
         <child>
-          <object class="GtkBox">
-            <property name="orientation">horizontal</property>
-            <property name="spacing">20</property>
-            <child>
-              <object class="GtkLabel">
-                <property name="label" translatable="yes">HTML generation backend</property>
-              </object>
-              <packing>
-                <property name="pack-type">start</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkComboBoxText" id="backendCombobox"></object>
-              <packing>
-                <property name="pack-type">end</property>
-              </packing>
-            </child>
-          </object>
+          <object class="GtkBox" />
         </child>
 
       </object>
