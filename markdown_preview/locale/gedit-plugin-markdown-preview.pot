@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-01-19 03:55+0100\n"
+"POT-Creation-Date: 2020-01-19 05:30+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -106,60 +106,65 @@ msgstr ""
 msgid "Custom command line"
 msgstr ""
 
-#: markdown_preview/export.py:106 markdown_preview/css_box.ui:44
+#: markdown_preview/export.py:107 markdown_preview/css_box.ui:44
 #: markdown_preview/css_box.ui:52
 msgid "Select a CSS file"
 msgstr ""
 
-#: markdown_preview/export.py:112
-msgid "Stylesheet"
+#: markdown_preview/export.py:109
+msgid "Select"
 msgstr ""
 
-#: markdown_preview/export.py:226
-msgid "Export as…"
-msgstr ""
-
-#: markdown_preview/export.py:230 markdown_preview/export.py:318
+#: markdown_preview/export.py:109 markdown_preview/export.py:251
+#: markdown_preview/export.py:340
 msgid "Cancel"
 msgstr ""
 
-#: markdown_preview/export.py:231
+#: markdown_preview/export.py:111
+msgid "Stylesheet"
+msgstr ""
+
+#: markdown_preview/export.py:247
+msgid "Export as…"
+msgstr ""
+
+#: markdown_preview/export.py:252
 msgid "Next"
 msgstr ""
 
-#: markdown_preview/export.py:241 markdown_preview/preview.py:70
+#: markdown_preview/export.py:262 markdown_preview/preview.py:70
 msgid "Error: please install pandoc or python3-markdown"
 msgstr ""
 
-#: markdown_preview/export.py:245
+#: markdown_preview/export.py:266
 msgid "Export file with:"
 msgstr ""
 
-#: markdown_preview/export.py:316 markdown_preview/menus.ui:6
+#: markdown_preview/export.py:338 markdown_preview/menus.ui:6
 msgid "Export the preview"
 msgstr ""
 
-#: markdown_preview/export.py:318
+#: markdown_preview/export.py:340
 msgid "Export"
 msgstr ""
 
-#: markdown_preview/export.py:321
+#: markdown_preview/export.py:343
 msgid "(exported)"
 msgstr ""
 
-#: markdown_preview/export.py:397 markdown_preview/menus.ui:45
+#: markdown_preview/export.py:419 markdown_preview/menus.ui:45
 msgid "Automatic"
 msgstr ""
 
-#: markdown_preview/export.py:398 markdown_preview/menus.ui:50
+#: markdown_preview/export.py:420 markdown_preview/menus.ui:50
 msgid "Side Panel"
 msgstr ""
 
-#: markdown_preview/export.py:399 markdown_preview/menus.ui:55
+#: markdown_preview/export.py:421 markdown_preview/menus.ui:55
 msgid "Bottom Panel"
 msgstr ""
 
-#: markdown_preview/export.py:418 markdown_preview/backend_box.ui:14
+#: markdown_preview/export.py:440
 msgid "HTML generation backend"
 msgstr ""
 
@@ -225,15 +230,19 @@ msgstr ""
 msgid "%s results"
 msgstr ""
 
-#: markdown_preview/backend_box.ui:45
+#: markdown_preview/backend_box.ui:44
 msgid "Extensions for python3-markdown:"
 msgstr ""
 
-#: markdown_preview/backend_box.ui:74
+#: markdown_preview/backend_box.ui:68
+msgid "Add an extension"
+msgstr ""
+
+#: markdown_preview/backend_box.ui:100
 msgid "Output file format:"
 msgstr ""
 
-#: markdown_preview/backend_box.ui:113
+#: markdown_preview/backend_box.ui:139
 msgid "Remember"
 msgstr ""
 

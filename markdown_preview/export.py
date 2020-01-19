@@ -80,10 +80,10 @@ PANDOC_FORMATS_PREVIEW = {
 ################################################################################
 
 class MdCSSSettings():
-	def __init__(self, settings, gedit_window, parent_dialog):
+	def __init__(self, settings, related_window, parent_widget):
 		self._settings = settings
-		self.gedit_window = gedit_window
-		self.parent_dialog = parent_dialog
+		self.related_window = related_window # might sadly be None
+		self.parent_widget = parent_widget
 
 		builder = Gtk.Builder().new_from_file(BASE_PATH + '/css_box.ui')
 		self.full_widget = builder.get_object('css_box')
@@ -100,24 +100,23 @@ class MdCSSSettings():
 
 	def on_css_changed(self, w, a):
 		self.css_sensitive_box.set_sensitive(w.get_state())
+		self.parent_widget.update_css(self.css_uri)
 
 	def on_choose_css(self, w):
 		# Building a FileChooserDialog for the CSS file
-		file_chooser = Gtk.FileChooserDialog(_("Select a CSS file"),
-			self.gedit_window,
-			Gtk.FileChooserAction.OPEN,
-			(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
-			Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
+		file_chooser = Gtk.FileChooserNative.new(_("Select a CSS file"), \
+		                      self.related_window, Gtk.FileChooserAction.OPEN, \
+		                                               _("Select"), _("Cancel"))
 		onlyCSS = Gtk.FileFilter()
 		onlyCSS.set_name(_("Stylesheet"))
 		onlyCSS.add_mime_type('text/css')
-		file_chooser.set_filter(onlyCSS)
+		file_chooser.add_filter(onlyCSS)
 		response = file_chooser.run()
 
-		if response == Gtk.ResponseType.OK:
+		if response == Gtk.ResponseType.ACCEPT:
 			self.css_uri = file_chooser.get_uri()
 			self.update_file_chooser_btn_label()
-			self.parent_dialog.update_css(self.css_uri)
+			self.parent_widget.update_css(self.css_uri)
 		file_chooser.destroy()
 
 	def update_file_chooser_btn_label(self):
@@ -126,12 +125,14 @@ class MdCSSSettings():
 			label = '…' + label[-50:]
 		self.style_label.set_label(label)
 
+	############################################################################
 ################################################################################
 
 class MdBackendSettings():
-	def __init__(self, label, settings):
+	def __init__(self, label, settings, apply_to_settings):
 		self._settings = settings
 		self.plugins = {}
+		self.apply_to_settings = apply_to_settings
 
 		builder = Gtk.Builder().new_from_file(BASE_PATH + '/backend_box.ui')
 		self.full_widget = builder.get_object('backend_box')
@@ -148,7 +149,9 @@ class MdBackendSettings():
 		# Load UI for the python3-markdown backend
 		self.extensions_flowbox = builder.get_object('extensions_flowbox')
 		self.load_plugins_list()
-		# TODO entry + button to add 3rd party extensions
+		self.p3md_extension_entry = builder.get_object('p3md_extension_entry')
+		builder.get_object('btn_add').connect('clicked', self.on_add_ext)
+		self.p3md_extension_entry.connect('activate', self.on_add_ext)
 
 		# Load UI for the pandoc backend
 		self.pandoc_cli_entry = builder.get_object('pandoc_command_entry')
@@ -166,14 +169,6 @@ class MdBackendSettings():
 			active_backend = self._settings.get_string('backend')
 			self.backend_stack.set_visible_child_name('backend_' + active_backend)
 
-	def on_backend_changed(self, w):
-		self._settings.set_string('backend', w.get_active_id())
-		self.set_correct_page()
-
-	def set_correct_page(self, *args):
-		backend = self._settings.get_string('backend')
-		self.backend_stack.set_visible_child_name('backend_' + backend)
-
 	def fill_pandoc_combobox(self, formats_dict, default_id):
 		for file_format in formats_dict:
 			self.format_combobox.append(file_format, formats_dict[file_format])
@@ -188,11 +183,13 @@ class MdBackendSettings():
 		else:
 			name = plugin_id
 			description = None
-		btn = Gtk.CheckButton(visible=True, label=name, expand=True)
+		btn = Gtk.CheckButton(visible=True, label=name)
 		if description is not None:
 			btn.set_tooltip_text(description)
 		self.plugins[plugin_id] = btn
 		self.extensions_flowbox.add(btn)
+		if self.apply_to_settings:
+			btn.connect('clicked', self.update_plugins_list)
 
 	def load_plugins_list(self, *args):
 		for plugin_id in P3MD_PLUGINS:
@@ -202,6 +199,30 @@ class MdBackendSettings():
 			self.add_plugin_checkbtn(plugin_id)
 			self.plugins[plugin_id].set_active(True)
 		self.extensions_flowbox.show_all()
+
+	############################################################################
+
+	def update_plugins_list(self, *args):
+		array = []
+		for plugin_id in self.plugins:
+			if self.plugins[plugin_id].get_active():
+				array.append(plugin_id)
+		self._settings.set_strv('extensions', array)
+
+	def on_add_ext(self, *args):
+		plugin_id = self.p3md_extension_entry.get_text()
+		self.add_plugin_checkbtn(plugin_id)
+		self.plugins[plugin_id].set_active(True)
+		self.p3md_extension_entry.set_text('')
+
+	def on_backend_changed(self, w):
+		if self.apply_to_settings:
+			self._settings.set_string('backend', w.get_active_id())
+		self.set_correct_page()
+
+	def set_correct_page(self, *args):
+		backend = self._settings.get_string('backend')
+		self.backend_stack.set_visible_child_name('backend_' + backend)
 
 	def get_active_backend(self):
 		return self.backend_stack.get_visible_child_name()
@@ -242,14 +263,15 @@ class MdExportDialog(Gtk.Dialog):
 			self.get_content_area().add(error_label)
 			return
 
-		self._backend = MdBackendSettings(_("Export file with:"), self._settings)
+		self._backend = MdBackendSettings(_("Export file with:"), \
+		                                                  self._settings, False)
 		self.get_content_area().add(self._backend.full_widget)
 		self._backend.fill_pandoc_combobox(PANDOC_FORMATS_FULL, 'pdf')
 
 		self.get_content_area().add(Gtk.Separator(visible=True))
 
 		# Using a stylesheet is possible with both backends
-		self.css_manager = MdCSSSettings(self._settings, self.gedit_window, self)
+		self.css_manager = MdCSSSettings(self._settings, self, self)
 		self.get_content_area().add(self.css_manager.full_widget)
 
 		self.on_pandoc_format_changed(self._backend.format_combobox)
@@ -261,12 +283,12 @@ class MdExportDialog(Gtk.Dialog):
 	############################################################################
 
 	def update_css(self, uri):
-		pass
+		self.on_pandoc_format_changed(self._backend.format_combobox)
 
 	def on_pandoc_format_changed(self, w):
 		output_format = w.get_active_id()
 
-		self._backend.remember_button.set_visible(output_format == 'custom')
+		self._backend.remember_button.set_sensitive(output_format == 'custom')
 		if output_format == 'custom':
 			command = self._settings.get_string('custom-export')
 			self._backend.set_pandoc_command(command)
@@ -415,14 +437,12 @@ class MdConfigWidget(Gtk.Box):
 
 		### BACKEND PAGE #######################################################
 
-		self._backend = MdBackendSettings(_("HTML generation backend"), self._settings)
+		self._backend = MdBackendSettings(_("HTML generation backend"), \
+		                                                   self._settings, True)
 		builder.get_object('backend_box').add(self._backend.full_widget)
 		self._backend.fill_pandoc_combobox(PANDOC_FORMATS_PREVIEW, 'html5')
 		self.on_pandoc_format_changed(self._backend.format_combobox)
 		self._backend.format_combobox.connect('changed', self.on_pandoc_format_changed)
-
-		for plugin_id in self._backend.plugins:
-			self._backend.plugins[plugin_id].connect('clicked', self.update_plugins_list)
 
 		### SHORTCUTS PAGE #####################################################
 
@@ -475,21 +495,15 @@ class MdConfigWidget(Gtk.Box):
 
 	def update_css(self, uri):
 		self._settings.set_string('style', uri)
+		self.on_pandoc_format_changed(self._backend.format_combobox)
 
 	############################################################################
 	# Backend management #######################################################
 
-	def update_plugins_list(self, *args):
-		array = []
-		for plugin_id in self._backend.plugins:
-			if self._backend.plugins[plugin_id].get_active():
-				array.append(plugin_id)
-		self._settings.set_strv('extensions', array)
-
 	def on_pandoc_format_changed(self, w):
 		output_format = w.get_active_id()
 
-		self._backend.remember_button.set_visible(output_format == 'custom') # XXX ne marche pas
+		self._backend.remember_button.set_sensitive(output_format == 'custom')
 		if output_format == 'custom':
 			command = self._settings.get_string('custom-export')
 			self._backend.set_pandoc_command(command)

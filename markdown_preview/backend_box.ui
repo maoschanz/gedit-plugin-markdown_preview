@@ -11,7 +11,6 @@
         <property name="spacing">20</property>
         <child>
           <object class="GtkLabel" id="combo_label">
-            <property name="label" translatable="yes">HTML generation backend</property>
             <property name="visible">True</property>
           </object>
           <packing>
@@ -49,6 +48,33 @@
               <object class="GtkFlowBox" id="extensions_flowbox">
                 <property name="visible">True</property>
                 <property name="selection_mode">none</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="orientation">horizontal</property>
+                <property name="visible">True</property>
+                <property name="expand">False</property>
+                <child>
+                  <object class="GtkEntry" id="p3md_extension_entry">
+                    <property name="visible">True</property>
+                    <property name="expand">True</property>
+                    <property name="placeholder-text">Add an extension</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="btn_add">
+                    <property name="visible">True</property>
+                    <property name="tooltip_text" translatable="yes">Add an extension</property>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="icon-name">list-add-symbolic</property>
+                        <property name="visible">True</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <style><class name="linked"/></style>
               </object>
             </child>
           </object>
@@ -108,7 +134,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="remember_button">
-                    <property name="visible">False</property>
+                    <property name="visible">True</property>
                     <property name="valign">center</property>
                     <property name="label" translatable="yes">Remember</property>
                   </object>
