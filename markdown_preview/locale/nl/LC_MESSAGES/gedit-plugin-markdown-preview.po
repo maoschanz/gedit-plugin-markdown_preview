@@ -1,13 +1,13 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2019-2020.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-01-19 05:30+0100\n"
+"POT-Creation-Date: 2020-01-19 18:50+0100\n"
 "PO-Revision-Date: 2019-08-05 13:48+0200\n"
 "Last-Translator: Heimen Stoffels <vistausss@outlook.com>\n"
 "Language-Team: \n"
@@ -37,17 +37,17 @@ msgid ""
 msgstr ""
 
 #: markdown_preview/export.py:51
-msgid "Show a clickable table of content with the [TOC] tag."
+msgid "Shows a clickable table of content with the [TOC] tag."
 msgstr ""
 
 #: markdown_preview/export.py:52
 msgid ""
-"Highlight your code with a correct syntax coloration (it needs a set up and "
-"some dependencies)."
+"Highlights your code with a correct syntax coloration (it needs to be set up "
+"and have some dependencies)."
 msgstr ""
 
 #: markdown_preview/export.py:53
-msgid "Add a line break at each new line."
+msgid "Adds a line break at each new line."
 msgstr ""
 
 #: markdown_preview/export.py:54
@@ -59,126 +59,151 @@ msgstr ""
 msgid "Alters the behavior of the lists syntax."
 msgstr ""
 
-#: markdown_preview/export.py:56 markdown_preview/export.py:57
-msgid "...TODO"
+#: markdown_preview/export.py:56
+msgid "Adds admonitions (notes, warnings, tips, …) with the !!! tag."
 msgstr ""
 
-#: markdown_preview/export.py:61
+#: markdown_preview/export.py:57
+msgid "Converts any [[bracketed]] word to a link."
+msgstr ""
+
+#: markdown_preview/export.py:60
+msgid ""
+"Aside of default extensions provided by the python3-markdown package, you "
+"can <b>install</b> third-party extensions using instructions provided by "
+"their respective authors."
+msgstr ""
+
+#: markdown_preview/export.py:64
+msgid ""
+"These third-party extensions are <b>not</b> Gedit plugins, they extend "
+"python3-markdown."
+msgstr ""
+
+#: markdown_preview/export.py:67
+msgid ""
+"Next, to improve the preview of your markdown file with the features of "
+"these extensions, please add their module names to the list using the text "
+"entry and the '+' icon."
+msgstr ""
+
+#: markdown_preview/export.py:72
 #, fuzzy
 msgid "LaTeX beamer slideshow (.tex)"
 msgstr "LaTeX-beamer-diavoorstelling"
 
-#: markdown_preview/export.py:62
+#: markdown_preview/export.py:73
 msgid "Microsoft Word (.docx)"
 msgstr "Microsoft Word (.docx)"
 
-#: markdown_preview/export.py:63 markdown_preview/export.py:75
+#: markdown_preview/export.py:74 markdown_preview/export.py:86
 msgid "HTML5"
 msgstr "HTML5"
 
-#: markdown_preview/export.py:64
+#: markdown_preview/export.py:75
 msgid "LaTeX (.tex)"
 msgstr "LaTeX (.tex)"
 
-#: markdown_preview/export.py:65
+#: markdown_preview/export.py:76
 msgid "OpenOffice text document (.odt)"
 msgstr "OpenOffice-tekstdocument (.odt)"
 
-#: markdown_preview/export.py:66
+#: markdown_preview/export.py:77
 msgid "Portable Document Format (.pdf)"
 msgstr "Portable Document Format (.pdf)"
 
-#: markdown_preview/export.py:67
+#: markdown_preview/export.py:78
 #, fuzzy
 msgid "plain text (.txt)"
 msgstr "Platte tekst"
 
-#: markdown_preview/export.py:68
+#: markdown_preview/export.py:79
 #, fuzzy
 msgid "PowerPoint slideshow (.pptx)"
 msgstr "PowerPoint-diavoorstelling"
 
-#: markdown_preview/export.py:69
+#: markdown_preview/export.py:80
 msgid "Rich Text Format (.rtf)"
 msgstr "Rich Text Format (.rtf)"
 
-#: markdown_preview/export.py:70 markdown_preview/export.py:76
+#: markdown_preview/export.py:81 markdown_preview/export.py:87
 #, fuzzy
 msgid "reveal.js slideshow (HTML with Javascript)"
 msgstr "reveal.js HTML + Javascript-diavoorstelling"
 
-#: markdown_preview/export.py:71 markdown_preview/export.py:77
+#: markdown_preview/export.py:82 markdown_preview/export.py:88
 msgid "Custom command line"
 msgstr "Aangepaste opdrachtregel"
 
-#: markdown_preview/export.py:107 markdown_preview/css_box.ui:44
+#: markdown_preview/export.py:118 markdown_preview/css_box.ui:44
 #: markdown_preview/css_box.ui:52
 msgid "Select a CSS file"
 msgstr "Kies een CSS-bestand"
 
-#: markdown_preview/export.py:109
+#: markdown_preview/export.py:120
 msgid "Select"
 msgstr ""
 
-#: markdown_preview/export.py:109 markdown_preview/export.py:251
-#: markdown_preview/export.py:340
+#: markdown_preview/export.py:120 markdown_preview/export.py:265
+#: markdown_preview/export.py:354
 msgid "Cancel"
 msgstr "Annuleren"
 
-#: markdown_preview/export.py:111
+#: markdown_preview/export.py:122
 msgid "Stylesheet"
 msgstr "Stijlblad"
 
-#: markdown_preview/export.py:247
+#: markdown_preview/export.py:261
 msgid "Export as…"
 msgstr "Exporteren als…"
 
-#: markdown_preview/export.py:252
+#: markdown_preview/export.py:266
 msgid "Next"
 msgstr "Volgende"
 
-#: markdown_preview/export.py:262 markdown_preview/preview.py:70
+#: markdown_preview/export.py:276 markdown_preview/preview.py:70
 #, fuzzy
 msgid "Error: please install pandoc or python3-markdown"
 msgstr "Uitbreidingen voor python3-markdown:"
 
-#: markdown_preview/export.py:266
+#: markdown_preview/export.py:280
 #, fuzzy
 msgid "Export file with:"
 msgstr "Bestand exporteren met:"
 
-#: markdown_preview/export.py:338 markdown_preview/menus.ui:6
+#: markdown_preview/export.py:352 markdown_preview/menus.ui:6
 msgid "Export the preview"
 msgstr "Voorbeeld exporteren"
 
-#: markdown_preview/export.py:340
+#: markdown_preview/export.py:354
 #, fuzzy
 msgid "Export"
 msgstr "Exporteren als…"
 
-#: markdown_preview/export.py:343
+#: markdown_preview/export.py:357
 msgid "(exported)"
 msgstr ""
 
-#: markdown_preview/export.py:419 markdown_preview/menus.ui:45
+#: markdown_preview/export.py:433 markdown_preview/menus.ui:45
 #, fuzzy
 msgid "Automatic"
 msgstr "Automatisch herladen"
 
-#: markdown_preview/export.py:420 markdown_preview/menus.ui:50
+#: markdown_preview/export.py:434 markdown_preview/menus.ui:50
 msgid "Side Panel"
 msgstr "Paneel aan de zijkant"
 
-#: markdown_preview/export.py:421 markdown_preview/menus.ui:55
+#: markdown_preview/export.py:435 markdown_preview/menus.ui:55
 msgid "Bottom Panel"
 msgstr "Paneel onderaan"
 
-#: markdown_preview/export.py:440
-msgid "HTML generation backend"
+#: markdown_preview/export.py:454
+#, fuzzy
+msgid "HTML generation backend:"
 msgstr "HTML-genereerbackend"
 
 #: markdown_preview/__init__.py:46 markdown_preview/__init__.py:49
-#: markdown_preview/__init__.py:276 markdown_preview/preview.py:458
+#: markdown_preview/__init__.py:276 markdown_preview/preview.py:461
 msgid "Markdown Preview"
 msgstr "Markdown-voorbeeld"
 
@@ -235,24 +260,33 @@ msgstr "Kan geen voorbeeld tonen van een niet-opgeslagen document"
 msgid "Unsupported type of document: "
 msgstr "Geen ondersteuning voor dit soort documenten: "
 
-#: markdown_preview/preview.py:514
+#: markdown_preview/preview.py:517
 #, python-format
 msgid "%s results"
 msgstr "%s resultaten"
 
-#: markdown_preview/backend_box.ui:44
+#: markdown_preview/backend_box.ui:48
 msgid "Extensions for python3-markdown:"
 msgstr "Uitbreidingen voor python3-markdown:"
 
-#: markdown_preview/backend_box.ui:68
-msgid "Add an extension"
+#: markdown_preview/backend_box.ui:58
+#, fuzzy
+msgid "More informations"
+msgstr "Meer opties"
+
+#: markdown_preview/backend_box.ui:82
+msgid "Help"
 msgstr ""
 
-#: markdown_preview/backend_box.ui:100
+#: markdown_preview/backend_box.ui:95
+msgid "Get extensions"
+msgstr ""
+
+#: markdown_preview/backend_box.ui:129
 msgid "Output file format:"
 msgstr "Bestandsformaat:"
 
-#: markdown_preview/backend_box.ui:139
+#: markdown_preview/backend_box.ui:168
 msgid "Remember"
 msgstr "Onthouden"
 

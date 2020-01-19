@@ -366,7 +366,7 @@ class MdPreviewBar(Gtk.Box):
 		post_string = '</body></html>'
 		result = subprocess.run(['pandoc', file_path], stdout=subprocess.PIPE)
 		html_string = result.stdout.decode('utf-8')
-		html_content = pre_string + html_string + post_string
+		html_content = pre_string + html_string + post_string # TODO pandoc can have CSS without hacks
 		return html_content
 
 	def get_html_from_md_python(self, unsaved_text):
@@ -437,7 +437,10 @@ class MdPreviewBar(Gtk.Box):
 		position = self._settings.get_string('position')
 		window = self.parent_plugin.window
 		if position == 'auto':
-			ratio = window.get_allocated_width() / window.get_allocated_height()
+			width = window.get_allocated_width()
+			if width < 100:
+				return 'side' # i hardcode that to have my terminal accessible
+			ratio = width / window.get_allocated_height()
 			if ratio > 1.2:
 				position = 'side'
 			else:

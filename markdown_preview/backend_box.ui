@@ -4,11 +4,11 @@
   <object class="GtkBox" id="backend_box">
     <property name="visible">True</property>
     <property name="orientation">vertical</property>
-    <property name="spacing">20</property>
+    <property name="spacing">16</property>
     <child>
       <object class="GtkBox" id="switcher_box">
         <property name="visible">True</property>
-        <property name="spacing">20</property>
+        <property name="spacing">16</property>
         <child>
           <object class="GtkLabel" id="combo_label">
             <property name="visible">True</property>
@@ -36,12 +36,31 @@
           <object class="GtkBox">
             <property name="visible">True</property>
             <property name="orientation">vertical</property>
-            <property name="spacing">12</property>
+            <property name="spacing">16</property>
             <child>
-              <object class="GtkLabel">
+              <object class="GtkBox">
+                <property name="orientation">horizontal</property>
                 <property name="visible">True</property>
-                <property name="halign">start</property>
-                <property name="label" translatable="yes">Extensions for python3-markdown:</property>
+                <property name="expand">False</property>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">True</property>
+                    <property name="label" translatable="yes">Extensions for python3-markdown:</property>
+                  </object>
+                  <packing>
+                    <property name="pack-type">start</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLinkButton">
+                    <property name="visible">True</property>
+                    <property name="uri">https://python-markdown.github.io/extensions/#officially-supported-extensions</property>
+                    <property name="label" translatable="yes">More informations</property>
+                  </object>
+                  <packing>
+                    <property name="pack-type">end</property>
+                  </packing>
+                </child>
               </object>
             </child>
             <child>
@@ -55,26 +74,36 @@
                 <property name="orientation">horizontal</property>
                 <property name="visible">True</property>
                 <property name="expand">False</property>
+                <property name="spacing">16</property>
                 <child>
-                  <object class="GtkEntry" id="p3md_extension_entry">
+                  <object class="GtkMenuButton">
                     <property name="visible">True</property>
-                    <property name="expand">True</property>
-                    <property name="placeholder-text">Add an extension</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkButton" id="btn_add">
-                    <property name="visible">True</property>
-                    <property name="tooltip_text" translatable="yes">Add an extension</property>
+                    <property name="popover">help-popover</property>
+                    <property name="tooltip-text" translatable="yes">Help</property>
                     <child>
                       <object class="GtkImage">
-                        <property name="icon-name">list-add-symbolic</property>
                         <property name="visible">True</property>
+                        <property name="icon-name">help-faq-symbolic</property>
                       </object>
                     </child>
                   </object>
                 </child>
-                <style><class name="linked"/></style>
+                <child>
+                  <object class="GtkLinkButton">
+                    <property name="visible">True</property>
+                    <property name="uri">https://github.com/Python-Markdown/markdown/wiki/Third-Party-Extensions</property>
+                    <property name="label" translatable="yes">Get extensions</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="p3md_extension_entry">
+                    <property name="visible">True</property>
+                    <property name="expand">True</property>
+                    <property name="secondary-icon-name">list-add-symbolic</property>
+                    <property name="placeholder-text">Add an extension</property>
+                    <property name="tooltip-text">Add an extension</property>
+                  </object>
+                </child>
               </object>
             </child>
           </object>
@@ -88,11 +117,11 @@
           <object class="GtkBox">
             <property name="visible">True</property>
             <property name="orientation">vertical</property>
-            <property name="spacing">12</property>
+            <property name="spacing">16</property>
             <child>
               <object class="GtkBox">
                 <property name="visible">True</property>
-                <property name="spacing">20</property>
+                <property name="spacing">16</property>
                 <property name="orientation">horizontal</property>
                 <child>
                   <object class="GtkLabel">
@@ -118,7 +147,7 @@
                 <property name="orientation">horizontal</property>
                 <property name="expand">False</property>
                 <property name="visible">True</property>
-                <property name="spacing">6</property>
+                <property name="spacing">16</property>
                 <child>
                   <object class="GtkFrame">
                     <property name="visible">True</property>
@@ -146,6 +175,47 @@
             <property name="title">pandoc</property>
             <property name="name">backend_pandoc</property>
           </packing>
+        </child>
+
+      </object>
+    </child>
+  </object>
+
+  <!-- -->
+
+  <object class="GtkPopover" id="help-popover">
+    <property name="visible">False</property>
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <property name="visible">True</property>
+        <property name="margin">8</property>
+        <property name="spacing">16</property>
+        <child>
+          <object class="GtkLabel" id="help_label_1">
+            <property name="visible">True</property>
+            <property name="wrap">True</property>
+            <property name="use-markup">True</property>
+            <property name="max-width-chars">50</property>
+            <style><class name="dim-label"/></style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="help_label_2">
+            <property name="visible">True</property>
+            <property name="use-markup">True</property>
+            <property name="wrap">True</property>
+            <property name="max-width-chars">50</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="help_label_3">
+            <property name="visible">True</property>
+            <property name="wrap">True</property>
+            <property name="use-markup">True</property>
+            <property name="max-width-chars">50</property>
+            <style><class name="dim-label"/></style>
+          </object>
         </child>
       </object>
     </child>

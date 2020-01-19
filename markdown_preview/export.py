@@ -48,14 +48,25 @@ P3MD_PLUGINS = {
 
 P3MD_PLUGINS_DESCRIPTIONS = {
 	'extra': _("A compilation of various extensions (Abbreviations, Attribute Lists, Definition Lists, Fenced Code Blocks, Footnotes, Tables)."),
-	'toc': _("Show a clickable table of content with the [TOC] tag."),
-	'codehilite': _("Highlight your code with a correct syntax coloration (it needs a set up and some dependencies)."),
-	'nl2br': _("Add a line break at each new line."),
+	'toc': _("Shows a clickable table of content with the [TOC] tag."),
+	'codehilite': _("Highlights your code with a correct syntax coloration (it needs to be set up and have some dependencies)."), # XXX et du coup, lesquelles?
+	'nl2br': _("Adds a line break at each new line."),
 	'smarty': _("Converts ASCII dashes, quotes and ellipses to their nice-looking equivalents."),
 	'sane_lists': _("Alters the behavior of the lists syntax."),
-	'admonition': _("...TODO"),
-	'wikilinks': _("...TODO")
+	'admonition': _("Adds admonitions (notes, warnings, tips, …) with the !!! tag."),
+	'wikilinks': _("Converts any [[bracketed]] word to a link.")
 }
+
+HELP_LABEL_1 = _("Aside of default extensions provided by the " + \
+"python3-markdown package, you can <b>install</b> third-party extensions " + \
+"using instructions provided by their respective authors.")
+
+HELP_LABEL_2 = _("These third-party extensions are <b>not</b> Gedit " + \
+"plugins, they extend python3-markdown.")
+
+HELP_LABEL_3 = _("Next, to improve the preview of your markdown file with " + \
+"the features of these extensions, please add their module names to the " + \
+"list using the text entry and the '+' icon.")
 
 PANDOC_FORMATS_FULL = {
 	'beamer': _("LaTeX beamer slideshow (.tex)"),
@@ -144,13 +155,16 @@ class MdBackendSettings():
 		backendCombobox.append('pandoc', "pandoc")
 		backendCombobox.set_active_id(self._settings.get_string('backend'))
 		backendCombobox.connect('changed', self.on_backend_changed)
-		self.set_correct_page()
+		self.set_correct_page(self._settings.get_string('backend'))
 
 		# Load UI for the python3-markdown backend
 		self.extensions_flowbox = builder.get_object('extensions_flowbox')
 		self.load_plugins_list()
+		builder.get_object('help_label_1').set_label(HELP_LABEL_1)
+		builder.get_object('help_label_2').set_label(HELP_LABEL_2)
+		builder.get_object('help_label_3').set_label(HELP_LABEL_3)
 		self.p3md_extension_entry = builder.get_object('p3md_extension_entry')
-		builder.get_object('btn_add').connect('clicked', self.on_add_ext)
+		self.p3md_extension_entry.connect('icon-release', self.on_add_ext)
 		self.p3md_extension_entry.connect('activate', self.on_add_ext)
 
 		# Load UI for the pandoc backend
@@ -216,12 +230,12 @@ class MdBackendSettings():
 		self.p3md_extension_entry.set_text('')
 
 	def on_backend_changed(self, w):
+		backend = w.get_active_id()
 		if self.apply_to_settings:
-			self._settings.set_string('backend', w.get_active_id())
-		self.set_correct_page()
+			self._settings.set_string('backend', backend)
+		self.set_correct_page(backend)
 
-	def set_correct_page(self, *args):
-		backend = self._settings.get_string('backend')
+	def set_correct_page(self, backend):
 		self.backend_stack.set_visible_child_name('backend_' + backend)
 
 	def get_active_backend(self):
@@ -437,7 +451,7 @@ class MdConfigWidget(Gtk.Box):
 
 		### BACKEND PAGE #######################################################
 
-		self._backend = MdBackendSettings(_("HTML generation backend"), \
+		self._backend = MdBackendSettings(_("HTML generation backend:"), \
 		                                                   self._settings, True)
 		builder.get_object('backend_box').add(self._backend.full_widget)
 		self._backend.fill_pandoc_combobox(PANDOC_FORMATS_PREVIEW, 'html5')
