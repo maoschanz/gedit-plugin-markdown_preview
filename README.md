@@ -2,19 +2,15 @@
 
 <!-- TODO
 
-- checkboxs individuelles pour les sous-extensions de "extra" ? https://python-markdown.github.io/extensions/
-- help labels and links for pandoc too!
-- CSS for admonitions
-- cesser les zouaveries avec pandoc et les pre-strings/post-strings, il y a de vraies options 
-- compléter les descriptions des schémas
-- se souvenir du splitter
-- ajouter le réglage pour le splitter dans les préférences
-- ajouter le réglage pour la position dans les préférences
-- utiliser encore + le même UI pour le backend dans export.py et dans prefs.py
-- factoriser des trucs de export.py et de prefs.py
-- interdire le redimensionnement de l'entrée de texte quand on change le format
+- [ ] checkboxs individuelles pour les sous-extensions de "extra" ? https://python-markdown.github.io/extensions/
+- [ ] help labels and links for pandoc too!
+- [ ] CSS for admonitions
+- [ ] cesser les zouaveries avec pandoc et les pre-strings/post-strings, il y a de vraies options 
+- [ ] compléter les descriptions des schémas
+- [ ] se souvenir du splitter
+- [ ] ajouter le réglage pour le splitter dans les préférences
 
-     TODO -->
+~     TODO -->
 
 This is a plugin for the Gedit text editor, previewing .md files in the side (`F9`) or the bottom (`Ctrl+F9`) panel.
 

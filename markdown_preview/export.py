@@ -262,21 +262,21 @@ class MdExportDialog(Gtk.Dialog):
 		self.file_format = file_format
 		self.gedit_window = gedit_window
 		self._settings = settings
-		self.add_button(_("Cancel"), Gtk.ResponseType.CANCEL)
-		self.add_button(_("Next"), Gtk.ResponseType.OK)
 
+		self.add_button(_("Cancel"), Gtk.ResponseType.CANCEL)
 		self.get_content_area().set_margin_left(20)
 		self.get_content_area().set_margin_right(20)
 		self.get_content_area().set_margin_top(20)
 		self.get_content_area().set_margin_bottom(20)
 		self.get_content_area().set_spacing(20)
-
 		if not BACKEND_P3MD_AVAILABLE and not BACKEND_PANDOC_AVAILABLE:
 			error_label = Gtk.Label(visible=True, \
 			        label=_("Error: please install pandoc or python3-markdown"))
 			self.get_content_area().add(error_label)
 			return
+		self.add_button(_("Next"), Gtk.ResponseType.OK)
 
+		# Add the backend settings to the dialog
 		self._backend = MdBackendSettings(_("Export file with:"), \
 		                                                  self._settings, False)
 		self.get_content_area().add(self._backend.full_widget)
@@ -356,6 +356,7 @@ class MdExportDialog(Gtk.Dialog):
 		# retirer l'ancienne extension ?
 		name = str(name + ' ' + _("(exported)") + output_extension)
 		file_chooser.set_current_name(name)
+		file_chooser.set_do_overwrite_confirmation(True)
 		response = file_chooser.run()
 		if response == Gtk.ResponseType.ACCEPT:
 			return file_chooser
@@ -369,7 +370,7 @@ class MdExportDialog(Gtk.Dialog):
 			return False
 
 		md_extensions = []
-		for plugin_id in P3MD_PLUGINS:
+		for plugin_id in self._backend.plugins:
 			if self._backend.plugins[plugin_id].get_active():
 				md_extensions.append(plugin_id)
 
@@ -400,7 +401,8 @@ class MdExportDialog(Gtk.Dialog):
 
 		output_format = self._backend.format_combobox.get_active_id()
 		doc_path = self.gedit_window.get_active_document().get_location().get_path()
-		cmd = self._backend.pandoc_cli_entry.get_buffer().get_text()
+		buff = self._backend.pandoc_cli_entry.get_buffer()
+		cmd = buff.get_text(buff.get_start_iter(), buff.get_end_iter(), False)
 		words = cmd.split()
 		words[words.index('$INPUT_FILE')] = doc_path
 		words[words.index('$OUTPUT_FILE')] = file_chooser.get_filename()
