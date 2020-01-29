@@ -53,6 +53,7 @@
         <child>
           <object class="GtkButton" id="refresh_btn">
             <property name="visible">True</property>
+<!--            <property name="halign">center</property>-->
             <property name="action-name">win.md-prev-reload</property>
             <property name="tooltip_text" translatable="yes">Reload the preview</property>
             <child>
@@ -95,7 +96,7 @@
                 </child>
               </object>
             </child>
-            <style> <class name="linked"/> </style>
+            <style><class name="linked"/></style>
           </object>
           <packing>
             <property name="pack-type">start</property>
@@ -105,6 +106,7 @@
         <child>
           <object class="GtkMenuButton" id="menu_btn">
             <property name="visible">True</property>
+<!--            <property name="halign">center</property>-->
             <property name="tooltip_text" translatable="yes">More options</property>
             <child>
               <object class="GtkImage">
@@ -121,6 +123,7 @@
         <child>
           <object class="GtkMenuButton">
             <property name="visible">True</property>
+<!--            <property name="halign">center</property>-->
             <property name="popover">search_popover</property>
             <property name="tooltip_text" translatable="yes">Search</property>
             <child>

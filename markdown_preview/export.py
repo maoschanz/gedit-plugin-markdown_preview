@@ -417,10 +417,11 @@ class MdConfigWidget(Gtk.Box):
 	__gtype_name__ = 'MdConfigWidget'
 
 	def __init__(self, datadir, **kwargs):
+		# XXX what's datadir ??
 		super().__init__(**kwargs, orientation=Gtk.Orientation.VERTICAL, \
 		                                                  spacing=10, margin=10)
-		# XXX what's datadir ??
 		self._settings = Gio.Settings.new(MD_PREVIEW_KEY_BASE)
+		self._kb_settings = Gio.Settings.new(MD_PREVIEW_KEY_BASE + '.keybindings')
 
 		builder = Gtk.Builder().new_from_file(BASE_PATH + '/prefs.ui')
 #		builder.set_translation_domain('gedit-plugin-markdown-preview') # TODO
@@ -475,7 +476,7 @@ class MdConfigWidget(Gtk.Box):
 	############################################################################
 
 	def add_keybinding(self, setting_id, description):
-		accelerator = self._settings.get_strv(setting_id)[0]
+		accelerator = self._kb_settings.get_strv(setting_id)[0]
 		if accelerator is None:
 			[key, mods] = [0, 0]
 		else:
@@ -488,13 +489,13 @@ class MdConfigWidget(Gtk.Box):
 		self.shortcuts_treeview.get_model().set(tree_iter, [2, 3], [args[2], int(args[3])])
 		setting_id = self.shortcuts_treeview.get_model().get_value(tree_iter, 0)
 		accelString = Gtk.accelerator_name(args[2], args[3])
-		self._settings.set_strv(setting_id, [accelString])
+		self._kb_settings.set_strv(setting_id, [accelString])
 
 	def on_accel_cleared(self, *args):
 		tree_iter = self.shortcuts_treeview.get_model().get_iter_from_string(args[1])
 		self.shortcuts_treeview.get_model().set(tree_iter, [2, 3], [0, 0])
 		setting_id = self.shortcuts_treeview.get_model().get_value(tree_iter, 0)
-		self._settings.set_strv(setting_id, [])
+		self._kb_settings.set_strv(setting_id, [])
 
 	############################################################################
 	# Preview options ##########################################################
