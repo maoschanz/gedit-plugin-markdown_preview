@@ -75,9 +75,9 @@ The plugin's options can be accessed…
 
 Available settings include:
 
-- The preview can be generated (and exported) with [pandoc](https://pandoc.org/) or [python-markdown](https://python-markdown.github.io/). A set of [extensions](https://python-markdown.github.io/extensions/) is provided with python-markdown.
 - A stylesheet (CSS file) can be applied to the preview.
-- Choose if you want the plugin to understand relative paths (for links and pictures). Not recommended if you use special characters in filenames (WebKit2GTK can't load URIs with special characters for some reason)
+- The preview can be generated (and exported) with [pandoc](https://pandoc.org/) or [python-markdown](https://python-markdown.github.io/). A set of [extensions](https://python-markdown.github.io/extensions/) is provided with python-markdown. [Great third-party extensions](https://facelessuser.github.io/pymdown-extensions/) exist.
+- Choose if you want the plugin to understand relative paths (for links and pictures). Not recommended if you use special characters in filenames (some versions of WebKit2GTK can't load URIs with special characters for some reason)
 - Set keyboard shortcuts to add/remove tags *(beta)*
 
 ## Available languages
