@@ -32,6 +32,11 @@
       <summary>Custom export command</summary>
       <description></description>
     </key>
+    <key type="b" name="use-style">
+      <default>false</default>
+      <summary>Use a stylesheet</summary>
+      <description></description>
+    </key>
     <key type="s" name="style">
       <default>""</default>
       <summary>Stylesheet URI</summary>

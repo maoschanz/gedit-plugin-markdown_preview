@@ -35,6 +35,8 @@ try:
 except:
 	_ = lambda s: s
 
+################################################################################
+
 P3MD_PLUGINS = {
 	'extra': "Extras",
 	'toc': _("Table of content"),
@@ -78,13 +80,13 @@ PANDOC_FORMATS_FULL = {
 	'plain': _("plain text (.txt)"),
 	'pptx': _("PowerPoint slideshow (.pptx)"),
 	'rtf': _("Rich Text Format (.rtf)"),
-	'revealjs': _("reveal.js slideshow (HTML with Javascript)"),
+	'revealjs': _("reveal.js slideshow (HTML/JS)"),
 	'custom': _("Custom command line")
 }
 
 PANDOC_FORMATS_PREVIEW = {
 	'html5': _("HTML5"),
-	'revealjs': _("reveal.js slideshow (HTML with Javascript)"),
+	'revealjs': _("reveal.js slideshow (HTML/JS)"),
 	'custom': _("Custom command line")
 }
 
@@ -99,25 +101,34 @@ class MdCSSSettings():
 		builder = Gtk.Builder().new_from_file(BASE_PATH + '/css_box.ui')
 		self.full_widget = builder.get_object('css_box')
 
-		self.switch_css = builder.get_object('switch_css')
-		self.switch_css.connect('notify::active', self.on_css_changed)
-		self.css_sensitive_box = builder.get_object('css_sensitive_box')
-
 		file_chooser_btn_css = builder.get_object('file_chooser_btn_css')
-		file_chooser_btn_css.connect('clicked', self.on_choose_css)
+		file_chooser_btn_css.connect('clicked', self._on_choose_css)
 		self.style_label = builder.get_object('style_label')
 		self.css_uri = self._settings.get_string('style')
-		self.update_file_chooser_btn_label()
 
-	def on_css_changed(self, w, a):
-		self.css_sensitive_box.set_sensitive(w.get_state())
-		self.parent_widget.update_css(self.css_uri)
+		self.switch_css = builder.get_object('switch_css')
+		css_is_active = self._settings.get_boolean('use-style')
+		self.switch_css.set_active(css_is_active)
+		self.switch_css.connect('notify::active', self._on_use_css_changed)
+		self.css_sensitive_box = builder.get_object('css_sensitive_box')
 
-	def on_choose_css(self, w):
+		self._set_css_active(css_is_active)
+		self._update_file_chooser_btn_label()
+
+	def _set_css_active(self, css_is_active):
+		self.css_sensitive_box.set_sensitive(css_is_active)
+
+	def _on_use_css_changed(self, *args):
+		css_is_active = args[0].get_state()
+		self._set_css_active(css_is_active)
+		self.parent_widget.update_css(css_is_active, self.css_uri)
+
+	def _on_choose_css(self, *args):
 		# Building a FileChooserDialog for the CSS file
 		file_chooser = Gtk.FileChooserNative.new(_("Select a CSS file"), \
-		                      self.related_window, Gtk.FileChooserAction.OPEN, \
-		                                               _("Select"), _("Cancel"))
+		                                         self.related_window,
+		                                         Gtk.FileChooserAction.OPEN, \
+		                                         _("Select"), _("Cancel"))
 		onlyCSS = Gtk.FileFilter()
 		onlyCSS.set_name(_("Stylesheet"))
 		onlyCSS.add_mime_type('text/css')
@@ -126,14 +137,16 @@ class MdCSSSettings():
 
 		if response == Gtk.ResponseType.ACCEPT:
 			self.css_uri = file_chooser.get_uri()
-			self.update_file_chooser_btn_label()
-			self.parent_widget.update_css(self.css_uri)
+			self._update_file_chooser_btn_label()
+			self.parent_widget.update_css(self.switch_css.get_active(), self.css_uri)
 		file_chooser.destroy()
 
-	def update_file_chooser_btn_label(self):
+	def _update_file_chooser_btn_label(self):
 		label = self.css_uri
-		if len(label) > 50:
-			label = '…' + label[-50:]
+		if label == '':
+			label = _("Select a CSS file")
+		if len(label) > 45:
+			label = '…' + label[-45:]
 		self.style_label.set_label(label)
 
 	############################################################################
@@ -296,7 +309,7 @@ class MdExportDialog(Gtk.Dialog):
 
 	############################################################################
 
-	def update_css(self, uri):
+	def update_css(self, is_active, uri):
 		self.on_pandoc_format_changed(self._backend.format_combobox)
 
 	def on_pandoc_format_changed(self, w):
@@ -378,6 +391,7 @@ class MdExportDialog(Gtk.Dialog):
 		start, end = doc.get_bounds()
 		unsaved_text = doc.get_text(start, end, True)
 		content = markdown.markdown(unsaved_text, extensions=md_extensions)
+		# FIXME code complètement con ci-après
 		with open(file_chooser.get_filename(), 'w') as f:
 			f.write(content)
 		if self.css_manager.switch_css.get_active():
@@ -417,15 +431,15 @@ class MdConfigWidget(Gtk.Box):
 	__gtype_name__ = 'MdConfigWidget'
 
 	def __init__(self, datadir, **kwargs):
-		super().__init__(**kwargs, orientation=Gtk.Orientation.VERTICAL, \
-		                                                  spacing=10, margin=10)
-		# XXX what's datadir ??
+		super().__init__(**kwargs, orientation=Gtk.Orientation.HORIZONTAL)
+		# print(datadir) # TODO c'est le path de là où est le plugin, ça peut
+		# aider à mettre un css par défaut ?
 		self._settings = Gio.Settings.new(MD_PREVIEW_KEY_BASE)
 
 		builder = Gtk.Builder().new_from_file(BASE_PATH + '/prefs.ui')
 #		builder.set_translation_domain('gedit-plugin-markdown-preview') # TODO
 		stack = builder.get_object('stack')
-		switcher = Gtk.StackSwitcher(stack=stack, halign=Gtk.Align.CENTER)
+		sidebar = Gtk.StackSidebar(stack=stack)
 
 		### PREVIEW PAGE #######################################################
 
@@ -469,7 +483,7 @@ class MdConfigWidget(Gtk.Box):
 #		https://github.com/GNOME/gtk/blob/master/gdk/keynames.txt
 		for i in range(len(SETTINGS_KEYS)):
 			self.add_keybinding(SETTINGS_KEYS[i], LABELS[i])
-		self.add(switcher)
+		self.add(sidebar)
 		self.add(stack)
 
 	############################################################################
@@ -509,7 +523,8 @@ class MdConfigWidget(Gtk.Box):
 	def on_auto_manage_changed(self, w, a):
 		self._settings.set_boolean('auto-manage-panel', w.get_state())
 
-	def update_css(self, uri):
+	def update_css(self, is_active, uri):
+		self._settings.set_boolean('use-style', is_active)
 		self._settings.set_string('style', uri)
 		self.on_pandoc_format_changed(self._backend.format_combobox)
 

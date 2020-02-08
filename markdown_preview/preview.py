@@ -89,9 +89,13 @@ class MdPreviewBar(Gtk.Box):
 		self._webview.disconnect(self._handlers[2])
 		self._settings.disconnect(self._handlers[1])
 		self._settings.disconnect(self._handlers[0])
-		self.delete_temp_file()
+		self._delete_temp_file()
 		self.remove_from_panel()
 		self.preview_bar.destroy()
+
+	def _delete_temp_file(self):
+		if self.temp_file_md.query_exists():
+			self.temp_file_md.delete()
 
 	############################################################################
 	# Misc #####################################################################
@@ -264,10 +268,112 @@ class MdPreviewBar(Gtk.Box):
 		self.on_reload()
 
 	############################################################################
+	# Reload ###################################################################
 
-	def delete_temp_file(self):
-		if self.temp_file_md.query_exists():
-			self.temp_file_md.delete()
+	def on_reload(self, *args):
+		# Guard clause: it will not load documents which are not supported
+		self.file_format = self.recognize_format()
+		if self.file_format == 'error' or not self.preview_bar.props.visible:
+			return
+		elif self.panel.get_visible_child() != self.preview_bar:
+			return
+		if self.parent_plugin._auto_position:
+			self.auto_change_panel()
+
+		css_uri = ''
+		if self._settings.get_boolean('use-style'):
+			css_uri = self._settings.get_string('style')
+
+		html_content = ''
+		doc = self.parent_plugin.window.get_active_document()
+		start, end = doc.get_bounds()
+		unsaved_text = doc.get_text(start, end, True)
+		if self.file_format == 'html':
+			html_content = self.get_html_from_html(unsaved_text)
+		elif self.file_format == 'tex':
+			html_content = self.get_html_from_tex(css_uri)
+		elif self.file_format == 'md':
+			if self._settings.get_string('backend') == 'python':
+				html_content = self.get_html_from_md_python(unsaved_text, css_uri)
+			else:
+				html_content = self.get_html_from_md_pandoc(unsaved_text, css_uri)
+		else:
+			return
+
+		# The html code is converted into bytes
+		my_string = GLib.String()
+		my_string.append(html_content)
+		bytes_content = my_string.free_to_bytes()
+
+		# This uri will be used as a reference for links and images using relative paths
+		dummy_uri = self.get_dummy_uri()
+		self._webview.load_bytes(bytes_content, 'text/html', 'UTF-8', dummy_uri)
+
+	def get_html_from_html(self, unsaved_text):
+		# CSS not applied if it's HTML
+		return self.current_page(unsaved_text, HTML_SPLITTERS)
+
+	def get_html_from_tex(self, css_uri):
+		doc = self.parent_plugin.window.get_active_document()
+		file_path = doc.get_location().get_path()
+		# TODO FIXME splitters ?
+
+		# It uses pandoc to produce the html code
+		command = ['pandoc', '-s', file_path, '--metadata', 'pagetitle=Preview']
+		if css_uri != '':
+			command = command + ['-c', css_uri]
+		result = subprocess.run(command, stdout=subprocess.PIPE)
+		html_content = result.stdout.decode('utf-8')
+		return html_content
+
+	def get_html_from_md_pandoc(self, unsaved_text, css_uri):
+		# Get the current document, or the temporary document if requested
+		unsaved_text = self.current_page(unsaved_text, MARKDOWN_SPLITTERS)
+		f = open(BASE_TEMP_NAME + '.md', 'w')
+		f.write(unsaved_text)
+		f.close()
+		file_path = self.temp_file_md.get_path()
+
+		# It uses pandoc to produce the html code
+		command = ['pandoc', '-s', file_path, '--metadata', 'pagetitle=Preview']
+		if css_uri != '':
+			command = command + ['-c', css_uri]
+		result = subprocess.run(command, stdout=subprocess.PIPE)
+		html_content = result.stdout.decode('utf-8')
+		return html_content
+
+	def get_revealjs_from_md(self, unsaved_text):
+		# Get the current document, or the temporary document if requested
+		unsaved_text = self.current_page(unsaved_text, MARKDOWN_SPLITTERS)
+		f = open(BASE_TEMP_NAME + '.md', 'w')
+		f.write(unsaved_text)
+		f.close()
+		file_path = self.temp_file_md.get_path()
+
+		# It uses pandoc to produce the html code
+		# command = ['pandoc', '-s', file_path, '--metadata', 'pagetitle=Preview', \
+		# '-t', 'revealjs', '-V', 'revealjs-url=http://lab.hakim.se/reveal-js']
+		# if css_uri != '':
+		# 	command = command + ['-c', css_uri]
+		# result = subprocess.run(command, stdout=subprocess.PIPE)
+		# html_content = result.stdout.decode('utf-8')
+		# return html_content  # TODO
+
+	def get_html_from_md_python(self, unsaved_text, css_uri):
+		unsaved_text = self.current_page(unsaved_text, MARKDOWN_SPLITTERS)
+		# https://github.com/Python-Markdown/markdown/wiki/Third-Party-Extensions
+		md_extensions = self._settings.get_strv('extensions')
+		if css_uri == '':
+			pre_string = '<html><head><meta charset="utf-8" /></head><body>'
+		else:
+			pre_string = '<html><head><meta charset="utf-8" />' + \
+			     '<link rel="stylesheet" href="' + css_uri + '" /></head><body>'
+		post_string = '</body></html>'
+		html_string = markdown.markdown(unsaved_text, extensions=md_extensions)
+		html_content = pre_string + html_string + post_string
+		return html_content
+
+	############################################################################
 
 	def on_file_changed(self, *args):
 		self.file_format = self.recognize_format()
@@ -295,91 +401,6 @@ class MdPreviewBar(Gtk.Box):
 			self.display_warning(_("Unsupported type of document: ") + name)
 		return 'error'
 
-	def on_reload(self, *args):
-		# Guard clause: it will not load documents which are not supported
-		self.file_format = self.recognize_format()
-		if self.file_format == 'error' or not self.preview_bar.props.visible:
-			return
-		elif self.panel.get_visible_child() != self.preview_bar:
-			return
-		if self.parent_plugin._auto_position:
-			self.auto_change_panel()
-
-		html_content = ''
-		doc = self.parent_plugin.window.get_active_document()
-		start, end = doc.get_bounds()
-		unsaved_text = doc.get_text(start, end, True)
-		if self.file_format == 'html':
-			html_content = self.get_html_from_html(unsaved_text)
-		elif self.file_format == 'tex':
-			html_content = self.get_html_from_tex()
-		elif self.file_format == 'md':
-			if self._settings.get_string('backend') == 'python':
-				html_content = self.get_html_from_md_python(unsaved_text)
-			else:
-				html_content = self.get_html_from_md_pandoc(unsaved_text)
-		else:
-			return
-
-		# The html code is converted into bytes
-		my_string = GLib.String()
-		my_string.append(html_content)
-		bytes_content = my_string.free_to_bytes()
-
-		# This uri will be used as a reference for links and images using relative paths
-		dummy_uri = self.get_dummy_uri()
-		self._webview.load_bytes(bytes_content, 'text/html', 'UTF-8', dummy_uri)
-
-	def get_html_from_html(self, unsaved_text):
-		# FIXME is bad idea if the document already has these tags
-		pre_string = '<html><head><meta charset="utf-8" /></head><body>'
-		post_string = '</body></html>'
-		unsaved_text = self.current_page(unsaved_text, HTML_SPLITTERS)
-		html_content = pre_string + unsaved_text + post_string
-		return html_content
-	
-	def get_html_from_tex(self):
-		doc = self.parent_plugin.window.get_active_document()
-		file_path = doc.get_location().get_path()
-
-		# It uses pandoc to produce the html code
-		pre_string = '<html><head><meta charset="utf-8" /><link rel="stylesheet" href="' + \
-			self._settings.get_string('style') + '" /></head><body>'
-		post_string = '</body></html>'
-		result = subprocess.run(['pandoc', file_path], stdout=subprocess.PIPE)
-		html_string = result.stdout.decode('utf-8')
-		html_string = self.current_page(html_string, HTML_SPLITTERS)
-		html_content = pre_string + html_string + post_string
-		return html_content
-
-	def get_html_from_md_pandoc(self, unsaved_text):
-		# Get the current document, or the temporary document if requested
-		unsaved_text = self.current_page(unsaved_text, MARKDOWN_SPLITTERS)
-		f = open(BASE_TEMP_NAME + '.md', 'w')
-		f.write(unsaved_text)
-		f.close()
-		file_path = self.temp_file_md.get_path()
-
-		# It uses pandoc to produce the html code
-		pre_string = '<html><head><meta charset="utf-8" /><link rel="stylesheet" href="' + \
-		                self._settings.get_string('style') + '" /></head><body>'
-		post_string = '</body></html>'
-		result = subprocess.run(['pandoc', file_path], stdout=subprocess.PIPE)
-		html_string = result.stdout.decode('utf-8')
-		html_content = pre_string + html_string + post_string # TODO pandoc can have CSS without hacks
-		return html_content
-
-	def get_html_from_md_python(self, unsaved_text):
-		unsaved_text = self.current_page(unsaved_text, MARKDOWN_SPLITTERS)
-		# TODO https://github.com/Python-Markdown/markdown/wiki/Third-Party-Extensions
-		md_extensions = self._settings.get_strv('extensions')
-		pre_string = '<html><head><meta charset="utf-8" /><link rel="stylesheet" href="' + \
-		                self._settings.get_string('style') + '" /></head><body>'
-		post_string = '</body></html>'
-		html_string = markdown.markdown(unsaved_text, extensions=md_extensions)
-		html_content = pre_string + html_string + post_string
-		return html_content
-
 	def current_page(self, lang_string, splitters_array):
 		if self.pagination_mode == 'whole':
 			return lang_string
@@ -391,7 +412,7 @@ class MdPreviewBar(Gtk.Box):
 			correct_splitter = splitters_array[0]
 
 		# The document is (as much as possible) splitted in its original
-		# language. It avoid converting markdown to html which wouldn't be
+		# language. It avoids converting some markdown to html which wouldn't be
 		# rendered anyway.
 		lang_pages = lang_string.split(correct_splitter)
 		self.page_number = len(lang_pages)

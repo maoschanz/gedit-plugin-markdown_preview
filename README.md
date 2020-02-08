@@ -2,17 +2,26 @@
 
 <!-- TODO
 
-- [ ] checkboxs individuelles pour les sous-extensions de "extra" ? https://python-markdown.github.io/extensions/
-- [ ] help labels and links for pandoc too!
-- [ ] CSS for admonitions
-- [ ] cesser les zouaveries avec pandoc et les pre-strings/post-strings, il y a de vraies options 
+- [ ] comment retirer le fichier CSS ??
+	- [ ] connecter le switch des préférences
+	- [x] code dans preview.py
+- [ ] pages séparées (général/style)
+- [ ] help labels and links for pandoc too! et toutes les pages en fait
+- [ ] CSS for admonitions (and other default plugins ?)
+	- [ ] and pymdown ??
+- [ ] cesser les zouaveries avec pandoc et les pre-strings/post-strings, il y a de vraies options
+- [ ] reveal js https://github.com/jgm/pandoc/wiki/Using-pandoc-to-produce-reveal.js-slides
+	- [ ] rendu
+	- [ ] transitions
+	- [ ] paramètres de thème
 - [ ] compléter les descriptions des schémas
 - [ ] se souvenir du splitter
 - [ ] ajouter le réglage pour le splitter dans les préférences
+- [ ] bring back the fullscreen, but better
 
 ~     TODO -->
 
-This is a plugin for the Gedit text editor, previewing .md files in the side (`F9`) or the bottom (`Ctrl+F9`) panel.
+This is a plugin for the Gedit text editor, previewing .md files in the side (`F9`) or the bottom (`Ctrl+F9`) pane.
 
 <!-- Main features (version 0.8): -->
 
@@ -28,7 +37,7 @@ This is a plugin for the Gedit text editor, previewing .md files in the side (`F
 	- or export to HTML with `python3-markdown` and its [extensions](https://python-markdown.github.io/extensions/)
 - Edition assistance:
 	- insert an image in your file
-	- insert markdown tags in your text with keyboard shortcuts
+	- insert markdown tags in your text with right-click menu or keyboard shortcuts
 
 ----
 
