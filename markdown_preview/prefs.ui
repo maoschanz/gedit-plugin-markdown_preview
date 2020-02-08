@@ -6,14 +6,14 @@
     <property name="transition-type">crossfade</property>
 
     <child>
-      <object class="GtkBox" id="preview_box">
-        <property name="spacing">12</property>
+      <object class="GtkBox" id="general_box">
+        <property name="spacing">16</property>
         <property name="orientation">vertical</property>
 
         <child>
           <object class="GtkBox">
             <property name="orientation">horizontal</property>
-            <property name="spacing">20</property>
+            <property name="spacing">16</property>
             <child>
               <object class="GtkLabel">
                 <property name="label" translatable="yes">Preview position</property>
@@ -34,7 +34,7 @@
         <child>
           <object class="GtkBox">
             <property name="orientation">horizontal</property>
-            <property name="spacing">20</property>
+            <property name="spacing">16</property>
             <child>
               <object class="GtkLabel">
                 <property name="label" translatable="yes">Automatically show/hide panel</property>
@@ -55,7 +55,7 @@
         <child>
           <object class="GtkBox">
             <property name="orientation">horizontal</property>
-            <property name="spacing">20</property>
+            <property name="spacing">16</property>
             <child>
               <object class="GtkLabel">
                 <property name="label" translatable="yes">Use relative paths</property>
@@ -75,20 +75,26 @@
 
       </object>
       <packing>
-        <property name="name">preview_page</property>
-        <property name="title" translatable="yes">Preview</property>
+        <property name="name">general_page</property>
+        <property name="title" translatable="yes">General options</property>
+      </packing>
+    </child>
+
+    <child>
+      <object class="GtkBox" id="style_box">
+        <property name="spacing">16</property>
+        <property name="orientation">vertical</property>
+      </object>
+      <packing>
+        <property name="name">style_page</property>
+        <property name="title" translatable="yes">Style</property>
       </packing>
     </child>
 
     <child>
       <object class="GtkBox" id="backend_box">
-        <property name="spacing">10</property>
+        <property name="spacing">16</property>
         <property name="orientation">vertical</property>
-
-        <child>
-          <object class="GtkBox" />
-        </child>
-
       </object>
       <packing>
         <property name="name">backend_page</property>
@@ -98,7 +104,7 @@
 
     <child>
       <object class="GtkBox" id="shortcuts_page">
-        <property name="spacing">10</property>
+        <property name="spacing">16</property>
         <property name="orientation">vertical</property>
         <child>
           <object class="GtkFrame">

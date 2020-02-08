@@ -331,9 +331,13 @@ class MdExportDialog(Gtk.Dialog):
 			self.output_extension = '.pdf'
 		elif output_format == 'revealjs':
 			options = '-t revealjs -s -V revealjs-url=http://lab.hakim.se/reveal-js'
-			# TODO slide numbers ??
+			# TODO slide numbers option ??
+			# options = options + ' -V theme=moon -V transition=cube'
+			# options = options + ' -V showSlideNumber=all' # XXX ne marche pas
+			# beige black blood league moon night serif simple sky solarized white
 			self.output_extension = '.html'
-			# accept_css = False # XXX ?
+			accept_css = False # in fact, it does accept a stylesheet as an
+			# option, but the 2 CSS will often be incompatible.
 		else:
 			options = '-t ' + output_format
 			if output_format == 'beamer' or output_format == 'latex':
@@ -391,20 +395,14 @@ class MdExportDialog(Gtk.Dialog):
 		start, end = doc.get_bounds()
 		unsaved_text = doc.get_text(start, end, True)
 		content = markdown.markdown(unsaved_text, extensions=md_extensions)
-		# FIXME code complètement con ci-après
-		with open(file_chooser.get_filename(), 'w') as f:
-			f.write(content)
 		if self.css_manager.switch_css.get_active():
 			pre_string = '<html><head><meta charset="utf-8" />' + \
 			      '<link rel="stylesheet" href="' + self.css_manager.css_uri + \
 			                                                 '" /></head><body>'
 			post_string = '</body></html>'
-			with open(file_chooser.get_filename(), 'r+') as f:
-				content = f.read()
-				f.seek(0, 0)
-				f.write(pre_string.rstrip('\r\n') + '\n' + content)
-			with open(file_chooser.get_filename(), 'a') as f:
-				f.write(post_string)
+			content = pre_string + content + post_string
+		with open(file_chooser.get_filename(), 'w') as f:
+			f.write(content)
 		file_chooser.destroy()
 		return True
 
@@ -435,15 +433,16 @@ class MdConfigWidget(Gtk.Box):
 		# print(datadir) # TODO c'est le path de là où est le plugin, ça peut
 		# aider à mettre un css par défaut ?
 		self._settings = Gio.Settings.new(MD_PREVIEW_KEY_BASE)
+		self._kb_settings = Gio.Settings.new(MD_PREVIEW_KEY_BASE + '.keybindings')
 
 		builder = Gtk.Builder().new_from_file(BASE_PATH + '/prefs.ui')
 #		builder.set_translation_domain('gedit-plugin-markdown-preview') # TODO
 		stack = builder.get_object('stack')
 		sidebar = Gtk.StackSidebar(stack=stack)
 
-		### PREVIEW PAGE #######################################################
+		### GENERAL PAGE #######################################################
 
-		preview_box = builder.get_object('preview_box')
+		general_box = builder.get_object('general_box')
 
 		positionCombobox = builder.get_object('positionCombobox')
 		positionCombobox.append('auto', _("Automatic"))
@@ -460,10 +459,11 @@ class MdConfigWidget(Gtk.Box):
 		autoManageSwitch.set_state(self._settings.get_boolean('auto-manage-panel'))
 		autoManageSwitch.connect('notify::active', self.on_auto_manage_changed)
 
-		preview_box.add(Gtk.Separator(visible=True))
+		### STYLE PAGE #########################################################
 
+		style_box = builder.get_object('style_box')
 		self.css_manager = MdCSSSettings(self._settings, None, self)
-		preview_box.add(self.css_manager.full_widget)
+		style_box.add(self.css_manager.full_widget)
 
 		### BACKEND PAGE #######################################################
 
@@ -489,7 +489,7 @@ class MdConfigWidget(Gtk.Box):
 	############################################################################
 
 	def add_keybinding(self, setting_id, description):
-		accelerator = self._settings.get_strv(setting_id)[0]
+		accelerator = self._kb_settings.get_strv(setting_id)[0]
 		if accelerator is None:
 			[key, mods] = [0, 0]
 		else:
@@ -502,13 +502,13 @@ class MdConfigWidget(Gtk.Box):
 		self.shortcuts_treeview.get_model().set(tree_iter, [2, 3], [args[2], int(args[3])])
 		setting_id = self.shortcuts_treeview.get_model().get_value(tree_iter, 0)
 		accelString = Gtk.accelerator_name(args[2], args[3])
-		self._settings.set_strv(setting_id, [accelString])
+		self._kb_settings.set_strv(setting_id, [accelString])
 
 	def on_accel_cleared(self, *args):
 		tree_iter = self.shortcuts_treeview.get_model().get_iter_from_string(args[1])
 		self.shortcuts_treeview.get_model().set(tree_iter, [2, 3], [0, 0])
 		setting_id = self.shortcuts_treeview.get_model().get_value(tree_iter, 0)
-		self._settings.set_strv(setting_id, [])
+		self._kb_settings.set_strv(setting_id, [])
 
 	############################################################################
 	# Preview options ##########################################################

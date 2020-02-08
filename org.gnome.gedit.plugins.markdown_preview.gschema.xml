@@ -47,8 +47,9 @@
       <summary></summary>
       <description></description>
     </key>
+  </schema>
 
-    <!-- Keyboard shortcuts -->
+  <schema id="org.gnome.gedit.plugins.markdown_preview.keybindings" path="/org/gnome/gedit/plugins/markdown_preview/keybindings/">
     <key name="kb-italic" type="as">
       <default><![CDATA[['<Primary>slash']]]></default>
       <summary>Add italic markup</summary>

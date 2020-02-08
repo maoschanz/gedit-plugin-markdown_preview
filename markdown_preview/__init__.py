@@ -57,12 +57,12 @@ class MarkdownGeditPluginApp(GObject.Object, Gedit.AppActivatable):
 		self.menu_ext_view = None # XXX ?
 
 	def add_all_accelerators(self):
-		self._settings = Gio.Settings.new(MD_PREVIEW_KEY_BASE)
+		self._kb_settings = Gio.Settings.new(MD_PREVIEW_KEY_BASE + '.keybindings')
 		for i in range(len(SETTINGS_KEYS)):
 			self.add_one_accelerator(SETTINGS_KEYS[i], ACTIONS_NAMES[i])
 
 	def add_one_accelerator(self, setting_key, action_name):
-		accels = self._settings.get_strv(setting_key)
+		accels = self._kb_settings.get_strv(setting_key)
 		if len(accels) > 0:
 			self.app.add_accelerator(accels[0], action_name, None)
 
@@ -83,8 +83,10 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 	def do_activate(self):
 		self._handlers = []
 		self._settings = Gio.Settings.new(MD_PREVIEW_KEY_BASE)
-		self._handlers.append( self.window.connect('active-tab-changed', self.preview.on_file_changed) )
-		self._handlers.append( self.window.connect('active-tab-state-changed', self.preview.on_file_changed) )
+		sig_id0 = self.window.connect('active-tab-changed', self.preview.on_file_changed)
+		self._handlers.append(sig_id0)
+		sig_id1 = self.window.connect('active-tab-state-changed', self.preview.on_file_changed)
+		self._handlers.append(sig_id1)
 		self.connect_actions()
 		self.preview.do_activate()
 

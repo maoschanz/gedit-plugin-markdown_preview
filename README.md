@@ -2,10 +2,6 @@
 
 <!-- TODO
 
-- [ ] comment retirer le fichier CSS ??
-	- [ ] connecter le switch des préférences
-	- [x] code dans preview.py
-- [ ] pages séparées (général/style)
 - [ ] help labels and links for pandoc too! et toutes les pages en fait
 - [ ] CSS for admonitions (and other default plugins ?)
 	- [ ] and pymdown ??
@@ -18,26 +14,47 @@
 - [ ] se souvenir du splitter
 - [ ] ajouter le réglage pour le splitter dans les préférences
 - [ ] bring back the fullscreen, but better
+- [ ] style broken with paginated HTML
 
 ~     TODO -->
 
 This is a plugin for the Gedit text editor, previewing .md files in the side (`F9`) or the bottom (`Ctrl+F9`) pane.
 
-<!-- Main features (version 0.8): -->
+## Main features
 
-- Previewing:
-	- show a preview of a file
-	- dynamically update the preview
-	- zoom in or out on the preview
-	- search in the preview
-	- open links and image
-- Exporting:
-	- print the preview
-	- export to any file format supported by [pandoc](https://pandoc.org/)
-	- or export to HTML with `python3-markdown` and its [extensions](https://python-markdown.github.io/extensions/)
-- Edition assistance:
-	- insert an image in your file
-	- insert markdown tags in your text with right-click menu or keyboard shortcuts
+### Previewing
+
+- show a preview of a file
+- dynamically update the preview
+- zoom in or out on the preview
+- search in the preview
+- open links and images
+
+This works for Markdown files, HTML files, and theorically LaTeX files.
+
+### Exporting
+
+You can print the preview, or export it:
+
+- if [pandoc](https://pandoc.org/) is installed on your system, you can export to any format it supports
+	- a stylesheet can be applied to most file formats
+	- options are available when exporting to a [https://revealjs.com](revealjs) slideshow (**WORK IN PROGRESS**)
+- if only `python3-markdown` is installed, you can export to HTML
+	- a stylesheet can be applied
+	- `python3-markdown` [extensions](https://python-markdown.github.io/extensions/) can be used (including [third-party extensions](https://github.com/Python-Markdown/markdown/wiki/Third-Party-Extensions) like [these great ones](https://facelessuser.github.io/pymdown-extensions/)
+
+### Editing assistance
+
+- insert an image in your file
+- insert markdown tags in your text with right-click menu or keyboard shortcuts
+
+----
+
+## Screenshots
+
+![With the preview in the side pane, menu opened](https://i.imgur.com/wo2pUrR.png)
+
+![With the preview in the bottom pane, searching](https://i.imgur.com/NaVogWH.png)
 
 ----
 
@@ -82,12 +99,42 @@ The plugin's options can be accessed…
 - from Gedit's preferences → Plugins → Markdown preview → Preferences
 - or with the extension's "3-dots menu" → Options
 
-Available settings include:
+### General options
 
-- The preview can be generated (and exported) with [pandoc](https://pandoc.org/) or [python-markdown](https://python-markdown.github.io/). A set of [extensions](https://python-markdown.github.io/extensions/) is provided with python-markdown.
-- A stylesheet (CSS file) can be applied to the preview.
-- Choose if you want the plugin to understand relative paths (for links and pictures). Not recommended if you use special characters in filenames (WebKit2GTK can't load URIs with special characters for some reason)
-- Set keyboard shortcuts to add/remove tags *(beta)*
+- Select the position of the pane
+- Choose if you want the plugin to understand relative paths (for links and pictures). Not recommended if you use special characters in filenames (some versions of WebKit2GTK can't load URIs with special characters for some reason)
+
+### Rendering options
+
+The preview can be generated with [pandoc](https://pandoc.org/) or [python-markdown](https://python-markdown.github.io/).
+
+##### Options with pandoc
+
+You can decide to render the file as classic HTML (it may then use the CSS file you set) or as HTML with the stylesheet and javascript code from _revealjs_. (**WORK IN PROGRESS**)
+
+A third "custom" option is possible: be sure to write a full, correct command whose output will be HTML, press "Remember" to save your custom command. (**WORK IN PROGRESS**)
+
+##### Options with python-markdown
+
+A set of [extensions](https://python-markdown.github.io/extensions/) is provided natively with python-markdown. You can enable or disable them depending on your needs.
+
+[Great third-party extensions](https://facelessuser.github.io/pymdown-extensions/) exist too, and once installed they can be added manually to the list.
+
+### Style
+
+A stylesheet (CSS file) can be applied to the preview.
+
+- doesn't work when previewing HTML files
+- doesn't work if you preview the file as a revealjs slideshow
+
+<!--TODO-->
+<!--revealjs options-->
+
+### Keyboard shortcuts
+
+Set keyboard shortcuts to add/remove tags (**WORK IN PROGRESS**)
+
+----
 
 ## Available languages
 
@@ -95,13 +142,4 @@ Available settings include:
 - French
 - Dutch
 
-----
-
-## Screenshots
-
-![With the preview in the side panel, menu opened](https://i.imgur.com/wo2pUrR.png)
-
-![With the preview in the bottom panel, searching](https://i.imgur.com/NaVogWH.png)
-
-----
 
