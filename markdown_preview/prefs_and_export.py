@@ -94,6 +94,29 @@ PANDOC_FORMATS_PREVIEW = {
 	'custom': _("Custom command line")
 }
 
+REVEALJS_TRANSITIONS = {
+	'none': _("None"),
+	'fade': _("Fade"),
+	'slide': _("Slide"),
+	'convex': _("Cube (convex)"),
+	'concave': _("Cube (concave)"),
+	'zoom': _("Zoom")
+}
+
+REVEALJS_THEMES = {
+	'beige': _("Beige"),
+	'black': _("Black"),
+	'blood': _("Blood"),
+	'league': _("League"),
+	'moon': _("Moon"),
+	'night': _("Night"),
+	'serif': _("Serif"),
+	'simple': _("Simple"),
+	'sky': _("Sky"),
+	'solarized': _("Solarized"),
+	'white': _("White")
+}
+
 ################################################################################
 
 class MdRevealjsSettings():
@@ -105,9 +128,36 @@ class MdRevealjsSettings():
 		self.full_widget = builder.get_object('revealjs_box')
 
 		self.transitions_flowbox = builder.get_object('transitions_flowbox')
+		self.fill_flowbox(self.transitions_flowbox, 'revealjs-transitions', \
+		                                                   REVEALJS_TRANSITIONS)
 		self.theme_flowbox = builder.get_object('theme_flowbox')
+		self.fill_flowbox(self.theme_flowbox, 'revealjs-theme', REVEALJS_THEMES)
+
 		self.slide_num_switch = builder.get_object('slide_number_switch')
 		# TODO
+
+	def fill_flowbox(self, flowbox, setting_key, labels_dict):
+		self._radio_are_active = False
+		w0 = None
+		for id0 in labels_dict:
+			w0 = self.build_radio_btn(labels_dict[id0], id0, setting_key, w0)
+			flowbox.add(w0)
+		self._radio_are_active = True
+
+	def build_radio_btn(self, label, btn_id, key, group):
+		btn = Gtk.RadioButton(label=label, visible=True, group=group)
+		active_id = self._settings.get_string(key)
+		btn.set_active(btn_id == active_id)
+		btn.connect('toggled', self.on_radio_btn_changed, key, btn_id)
+		return btn
+
+	def on_radio_btn_changed(self, radiobtn, key, btn_id):
+		if not self._radio_are_active:
+			return
+		if key == 'revealjs-theme':
+			pass
+		elif key == 'revealjs-transitions':
+			pass
 
 	############################################################################
 ################################################################################
@@ -158,7 +208,7 @@ class MdCSSSettings():
 		if response == Gtk.ResponseType.ACCEPT:
 			self.css_uri = file_chooser.get_uri()
 			self._update_file_chooser_btn_label()
-			self.parent_widget.update_css(self.switch_css.get_active(), self.css_uri)
+			self.parent_widget.update_css(self.is_active(), self.css_uri)
 		file_chooser.destroy()
 
 	def _update_file_chooser_btn_label(self):
@@ -168,6 +218,9 @@ class MdCSSSettings():
 		if len(label) > 45:
 			label = '…' + label[-45:]
 		self.style_label.set_label(label)
+
+	def is_active(self):
+		return self.switch_css.get_active()
 
 	############################################################################
 ################################################################################
@@ -417,7 +470,7 @@ class MdExportDialog(Gtk.Dialog):
 		start, end = doc.get_bounds()
 		unsaved_text = doc.get_text(start, end, True)
 		content = markdown.markdown(unsaved_text, extensions=md_extensions)
-		if self.css_manager.switch_css.get_active():
+		if self.css_manager.is_active():
 			pre_string = '<html><head><meta charset="utf-8" />' + \
 			      '<link rel="stylesheet" href="' + self.css_manager.css_uri + \
 			                                                 '" /></head><body>'

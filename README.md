@@ -3,6 +3,7 @@
 <!-- TODO
 
 - [ ] tex support sucks, remove it entirely
+- [ ] faire une stack (?????|style) pour ce pauvre dialogue d'export
 - [ ] casser prefs_and_export en 2 mais intelligemment
 - [ ] help labels and links for pandoc too! et toutes les pages en fait
 - [ ] CSS for admonitions (and other default plugins ?)

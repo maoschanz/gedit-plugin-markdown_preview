@@ -19,9 +19,37 @@
     </key>
     <key type="b" name="auto-reload">
       <default>true</default>
-      <summary></summary>
+      <summary>Automatically reload the preview</summary>
       <description></description>
     </key>
+
+    <key type="b" name="use-style">
+      <default>false</default>
+      <summary>Use a stylesheet</summary>
+      <description></description>
+    </key>
+    <key type="s" name="style">
+      <default>''</default>
+      <summary>Stylesheet URI</summary>
+      <description></description>
+    </key>
+
+    <key type="s" name="revealjs-theme">
+      <default>'black'</default>
+      <summary>Name of the revealjs theme</summary>
+      <description>Values can be </description>
+    </key>
+    <key type="s" name="revealjs-transitions">
+      <default>'none'</default>
+      <summary>Type of transitions</summary>
+      <description>Values can be </description>
+    </key>
+    <key type="b" name="revealjs-slide-num">
+      <default>true</default>
+      <summary>Display slide numbers</summary>
+      <description></description>
+    </key>
+
     <key type="s" name="backend">
       <default>'pandoc'</default>
       <summary>Favorite backend for the preview</summary>
@@ -35,16 +63,6 @@
     <key type="s" name="custom-render">
       <default>''</default>
       <summary>Custom rendering command</summary>
-      <description></description>
-    </key>
-    <key type="b" name="use-style">
-      <default>false</default>
-      <summary>Use a stylesheet</summary>
-      <description></description>
-    </key>
-    <key type="s" name="style">
-      <default>""</default>
-      <summary>Stylesheet URI</summary>
       <description></description>
     </key>
     <key type="as" name="extensions">

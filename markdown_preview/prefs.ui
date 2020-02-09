@@ -3,7 +3,7 @@
   <object class="GtkStack" id="stack">
     <property name="margin">10</property>
     <property name="visible">True</property>
-    <property name="transition-type">crossfade</property>
+    <property name="transition-type">slide-up-down</property>
 
     <child>
       <object class="GtkBox" id="general_box">
