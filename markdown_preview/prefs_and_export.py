@@ -104,6 +104,9 @@ class MdRevealjsSettings():
 		builder = Gtk.Builder().new_from_file(BASE_PATH + '/revealjs_box.ui')
 		self.full_widget = builder.get_object('revealjs_box')
 
+		self.transitions_flowbox = builder.get_object('transitions_flowbox')
+		self.theme_flowbox = builder.get_object('theme_flowbox')
+		self.slide_num_switch = builder.get_object('slide_number_switch')
 		# TODO
 
 	############################################################################

@@ -2,6 +2,8 @@
 
 <!-- TODO
 
+- [ ] tex support sucks, remove it entirely
+- [ ] casser prefs_and_export en 2 mais intelligemment
 - [ ] help labels and links for pandoc too! et toutes les pages en fait
 - [ ] CSS for admonitions (and other default plugins ?)
 	- [ ] and pymdown ??
@@ -29,7 +31,7 @@ This is a plugin for the Gedit text editor, previewing .md files in the side (`F
 - search in the preview
 - open links and images
 
-This works for Markdown files, HTML files, and theorically LaTeX files.
+This works for Markdown files (and theorically HTML files)
 
 ### Exporting
 
