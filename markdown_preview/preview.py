@@ -283,7 +283,7 @@ class MdPreviewBar(Gtk.Box):
 		if self.parent_plugin._auto_position:
 			self.auto_change_panel()
 
-		css_uri = ''
+		css_uri = '' # TODO virer ça
 		if self._settings.get_boolean('use-style'):
 			css_uri = self._settings.get_string('style')
 
@@ -293,12 +293,13 @@ class MdPreviewBar(Gtk.Box):
 		unsaved_text = doc.get_text(start, end, True)
 		if self.file_format == 'html':
 			html_content = self.get_html_from_html(unsaved_text)
-		elif self.file_format == 'md' \
-		and self._settings.get_string('backend') == 'python':
-			html_content = self.get_html_from_p3md(unsaved_text, css_uri)
+		if self._settings.get_string('backend') == 'python':
+			if self.file_format == 'md':
+				html_content = self.get_html_from_p3md(unsaved_text, css_uri)
+			else:
+				return
 		else:
-			# html_content = self.get_html_from_pandoc_temp(unsaved_text, css_uri)
-			html_content = self.get_html_from_pandoc(unsaved_text) # TODO
+			html_content = self.get_html_from_pandoc(unsaved_text)
 
 		# The html code is converted into bytes
 		my_string = GLib.String()

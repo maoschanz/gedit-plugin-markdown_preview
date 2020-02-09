@@ -149,7 +149,7 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 
 		position = self._settings.get_string('position')
 		self._auto_position = position == 'auto'
-		action_panel = Gio.SimpleAction().new_stateful('md-prev-panel', \
+		action_panel = Gio.SimpleAction().new_stateful('md-prev-pane', \
 		           GLib.VariantType.new('s'), GLib.Variant.new_string(position))
 		action_panel.connect('change-state', self.on_change_panel_from_popover)
 
