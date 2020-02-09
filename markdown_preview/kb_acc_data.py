@@ -22,15 +22,15 @@ ACTIONS_NAMES = [
 	'win.md-prev-insert-picture',
 	'win.md-prev-format-title-lower',
 	'win.md-prev-format-title-upper'
-] # TODO pas fini évidemment
+] # TODO obviously not finished
 
 SETTINGS_KEYS = [
-	'kb-italic',
-	'kb-bold',
-	'kb-insert-picture',
-	'kb-title-lower',
-	'kb-title-upper'
-] # TODO pas fini évidemment
+	'italic',
+	'bold',
+	'insert-picture',
+	'title-lower',
+	'title-upper'
+] # TODO obviously not finished
 
 LABELS = [
 	_("Italic"),
@@ -38,7 +38,7 @@ LABELS = [
 	_("Insert a picture"),
 	_("Lower title"),
 	_("Upper title")
-] # TODO pas fini évidemment
+] # TODO obviously not finished
 
 ################################################################################
 

@@ -64,9 +64,16 @@
               </object>
             </child>
             <child>
-              <object class="GtkFlowBox" id="extensions_flowbox">
+              <object class="GtkScrolledWindow">
                 <property name="visible">True</property>
-                <property name="selection_mode">none</property>
+                <property name="expand">True</property>
+                <property name="shadow-type">in</property>
+                <child>
+                  <object class="GtkFlowBox" id="extensions_flowbox">
+                    <property name="visible">True</property>
+                    <property name="selection_mode">none</property>
+                  </object>
+                </child>
               </object>
             </child>
             <child>
@@ -143,22 +150,32 @@
               </object>
             </child>
             <child>
+              <object class="GtkScrolledWindow">
+                <property name="visible">True</property>
+                <property name="expand">True</property>
+                <property name="shadow-type">in</property>
+                <child>
+                  <object class="GtkTextView" id="pandoc_command_entry">
+                    <property name="visible">True</property>
+                    <property name="wrap-mode">word-char</property>
+                    <property name="accepts-tab">False</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
               <object class="GtkBox">
                 <property name="orientation">horizontal</property>
                 <property name="expand">False</property>
                 <property name="visible">True</property>
                 <property name="spacing">16</property>
                 <child>
-                  <object class="GtkFrame">
+                  <object class="GtkLabel" id="help_label_pandoc">
                     <property name="visible">True</property>
-                    <child>
-                      <object class="GtkTextView" id="pandoc_command_entry">
-                        <property name="visible">True</property>
-                        <property name="expand">True</property>
-                        <property name="wrap-mode">word-char</property>
-                        <property name="accepts-tab">False</property>
-                      </object>
-                    </child>
+                    <property name="wrap">True</property>
+                    <property name="use-markup">True</property>
+                    <property name="max-width-chars">50</property>
+                    <style><class name="dim-label"/></style>
                   </object>
                 </child>
                 <child>
@@ -167,6 +184,9 @@
                     <property name="valign">center</property>
                     <property name="label" translatable="yes">Remember</property>
                   </object>
+                  <packing>
+                    <property name="pack-type">end</property>
+                  </packing>
                 </child>
               </object>
             </child>

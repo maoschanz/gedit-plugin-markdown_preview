@@ -53,10 +53,10 @@ class MdPreviewBar(Gtk.Box):
 	def do_activate(self):
 		self._handlers = []
 		self._settings = Gio.Settings.new(MD_PREVIEW_KEY_BASE)
-		id1 = self._settings.connect('changed::position', self.change_panel)
-		id2 = self._settings.connect('changed::auto-manage-panel', self.set_auto_manage)
+		id0 = self._settings.connect('changed::position', self.change_panel)
+		id1 = self._settings.connect('changed::auto-manage-pane', self.set_auto_manage)
+		self._handlers.append(id0)
 		self._handlers.append(id1)
-		self._handlers.append(id2)
 		self.pagination_mode = 'whole'
 		self.set_auto_manage()
 		self.build_preview_ui()
@@ -84,7 +84,7 @@ class MdPreviewBar(Gtk.Box):
 				self.on_reload()
 
 	def do_deactivate(self):
-		self._webview.disconnect(self._handlers[4]) # XXX if useful, use elsewhere
+		self._webview.disconnect(self._handlers[4]) # XXX if it's useful, use this elsewhere
 		self._webview.disconnect(self._handlers[3])
 		self._webview.disconnect(self._handlers[2])
 		self._settings.disconnect(self._handlers[1])
@@ -111,7 +111,7 @@ class MdPreviewBar(Gtk.Box):
 		self._settings.set_boolean('auto-reload', self.auto_reload)
 
 	def set_auto_manage(self, *args):
-		self.auto_manage_panel = self._settings.get_boolean('auto-manage-panel')
+		self.auto_manage_panel = self._settings.get_boolean('auto-manage-pane')
 
 	def set_action_enabled(self, action_name, state):
 		self.parent_plugin.window.lookup_action(action_name).set_enabled(state)
@@ -141,9 +141,12 @@ class MdPreviewBar(Gtk.Box):
 		# This is the preview itself
 		self._webview = WebKit2.WebView()
 		self._webview.get_settings().set_property('enable_javascript', True)
-		self._handlers.append( self._webview.connect('context-menu', self.on_context_menu) )
-		self._handlers.append( self._webview.connect('mouse-target-changed', self.on_remember_scroll) )
-		self._handlers.append( self._webview.connect('load-changed', self.on_restore_scroll) )
+		id2 = self._webview.connect('context-menu', self.on_context_menu)
+		id3 = self._webview.connect('mouse-target-changed', self.on_remember_scroll)
+		id4 = self._webview.connect('load-changed', self.on_restore_scroll)
+		self._handlers.append(id2)
+		self._handlers.append(id3)
+		self._handlers.append(id4)
 		preview_box.pack_start(self._webview, expand=True, fill=True, padding=0)
 
 		# Displaying error messages
@@ -311,12 +314,13 @@ class MdPreviewBar(Gtk.Box):
 
 	def get_html_from_html(self, unsaved_text):
 		# CSS not applied if it's HTML
+		# XXX splitting breaks the default CSS, should i care?
 		return self.current_page(unsaved_text, HTML_SPLITTERS)
 
 	def get_html_from_tex(self, css_uri):
 		doc = self.parent_plugin.window.get_active_document()
 		file_path = doc.get_location().get_path()
-		# TODO FIXME splitters ?
+		# TODO implement splitters
 
 		# It uses pandoc to produce the html code
 		command = ['pandoc', '-s', file_path, '--metadata', 'pagetitle=Preview']

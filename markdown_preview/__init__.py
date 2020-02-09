@@ -8,7 +8,7 @@ BASE_PATH = os.path.dirname(os.path.realpath(__file__))
 LOCALE_PATH = os.path.join(BASE_PATH, 'locale')
 
 from .preview import MdPreviewBar
-from .export import MdExportDialog, MdConfigWidget
+from .prefs_and_export import MdExportDialog, MdConfigWidget
 from .kb_acc_data import ACTIONS_NAMES
 from .kb_acc_data import SETTINGS_KEYS
 
@@ -211,7 +211,7 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		else:
 			return
 		
-		print('action : ' + name)
+		# print('action : ' + name) # TODO terminer ça mdr
 		
 		if name == 'insert_table':
 			v.insert_table()
@@ -275,11 +275,11 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		return widget
 
 	def on_open_prefs(self, *args):
-		w = Gtk.Window(title=_("Markdown Preview"))
+		w = Gtk.Window(title=_("Markdown Preview"), default_height=350)
 		widget = MdConfigWidget(self.plugin_info.get_data_dir())
 		w.add(widget)
 		w.present()
-		w.show_all()
+		w.show_all() # immonde mais reproduit le comportement de libpeas
 
 	def export_doc(self, *args):
 		dialog = MdExportDialog(self.preview.recognize_format(), self.window, self._settings)
@@ -325,7 +325,7 @@ class MarkdownGeditPluginView(GObject.Object, Gedit.ViewActivatable):
 			item.set_sensitive(False)
 		popup.append(item)
 	
-	def recognize_format(self): # FIXME doc.get_language()
+	def recognize_format(self): # TODO doc.get_language()
 		doc = self.view.get_buffer()
 		name = doc.get_short_name_for_display()
 		temp = name.split('.')

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface domain="gedit-plugin-markdown-preview">
+  <object class="GtkBox" id="revealjs_box">
+    <property name="visible">True</property>
+    <property name="orientation">vertical</property>
+    <!-- TODO -->
+  </object>
+</interface>
+

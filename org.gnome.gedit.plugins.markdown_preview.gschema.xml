@@ -8,13 +8,13 @@
     </key>
     <key type="b" name="relative">
       <default>false</default>
-      <summary></summary>
-      <description></description>
+      <summary>Use relative paths</summary>
+      <description>Enable relative paths for links and pictures</description>
     </key>
-    <key type="b" name="auto-manage-panel">
+    <key type="b" name="auto-manage-pane">
       <default>true</default>
-      <summary>Show/hide panel automatically</summary>
-      <description>If true, the panel will be shown/hidden automatically if no
+      <summary>Show/hide pane automatically</summary>
+      <description>If true, the pane will be shown/hidden automatically if no
       other plugin is active in it.</description>
     </key>
     <key type="b" name="auto-reload">
@@ -25,11 +25,16 @@
     <key type="s" name="backend">
       <default>'pandoc'</default>
       <summary>Favorite backend for the preview</summary>
-      <description>python or pandoc</description>
+      <description>Can be 'python' or 'pandoc'</description>
     </key>
     <key type="s" name="custom-export">
       <default>''</default>
       <summary>Custom export command</summary>
+      <description></description>
+    </key>
+    <key type="s" name="custom-render">
+      <default>''</default>
+      <summary>Custom rendering command</summary>
       <description></description>
     </key>
     <key type="b" name="use-style">
@@ -44,33 +49,33 @@
     </key>
     <key type="as" name="extensions">
       <default>['extra', 'sane_lists', 'toc']</default>
-      <summary></summary>
-      <description></description>
+      <summary>Enabled extensions</summary>
+      <description>List of enabled extensions for python3-markdown</description>
     </key>
   </schema>
 
   <schema id="org.gnome.gedit.plugins.markdown_preview.keybindings" path="/org/gnome/gedit/plugins/markdown_preview/keybindings/">
-    <key name="kb-italic" type="as">
+    <key name="italic" type="as">
       <default><![CDATA[['<Primary>slash']]]></default>
       <summary>Add italic markup</summary>
       <description></description>
     </key>
-    <key name="kb-bold" type="as">
+    <key name="bold" type="as">
       <default><![CDATA[['<Primary><Shift>B']]]></default>
       <summary>Add bold markup</summary>
       <description></description>
     </key>
-    <key name="kb-insert-picture" type="as">
+    <key name="insert-picture" type="as">
       <default><![CDATA[['<Primary><Shift>P']]]></default>
       <summary>Insert an image</summary>
       <description></description>
     </key>
-    <key name="kb-title-lower" type="as">
+    <key name="title-lower" type="as">
       <default><![CDATA[['<Primary>minus']]]></default>
       <summary>Use a lower level of title by adding a "#" tag</summary>
       <description></description>
     </key>
-    <key name="kb-title-upper" type="as">
+    <key name="title-upper" type="as">
       <default><![CDATA[['<Primary>plus']]]></default>
       <summary>Use a upper level of title by removing a "#" tag</summary>
       <description></description>

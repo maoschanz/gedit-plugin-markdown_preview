@@ -70,6 +70,10 @@ HELP_LABEL_3 = _("Next, to improve the preview of your markdown file with " + \
 "the features of these extensions, please add their module names to the " + \
 "list using the text entry and the '+' icon.")
 
+HELP_LABEL_PANDOC = _("TODO explanation about pandoc")
+# TODO there should be several distinct labels
+pass
+
 PANDOC_FORMATS_FULL = {
 	'beamer': _("LaTeX beamer slideshow (.tex)"),
 	'docx': _("Microsoft Word (.docx)"),
@@ -90,6 +94,19 @@ PANDOC_FORMATS_PREVIEW = {
 	'custom': _("Custom command line")
 }
 
+################################################################################
+
+class MdRevealjsSettings():
+	def __init__(self, settings, parent_widget):
+		self._settings = settings
+		self.parent_widget = parent_widget
+
+		builder = Gtk.Builder().new_from_file(BASE_PATH + '/revealjs_box.ui')
+		self.full_widget = builder.get_object('revealjs_box')
+
+		# TODO
+
+	############################################################################
 ################################################################################
 
 class MdCSSSettings():
@@ -162,7 +179,6 @@ class MdBackendSettings():
 		self.full_widget = builder.get_object('backend_box')
 		builder.get_object('combo_label').set_label(label)
 		self.backend_stack = builder.get_object('backend_stack')
-		self.full_widget.show_all() # XXX ugly
 		backendCombobox = builder.get_object('backend_combobox')
 		backendCombobox.append('python', "python3-markdown")
 		backendCombobox.append('pandoc', "pandoc")
@@ -182,6 +198,7 @@ class MdBackendSettings():
 
 		# Load UI for the pandoc backend
 		self.pandoc_cli_entry = builder.get_object('pandoc_command_entry')
+		builder.get_object('help_label_pandoc').set_label(HELP_LABEL_PANDOC)
 		self.remember_button = builder.get_object('remember_button')
 		self.remember_button.connect('clicked', self.on_remember)
 		self.format_combobox = builder.get_object('format_combobox')
@@ -255,7 +272,7 @@ class MdBackendSettings():
 		return self.backend_stack.get_visible_child_name()
 
 	def on_remember(self, b):
-		new_command = self.pandoc_command_entry.get_buffer().get_text()
+		new_command = self.pandoc_cli_entry.get_buffer().get_text()
 		self._settings.set_string('custom-export', new_command)
 
 	def set_pandoc_command(self, command):
@@ -271,7 +288,8 @@ class MdExportDialog(Gtk.Dialog):
 	output_extension = '.pdf'
 
 	def __init__(self, file_format, gedit_window, settings, **kwargs):
-		super().__init__(use_header_bar=True, title=_("Export as…"), **kwargs)
+		super().__init__(use_header_bar=True, title=_("Export as…"), \
+		                        default_width=640, default_height=400, **kwargs)
 		self.file_format = file_format
 		self.gedit_window = gedit_window
 		self._settings = settings
@@ -331,10 +349,11 @@ class MdExportDialog(Gtk.Dialog):
 			self.output_extension = '.pdf'
 		elif output_format == 'revealjs':
 			options = '-t revealjs -s -V revealjs-url=http://lab.hakim.se/reveal-js'
-			# TODO slide numbers option ??
-			# options = options + ' -V theme=moon -V transition=cube'
-			# options = options + ' -V showSlideNumber=all' # XXX ne marche pas
+			options = options + ' -V theme=blood'
 			# beige black blood league moon night serif simple sky solarized white
+			options = options + ' -V transition=slide'
+			# none, fade, slide, convex (= cube ?), concave, zoom
+			options = options + ' -V slideNumber=true' # there are more options
 			self.output_extension = '.html'
 			accept_css = False # in fact, it does accept a stylesheet as an
 			# option, but the 2 CSS will often be incompatible.
@@ -436,18 +455,25 @@ class MdConfigWidget(Gtk.Box):
 		self._kb_settings = Gio.Settings.new(MD_PREVIEW_KEY_BASE + '.keybindings')
 
 		builder = Gtk.Builder().new_from_file(BASE_PATH + '/prefs.ui')
-#		builder.set_translation_domain('gedit-plugin-markdown-preview') # TODO
+		# builder.set_translation_domain('gedit-plugin-markdown-preview') # FIXME
 		stack = builder.get_object('stack')
 		sidebar = Gtk.StackSidebar(stack=stack)
 
-		### GENERAL PAGE #######################################################
+		self._build_general_page(builder)
+		self._build_style_page(builder)
+		self._build_backend_page(builder)
+		self._build_shortcuts_page(builder)
 
+		self.add(sidebar)
+		self.add(stack)
+
+	def _build_general_page(self, builder):
 		general_box = builder.get_object('general_box')
 
 		positionCombobox = builder.get_object('positionCombobox')
 		positionCombobox.append('auto', _("Automatic"))
-		positionCombobox.append('side', _("Side Panel"))
-		positionCombobox.append('bottom', _("Bottom Panel"))
+		positionCombobox.append('side', _("Side Pane"))
+		positionCombobox.append('bottom', _("Bottom Pane"))
 		positionCombobox.set_active_id(self._settings.get_string('position'))
 		positionCombobox.connect('changed', self.on_position_changed)
 
@@ -456,17 +482,28 @@ class MdConfigWidget(Gtk.Box):
 		relativePathsSwitch.connect('notify::active', self.on_relative_changed)
 
 		autoManageSwitch = builder.get_object('autoManageSwitch')
-		autoManageSwitch.set_state(self._settings.get_boolean('auto-manage-panel'))
+		autoManageSwitch.set_state(self._settings.get_boolean('auto-manage-pane'))
 		autoManageSwitch.connect('notify::active', self.on_auto_manage_changed)
 
-		### STYLE PAGE #########################################################
-
+	def _build_style_page(self, builder):
 		style_box = builder.get_object('style_box')
+
+		style_box.add(self._new_dim_label(_("TODO explanation about css")))
 		self.css_manager = MdCSSSettings(self._settings, None, self)
 		style_box.add(self.css_manager.full_widget)
 
-		### BACKEND PAGE #######################################################
+		style_box.add(Gtk.Separator(visible=True))
 
+		style_box.add(self._new_dim_label(_("TODO explanation about revealjs")))
+		self.revealjs_manager = MdRevealjsSettings(self._settings, self)
+		style_box.add(self.revealjs_manager.full_widget)
+
+	def _new_dim_label(self, string):
+		label = Gtk.Label(visible=True, halign=Gtk.Align.START, label=string)
+		label.get_style_context().add_class('dim-label')
+		return label
+
+	def _build_backend_page(self, builder):
 		self._backend = MdBackendSettings(_("HTML generation backend:"), \
 		                                                   self._settings, True)
 		builder.get_object('backend_box').add(self._backend.full_widget)
@@ -474,17 +511,14 @@ class MdConfigWidget(Gtk.Box):
 		self.on_pandoc_format_changed(self._backend.format_combobox)
 		self._backend.format_combobox.connect('changed', self.on_pandoc_format_changed)
 
-		### SHORTCUTS PAGE #####################################################
-
+	def _build_shortcuts_page(self, builder):
 		self.shortcuts_treeview = builder.get_object('shortcuts_treeview')
 		renderer = builder.get_object('accel_renderer')
 		renderer.connect('accel-edited', self.on_accel_edited)
 		renderer.connect('accel-cleared', self.on_accel_cleared)
-#		https://github.com/GNOME/gtk/blob/master/gdk/keynames.txt
+		# https://github.com/GNOME/gtk/blob/master/gdk/keynames.txt
 		for i in range(len(SETTINGS_KEYS)):
 			self.add_keybinding(SETTINGS_KEYS[i], LABELS[i])
-		self.add(sidebar)
-		self.add(stack)
 
 	############################################################################
 
@@ -521,7 +555,7 @@ class MdConfigWidget(Gtk.Box):
 		self._settings.set_string('position', position)
 
 	def on_auto_manage_changed(self, w, a):
-		self._settings.set_boolean('auto-manage-panel', w.get_state())
+		self._settings.set_boolean('auto-manage-pane', w.get_state())
 
 	def update_css(self, is_active, uri):
 		self._settings.set_boolean('use-style', is_active)
@@ -536,13 +570,12 @@ class MdConfigWidget(Gtk.Box):
 
 		self._backend.remember_button.set_sensitive(output_format == 'custom')
 		if output_format == 'custom':
-			command = self._settings.get_string('custom-export')
+			command = self._settings.get_string('custom-render')
 			self._backend.set_pandoc_command(command)
-			self.output_extension = '.pdf'
 			return
 
-		command = 'pandoc $INPUT_FILE %s -o $OUTPUT_FILE'
-		options = ''
+		command = 'pandoc $INPUT_FILE %s'
+		options = '--metadata pagetitle=Preview'
 		accept_css = True
 		# TODO........
 		if self.css_manager.switch_css.get_state() and accept_css:
