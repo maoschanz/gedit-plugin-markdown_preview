@@ -293,15 +293,12 @@ class MdPreviewBar(Gtk.Box):
 		unsaved_text = doc.get_text(start, end, True)
 		if self.file_format == 'html':
 			html_content = self.get_html_from_html(unsaved_text)
-		elif self.file_format == 'tex':
-			html_content = self.get_html_from_tex(css_uri)
-		elif self.file_format == 'md':
-			if self._settings.get_string('backend') == 'python':
-				html_content = self.get_html_from_md_python(unsaved_text, css_uri)
-			else:
-				html_content = self.get_html_from_md_pandoc(unsaved_text, css_uri)
+		elif self.file_format == 'md' \
+		and self._settings.get_string('backend') == 'python':
+			html_content = self.get_html_from_p3md(unsaved_text, css_uri)
 		else:
-			return
+			# html_content = self.get_html_from_pandoc_temp(unsaved_text, css_uri)
+			html_content = self.get_html_from_pandoc(unsaved_text) # TODO
 
 		# The html code is converted into bytes
 		my_string = GLib.String()
@@ -314,23 +311,9 @@ class MdPreviewBar(Gtk.Box):
 
 	def get_html_from_html(self, unsaved_text):
 		# CSS not applied if it's HTML
-		# XXX splitting breaks the default CSS, should i care?
 		return self.current_page(unsaved_text, HTML_SPLITTERS)
 
-	def get_html_from_tex(self, css_uri):
-		doc = self.parent_plugin.window.get_active_document()
-		file_path = doc.get_location().get_path()
-		# TODO implement splitters
-
-		# It uses pandoc to produce the html code
-		command = ['pandoc', '-s', file_path, '--metadata', 'pagetitle=Preview']
-		if css_uri != '':
-			command = command + ['-c', css_uri]
-		result = subprocess.run(command, stdout=subprocess.PIPE)
-		html_content = result.stdout.decode('utf-8')
-		return html_content
-
-	def get_html_from_md_pandoc(self, unsaved_text, css_uri):
+	def get_html_from_pandoc_temp(self, unsaved_text, css_uri):
 		# Get the current document, or the temporary document if requested
 		unsaved_text = self.current_page(unsaved_text, MARKDOWN_SPLITTERS)
 		f = open(BASE_TEMP_NAME + '.md', 'w')
@@ -346,7 +329,7 @@ class MdPreviewBar(Gtk.Box):
 		html_content = result.stdout.decode('utf-8')
 		return html_content
 
-	def get_revealjs_from_md(self, unsaved_text):
+	def get_html_from_pandoc(self, unsaved_text):
 		# Get the current document, or the temporary document if requested
 		unsaved_text = self.current_page(unsaved_text, MARKDOWN_SPLITTERS)
 		f = open(BASE_TEMP_NAME + '.md', 'w')
@@ -355,15 +338,13 @@ class MdPreviewBar(Gtk.Box):
 		file_path = self.temp_file_md.get_path()
 
 		# It uses pandoc to produce the html code
-		# command = ['pandoc', '-s', file_path, '--metadata', 'pagetitle=Preview', \
-		# '-t', 'revealjs', '-V', 'revealjs-url=http://lab.hakim.se/reveal-js']
-		# if css_uri != '':
-		# 	command = command + ['-c', css_uri]
-		# result = subprocess.run(command, stdout=subprocess.PIPE)
-		# html_content = result.stdout.decode('utf-8')
-		# return html_content  # TODO
+		command = self._settings.get_strv('pandoc-command')
+		command[command.index('$INPUT_FILE')] = file_path
+		result = subprocess.run(command, stdout=subprocess.PIPE)
+		html_content = result.stdout.decode('utf-8')
+		return html_content
 
-	def get_html_from_md_python(self, unsaved_text, css_uri):
+	def get_html_from_p3md(self, unsaved_text, css_uri):
 		unsaved_text = self.current_page(unsaved_text, MARKDOWN_SPLITTERS)
 		# https://github.com/Python-Markdown/markdown/wiki/Third-Party-Extensions
 		md_extensions = self._settings.get_strv('extensions')
@@ -400,7 +381,7 @@ class MdPreviewBar(Gtk.Box):
 			self.close_warning()
 			return 'tex'
 		if doc.is_untitled():
-			self.display_warning(_("Can't preview an unsaved document")) # FIXME
+			self.display_warning(_("Can't preview an unsaved document")) # XXX
 		else:
 			self.display_warning(_("Unsupported type of document: ") + name)
 		return 'error'

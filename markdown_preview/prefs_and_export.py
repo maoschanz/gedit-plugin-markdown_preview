@@ -127,37 +127,32 @@ class MdRevealjsSettings():
 		builder = Gtk.Builder().new_from_file(BASE_PATH + '/revealjs_box.ui')
 		self.full_widget = builder.get_object('revealjs_box')
 
-		self.transitions_flowbox = builder.get_object('transitions_flowbox')
-		self.fill_flowbox(self.transitions_flowbox, 'revealjs-transitions', \
+		self.transitions_combobox = builder.get_object('transitions_combobox')
+		self.fill_combobox(self.transitions_combobox, 'revealjs-transitions', \
 		                                                   REVEALJS_TRANSITIONS)
-		self.theme_flowbox = builder.get_object('theme_flowbox')
-		self.fill_flowbox(self.theme_flowbox, 'revealjs-theme', REVEALJS_THEMES)
+		self.theme_combobox = builder.get_object('theme_combobox')
+		self.fill_combobox(self.theme_combobox, 'revealjs-theme', REVEALJS_THEMES)
 
-		self.slide_num_switch = builder.get_object('slide_number_switch')
-		# TODO
+		self.slidenum_switch = builder.get_object('slide_number_switch')
+		show_slide_num = self._settings.get_boolean('revealjs-slide-num')
+		self.slidenum_switch.set_active(show_slide_num)
+		self.slidenum_switch.connect('notify::active', self._on_slidenum_changed)
 
-	def fill_flowbox(self, flowbox, setting_key, labels_dict):
-		self._radio_are_active = False
-		w0 = None
-		for id0 in labels_dict:
-			w0 = self.build_radio_btn(labels_dict[id0], id0, setting_key, w0)
-			flowbox.add(w0)
-		self._radio_are_active = True
+	def fill_combobox(self, combobox, setting_key, labels_dict):
+		for choice in labels_dict:
+			combobox.append(choice, labels_dict[choice])
+		combobox.set_active_id(self._settings.get_string(setting_key))
+		combobox.connect('changed', self._on_combobox_changed, setting_key)
 
-	def build_radio_btn(self, label, btn_id, key, group):
-		btn = Gtk.RadioButton(label=label, visible=True, group=group)
-		active_id = self._settings.get_string(key)
-		btn.set_active(btn_id == active_id)
-		btn.connect('toggled', self.on_radio_btn_changed, key, btn_id)
-		return btn
+	def _on_combobox_changed(self, combobox, setting_key):
+		new_value = combobox.get_active_id()
+		if setting_key == 'revealjs-theme':
+			pass # TODO
+		elif setting_key == 'revealjs-transitions':
+			pass # TODO
 
-	def on_radio_btn_changed(self, radiobtn, key, btn_id):
-		if not self._radio_are_active:
-			return
-		if key == 'revealjs-theme':
-			pass
-		elif key == 'revealjs-transitions':
-			pass
+	def _on_slidenum_changed(self, *args):
+		pass
 
 	############################################################################
 ################################################################################
@@ -192,6 +187,7 @@ class MdCSSSettings():
 		css_is_active = args[0].get_state()
 		self._set_css_active(css_is_active)
 		self.parent_widget.update_css(css_is_active, self.css_uri)
+		self.on_pandoc_format_changed(self.format_combobox)
 
 	def _on_choose_css(self, *args):
 		# Building a FileChooserDialog for the CSS file
@@ -226,8 +222,9 @@ class MdCSSSettings():
 ################################################################################
 
 class MdBackendSettings():
-	def __init__(self, label, settings, apply_to_settings):
+	def __init__(self, label, settings, apply_to_settings, parent_widget):
 		self._settings = settings
+		self.parent_widget = parent_widget
 		self.plugins = {}
 		self.apply_to_settings = apply_to_settings
 
@@ -238,9 +235,10 @@ class MdBackendSettings():
 		backendCombobox = builder.get_object('backend_combobox')
 		backendCombobox.append('python', "python3-markdown")
 		backendCombobox.append('pandoc', "pandoc")
-		backendCombobox.set_active_id(self._settings.get_string('backend'))
+		active_backend = self._settings.get_string('backend')
+		backendCombobox.set_active_id(active_backend)
 		backendCombobox.connect('changed', self.on_backend_changed)
-		self.set_correct_page(self._settings.get_string('backend'))
+		self.set_correct_page(active_backend)
 
 		# Load UI for the python3-markdown backend
 		self.extensions_flowbox = builder.get_object('extensions_flowbox')
@@ -258,6 +256,7 @@ class MdBackendSettings():
 		self.remember_button = builder.get_object('remember_button')
 		self.remember_button.connect('clicked', self.on_remember)
 		self.format_combobox = builder.get_object('format_combobox')
+		self.format_combobox.connect('changed', self.on_pandoc_format_changed)
 
 		if not BACKEND_P3MD_AVAILABLE:
 			self.backend_stack.set_visible_child_name('backend_pandoc')
@@ -266,13 +265,53 @@ class MdBackendSettings():
 			self.backend_stack.set_visible_child_name('backend_python')
 			builder.get_object('switcher_box').set_visible(False)
 		else:
-			active_backend = self._settings.get_string('backend')
 			self.backend_stack.set_visible_child_name('backend_' + active_backend)
 
-	def fill_pandoc_combobox(self, formats_dict, default_id):
+	############################################################################
+
+	def on_backend_changed(self, w):
+		backend = w.get_active_id()
+		if self.apply_to_settings:
+			self._settings.set_string('backend', backend)
+		self.set_correct_page(backend)
+		if backend == 'python':
+			self.parent_widget.set_command_for_format('html5')
+		else:
+			self.on_pandoc_format_changed(self.format_combobox)
+
+	def set_correct_page(self, backend):
+		self.backend_stack.set_visible_child_name('backend_' + backend)
+
+	def get_active_backend(self):
+		return self.backend_stack.get_visible_child_name()
+
+	############################################################################
+	# Pandoc backend options ###################################################
+
+	def fill_pandoc_combobox(self, formats_dict):
 		for file_format in formats_dict:
 			self.format_combobox.append(file_format, formats_dict[file_format])
+
+	def init_pandoc_combobox(self, default_id):
 		self.format_combobox.set_active_id(default_id)
+
+	def on_remember(self, *args):
+		new_command = self.pandoc_cli_entry.get_buffer().get_text()
+		if self.apply_to_settings:
+			self._settings.set_string('custom-render', new_command)
+		else:
+			self._settings.set_string('custom-export', new_command)
+
+	def set_pandoc_command(self, command):
+		self.pandoc_cli_entry.get_buffer().set_text(command)
+
+	def on_pandoc_format_changed(self, w):
+		output_format = w.get_active_id()
+		self.remember_button.set_sensitive(output_format == 'custom')
+		self.parent_widget.set_command_for_format(output_format)
+
+	############################################################################
+	# python3-markdown backend options #########################################
 
 	def add_plugin_checkbtn(self, plugin_id):
 		if plugin_id in self.plugins:
@@ -300,8 +339,6 @@ class MdBackendSettings():
 			self.plugins[plugin_id].set_active(True)
 		self.extensions_flowbox.show_all()
 
-	############################################################################
-
 	def update_plugins_list(self, *args):
 		array = []
 		for plugin_id in self.plugins:
@@ -314,25 +351,6 @@ class MdBackendSettings():
 		self.add_plugin_checkbtn(plugin_id)
 		self.plugins[plugin_id].set_active(True)
 		self.p3md_extension_entry.set_text('')
-
-	def on_backend_changed(self, w):
-		backend = w.get_active_id()
-		if self.apply_to_settings:
-			self._settings.set_string('backend', backend)
-		self.set_correct_page(backend)
-
-	def set_correct_page(self, backend):
-		self.backend_stack.set_visible_child_name('backend_' + backend)
-
-	def get_active_backend(self):
-		return self.backend_stack.get_visible_child_name()
-
-	def on_remember(self, b):
-		new_command = self.pandoc_cli_entry.get_buffer().get_text()
-		self._settings.set_string('custom-export', new_command)
-
-	def set_pandoc_command(self, command):
-		self.pandoc_cli_entry.get_buffer().set_text(command)
 
 	############################################################################
 ################################################################################
@@ -365,18 +383,24 @@ class MdExportDialog(Gtk.Dialog):
 
 		# Add the backend settings to the dialog
 		self._backend = MdBackendSettings(_("Export file with:"), \
-		                                                  self._settings, False)
+		                                            self._settings, False, self)
 		self.get_content_area().add(self._backend.full_widget)
-		self._backend.fill_pandoc_combobox(PANDOC_FORMATS_FULL, 'pdf')
+		self._backend.fill_pandoc_combobox(PANDOC_FORMATS_FULL)
 
 		self.get_content_area().add(Gtk.Separator(visible=True))
+
+		self.no_style_label = Gtk.Label(_("No styling options available for this file format."))
+		self.get_content_area().add(self.no_style_label)
 
 		# Using a stylesheet is possible with both backends
 		self.css_manager = MdCSSSettings(self._settings, self, self)
 		self.get_content_area().add(self.css_manager.full_widget)
 
-		self.on_pandoc_format_changed(self._backend.format_combobox)
-		self._backend.format_combobox.connect('changed', self.on_pandoc_format_changed)
+		# Shown instead of the CSS manager if user wants to export as revealjs
+		self.revealjs_manager = MdRevealjsSettings(self._settings, self)
+		self.get_content_area().add(self.revealjs_manager.full_widget)
+
+		self._backend.init_pandoc_combobox('pdf')
 
 	def do_cancel_export(self):
 		self.destroy()
@@ -384,17 +408,25 @@ class MdExportDialog(Gtk.Dialog):
 	############################################################################
 
 	def update_css(self, is_active, uri):
-		self.on_pandoc_format_changed(self._backend.format_combobox)
+		pass # the only thing needed is to update the pandoc entry, which is
+		# already handled by the backend module
 
-	def on_pandoc_format_changed(self, w):
-		output_format = w.get_active_id()
+	def _show_accurate_style_manager(self, show_css, show_revealjs):
+		self.revealjs_manager.full_widget.set_visible(show_revealjs)
+		self.css_manager.full_widget.set_visible(show_css)
+		self.no_style_label.set_visible(not (show_css or show_revealjs))
 
-		self._backend.remember_button.set_sensitive(output_format == 'custom')
+	def set_command_for_format(self, output_format):
 		if output_format == 'custom':
 			command = self._settings.get_string('custom-export')
 			self._backend.set_pandoc_command(command)
-			self.output_extension = '.pdf'
+			self.output_extension = '.pdf' # XXX
+			self._show_accurate_style_manager(False, False)
 			return
+
+		show_revealjs = output_format == 'revealjs'
+		show_css = not show_revealjs and output_format != 'plain'
+		self._show_accurate_style_manager(show_css, show_revealjs)
 
 		command = 'pandoc $INPUT_FILE %s -o $OUTPUT_FILE'
 		options = ''
@@ -404,12 +436,14 @@ class MdExportDialog(Gtk.Dialog):
 			                 'geometry=bottom=2cm -V geometry=top=2cm'
 			self.output_extension = '.pdf'
 		elif output_format == 'revealjs':
-			options = '-t revealjs -s -V revealjs-url=http://lab.hakim.se/reveal-js'
-			options = options + ' -V theme=blood'
-			# beige black blood league moon night serif simple sky solarized white
-			options = options + ' -V transition=slide'
-			# none, fade, slide, convex (= cube ?), concave, zoom
-			options = options + ' -V slideNumber=true' # there are more options
+			options = '-t revealjs -s --metadata pagetitle=Exported ' + \
+			                     '-V revealjs-url=http://lab.hakim.se/reveal-js'
+			options = options + ' -V theme=' + self._settings.get_string('revealjs-theme')
+			options = options + ' -V transition=' + \
+			                   self._settings.get_string('revealjs-transitions')
+			if self._settings.get_boolean('revealjs-slide-num'):
+				options = options + ' -V slideNumber=true'
+				# there are more options but a boolean is enough for me
 			self.output_extension = '.html'
 			accept_css = False # in fact, it does accept a stylesheet as an
 			# option, but the 2 CSS will often be incompatible.
@@ -516,8 +550,9 @@ class MdConfigWidget(Gtk.Box):
 		sidebar = Gtk.StackSidebar(stack=stack)
 
 		self._build_general_page(builder)
-		self._build_style_page(builder)
 		self._build_backend_page(builder)
+		self._build_style_page(builder)
+		self._backend.init_pandoc_combobox('html5') # TODO FIXME wrong, not what the user defined!!
 		self._build_shortcuts_page(builder)
 
 		self.add(sidebar)
@@ -554,31 +589,29 @@ class MdConfigWidget(Gtk.Box):
 		self.revealjs_manager = MdRevealjsSettings(self._settings, self)
 		style_box.add(self.revealjs_manager.full_widget)
 
+	def _build_backend_page(self, builder):
+		self._backend = MdBackendSettings(_("HTML generation backend:"), \
+		                                             self._settings, True, self)
+		builder.get_object('backend_box').add(self._backend.full_widget)
+		self._backend.fill_pandoc_combobox(PANDOC_FORMATS_PREVIEW)
+
+	def _build_shortcuts_page(self, builder):
+		self.shortcuts_treeview = builder.get_object('shortcuts_treeview')
+		renderer = builder.get_object('accel_renderer')
+		renderer.connect('accel-edited', self._on_accel_edited)
+		renderer.connect('accel-cleared', self._on_accel_cleared)
+		# https://github.com/GNOME/gtk/blob/master/gdk/keynames.txt
+		for i in range(len(SETTINGS_KEYS)):
+			self._add_keybinding(SETTINGS_KEYS[i], LABELS[i])
+
+	############################################################################
+
 	def _new_dim_label(self, string):
 		label = Gtk.Label(visible=True, halign=Gtk.Align.START, label=string)
 		label.get_style_context().add_class('dim-label')
 		return label
 
-	def _build_backend_page(self, builder):
-		self._backend = MdBackendSettings(_("HTML generation backend:"), \
-		                                                   self._settings, True)
-		builder.get_object('backend_box').add(self._backend.full_widget)
-		self._backend.fill_pandoc_combobox(PANDOC_FORMATS_PREVIEW, 'html5')
-		self.on_pandoc_format_changed(self._backend.format_combobox)
-		self._backend.format_combobox.connect('changed', self.on_pandoc_format_changed)
-
-	def _build_shortcuts_page(self, builder):
-		self.shortcuts_treeview = builder.get_object('shortcuts_treeview')
-		renderer = builder.get_object('accel_renderer')
-		renderer.connect('accel-edited', self.on_accel_edited)
-		renderer.connect('accel-cleared', self.on_accel_cleared)
-		# https://github.com/GNOME/gtk/blob/master/gdk/keynames.txt
-		for i in range(len(SETTINGS_KEYS)):
-			self.add_keybinding(SETTINGS_KEYS[i], LABELS[i])
-
-	############################################################################
-
-	def add_keybinding(self, setting_id, description):
+	def _add_keybinding(self, setting_id, description):
 		accelerator = self._kb_settings.get_strv(setting_id)[0]
 		if accelerator is None:
 			[key, mods] = [0, 0]
@@ -587,14 +620,14 @@ class MdConfigWidget(Gtk.Box):
 		row_array = [setting_id, description, key, mods]
 		row = self.shortcuts_treeview.get_model().insert(0, row=row_array)
 
-	def on_accel_edited(self, *args):
+	def _on_accel_edited(self, *args):
 		tree_iter = self.shortcuts_treeview.get_model().get_iter_from_string(args[1])
 		self.shortcuts_treeview.get_model().set(tree_iter, [2, 3], [args[2], int(args[3])])
 		setting_id = self.shortcuts_treeview.get_model().get_value(tree_iter, 0)
 		accelString = Gtk.accelerator_name(args[2], args[3])
 		self._kb_settings.set_strv(setting_id, [accelString])
 
-	def on_accel_cleared(self, *args):
+	def _on_accel_cleared(self, *args):
 		tree_iter = self.shortcuts_treeview.get_model().get_iter_from_string(args[1])
 		self.shortcuts_treeview.get_model().set(tree_iter, [2, 3], [0, 0])
 		setting_id = self.shortcuts_treeview.get_model().get_value(tree_iter, 0)
@@ -616,15 +649,11 @@ class MdConfigWidget(Gtk.Box):
 	def update_css(self, is_active, uri):
 		self._settings.set_boolean('use-style', is_active)
 		self._settings.set_string('style', uri)
-		self.on_pandoc_format_changed(self._backend.format_combobox)
 
 	############################################################################
 	# Backend management #######################################################
 
-	def on_pandoc_format_changed(self, w):
-		output_format = w.get_active_id()
-
-		self._backend.remember_button.set_sensitive(output_format == 'custom')
+	def set_command_for_format(self, output_format):
 		if output_format == 'custom':
 			command = self._settings.get_string('custom-render')
 			self._backend.set_pandoc_command(command)
@@ -634,9 +663,19 @@ class MdConfigWidget(Gtk.Box):
 		options = '--metadata pagetitle=Preview'
 		accept_css = True
 		# TODO........
+
+		# command = ['pandoc', '-s', file_path, '--metadata', 'pagetitle=Preview', \
+		# '-t', 'revealjs', '-V', 'revealjs-url=http://lab.hakim.se/reveal-js']
+		# command = command + ['-V', 'theme=' + self._settings.get_string('revealjs-theme')]
+		# command = command + ['-V', 'transition=' + self._settings.get_string('revealjs-transitions')]
+		# if self._settings.get_boolean('revealjs-slide-num'):
+		# 	command = command + ['-V', 'slideNumber=true']
+
 		if self.css_manager.switch_css.get_state() and accept_css:
 			options = options + ' -c ' + self.css_manager.css_uri
 		self._backend.set_pandoc_command(command % options)
+
+		# command = self._settings.get_strv('pandoc-command')
 
 	############################################################################
 ################################################################################

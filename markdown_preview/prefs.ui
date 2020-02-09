@@ -81,17 +81,6 @@
     </child>
 
     <child>
-      <object class="GtkBox" id="style_box">
-        <property name="spacing">16</property>
-        <property name="orientation">vertical</property>
-      </object>
-      <packing>
-        <property name="name">style_page</property>
-        <property name="title" translatable="yes">Style</property>
-      </packing>
-    </child>
-
-    <child>
       <object class="GtkBox" id="backend_box">
         <property name="spacing">16</property>
         <property name="orientation">vertical</property>
@@ -103,9 +92,27 @@
     </child>
 
     <child>
+      <object class="GtkBox" id="style_box">
+        <property name="spacing">16</property>
+        <property name="orientation">vertical</property>
+      </object>
+      <packing>
+        <property name="name">style_page</property>
+        <property name="title" translatable="yes">Style</property>
+      </packing>
+    </child>
+
+    <child>
       <object class="GtkBox" id="shortcuts_page">
         <property name="spacing">16</property>
         <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkLabel">
+            <property name="label" translatable="yes">Double-click on a shortcut to edit it.</property>
+            <property name="halign">start</property>
+            <style><class name="dim-label"/></style>
+          </object>
+        </child>
         <child>
           <object class="GtkFrame">
             <property name="visible">True</property>

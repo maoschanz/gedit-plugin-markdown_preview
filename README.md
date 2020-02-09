@@ -2,25 +2,36 @@
 
 <!-- TODO
 
-- [ ] tex support sucks, remove it entirely
-- [ ] faire une stack (?????|style) pour ce pauvre dialogue d'export
-- [ ] casser prefs_and_export en 2 mais intelligemment
+- [ ] tex support as a mere option
+- [ ] splitters for md only
+- [ ] casser prefs_and_export.py en 2 mais intelligemment
 - [ ] help labels and links for pandoc too! et toutes les pages en fait
 - [ ] CSS for admonitions (and other default plugins ?)
 	- [ ] and pymdown ??
-- [ ] reveal js https://github.com/jgm/pandoc/wiki/Using-pandoc-to-produce-reveal.js-slides
-	- [ ] rendu
-	- [ ] transitions
-	- [ ] numéros de pages
-	- [ ] paramètres de thème
+- reveal js https://github.com/jgm/pandoc/wiki/Using-pandoc-to-produce-reveal.js-slides
+	- [x] GUI
+		- [x] rendu
+		- [x] transitions
+		- [x] numéros de pages
+		- [x] paramètres de thème
+	- [ ] prefs
+		- [ ] rendu
+		- [ ] transitions
+		- [ ] numéros de pages
+		- [ ] paramètres de thème
+	- [ ] export
+		- [ ] rendu
+		- [ ] transitions
+		- [ ] numéros de pages
+		- [ ] paramètres de thème
 - [ ] se souvenir du splitter
-- [ ] ajouter le réglage pour le splitter dans les préférences
+- [ ] ajouter le réglage pour le splitter dans les préférences ?
 - [ ] bring back the fullscreen, but better
-- [ ] style broken with paginated HTML
 
 ~     TODO -->
 
-This is a plugin for the Gedit text editor, previewing .md files in the side (`F9`) or the bottom (`Ctrl+F9`) pane.
+This is a plugin for the Gedit text editor, previewing .md files in the side
+(<kbd>F9</kbd>) or the bottom (<kbd>Ctrl</kbd>+<kbd>F9</kbd>) pane.
 
 ## Main features
 
@@ -81,7 +92,8 @@ Be sure to have these packages installed before trying to install the plugin:
 
 ### Plugin installation
 
-The script `install.sh` can be executed as root (system-wide installation) or as a normal user (user-wide installation, but that works only with some systems, weirdly).
+The script `install.sh` can be executed as root (system-wide installation) or as
+a normal user (user-wide installation, but that works only with some systems, weirdly).
 
 - Open the project's folder in a terminal.
 - Run `./install.sh`
@@ -112,15 +124,19 @@ The preview can be generated with [pandoc](https://pandoc.org/) or [python-markd
 
 ##### Options with pandoc
 
-You can decide to render the file as classic HTML (it may then use the CSS file you set) or as HTML with the stylesheet and javascript code from _revealjs_. (**WORK IN PROGRESS**)
+You can decide to render the file as classic HTML (it may then use the CSS file
+you set) or as HTML with the stylesheet and javascript code from _revealjs_. (**WORK IN PROGRESS**)
 
-A third "custom" option is possible: be sure to write a full, correct command whose output will be HTML, press "Remember" to save your custom command. (**WORK IN PROGRESS**)
+A third "custom" option is possible: be sure to write a full, correct command
+whose output will be HTML, press "Remember" to save your custom command. (**WORK IN PROGRESS**)
 
 ##### Options with python-markdown
 
-A set of [extensions](https://python-markdown.github.io/extensions/) is provided natively with python-markdown. You can enable or disable them depending on your needs.
+A set of [extensions](https://python-markdown.github.io/extensions/) is provided
+natively with python-markdown. You can enable or disable them depending on your needs.
 
-[Great third-party extensions](https://facelessuser.github.io/pymdown-extensions/) exist too, and once installed they can be added manually to the list.
+[Great third-party extensions](https://facelessuser.github.io/pymdown-extensions/)
+exist too, and once installed they can be added manually to the list.
 
 ### Style
 
@@ -129,12 +145,12 @@ A stylesheet (CSS file) can be applied to the preview.
 - doesn't work when previewing HTML files
 - doesn't work if you preview the file as a revealjs slideshow
 
-<!--TODO-->
-<!--revealjs options-->
+If you render your preview using `pandoc`, you can render it as a _revealjs_
+slideshow, which comes with pre-defined themes and slide transition types.
 
 ### Keyboard shortcuts
 
-Set keyboard shortcuts to add/remove tags (**WORK IN PROGRESS**)
+Customize keyboard shortcuts to add/remove tags (**WORK IN PROGRESS**)
 
 ----
 

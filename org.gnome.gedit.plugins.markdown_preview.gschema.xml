@@ -14,11 +14,14 @@
     <key type="b" name="auto-manage-pane">
       <default>true</default>
       <summary>Show/hide pane automatically</summary>
-      <description>If true, the pane will be shown/hidden automatically if no
-      other plugin is active in it.</description>
+      <description>
+        If true, the pane will be shown automatically when there is something to
+        preview, and hidden automatically otherwise if no other plugin is active
+        in that pane.
+      </description>
     </key>
     <key type="b" name="auto-reload">
-      <default>true</default>
+      <default>false</default>
       <summary>Automatically reload the preview</summary>
       <description></description>
     </key>
@@ -51,7 +54,7 @@
     </key>
 
     <key type="s" name="backend">
-      <default>'pandoc'</default>
+      <default>'python'</default>
       <summary>Favorite backend for the preview</summary>
       <description>Can be 'python' or 'pandoc'</description>
     </key>
@@ -64,6 +67,15 @@
       <default>''</default>
       <summary>Custom rendering command</summary>
       <description></description>
+    </key>
+    <key type="as" name="pandoc-command">
+      <default>['pandoc', '-s', '$INPUT_FILE', '--metadata', 'pagetitle=Preview']</default>
+      <summary>Pandoc rendering command line</summary>
+      <description>
+        The command line used for pandoc rendering. It has to return HTML code
+        instead of writing it in a file! '$INPUT_FILE' will be replaced in the
+        code by an appropriate value, it's "mandatory".
+      </description>
     </key>
     <key type="as" name="extensions">
       <default>['extra', 'sane_lists', 'toc']</default>
@@ -90,13 +102,13 @@
     </key>
     <key name="title-lower" type="as">
       <default><![CDATA[['<Primary>minus']]]></default>
-      <summary>Use a lower level of title by adding a "#" tag</summary>
-      <description></description>
+      <summary>Lower the level of title</summary>
+      <description>Use a lower level of title by adding a "#" tag</description>
     </key>
     <key name="title-upper" type="as">
       <default><![CDATA[['<Primary>plus']]]></default>
-      <summary>Use a upper level of title by removing a "#" tag</summary>
-      <description></description>
+      <summary>Rise the level of title</summary>
+      <description>Use an upper level of title by removing a "#" tag</description>
     </key>
   </schema>
 </schemalist>
