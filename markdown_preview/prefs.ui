@@ -53,6 +53,10 @@
         </child>
 
         <child>
+          <object class="GtkSeparator" />
+        </child>
+
+        <child>
           <object class="GtkBox">
             <property name="orientation">horizontal</property>
             <property name="spacing">16</property>
@@ -65,7 +69,32 @@
               </packing>
             </child>
             <child>
-              <object class="GtkSwitch" id="relativePathsSwitch"></object>
+              <object class="GtkSwitch" id="relative_paths_switch"></object>
+              <packing>
+                <property name="pack-type">end</property>
+              </packing>
+            </child>
+          </object>
+        </child>
+
+        <child>
+          <object class="GtkSeparator" />
+        </child>
+
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">horizontal</property>
+            <property name="spacing">16</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="yes">Preview .tex files (pandoc only)</property>
+              </object>
+              <packing>
+                <property name="pack-type">start</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkSwitch" id="tex_files_switch"></object>
               <packing>
                 <property name="pack-type">end</property>
               </packing>

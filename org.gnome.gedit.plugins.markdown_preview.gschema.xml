@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
-  <schema id="org.gnome.gedit.plugins.markdown_preview" path="/org/gnome/gedit/plugins/markdown_preview/">
+  <schema id="org.gnome.gedit.plugins.markdown_preview"
+    path="/org/gnome/gedit/plugins/markdown_preview/">
+
+    <!-- General options -->
     <key type="s" name="position">
       <default>'side'</default>
       <summary>The position of the preview within the window</summary>
@@ -10,6 +13,11 @@
       <default>false</default>
       <summary>Use relative paths</summary>
       <description>Enable relative paths for links and pictures</description>
+    </key>
+    <key type="b" name="tex-files">
+      <default>false</default>
+      <summary>Render .tex files</summary>
+      <description>Try to render .tex files if pandoc is installed.</description>
     </key>
     <key type="b" name="auto-manage-pane">
       <default>true</default>
@@ -26,6 +34,7 @@
       <description></description>
     </key>
 
+    <!-- CSS options -->
     <key type="b" name="use-style">
       <default>false</default>
       <summary>Use a stylesheet</summary>
@@ -37,6 +46,7 @@
       <description></description>
     </key>
 
+    <!-- RevealJs options -->
     <key type="s" name="revealjs-theme">
       <default>'black'</default>
       <summary>Name of the revealjs theme</summary>
@@ -53,6 +63,7 @@
       <description></description>
     </key>
 
+    <!-- Rendering options -->
     <key type="s" name="backend">
       <default>'python'</default>
       <summary>Favorite backend for the preview</summary>
@@ -84,7 +95,9 @@
     </key>
   </schema>
 
-  <schema id="org.gnome.gedit.plugins.markdown_preview.keybindings" path="/org/gnome/gedit/plugins/markdown_preview/keybindings/">
+  <schema id="org.gnome.gedit.plugins.markdown_preview.keybindings"
+    path="/org/gnome/gedit/plugins/markdown_preview/keybindings/">
+
     <key name="italic" type="as">
       <default><![CDATA[['<Primary>slash']]]></default>
       <summary>Add italic markup</summary>

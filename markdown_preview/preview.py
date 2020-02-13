@@ -293,13 +293,12 @@ class MdPreviewBar(Gtk.Box):
 		unsaved_text = doc.get_text(start, end, True)
 		if self.file_format == 'html':
 			html_content = self.get_html_from_html(unsaved_text)
-		if self._settings.get_string('backend') == 'python':
-			if self.file_format == 'md':
-				html_content = self.get_html_from_p3md(unsaved_text, css_uri)
-			else:
-				return
+		elif self._settings.get_string('backend') == 'python' \
+		                                           and self.file_format == 'md':
+			html_content = self.get_html_from_p3md(unsaved_text, css_uri)
 		else:
-			html_content = self.get_html_from_pandoc(unsaved_text)
+			is_tex = self.file_format != 'tex'
+			html_content = self.get_html_from_pandoc(unsaved_text, is_tex)
 
 		# The html code is converted into bytes
 		my_string = GLib.String()
@@ -330,16 +329,22 @@ class MdPreviewBar(Gtk.Box):
 		html_content = result.stdout.decode('utf-8')
 		return html_content
 
-	def get_html_from_pandoc(self, unsaved_text):
+	def get_html_from_pandoc(self, unsaved_text, from_temp_file):
 		# Get the current document, or the temporary document if requested
 		unsaved_text = self.current_page(unsaved_text, MARKDOWN_SPLITTERS)
-		f = open(BASE_TEMP_NAME + '.md', 'w')
-		f.write(unsaved_text)
-		f.close()
-		file_path = self.temp_file_md.get_path()
+		if from_temp_file:
+			f = open(BASE_TEMP_NAME + '.md', 'w')
+			f.write(unsaved_text)
+			f.close()
+			file_path = self.temp_file_md.get_path()
+		else: # if a tex file is used
+			doc = self.parent_plugin.window.get_active_document()
+			file_path = doc.get_uri_for_display()
 
 		# It uses pandoc to produce the html code
 		command = self._settings.get_strv('pandoc-command')
+		if not from_temp_file and '-f' not in command:
+			command = command + ['-f', 'latex']
 		command[command.index('$INPUT_FILE')] = file_path
 		result = subprocess.run(command, stdout=subprocess.PIPE)
 		html_content = result.stdout.decode('utf-8')
@@ -378,7 +383,8 @@ class MdPreviewBar(Gtk.Box):
 		elif temp == 'html':
 			self.close_warning()
 			return 'html'
-		elif temp == 'tex':
+		elif temp == 'tex' and BACKEND_PANDOC_AVAILABLE and \
+		                                self._settings.get_boolean('tex-files'):
 			self.close_warning()
 			return 'tex'
 		if doc.is_untitled():

@@ -187,7 +187,6 @@ class MdCSSSettings():
 		css_is_active = args[0].get_state()
 		self._set_css_active(css_is_active)
 		self.parent_widget.update_css(css_is_active, self.css_uri)
-		self.on_pandoc_format_changed(self.format_combobox)
 
 	def _on_choose_css(self, *args):
 		# Building a FileChooserDialog for the CSS file
@@ -294,6 +293,9 @@ class MdBackendSettings():
 
 	def init_pandoc_combobox(self, default_id):
 		self.format_combobox.set_active_id(default_id)
+
+	def update_pandoc_combobox(self):
+		self.on_pandoc_format_changed(self.format_combobox)
 
 	def on_remember(self, *args):
 		new_command = self.pandoc_cli_entry.get_buffer().get_text()
@@ -408,8 +410,7 @@ class MdExportDialog(Gtk.Dialog):
 	############################################################################
 
 	def update_css(self, is_active, uri):
-		pass # the only thing needed is to update the pandoc entry, which is
-		# already handled by the backend module
+		self._backend.update_pandoc_combobox()
 
 	def _show_accurate_style_manager(self, show_css, show_revealjs):
 		self.revealjs_manager.full_widget.set_visible(show_revealjs)
@@ -568,13 +569,19 @@ class MdConfigWidget(Gtk.Box):
 		positionCombobox.set_active_id(self._settings.get_string('position'))
 		positionCombobox.connect('changed', self.on_position_changed)
 
-		relativePathsSwitch = builder.get_object('relativePathsSwitch')
-		relativePathsSwitch.set_state(self._settings.get_boolean('relative'))
-		relativePathsSwitch.connect('notify::active', self.on_relative_changed)
-
 		autoManageSwitch = builder.get_object('autoManageSwitch')
 		autoManageSwitch.set_state(self._settings.get_boolean('auto-manage-pane'))
 		autoManageSwitch.connect('notify::active', self.on_auto_manage_changed)
+
+		relative_paths_switch = builder.get_object('relative_paths_switch')
+		relative_paths_switch.set_state(self._settings.get_boolean('relative'))
+		relative_paths_switch.connect('notify::active', self.on_relative_changed)
+
+		tex_files_switch = builder.get_object('tex_files_switch')
+		tex_files_switch.set_state(self._settings.get_boolean('tex-files'))
+		tex_files_switch.connect('notify::active', self.on_tex_support_changed)
+		help_tex = _("TODO explanation about tex files")
+		general_box.add(self._new_dim_label(help_tex))
 
 	def _build_style_page(self, builder):
 		style_box = builder.get_object('style_box')
@@ -639,6 +646,9 @@ class MdConfigWidget(Gtk.Box):
 	def on_relative_changed(self, w, a):
 		self._settings.set_boolean('relative', w.get_state())
 
+	def on_tex_support_changed(self, w, a):
+		self._settings.set_boolean('tex-files', w.get_state())
+
 	def on_position_changed(self, w):
 		position = w.get_active_id()
 		self._settings.set_string('position', position)
@@ -649,6 +659,7 @@ class MdConfigWidget(Gtk.Box):
 	def update_css(self, is_active, uri):
 		self._settings.set_boolean('use-style', is_active)
 		self._settings.set_string('style', uri)
+		self._backend.update_pandoc_combobox()
 
 	############################################################################
 	# Backend management #######################################################

@@ -2,7 +2,7 @@
 
 <!-- TODO
 
-- [ ] tex support as a mere option
+- [x] tex support as a mere option
 - [ ] splitters for md only
 - [ ] casser prefs_and_export.py en 2 mais intelligemment
 - [ ] help labels and links for pandoc too! et toutes les pages en fait
@@ -27,6 +27,7 @@
 - [ ] se souvenir du splitter
 - [ ] ajouter le réglage pour le splitter dans les préférences ?
 - [ ] bring back the fullscreen, but better
+- print(doc.get_mime_type(), doc.get_content_type())
 
 ~     TODO -->
 
