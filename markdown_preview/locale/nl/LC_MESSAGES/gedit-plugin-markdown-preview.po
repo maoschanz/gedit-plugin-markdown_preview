@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-02-09 22:50+0100\n"
+"POT-Creation-Date: 2020-02-20 19:01+0100\n"
 "PO-Revision-Date: 2020-01-20 18:07+0100\n"
 "Last-Translator: Heimen Stoffels <vistausss@outlook.com>\n"
 "Language-Team: \n"
@@ -17,6 +17,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.2.4\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: markdown_preview/prefs_and_export.py:41
+msgid "Extras"
+msgstr ""
 
 #: markdown_preview/prefs_and_export.py:42
 msgid "Table of content"
@@ -29,6 +33,14 @@ msgstr "Nieuw regeleinde"
 #: markdown_preview/prefs_and_export.py:46
 msgid "Sane Lists"
 msgstr "Geordende lijsten"
+
+#: markdown_preview/prefs_and_export.py:47
+msgid "Admonitions"
+msgstr ""
+
+#: markdown_preview/prefs_and_export.py:48
+msgid "WikiLinks"
+msgstr ""
 
 #: markdown_preview/prefs_and_export.py:52
 msgid ""
@@ -102,203 +114,217 @@ msgstr ""
 "aan de lijst middels het '+'-pictogram."
 
 #: markdown_preview/prefs_and_export.py:73
-msgid "TODO explanation about pandoc"
+msgid ""
+"Pandoc is a command line utility with several possible options, input "
+"formats and output formats."
 msgstr ""
 
-#: markdown_preview/prefs_and_export.py:78
+#: markdown_preview/prefs_and_export.py:76
+msgid ""
+"Any command using $INPUT_FILE as the name of the input file, and printing "
+"valid HTML to the standard output, is accepted."
+msgstr ""
+
+#: markdown_preview/prefs_and_export.py:79
+msgid ""
+"This enables the preview pane when you edit .tex files, so pandoc can try to "
+"convert them to HTML, and preview them using CSS if you set a stylesheet)."
+msgstr ""
+
+#: markdown_preview/prefs_and_export.py:84
 msgid "LaTeX beamer slideshow (.tex)"
 msgstr "LaTeX-beamer-diavoorstelling (.tex)"
 
-#: markdown_preview/prefs_and_export.py:79
+#: markdown_preview/prefs_and_export.py:85
 msgid "Microsoft Word (.docx)"
 msgstr "Microsoft Word (.docx)"
 
-#: markdown_preview/prefs_and_export.py:80
-#: markdown_preview/prefs_and_export.py:92
+#: markdown_preview/prefs_and_export.py:86
+#: markdown_preview/prefs_and_export.py:98
 msgid "HTML5"
 msgstr "HTML5"
 
-#: markdown_preview/prefs_and_export.py:81
+#: markdown_preview/prefs_and_export.py:87
 msgid "LaTeX (.tex)"
 msgstr "LaTeX (.tex)"
 
-#: markdown_preview/prefs_and_export.py:82
+#: markdown_preview/prefs_and_export.py:88
 msgid "OpenOffice text document (.odt)"
 msgstr "OpenOffice-tekstdocument (.odt)"
 
-#: markdown_preview/prefs_and_export.py:83
+#: markdown_preview/prefs_and_export.py:89
 msgid "Portable Document Format (.pdf)"
 msgstr "Portable Document Format (.pdf)"
 
-#: markdown_preview/prefs_and_export.py:84
+#: markdown_preview/prefs_and_export.py:90
 msgid "plain text (.txt)"
 msgstr "Platte tekst (.txt)"
 
-#: markdown_preview/prefs_and_export.py:85
+#: markdown_preview/prefs_and_export.py:91
 msgid "PowerPoint slideshow (.pptx)"
 msgstr "PowerPoint-diavoorstelling (.pptx)"
 
-#: markdown_preview/prefs_and_export.py:86
+#: markdown_preview/prefs_and_export.py:92
 msgid "Rich Text Format (.rtf)"
 msgstr "Rich Text Format (.rtf)"
 
-#: markdown_preview/prefs_and_export.py:87
 #: markdown_preview/prefs_and_export.py:93
+#: markdown_preview/prefs_and_export.py:99
 msgid "reveal.js slideshow (HTML/JS)"
 msgstr "reveal.js-diavoorstelling (HTML/JS)"
 
-#: markdown_preview/prefs_and_export.py:88
 #: markdown_preview/prefs_and_export.py:94
+#: markdown_preview/prefs_and_export.py:100
 msgid "Custom command line"
 msgstr "Aangepaste opdrachtregel"
 
-#: markdown_preview/prefs_and_export.py:98
+#: markdown_preview/prefs_and_export.py:104
 msgid "None"
 msgstr ""
 
-#: markdown_preview/prefs_and_export.py:99
+#: markdown_preview/prefs_and_export.py:105
 msgid "Fade"
 msgstr ""
 
-#: markdown_preview/prefs_and_export.py:100
+#: markdown_preview/prefs_and_export.py:106
 #, fuzzy
 msgid "Slide"
 msgstr "Diavoorstelling"
 
-#: markdown_preview/prefs_and_export.py:101
+#: markdown_preview/prefs_and_export.py:107
 msgid "Cube (convex)"
 msgstr ""
 
-#: markdown_preview/prefs_and_export.py:102
+#: markdown_preview/prefs_and_export.py:108
 msgid "Cube (concave)"
 msgstr ""
 
-#: markdown_preview/prefs_and_export.py:103 markdown_preview/__init__.py:52
+#: markdown_preview/prefs_and_export.py:109 markdown_preview/__init__.py:52
 msgid "Zoom"
 msgstr "Zoomen"
 
-#: markdown_preview/prefs_and_export.py:107
+#: markdown_preview/prefs_and_export.py:113
 msgid "Beige"
 msgstr ""
 
-#: markdown_preview/prefs_and_export.py:108
+#: markdown_preview/prefs_and_export.py:114
 msgid "Black"
 msgstr ""
 
-#: markdown_preview/prefs_and_export.py:109
+#: markdown_preview/prefs_and_export.py:115
 msgid "Blood"
 msgstr ""
 
-#: markdown_preview/prefs_and_export.py:110
+#: markdown_preview/prefs_and_export.py:116
 msgid "League"
 msgstr ""
 
-#: markdown_preview/prefs_and_export.py:111
+#: markdown_preview/prefs_and_export.py:117
 msgid "Moon"
 msgstr ""
 
-#: markdown_preview/prefs_and_export.py:112
+#: markdown_preview/prefs_and_export.py:118
 msgid "Night"
 msgstr ""
 
-#: markdown_preview/prefs_and_export.py:113
+#: markdown_preview/prefs_and_export.py:119
 msgid "Serif"
 msgstr ""
 
-#: markdown_preview/prefs_and_export.py:114
+#: markdown_preview/prefs_and_export.py:120
 msgid "Simple"
 msgstr ""
 
-#: markdown_preview/prefs_and_export.py:115
+#: markdown_preview/prefs_and_export.py:121
 msgid "Sky"
 msgstr ""
 
-#: markdown_preview/prefs_and_export.py:116
+#: markdown_preview/prefs_and_export.py:122
 msgid "Solarized"
 msgstr ""
 
-#: markdown_preview/prefs_and_export.py:117
+#: markdown_preview/prefs_and_export.py:123
 msgid "White"
 msgstr ""
 
-#: markdown_preview/prefs_and_export.py:194
-#: markdown_preview/prefs_and_export.py:213 markdown_preview/css_box.ui:44
+#: markdown_preview/prefs_and_export.py:199
+#: markdown_preview/prefs_and_export.py:218 markdown_preview/css_box.ui:44
 #: markdown_preview/css_box.ui:52
 msgid "Select a CSS file"
 msgstr "Kies een CSS-bestand"
 
-#: markdown_preview/prefs_and_export.py:197
+#: markdown_preview/prefs_and_export.py:202
 msgid "Select"
 msgstr "Selecteren"
 
-#: markdown_preview/prefs_and_export.py:197
-#: markdown_preview/prefs_and_export.py:371
-#: markdown_preview/prefs_and_export.py:480
+#: markdown_preview/prefs_and_export.py:202
+#: markdown_preview/prefs_and_export.py:386
+#: markdown_preview/prefs_and_export.py:494
 msgid "Cancel"
 msgstr "Annuleren"
 
-#: markdown_preview/prefs_and_export.py:199
+#: markdown_preview/prefs_and_export.py:204
 msgid "Stylesheet"
 msgstr "Stijlblad"
 
-#: markdown_preview/prefs_and_export.py:365
+#: markdown_preview/prefs_and_export.py:380
 msgid "Export as…"
 msgstr "Exporteren als…"
 
-#: markdown_preview/prefs_and_export.py:379 markdown_preview/preview.py:70
+#: markdown_preview/prefs_and_export.py:394 markdown_preview/preview.py:70
 msgid "Error: please install pandoc or python3-markdown"
 msgstr "Fout: installeer pandoc of python3-markdown"
 
-#: markdown_preview/prefs_and_export.py:382
+#: markdown_preview/prefs_and_export.py:397
 msgid "Next"
 msgstr "Volgende"
 
-#: markdown_preview/prefs_and_export.py:385
+#: markdown_preview/prefs_and_export.py:400
 msgid "Export file with:"
 msgstr "Bestand exporteren met:"
 
-#: markdown_preview/prefs_and_export.py:392
+#: markdown_preview/prefs_and_export.py:407
 msgid "No styling options available for this file format."
 msgstr ""
 
-#: markdown_preview/prefs_and_export.py:478 markdown_preview/menus.ui:6
+#: markdown_preview/prefs_and_export.py:492 markdown_preview/menus.ui:6
 msgid "Export the preview"
 msgstr "Voorvertoning exporteren"
 
-#: markdown_preview/prefs_and_export.py:480
+#: markdown_preview/prefs_and_export.py:494
 msgid "Export"
 msgstr "Exporteren"
 
-#: markdown_preview/prefs_and_export.py:483
+#: markdown_preview/prefs_and_export.py:497
 msgid "(exported)"
 msgstr "(geëxporteerd)"
 
-#: markdown_preview/prefs_and_export.py:565 markdown_preview/menus.ui:45
+#: markdown_preview/prefs_and_export.py:579 markdown_preview/menus.ui:45
 msgid "Automatic"
 msgstr "Automatisch"
 
-#: markdown_preview/prefs_and_export.py:566 markdown_preview/menus.ui:50
+#: markdown_preview/prefs_and_export.py:580 markdown_preview/menus.ui:50
 msgid "Side Pane"
 msgstr "Paneel aan de zijkant"
 
-#: markdown_preview/prefs_and_export.py:567 markdown_preview/menus.ui:55
+#: markdown_preview/prefs_and_export.py:581 markdown_preview/menus.ui:55
 msgid "Bottom Pane"
 msgstr "Paneel onderaan"
 
-#: markdown_preview/prefs_and_export.py:582
+#: markdown_preview/prefs_and_export.py:603
 msgid "TODO explanation about css"
 msgstr ""
 
-#: markdown_preview/prefs_and_export.py:588
+#: markdown_preview/prefs_and_export.py:611
 msgid "TODO explanation about revealjs"
 msgstr ""
 
-#: markdown_preview/prefs_and_export.py:593
+#: markdown_preview/prefs_and_export.py:615
 msgid "HTML generation backend:"
 msgstr "HTML-genereerbackend:"
 
 #: markdown_preview/__init__.py:46 markdown_preview/__init__.py:49
-#: markdown_preview/__init__.py:278 markdown_preview/preview.py:468
+#: markdown_preview/__init__.py:278 markdown_preview/preview.py:474
 msgid "Markdown Preview"
 msgstr "Markdown-voorvertoning"
 
@@ -342,15 +368,15 @@ msgstr "Afbeelding openen in browser"
 msgid "Reload the preview"
 msgstr "Voorvertoning herladen"
 
-#: markdown_preview/preview.py:385
+#: markdown_preview/preview.py:391
 msgid "Can't preview an unsaved document"
 msgstr "Kan een niet-opgeslagen document niet voorvertonen"
 
-#: markdown_preview/preview.py:387
+#: markdown_preview/preview.py:393
 msgid "Unsupported type of document: "
 msgstr "Geen ondersteuning voor dit soort documenten: "
 
-#: markdown_preview/preview.py:524
+#: markdown_preview/preview.py:530
 #, python-format
 msgid "%s results"
 msgstr "%s resultaten"
@@ -483,37 +509,41 @@ msgstr "Positie van voorvertoning"
 msgid "Automatically show/hide panel"
 msgstr "Paneel automatisch tonen/verbergen"
 
-#: markdown_preview/prefs.ui:61
+#: markdown_preview/prefs.ui:65
 msgid "Use relative paths"
 msgstr "Relatieve paden gebruiken"
 
-#: markdown_preview/prefs.ui:79
+#: markdown_preview/prefs.ui:90
+msgid "Preview .tex files (pandoc only)"
+msgstr ""
+
+#: markdown_preview/prefs.ui:108
 #, fuzzy
 msgid "General options"
 msgstr "Meer opties"
 
-#: markdown_preview/prefs.ui:90
+#: markdown_preview/prefs.ui:119
 msgid "Backend"
 msgstr "Backend"
 
-#: markdown_preview/prefs.ui:101
+#: markdown_preview/prefs.ui:130
 #, fuzzy
 msgid "Style"
 msgstr "Stijlblad"
 
-#: markdown_preview/prefs.ui:111
+#: markdown_preview/prefs.ui:140
 msgid "Double-click on a shortcut to edit it."
 msgstr ""
 
-#: markdown_preview/prefs.ui:126
+#: markdown_preview/prefs.ui:155
 msgid "Description"
 msgstr "Omschrijving"
 
-#: markdown_preview/prefs.ui:138
+#: markdown_preview/prefs.ui:167
 msgid "Shortcut"
 msgstr "Sneltoets"
 
-#: markdown_preview/prefs.ui:158
+#: markdown_preview/prefs.ui:187
 msgid "Shortcuts"
 msgstr "Sneltoetsen"
 

@@ -4,14 +4,12 @@
 
 <!-- TODO
 
-- [x] tex support as a mere option
 - [ ] splitters for md only
 - [ ] casser prefs_and_export.py en 2 mais intelligemment
 - [ ] help labels and links for pandoc too! et toutes les pages en fait
 - [ ] CSS for admonitions (and other default plugins ?)
 	- [ ] and pymdown ??
 - reveal js https://github.com/jgm/pandoc/wiki/Using-pandoc-to-produce-reveal.js-slides
-	- [ ] hide if no pandoc
 	- [ ] prefs
 		- [ ] rendu
 		- [ ] transitions
@@ -24,8 +22,8 @@
 		- [ ] paramètres de thème
 - [ ] se souvenir du splitter
 - [ ] ajouter le réglage pour le splitter dans les préférences ?
-- [ ] bring back the fullscreen, but better
 - print(doc.get_mime_type(), doc.get_content_type())
+- [ ] bring back the fullscreen, but better
 
 ~     TODO -->
 
