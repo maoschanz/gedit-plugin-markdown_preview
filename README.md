@@ -1,3 +1,5 @@
+(**WORK IN PROGRESS**)
+
 # Gedit Markdown Preview
 
 <!-- TODO
@@ -9,11 +11,7 @@
 - [ ] CSS for admonitions (and other default plugins ?)
 	- [ ] and pymdown ??
 - reveal js https://github.com/jgm/pandoc/wiki/Using-pandoc-to-produce-reveal.js-slides
-	- [x] GUI
-		- [x] rendu
-		- [x] transitions
-		- [x] numéros de pages
-		- [x] paramètres de thème
+	- [ ] hide if no pandoc
 	- [ ] prefs
 		- [ ] rendu
 		- [ ] transitions
@@ -50,9 +48,9 @@ This works for Markdown files (and theorically HTML files)
 
 You can print the preview, or export it:
 
-- if [pandoc](https://pandoc.org/) is installed on your system, you can export to any format it supports
+- if [`pandoc`](https://pandoc.org/) is installed on your system, you can export to any format it supports
 	- a stylesheet can be applied to most file formats
-	- options are available when exporting to a [https://revealjs.com](revealjs) slideshow (**WORK IN PROGRESS**)
+	- options are available when exporting to a [revealjs](https://revealjs.com) slideshow (**WORK IN PROGRESS**)
 - if only `python3-markdown` is installed, you can export to HTML
 	- a stylesheet can be applied
 	- `python3-markdown` [extensions](https://python-markdown.github.io/extensions/) can be used (including [third-party extensions](https://github.com/Python-Markdown/markdown/wiki/Third-Party-Extensions) like [these great ones](https://facelessuser.github.io/pymdown-extensions/)
@@ -82,7 +80,7 @@ Be sure to have these packages installed before trying to install the plugin:
 
 - `gedit` (≥3.22)
 - `python3-markdown` or `pandoc`
-- maybe `libwebkit2gtk-4.0-37`
+- `gir1.2-webkit2-4.0`
 
 ### Download
 
@@ -141,13 +139,11 @@ exist too, and once installed they can be added manually to the list.
 
 ### Style
 
-A stylesheet (CSS file) can be applied to the preview.
-
-- doesn't work when previewing HTML files
-- doesn't work if you preview the file as a revealjs slideshow
-
 If you render your preview using `pandoc`, you can render it as a _revealjs_
-slideshow, which comes with pre-defined themes and slide transition types.
+slideshow, which comes with pre-defined themes and slide transition types. (**WORK IN PROGRESS**)
+
+Otherwise, a stylesheet (CSS file) can be applied to the preview (markdown files
+only, doesn't work with HTML files)
 
 ### Keyboard shortcuts
 

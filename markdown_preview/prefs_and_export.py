@@ -38,14 +38,14 @@ except:
 ################################################################################
 
 P3MD_PLUGINS = {
-	'extra': "Extras",
+	'extra': _("Extras"),
 	'toc': _("Table of content"),
 	'codehilite': "CodeHilite",
 	'nl2br': _("New Line To Break"),
 	'smarty': "SmartyPants",
 	'sane_lists': _("Sane Lists"),
-	'admonition': "Admonition",
-	'wikilinks': "WikiLinks"
+	'admonition': _("Admonitions"),
+	'wikilinks': _("WikiLinks")
 }
 
 P3MD_PLUGINS_DESCRIPTIONS = {
@@ -70,9 +70,15 @@ HELP_LABEL_3 = _("Next, to improve the preview of your markdown file with " + \
 "the features of these extensions, please add their module names to the " + \
 "list using the text entry and the '+' icon.")
 
-HELP_LABEL_PANDOC = _("TODO explanation about pandoc")
-# TODO there should be several distinct labels
-pass
+HELP_LABEL_PANDOC = _("Pandoc is a command line utility with several " + \
+"possible options, input formats and output formats.")
+
+HELP_LABEL_PANDOC_CUSTOM = _("Any command using $INPUT_FILE as the name of " + \
+"the input file, and printing valid HTML to the standard output, is accepted.")
+
+HELP_LABEL_TEX = _("This enables the preview pane when you edit .tex files, " + \
+"so pandoc can try to convert them to HTML, and preview them using CSS if " + \
+"you set a stylesheet).")
 
 PANDOC_FORMATS_FULL = {
 	'beamer': _("LaTeX beamer slideshow (.tex)"),
@@ -251,7 +257,8 @@ class MdBackendSettings():
 
 		# Load UI for the pandoc backend
 		self.pandoc_cli_entry = builder.get_object('pandoc_command_entry')
-		builder.get_object('help_label_pandoc').set_label(HELP_LABEL_PANDOC)
+		self.pandoc_cli_help = builder.get_object('help_label_pandoc')
+		self.pandoc_cli_help.set_label(HELP_LABEL_PANDOC)
 		self.remember_button = builder.get_object('remember_button')
 		self.remember_button.connect('clicked', self.on_remember)
 		self.format_combobox = builder.get_object('format_combobox')
@@ -259,10 +266,10 @@ class MdBackendSettings():
 
 		if not BACKEND_P3MD_AVAILABLE:
 			self.backend_stack.set_visible_child_name('backend_pandoc')
-			builder.get_object('switcher_box').set_visible(False)
+			builder.get_object('switcher_box').set_sensitive(False)
 		elif not BACKEND_PANDOC_AVAILABLE:
 			self.backend_stack.set_visible_child_name('backend_python')
-			builder.get_object('switcher_box').set_visible(False)
+			builder.get_object('switcher_box').set_sensitive(False)
 		else:
 			self.backend_stack.set_visible_child_name('backend_' + active_backend)
 
@@ -309,8 +316,14 @@ class MdBackendSettings():
 
 	def on_pandoc_format_changed(self, w):
 		output_format = w.get_active_id()
-		self.remember_button.set_sensitive(output_format == 'custom')
+		is_custom = output_format == 'custom'
+		self.remember_button.set_sensitive(is_custom)
+		self.pandoc_cli_entry.set_sensitive(is_custom)
 		self.parent_widget.set_command_for_format(output_format)
+		if is_custom:
+			self.pandoc_cli_help.set_label(HELP_LABEL_PANDOC_CUSTOM)
+		else:
+			self.pandoc_cli_help.set_label(HELP_LABEL_PANDOC)
 
 	############################################################################
 	# python3-markdown backend options #########################################
@@ -580,7 +593,8 @@ class MdConfigWidget(Gtk.Box):
 		tex_files_switch = builder.get_object('tex_files_switch')
 		tex_files_switch.set_state(self._settings.get_boolean('tex-files'))
 		tex_files_switch.connect('notify::active', self.on_tex_support_changed)
-		help_tex = _("TODO explanation about tex files")
+		tex_files_switch.set_sensitive(BACKEND_PANDOC_AVAILABLE)
+		help_tex = HELP_LABEL_TEX
 		general_box.add(self._new_dim_label(help_tex))
 
 	def _build_style_page(self, builder):
@@ -590,11 +604,12 @@ class MdConfigWidget(Gtk.Box):
 		self.css_manager = MdCSSSettings(self._settings, None, self)
 		style_box.add(self.css_manager.full_widget)
 
-		style_box.add(Gtk.Separator(visible=True))
-
-		style_box.add(self._new_dim_label(_("TODO explanation about revealjs")))
 		self.revealjs_manager = MdRevealjsSettings(self._settings, self)
-		style_box.add(self.revealjs_manager.full_widget)
+		if BACKEND_PANDOC_AVAILABLE:
+			style_box.add(Gtk.Separator(visible=True))
+
+			style_box.add(self._new_dim_label(_("TODO explanation about revealjs")))
+			style_box.add(self.revealjs_manager.full_widget)
 
 	def _build_backend_page(self, builder):
 		self._backend = MdBackendSettings(_("HTML generation backend:"), \
@@ -613,8 +628,9 @@ class MdConfigWidget(Gtk.Box):
 
 	############################################################################
 
-	def _new_dim_label(self, string):
-		label = Gtk.Label(visible=True, halign=Gtk.Align.START, label=string)
+	def _new_dim_label(self, raw_text):
+		label = Gtk.Label(wrap=True, visible=True, label=raw_text, \
+		                                                 halign=Gtk.Align.START)
 		label.get_style_context().add_class('dim-label')
 		return label
 
