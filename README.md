@@ -4,25 +4,31 @@
 
 <!-- TODO
 
-- [ ] splitters for md only
+- [~] différencier explicitement le chemin d'exécution pour l'ouverture d'un
+fichier (reconnaissance format etc.) d'un reload normal
+	- [ ] régression : si un doc est ouvert et que c'est désac et qu'on active, 
+	ça ne réagit pas et on ne peut pas recharger
+- splitters
+	- [x] splitters for md only
+	- [ ] se souvenir du splitter choisi
+	- [ ] ajouter le réglage pour le splitter dans les préférences ?
 - [ ] casser prefs_and_export.py en 2 mais intelligemment
-- [ ] help labels and links for pandoc too! et toutes les pages en fait
-- [ ] CSS for admonitions (and other default plugins ?)
-	- [ ] and pymdown ??
+- [ ] links for pandoc too
 - reveal js https://github.com/jgm/pandoc/wiki/Using-pandoc-to-produce-reveal.js-slides
 	- [ ] prefs
-		- [ ] rendu
+		- [ ] rendu fonctionnel
 		- [ ] transitions
 		- [ ] numéros de pages
 		- [ ] paramètres de thème
 	- [ ] export
-		- [ ] rendu
+		- [ ] ne pas désactiver l'entrée quand on exporte
+		- [ ] rendu fonctionnel
 		- [ ] transitions
 		- [ ] numéros de pages
 		- [ ] paramètres de thème
-- [ ] se souvenir du splitter
-- [ ] ajouter le réglage pour le splitter dans les préférences ?
 - print(doc.get_mime_type(), doc.get_content_type())
+- [ ] CSS for admonitions (and other default plugins ?)
+	- [ ] and pymdown ??
 - [ ] bring back the fullscreen, but better
 
 ~     TODO -->

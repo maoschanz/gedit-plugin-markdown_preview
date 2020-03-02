@@ -36,7 +36,6 @@ MD_PREVIEW_KEY_BASE = 'org.gnome.gedit.plugins.markdown_preview'
 BASE_TEMP_NAME = '/tmp/gedit_plugin_markdown_preview'
 
 MARKDOWN_SPLITTERS = ['\n----', '\n# ', '\n## ']
-HTML_SPLITTERS = ['<hr />', '<h1>', '<h2>']
 
 ################################################################################
 
@@ -57,7 +56,7 @@ class MdPreviewBar(Gtk.Box):
 		id1 = self._settings.connect('changed::auto-manage-pane', self.set_auto_manage)
 		self._handlers.append(id0)
 		self._handlers.append(id1)
-		self.pagination_mode = 'whole'
+		self.pagination_mode = 'whole' # TODO
 		self.set_auto_manage()
 		self.build_preview_ui()
 		self.page_index = 0
@@ -201,8 +200,9 @@ class MdPreviewBar(Gtk.Box):
 			if not value.is_undefined():
 				self.scroll_level = value.to_int32()
 
-	def build_context_item(self, name, gio_action):
-		return WebKit2.ContextMenuItem.new_from_gaction(gio_action, name, None)
+	def build_context_item(self, label, action_name):
+		gio_action = self.parent_plugin.window.lookup_action(action_name)
+		return WebKit2.ContextMenuItem.new_from_gaction(gio_action, label, None)
 
 	def remove_at_position(self, context_menu, position):
 		context_menu.remove( context_menu.get_item_at_position(position) )
@@ -210,9 +210,9 @@ class MdPreviewBar(Gtk.Box):
 	def on_context_menu(self, a, context_menu, c, hit_test_result):
 		special_items = False
 		openLinkWithItem = self.build_context_item(_("Open link in browser"), \
-		                               self.parent_plugin.action_open_link_with)
+		                                               'md-prev-open-link-with')
 		openImageWithItem = self.build_context_item(_("Open image in browser"), \
-		                              self.parent_plugin.action_open_image_with)
+		                                              'md-prev-open-image-with')
 		if hit_test_result.context_is_link() and hit_test_result.context_is_image():
 			special_items = True
 			self.remove_at_position(context_menu, 6) # save image as
@@ -241,7 +241,7 @@ class MdPreviewBar(Gtk.Box):
 		if not special_items:
 			context_menu.remove_all()
 		reloadItem = self.build_context_item(_("Reload the preview"), \
-		                                       self.parent_plugin.action_reload)
+		                                                       'md-prev-reload')
 		context_menu.append(reloadItem)
 		return False
 
@@ -253,13 +253,26 @@ class MdPreviewBar(Gtk.Box):
 
 	############################################################################
 
-	def on_set_paginated(self, mode):
+	def set_pagination_available(self, file_format):
+		can_paginate = file_format == 'md'
+		self.set_action_enabled('md-set-view-mode', can_paginate)
+		if can_paginate:
+			current_pagination = self.parent_plugin.window.lookup_action( \
+			                        'md-set-view-mode').get_state().get_string()
+			self.set_pagination_mode(current_pagination)
+		else:
+			self.set_is_whole_doc(False)
+
+	def set_pagination_mode(self, mode):
 		self.pagination_mode = mode
 		is_whole = (self.pagination_mode == 'whole')
+		self.set_is_whole_doc(is_whole)
+		self.on_reload()
+
+	def set_is_whole_doc(self, is_whole):
 		self.set_action_enabled('md-prev-next', not is_whole)
 		self.set_action_enabled('md-prev-previous', not is_whole)
 		self.pages_box.props.visible = not is_whole
-		self.on_reload()
 
 	def on_previous_page(self, *args):
 		if self.page_index > 0:
@@ -274,18 +287,14 @@ class MdPreviewBar(Gtk.Box):
 	# Reload ###################################################################
 
 	def on_reload(self, *args):
-		# Guard clause: it will not load documents which are not supported
-		self.file_format = self.recognize_format()
-		if self.file_format == 'error' or not self.preview_bar.props.visible:
-			return
-		elif self.panel.get_visible_child() != self.preview_bar:
-			return
 		if self.parent_plugin._auto_position:
 			self.auto_change_panel()
-
-		css_uri = '' # TODO virer ça
-		if self._settings.get_boolean('use-style'):
-			css_uri = self._settings.get_string('style')
+		if self.file_format == 'error' or not self.preview_bar.props.visible:
+			return
+		# Guard clause: it will not load documents is the panel is already used
+		# for something else
+		if self.panel.get_visible_child() != self.preview_bar:
+			return
 
 		html_content = ''
 		doc = self.parent_plugin.window.get_active_document()
@@ -295,7 +304,7 @@ class MdPreviewBar(Gtk.Box):
 			html_content = self.get_html_from_html(unsaved_text)
 		elif self._settings.get_string('backend') == 'python' \
 		                                           and self.file_format == 'md':
-			html_content = self.get_html_from_p3md(unsaved_text, css_uri)
+			html_content = self.get_html_from_p3md(unsaved_text)
 		else:
 			is_tex = self.file_format != 'tex'
 			html_content = self.get_html_from_pandoc(unsaved_text, is_tex)
@@ -311,23 +320,7 @@ class MdPreviewBar(Gtk.Box):
 
 	def get_html_from_html(self, unsaved_text):
 		# CSS not applied if it's HTML
-		return self.current_page(unsaved_text, HTML_SPLITTERS)
-
-	def get_html_from_pandoc_temp(self, unsaved_text, css_uri):
-		# Get the current document, or the temporary document if requested
-		unsaved_text = self.current_page(unsaved_text, MARKDOWN_SPLITTERS)
-		f = open(BASE_TEMP_NAME + '.md', 'w')
-		f.write(unsaved_text)
-		f.close()
-		file_path = self.temp_file_md.get_path()
-
-		# It uses pandoc to produce the html code
-		command = ['pandoc', '-s', file_path, '--metadata', 'pagetitle=Preview']
-		if css_uri != '':
-			command = command + ['-c', css_uri]
-		result = subprocess.run(command, stdout=subprocess.PIPE)
-		html_content = result.stdout.decode('utf-8')
-		return html_content
+		return self.current_page(unsaved_text, None)
 
 	def get_html_from_pandoc(self, unsaved_text, from_temp_file):
 		# Get the current document, or the temporary document if requested
@@ -350,15 +343,17 @@ class MdPreviewBar(Gtk.Box):
 		html_content = result.stdout.decode('utf-8')
 		return html_content
 
-	def get_html_from_p3md(self, unsaved_text, css_uri):
+	def get_html_from_p3md(self, unsaved_text):
 		unsaved_text = self.current_page(unsaved_text, MARKDOWN_SPLITTERS)
 		# https://github.com/Python-Markdown/markdown/wiki/Third-Party-Extensions
 		md_extensions = self._settings.get_strv('extensions')
-		if css_uri == '':
+		if not self._settings.get_boolean('use-style'):
 			pre_string = '<html><head><meta charset="utf-8" /></head><body>'
 		else:
 			pre_string = '<html><head><meta charset="utf-8" />' + \
-			     '<link rel="stylesheet" href="' + css_uri + '" /></head><body>'
+			                    '<link rel="stylesheet" href="' + \
+			            self._settings.get_string('style') + '" /></head><body>'
+			# TODO cacher cet accès bdd dans le recognize_format ??
 		post_string = '</body></html>'
 		html_string = markdown.markdown(unsaved_text, extensions=md_extensions)
 		html_content = pre_string + html_string + post_string
@@ -377,24 +372,31 @@ class MdPreviewBar(Gtk.Box):
 		# It will not load documents which are not .md/.html/.tex
 		name = doc.get_short_name_for_display()
 		temp = name.split('.')[-1]
+		ret = None
 		if temp == 'md':
-			self.close_warning()
-			return 'md'
+			ret = 'md'
 		elif temp == 'html':
-			self.close_warning()
-			return 'html'
-		elif temp == 'tex' and BACKEND_PANDOC_AVAILABLE and \
-		                                self._settings.get_boolean('tex-files'):
-			self.close_warning()
-			return 'tex'
-		if doc.is_untitled():
-			self.display_warning(_("Can't preview an unsaved document")) # XXX
+			ret = 'html'
+		elif temp == 'tex' \
+		and BACKEND_PANDOC_AVAILABLE \
+		and self._settings.get_boolean('tex-files'):
+			ret = 'tex'
+		if ret is None:
+			if doc.is_untitled():
+				self.display_warning(_("Can't preview an unsaved document"))
+				# XXX it should
+			else:
+				self.display_warning(_("Unsupported type of document: ") + name)
+			ret = 'error'
 		else:
-			self.display_warning(_("Unsupported type of document: ") + name)
-		return 'error'
+			# TODO cacher les accès bdd ici (css_uri, array pandoc, is_tex, ...)
+			self.close_warning()
+		self.set_pagination_available(ret)
+		# print(ret)
+		return ret
 
 	def current_page(self, lang_string, splitters_array):
-		if self.pagination_mode == 'whole':
+		if self.pagination_mode == 'whole' or splitters_array == None:
 			return lang_string
 		elif self.pagination_mode == 'h1':
 			correct_splitter = splitters_array[1]

@@ -138,14 +138,14 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		action_options = Gio.SimpleAction(name='md-prev-options')
 		action_options.connect('activate', self.on_open_prefs)
 
-		self.action_reload = Gio.SimpleAction(name='md-prev-reload')
-		self.action_reload.connect('activate', self.preview.on_reload)
+		action_reload = Gio.SimpleAction(name='md-prev-reload')
+		action_reload.connect('activate', self.preview.on_reload)
 
-		self.action_open_link_with = Gio.SimpleAction(name='md-prev-open-link-with')
-		self.action_open_link_with.connect('activate', self.preview.on_open_link_with)
+		action_open_link_with = Gio.SimpleAction(name='md-prev-open-link-with')
+		action_open_link_with.connect('activate', self.preview.on_open_link_with)
 
-		self.action_open_image_with = Gio.SimpleAction(name='md-prev-open-image-with')
-		self.action_open_image_with.connect('activate', self.preview.on_open_image_with)
+		action_open_image_with = Gio.SimpleAction(name='md-prev-open-image-with')
+		action_open_image_with.connect('activate', self.preview.on_open_image_with)
 
 		position = self._settings.get_string('position')
 		self._auto_position = position == 'auto'
@@ -159,9 +159,9 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		self.window.add_action(action_panel)
 		self.window.add_action(action_autoreload)
 		self.window.add_action(action_options)
-		self.window.add_action(self.action_reload)
-		self.window.add_action(self.action_open_link_with)
-		self.window.add_action(self.action_open_image_with)
+		self.window.add_action(action_reload)
+		self.window.add_action(action_open_link_with)
+		self.window.add_action(action_open_image_with)
 
 		########################################################################
 
@@ -198,7 +198,7 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 
 	def on_change_view_mode(self, *args):
 		mode = args[1].get_string()
-		self.preview.on_set_paginated(mode)
+		self.preview.set_pagination_mode(mode)
 		args[0].set_state(GLib.Variant.new_string(mode))
 
 	def view_method(self, name):
