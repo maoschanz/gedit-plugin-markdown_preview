@@ -33,6 +33,11 @@
       <summary>Automatically reload the preview</summary>
       <description></description>
     </key>
+    <key type="s" name="splitter">
+      <default>'whole'</default>
+      <summary>How to split the document</summary>
+      <description>Can be 'whole' (no splitting), 'h1', 'h2', or 'hr'.</description>
+    </key>
 
     <!-- CSS options -->
     <key type="b" name="use-style">

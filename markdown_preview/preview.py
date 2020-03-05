@@ -54,9 +54,11 @@ class MdPreviewBar(Gtk.Box):
 		self._settings = Gio.Settings.new(MD_PREVIEW_KEY_BASE)
 		id0 = self._settings.connect('changed::position', self.change_panel)
 		id1 = self._settings.connect('changed::auto-manage-pane', self.set_auto_manage)
+		id2 = self._settings.connect('changed::splitter', self.change_splitter_setting)
 		self._handlers.append(id0)
 		self._handlers.append(id1)
-		self.pagination_mode = 'whole' # TODO
+		self._handlers.append(id2)
+		self.pagination_mode = self._settings.get_string('splitter')
 		self.set_auto_manage()
 		self.build_preview_ui()
 		self.page_index = 0
@@ -83,9 +85,10 @@ class MdPreviewBar(Gtk.Box):
 				self.on_reload()
 
 	def do_deactivate(self):
-		self._webview.disconnect(self._handlers[4]) # XXX if it's useful, use this elsewhere
+		self._webview.disconnect(self._handlers[5]) # XXX if it's useful, do this elsewhere
+		self._webview.disconnect(self._handlers[4])
 		self._webview.disconnect(self._handlers[3])
-		self._webview.disconnect(self._handlers[2])
+		self._settings.disconnect(self._handlers[2])
 		self._settings.disconnect(self._handlers[1])
 		self._settings.disconnect(self._handlers[0])
 		self._delete_temp_file()
@@ -98,6 +101,15 @@ class MdPreviewBar(Gtk.Box):
 
 	############################################################################
 	# Misc #####################################################################
+
+	def change_splitter_setting(self, *args):
+		action = self.parent_plugin.window.lookup_action('md-set-view-mode')
+		action.change_state(GLib.Variant.new_string(self._settings.get_string('splitter')))
+
+	def change_splitter_action(self, *args):
+		mode = args[1].get_string()
+		self.set_pagination_mode(mode)
+		args[0].set_state(GLib.Variant.new_string(mode))
 
 	def on_set_reload(self, *args):
 		if not args[0].get_state():

@@ -98,54 +98,38 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		self.preview.do_deactivate()
 		self.window.disconnect(self._handlers[0])
 		self.window.disconnect(self._handlers[1])
-		
-	def connect_actions(self):
-		action_export = Gio.SimpleAction(name='md-prev-export-doc')
-		action_print = Gio.SimpleAction(name='md-prev-print-doc')
-		action_export.connect('activate', self.export_doc)
-		action_print.connect('activate', self.preview.print_doc)
-		
-		self.window.add_action(action_export)
-		self.window.add_action(action_print)
 
-		action_zoom_in = Gio.SimpleAction(name='md-prev-zoom-in')
-		action_zoom_original = Gio.SimpleAction(name='md-prev-zoom-original')
-		action_zoom_out = Gio.SimpleAction(name='md-prev-zoom-out')
-		action_zoom_in.connect('activate', self.preview.on_zoom_in)
-		action_zoom_original.connect('activate', self.preview.on_zoom_original)
-		action_zoom_out.connect('activate', self.preview.on_zoom_out)
+	def add_action_simple(self, action_name, callback):
+		new_action = Gio.SimpleAction(name=action_name)
+		new_action.connect('activate', callback)
+		self.window.add_action(new_action)
+
+	def connect_actions(self):
+		self.add_action_simple('md-prev-export-doc', self.export_doc)
+		self.add_action_simple('md-prev-print-doc', self.preview.print_doc)
+
+		self.add_action_simple('md-prev-zoom-in', self.preview.on_zoom_in)
+		self.add_action_simple('md-prev-zoom-original', self.preview.on_zoom_original)
+		self.add_action_simple('md-prev-zoom-out', self.preview.on_zoom_out)
+
+		self.add_action_simple('md-prev-next', self.preview.on_next_page)
+		self.add_action_simple('md-prev-previous', self.preview.on_previous_page)
+
+		self.add_action_simple('md-prev-options', self.on_open_prefs)
+		self.add_action_simple('md-prev-reload', self.preview.on_reload)
 		
-		self.window.add_action(action_zoom_in)
-		self.window.add_action(action_zoom_original)
-		self.window.add_action(action_zoom_out)
+		self.add_action_simple('md-prev-open-link-with', self.preview.on_open_link_with)
+		self.add_action_simple('md-prev-open-image-with', self.preview.on_open_image_with)
 
 		action_view_mode = Gio.SimpleAction().new_stateful('md-set-view-mode', \
 		            GLib.VariantType.new('s'), GLib.Variant.new_string('whole'))
-		action_view_mode.connect('change-state', self.on_change_view_mode)
-		
-		action_next = Gio.SimpleAction(name='md-prev-next')
-		action_next.connect('activate', self.preview.on_next_page)
-		
-		action_previous = Gio.SimpleAction(name='md-prev-previous')
-		action_previous.connect('activate', self.preview.on_previous_page)
+		action_view_mode.connect('change-state', self.preview.change_splitter_action)
 
-		autoreload = self._settings.get_boolean('auto-reload')
-		self.preview.auto_reload = autoreload
+		bool_autoreload = self._settings.get_boolean('auto-reload')
+		self.preview.auto_reload = bool_autoreload
 		action_autoreload = Gio.SimpleAction().new_stateful('md-prev-set-autoreload', \
-		                             None, GLib.Variant.new_boolean(autoreload))
+		                        None, GLib.Variant.new_boolean(bool_autoreload))
 		action_autoreload.connect('change-state', self.preview.on_set_reload)
-
-		action_options = Gio.SimpleAction(name='md-prev-options')
-		action_options.connect('activate', self.on_open_prefs)
-
-		action_reload = Gio.SimpleAction(name='md-prev-reload')
-		action_reload.connect('activate', self.preview.on_reload)
-
-		action_open_link_with = Gio.SimpleAction(name='md-prev-open-link-with')
-		action_open_link_with.connect('activate', self.preview.on_open_link_with)
-
-		action_open_image_with = Gio.SimpleAction(name='md-prev-open-image-with')
-		action_open_image_with.connect('activate', self.preview.on_open_image_with)
 
 		position = self._settings.get_string('position')
 		self._auto_position = position == 'auto'
@@ -154,14 +138,8 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		action_panel.connect('change-state', self.on_change_panel_from_popover)
 
 		self.window.add_action(action_view_mode)
-		self.window.add_action(action_next)
-		self.window.add_action(action_previous)
 		self.window.add_action(action_panel)
 		self.window.add_action(action_autoreload)
-		self.window.add_action(action_options)
-		self.window.add_action(action_reload)
-		self.window.add_action(action_open_link_with)
-		self.window.add_action(action_open_image_with)
 
 		########################################################################
 
@@ -195,11 +173,6 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		action = Gio.SimpleAction(name=action_name)
 		action.connect('activate', lambda i, j: self.view_method(method_name))
 		self.window.add_action(action)
-
-	def on_change_view_mode(self, *args):
-		mode = args[1].get_string()
-		self.preview.set_pagination_mode(mode)
-		args[0].set_state(GLib.Variant.new_string(mode))
 
 	def view_method(self, name):
 		if self.preview.recognize_format() != 'md':
@@ -324,7 +297,7 @@ class MarkdownGeditPluginView(GObject.Object, Gedit.ViewActivatable):
 		if self.recognize_format() != 'md':
 			item.set_sensitive(False)
 		popup.append(item)
-	
+
 	def recognize_format(self): # TODO doc.get_language()
 		doc = self.view.get_buffer()
 		name = doc.get_short_name_for_display()
@@ -336,15 +309,15 @@ class MarkdownGeditPluginView(GObject.Object, Gedit.ViewActivatable):
 		elif temp[len(temp)-1] == 'tex':
 			return 'tex'
 		return 'error'
-		
+
 	################
-	
+
 	def add_block_tags(self, start_tag, end_tag):
 		pass
-	
+
 	def remove_line_tags(self, start_tag, end_tag):
 		print('à faire')
-		
+
 	def add_line_tags(self, start_tag, end_tag): # FIXME ajouter l'espace si il n'est pas là ?
 		document = self.view.get_buffer()
 		selection = document.get_selection_bounds()
@@ -362,7 +335,7 @@ class MarkdownGeditPluginView(GObject.Object, Gedit.ViewActivatable):
 		elif not end.ends_line():
 			end.forward_to_line_end()
 		new_code = self.add_tags_characters(document, start_tag, end_tag, start, end)
-	
+
 	def add_word_tags(self, start_tag, end_tag):
 		document = self.view.get_buffer()
 		selection = document.get_selection_bounds()
@@ -371,43 +344,43 @@ class MarkdownGeditPluginView(GObject.Object, Gedit.ViewActivatable):
 		else:
 			return
 		new_code = self.add_tags_characters(document, start_tag, end_tag, start, end)
-	
+
 	def format_title_lower(self):
 		self.add_line_tags('#', '')
-		
+
 	def format_title_upper(self):
 		self.remove_line_tags('# ', ' #')
-		
+
 	def format_title(self, level):
 		self.add_line_tags('#'*level + ' ', '')
-		
+
 	def format_bold(self):
 		self.add_word_tags('**', '**')
-		
+
 	def list_unordered(self):
 		self.add_line_tags('- ', '')
-		
+
 	def list_ordered(self):
 		self.add_line_tags('1. ', '')
-	
+
 	def format_italic(self):
 		self.add_word_tags('*', '*')
-	
+
 	def format_monospace(self):
 		self.add_word_tags('`', '`')
-	
+
 	def format_quote(self):
 		self.add_line_tags('> ', '')
-		
+
 	def format_underline(self):
 		self.add_word_tags('__', '__')
-		
+
 	def format_stroke(self):
 		self.add_word_tags('~~', '~~')
-	
+
 	def insert_link(self, window):
 		pass
-	
+
 	def insert_picture(self, window):
 		# Building a FileChooserDialog for pictures
 		file_chooser = Gtk.FileChooserDialog(_("Select a picture"), window,
@@ -427,13 +400,13 @@ class MarkdownGeditPluginView(GObject.Object, Gedit.ViewActivatable):
 			iter = doc.get_iter_at_mark(doc.get_insert())
 			doc.insert(iter, picture_path)
 		file_chooser.destroy()
-		
+
 	def insert_table(self):
 		doc = self.view.get_buffer()
 		table = '|||\n|--|--|\n|||'
 		iter = doc.get_iter_at_mark(doc.get_insert())
 		doc.insert(iter, table)
-		
+
 	def add_tags_characters(self, document, start_tag, end_tag, start, end):
 		smark = document.create_mark("start", start, False)
 		imark = document.create_mark("iter", start, False)

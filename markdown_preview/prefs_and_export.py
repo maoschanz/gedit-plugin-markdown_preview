@@ -586,9 +586,21 @@ class MdConfigWidget(Gtk.Box):
 		autoManageSwitch.set_state(self._settings.get_boolean('auto-manage-pane'))
 		autoManageSwitch.connect('notify::active', self.on_auto_manage_changed)
 
+		splitter_combobox = builder.get_object('splitter_combobox')
+		splitter_combobox.append('hr', _("Split at separators"))
+		splitter_combobox.append('whole', _("Whole document"))
+		splitter_combobox.append('h1', _("Split at level 1 titles"))
+		splitter_combobox.append('h2', _("Split at level 2 titles"))
+		splitter_combobox.set_active_id(self._settings.get_string('splitter'))
+		splitter_combobox.connect('changed', self.on_splitter_changed)
+
+		########################################################################
+
 		relative_paths_switch = builder.get_object('relative_paths_switch')
 		relative_paths_switch.set_state(self._settings.get_boolean('relative'))
 		relative_paths_switch.connect('notify::active', self.on_relative_changed)
+
+		########################################################################
 
 		tex_files_switch = builder.get_object('tex_files_switch')
 		tex_files_switch.set_state(self._settings.get_boolean('tex-files'))
@@ -668,6 +680,10 @@ class MdConfigWidget(Gtk.Box):
 	def on_position_changed(self, w):
 		position = w.get_active_id()
 		self._settings.set_string('position', position)
+
+	def on_splitter_changed(self, w):
+		splitter = w.get_active_id()
+		self._settings.set_string('splitter', splitter)
 
 	def on_auto_manage_changed(self, w, a):
 		self._settings.set_boolean('auto-manage-pane', w.get_state())

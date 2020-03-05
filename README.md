@@ -8,10 +8,6 @@
 fichier (reconnaissance format etc.) d'un reload normal
 	- [ ] régression : si un doc est ouvert et que c'est désac et qu'on active, 
 	ça ne réagit pas et on ne peut pas recharger
-- splitters
-	- [x] splitters for md only
-	- [ ] se souvenir du splitter choisi
-	- [ ] ajouter le réglage pour le splitter dans les préférences ?
 - [ ] casser prefs_and_export.py en 2 mais intelligemment
 - [ ] links for pandoc too
 - reveal js https://github.com/jgm/pandoc/wiki/Using-pandoc-to-produce-reveal.js-slides
