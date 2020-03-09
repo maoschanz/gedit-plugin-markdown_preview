@@ -9,8 +9,7 @@ LOCALE_PATH = os.path.join(BASE_PATH, 'locale')
 
 from .preview import MdPreviewBar
 from .prefs_and_export import MdExportDialog, MdConfigWidget
-from .kb_acc_data import ACTIONS_NAMES
-from .kb_acc_data import SETTINGS_KEYS
+from .constants import KeyboardShortcuts
 
 try:
 	import gettext
@@ -58,8 +57,9 @@ class MarkdownGeditPluginApp(GObject.Object, Gedit.AppActivatable):
 
 	def add_all_accelerators(self):
 		self._kb_settings = Gio.Settings.new(MD_PREVIEW_KEY_BASE + '.keybindings')
-		for i in range(len(SETTINGS_KEYS)):
-			self.add_one_accelerator(SETTINGS_KEYS[i], ACTIONS_NAMES[i])
+		for i in range(len(KeyboardShortcuts.SettingsKeys)):
+			self.add_one_accelerator(KeyboardShortcuts.SettingsKeys[i], \
+			                                  KeyboardShortcuts.ActionsNames[i])
 
 	def add_one_accelerator(self, setting_key, action_name):
 		accels = self._kb_settings.get_strv(setting_key)
@@ -67,8 +67,8 @@ class MarkdownGeditPluginApp(GObject.Object, Gedit.AppActivatable):
 			self.app.add_accelerator(accels[0], action_name, None)
 
 	def remove_accelerators(self):
-		for i in range(len(SETTINGS_KEYS)):
-			self.app.remove_accelerator(SETTINGS_KEYS[i], None)
+		for i in range(len(KeyboardShortcuts.SettingsKeys)):
+			self.app.remove_accelerator(KeyboardShortcuts.SettingsKeys[i], None)
 
 ################################################################################
 

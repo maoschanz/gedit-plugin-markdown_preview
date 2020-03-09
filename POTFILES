@@ -1,6 +1,6 @@
 ./markdown_preview/prefs_and_export.py
 ./markdown_preview/__init__.py
-./markdown_preview/kb_acc_data.py
+./markdown_preview/constants.py
 ./markdown_preview/preview.py
 
 ./markdown_preview/backend_box.ui

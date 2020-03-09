@@ -1,14 +1,14 @@
-# __init__.py
+# prefs_and_export.py
 # GPL v3
 
 import subprocess, gi, os
 from gi.repository import Gtk, Gio
 
-from .kb_acc_data import LABELS
-from .kb_acc_data import SETTINGS_KEYS
+from .constants import KeyboardShortcuts, HelpLabels, BackendsEnums
 
 MD_PREVIEW_KEY_BASE = 'org.gnome.gedit.plugins.markdown_preview'
 
+# TODO both dialogs are launched from __init__ so parameters can be passed
 BACKEND_P3MD_AVAILABLE = True
 BACKEND_PANDOC_AVAILABLE = True
 try:
@@ -37,94 +37,6 @@ except:
 
 ################################################################################
 
-P3MD_PLUGINS = {
-	'extra': _("Extras"),
-	'toc': _("Table of content"),
-	'codehilite': "CodeHilite",
-	'nl2br': _("New Line To Break"),
-	'smarty': "SmartyPants",
-	'sane_lists': _("Sane Lists"),
-	'admonition': _("Admonitions"),
-	'wikilinks': _("WikiLinks")
-}
-
-P3MD_PLUGINS_DESCRIPTIONS = {
-	'extra': _("A compilation of various extensions (Abbreviations, Attribute Lists, Definition Lists, Fenced Code Blocks, Footnotes, Tables)."),
-	'toc': _("Shows a clickable table of content with the [TOC] tag."),
-	'codehilite': _("Highlights your code with a correct syntax coloration (it needs to be set up and have some dependencies)."), # XXX et du coup, lesquelles?
-	'nl2br': _("Adds a line break at each new line."),
-	'smarty': _("Converts ASCII dashes, quotes and ellipses to their nice-looking equivalents."),
-	'sane_lists': _("Alters the behavior of the lists syntax."),
-	'admonition': _("Adds admonitions (notes, warnings, tips, …) with the !!! tag."),
-	'wikilinks': _("Converts any [[bracketed]] word to a link.")
-}
-
-HELP_LABEL_1 = _("Aside of default extensions provided by the " + \
-"python3-markdown package, you can <b>install</b> third-party extensions " + \
-"using instructions provided by their respective authors.")
-
-HELP_LABEL_2 = _("These third-party extensions are <b>not</b> Gedit " + \
-"plugins, they extend python3-markdown.")
-
-HELP_LABEL_3 = _("Next, to improve the preview of your markdown file with " + \
-"the features of these extensions, please add their module names to the " + \
-"list using the text entry and the '+' icon.")
-
-HELP_LABEL_PANDOC = _("Pandoc is a command line utility with several " + \
-"possible options, input formats and output formats.")
-
-HELP_LABEL_PANDOC_CUSTOM = _("Any command using $INPUT_FILE as the name of " + \
-"the input file, and printing valid HTML to the standard output, is accepted.")
-
-HELP_LABEL_TEX = _("This enables the preview pane when you edit .tex files, " + \
-"so pandoc can try to convert them to HTML, and preview them using CSS if " + \
-"you set a stylesheet).")
-
-PANDOC_FORMATS_FULL = {
-	'beamer': _("LaTeX beamer slideshow (.tex)"),
-	'docx': _("Microsoft Word (.docx)"),
-	'html5': _("HTML5"),
-	'latex': _("LaTeX (.tex)"),
-	'odt': _("OpenOffice text document (.odt)"),
-	'pdf': _("Portable Document Format (.pdf)"),
-	'plain': _("plain text (.txt)"),
-	'pptx': _("PowerPoint slideshow (.pptx)"),
-	'rtf': _("Rich Text Format (.rtf)"),
-	'revealjs': _("reveal.js slideshow (HTML/JS)"),
-	'custom': _("Custom command line")
-}
-
-PANDOC_FORMATS_PREVIEW = {
-	'html5': _("HTML5"),
-	'revealjs': _("reveal.js slideshow (HTML/JS)"),
-	'custom': _("Custom command line")
-}
-
-REVEALJS_TRANSITIONS = {
-	'none': _("None"),
-	'fade': _("Fade"),
-	'slide': _("Slide"),
-	'convex': _("Cube (convex)"),
-	'concave': _("Cube (concave)"),
-	'zoom': _("Zoom")
-}
-
-REVEALJS_THEMES = {
-	'beige': _("Beige"),
-	'black': _("Black"),
-	'blood': _("Blood"),
-	'league': _("League"),
-	'moon': _("Moon"),
-	'night': _("Night"),
-	'serif': _("Serif"),
-	'simple': _("Simple"),
-	'sky': _("Sky"),
-	'solarized': _("Solarized"),
-	'white': _("White")
-}
-
-################################################################################
-
 class MdRevealjsSettings():
 	def __init__(self, settings, parent_widget):
 		self._settings = settings
@@ -135,9 +47,10 @@ class MdRevealjsSettings():
 
 		self.transitions_combobox = builder.get_object('transitions_combobox')
 		self.fill_combobox(self.transitions_combobox, 'revealjs-transitions', \
-		                                                   REVEALJS_TRANSITIONS)
+		                                      BackendsEnums.RevealJSTransitions)
 		self.theme_combobox = builder.get_object('theme_combobox')
-		self.fill_combobox(self.theme_combobox, 'revealjs-theme', REVEALJS_THEMES)
+		self.fill_combobox(self.theme_combobox, 'revealjs-theme', \
+		                                           BackendsEnums.RevealJSThemes)
 
 		self.slidenum_switch = builder.get_object('slide_number_switch')
 		show_slide_num = self._settings.get_boolean('revealjs-slide-num')
@@ -248,9 +161,9 @@ class MdBackendSettings():
 		# Load UI for the python3-markdown backend
 		self.extensions_flowbox = builder.get_object('extensions_flowbox')
 		self.load_plugins_list()
-		builder.get_object('help_label_1').set_label(HELP_LABEL_1)
-		builder.get_object('help_label_2').set_label(HELP_LABEL_2)
-		builder.get_object('help_label_3').set_label(HELP_LABEL_3)
+		builder.get_object('help_label_1').set_label(HelpLabels.P3mdExtensions1)
+		builder.get_object('help_label_2').set_label(HelpLabels.P3mdExtensions2)
+		builder.get_object('help_label_3').set_label(HelpLabels.P3mdExtensions3)
 		self.p3md_extension_entry = builder.get_object('p3md_extension_entry')
 		self.p3md_extension_entry.connect('icon-release', self.on_add_ext)
 		self.p3md_extension_entry.connect('activate', self.on_add_ext)
@@ -258,7 +171,7 @@ class MdBackendSettings():
 		# Load UI for the pandoc backend
 		self.pandoc_cli_entry = builder.get_object('pandoc_command_entry')
 		self.pandoc_cli_help = builder.get_object('help_label_pandoc')
-		self.pandoc_cli_help.set_label(HELP_LABEL_PANDOC)
+		self.pandoc_cli_help.set_label(HelpLabels.PandocGeneral)
 		self.remember_button = builder.get_object('remember_button')
 		self.remember_button.connect('clicked', self.on_remember)
 		self.format_combobox = builder.get_object('format_combobox')
@@ -321,9 +234,9 @@ class MdBackendSettings():
 		self.pandoc_cli_entry.set_sensitive(is_custom)
 		self.parent_widget.set_command_for_format(output_format)
 		if is_custom:
-			self.pandoc_cli_help.set_label(HELP_LABEL_PANDOC_CUSTOM)
+			self.pandoc_cli_help.set_label(HelpLabels.PandocCustom)
 		else:
-			self.pandoc_cli_help.set_label(HELP_LABEL_PANDOC)
+			self.pandoc_cli_help.set_label(HelpLabels.PandocGeneral)
 
 	############################################################################
 	# python3-markdown backend options #########################################
@@ -331,9 +244,9 @@ class MdBackendSettings():
 	def add_plugin_checkbtn(self, plugin_id):
 		if plugin_id in self.plugins:
 			return
-		if plugin_id in P3MD_PLUGINS:
-			name = P3MD_PLUGINS[plugin_id]
-			description = P3MD_PLUGINS_DESCRIPTIONS[plugin_id]
+		if plugin_id in BackendsEnums.P3mdExtensions:
+			name = BackendsEnums.P3mdExtensions[plugin_id]
+			description = BackendsEnums.P3mdDescriptions[plugin_id]
 		else:
 			name = plugin_id
 			description = None
@@ -346,7 +259,7 @@ class MdBackendSettings():
 			btn.connect('clicked', self.update_plugins_list)
 
 	def load_plugins_list(self, *args):
-		for plugin_id in P3MD_PLUGINS:
+		for plugin_id in BackendsEnums.P3mdExtensions:
 			self.add_plugin_checkbtn(plugin_id)
 		array = self._settings.get_strv('extensions')
 		for plugin_id in array:
@@ -400,7 +313,7 @@ class MdExportDialog(Gtk.Dialog):
 		self._backend = MdBackendSettings(_("Export file with:"), \
 		                                            self._settings, False, self)
 		self.get_content_area().add(self._backend.full_widget)
-		self._backend.fill_pandoc_combobox(PANDOC_FORMATS_FULL)
+		self._backend.fill_pandoc_combobox(BackendsEnums.PandocFormatsFull)
 
 		self.get_content_area().add(Gtk.Separator(visible=True))
 
@@ -606,13 +519,12 @@ class MdConfigWidget(Gtk.Box):
 		tex_files_switch.set_state(self._settings.get_boolean('tex-files'))
 		tex_files_switch.connect('notify::active', self.on_tex_support_changed)
 		tex_files_switch.set_sensitive(BACKEND_PANDOC_AVAILABLE)
-		help_tex = HELP_LABEL_TEX
-		general_box.add(self._new_dim_label(help_tex))
+		general_box.add(self._new_dim_label(HelpLabels.PandocTex))
 
 	def _build_style_page(self, builder):
 		style_box = builder.get_object('style_box')
 
-		style_box.add(self._new_dim_label(_("TODO explanation about css")))
+		style_box.add(self._new_dim_label(HelpLabels.StyleCSS))
 		self.css_manager = MdCSSSettings(self._settings, None, self)
 		style_box.add(self.css_manager.full_widget)
 
@@ -620,14 +532,14 @@ class MdConfigWidget(Gtk.Box):
 		if BACKEND_PANDOC_AVAILABLE:
 			style_box.add(Gtk.Separator(visible=True))
 
-			style_box.add(self._new_dim_label(_("TODO explanation about revealjs")))
+			style_box.add(self._new_dim_label(HelpLabels.StyleRevealJS))
 			style_box.add(self.revealjs_manager.full_widget)
 
 	def _build_backend_page(self, builder):
 		self._backend = MdBackendSettings(_("HTML generation backend:"), \
 		                                             self._settings, True, self)
 		builder.get_object('backend_box').add(self._backend.full_widget)
-		self._backend.fill_pandoc_combobox(PANDOC_FORMATS_PREVIEW)
+		self._backend.fill_pandoc_combobox(BackendsEnums.PandocFormatsPreview)
 
 	def _build_shortcuts_page(self, builder):
 		self.shortcuts_treeview = builder.get_object('shortcuts_treeview')
@@ -635,8 +547,9 @@ class MdConfigWidget(Gtk.Box):
 		renderer.connect('accel-edited', self._on_accel_edited)
 		renderer.connect('accel-cleared', self._on_accel_cleared)
 		# https://github.com/GNOME/gtk/blob/master/gdk/keynames.txt
-		for i in range(len(SETTINGS_KEYS)):
-			self._add_keybinding(SETTINGS_KEYS[i], LABELS[i])
+		for i in range(len(KeyboardShortcuts.SettingsKeys)):
+			self._add_keybinding(KeyboardShortcuts.SettingsKeys[i], \
+			                                        KeyboardShortcuts.Labels[i])
 
 	############################################################################
 

@@ -64,9 +64,11 @@ You can print the preview, or export it:
 
 ## Screenshots
 
-![With the preview in the side pane, menu opened](https://i.imgur.com/wo2pUrR.png)
+| With the preview in the side pane, menu opened | With the preview in the bottom pane, searching |
+|------|------|
+| ![With the preview in the side pane, menu opened](https://i.imgur.com/wo2pUrR.png) | ![With the preview in the bottom pane, searching](https://i.imgur.com/NaVogWH.png) |
 
-![With the preview in the bottom pane, searching](https://i.imgur.com/NaVogWH.png)
+<!--TODO c'est pas à jour ça-->
 
 ----
 
