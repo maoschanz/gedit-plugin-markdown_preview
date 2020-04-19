@@ -448,7 +448,7 @@ class MdExportDialog(Gtk.Dialog):
 			return False
 
 		output_format = self._backend.format_combobox.get_active_id()
-		doc_path = self.gedit_window.get_active_document().get_location().get_path()
+		doc_path = self.gedit_window.get_active_document().get_file().get_location().get_path()
 		buff = self._backend.pandoc_cli_entry.get_buffer()
 		cmd = buff.get_text(buff.get_start_iter(), buff.get_end_iter(), False)
 		words = cmd.split()

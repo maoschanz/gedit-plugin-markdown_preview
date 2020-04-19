@@ -438,7 +438,7 @@ class MdPreviewBar(Gtk.Box):
 	def get_dummy_uri(self):
 		# Support for relative paths is cool, but breaks CSS in many cases
 		if self._settings.get_boolean('relative'):
-			return self.parent_plugin.window.get_active_document().get_location().get_uri()
+			return self.parent_plugin.window.get_active_document().get_file().get_location().get_uri()
 		else:
 			return 'file://'
 
@@ -489,7 +489,7 @@ class MdPreviewBar(Gtk.Box):
 		self.panel.set_visible_child(self.preview_bar)
 		self.preview_bar.show_all()
 		self.pages_box.props.visible = (self.pagination_mode != 'whole')
-		if self.parent_plugin.window.get_state() is 'STATE_NORMAL':
+		if self.parent_plugin.window.get_state() == 'STATE_NORMAL':
 			self.on_reload()
 
 	def remove_from_panel(self):
