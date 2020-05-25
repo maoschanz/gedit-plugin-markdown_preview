@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-02-20 19:01+0100\n"
-"PO-Revision-Date: 2020-05-25 13:45+0200\n"
+"PO-Revision-Date: 2020-05-25 17:04+0200\n"
 "Last-Translator: Heimen Stoffels <vistausss@outlook.com>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -224,15 +224,15 @@ msgstr "Bloedrood"
 
 #: markdown_preview/prefs_and_export.py:116
 msgid "League"
-msgstr "Competitie"
+msgstr "Zwartgrijs"
 
 #: markdown_preview/prefs_and_export.py:117
 msgid "Moon"
-msgstr "Maan"
+msgstr "Nachtblauw"
 
 #: markdown_preview/prefs_and_export.py:118
 msgid "Night"
-msgstr "Nacht"
+msgstr "Nachtzwart"
 
 #: markdown_preview/prefs_and_export.py:119
 msgid "Serif"
@@ -240,11 +240,11 @@ msgstr "Met schreef"
 
 #: markdown_preview/prefs_and_export.py:120
 msgid "Simple"
-msgstr "Eenvoudig"
+msgstr "Eenvoudig wit"
 
 #: markdown_preview/prefs_and_export.py:121
 msgid "Sky"
-msgstr "Lucht"
+msgstr "Hemelsblauw"
 
 #: markdown_preview/prefs_and_export.py:122
 msgid "Solarized"
@@ -320,11 +320,11 @@ msgstr "Paneel onderaan"
 
 #: markdown_preview/prefs_and_export.py:603
 msgid "TODO explanation about css"
-msgstr "NOG TE DOEN: uitleg over CSS"
+msgstr ""
 
 #: markdown_preview/prefs_and_export.py:611
 msgid "TODO explanation about revealjs"
-msgstr "NOG TE DOEN: uitleg over revealjs"
+msgstr ""
 
 #: markdown_preview/prefs_and_export.py:615
 msgid "HTML generation backend:"
