@@ -2,24 +2,13 @@
 # GPL v3
 
 import subprocess, gi, os
-
-BACKEND_P3MD_AVAILABLE = True
-BACKEND_PANDOC_AVAILABLE = True
-try:
-	import markdown
-except Exception:
-	print("Package python3-markdown not installed")
-	BACKEND_P3MD_AVAILABLE = False
-
-try:
-	status = subprocess.call(['which', 'pandoc'])
-	assert(status == 0)
-except Exception:
-	print("Package pandoc not installed")
-	BACKEND_PANDOC_AVAILABLE = False
-
 gi.require_version('WebKit2', '4.0')
 from gi.repository import Gtk, Gio, WebKit2, GLib
+from .utils import get_backends_dict
+
+AVAILABLE_BACKENDS = get_backends_dict()
+if AVAILABLE_BACKENDS['p3md']:
+	import markdown
 
 BASE_PATH = os.path.dirname(os.path.realpath(__file__))
 LOCALE_PATH = os.path.join(BASE_PATH, 'locale')
@@ -67,11 +56,11 @@ class MdPreviewBar(Gtk.Box):
 		self.fix_backend_setting()
 
 	def fix_backend_setting(self):
-		if not BACKEND_P3MD_AVAILABLE and not BACKEND_PANDOC_AVAILABLE:
+		if not AVAILABLE_BACKENDS['p3md'] and not AVAILABLE_BACKENDS['pandoc']:
 			self.display_warning(_("Error: please install pandoc or python3-markdown"))
-		elif not BACKEND_P3MD_AVAILABLE:
+		elif not AVAILABLE_BACKENDS['p3md']:
 			self._settings.set_string('backend', 'pandoc')
-		elif not BACKEND_PANDOC_AVAILABLE:
+		elif not AVAILABLE_BACKENDS['pandoc']:
 			self._settings.set_string('backend', 'python')
 
 	# This is called every time the gui is updated

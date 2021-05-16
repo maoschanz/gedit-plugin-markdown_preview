@@ -1,32 +1,15 @@
 # prefs_and_export.py
 # GPL v3
 
-import subprocess, gi, os
+import gi, os
 from gi.repository import Gtk, Gio
 
 from ..constants import KeyboardShortcuts, HelpLabels, BackendsEnums
+from ..utils import get_backends_dict
 
 MD_PREVIEW_KEY_BASE = 'org.gnome.gedit.plugins.markdown_preview'
 
-# XXX both dialogs are launched from __init__ so parameters can be passed, and
-# these things have to be set again.
-BACKEND_P3MD_AVAILABLE = True
-BACKEND_PANDOC_AVAILABLE = True
-try:
-	import markdown
-	# FIXME il existe sans doute un meilleur moyen de check l'existence du
-	# module, auquel cas on peut faire un module qu'on appelle et qui nous donne
-	# un dict de booléens.
-except Exception:
-	print("Package python3-markdown not installed")
-	BACKEND_P3MD_AVAILABLE = False
-
-try:
-	status = subprocess.call(['which', 'pandoc'])
-	assert(status == 0)
-except Exception:
-	print("Package pandoc not installed")
-	BACKEND_PANDOC_AVAILABLE = False
+AVAILABLE_BACKENDS = get_backends_dict()
 
 BASE_PATH = os.path.dirname(os.path.realpath(__file__))
 LOCALE_PATH = os.path.join(BASE_PATH, 'locale')
@@ -181,10 +164,10 @@ class MdBackendSettings():
 		self.format_combobox = builder.get_object('format_combobox')
 		self.format_combobox.connect('changed', self.on_pandoc_format_changed)
 
-		if not BACKEND_P3MD_AVAILABLE:
+		if not AVAILABLE_BACKENDS['p3md']:
 			self.backend_stack.set_visible_child_name('backend_pandoc')
 			builder.get_object('switcher_box').set_sensitive(False)
-		elif not BACKEND_PANDOC_AVAILABLE:
+		elif not AVAILABLE_BACKENDS['pandoc']:
 			self.backend_stack.set_visible_child_name('backend_python')
 			builder.get_object('switcher_box').set_sensitive(False)
 		else:
@@ -306,7 +289,7 @@ class MdExportDialog(Gtk.Dialog):
 		self.get_content_area().set_margin_top(20)
 		self.get_content_area().set_margin_bottom(20)
 		self.get_content_area().set_spacing(20)
-		if not BACKEND_P3MD_AVAILABLE and not BACKEND_PANDOC_AVAILABLE:
+		if not AVAILABLE_BACKENDS['p3md'] and not AVAILABLE_BACKENDS['pandoc']:
 			error_label = Gtk.Label(visible=True, \
 			        label=_("Error: please install pandoc or python3-markdown"))
 			self.get_content_area().add(error_label)
@@ -525,7 +508,7 @@ class MdConfigWidget(Gtk.Box):
 		style_box.add(self.css_manager.full_widget)
 
 		self.revealjs_manager = MdRevealjsSettings(self._settings, self)
-		if BACKEND_PANDOC_AVAILABLE:
+		if AVAILABLE_BACKENDS['pandoc']:
 			style_box.add(Gtk.Separator(visible=True))
 
 			style_box.add(self._new_dim_label(HelpLabels.StyleRevealJS))
