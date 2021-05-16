@@ -318,8 +318,7 @@ class MdPreviewBar(Gtk.Box):
 		                                           and self.file_format == 'md':
 			html_content = self.get_html_from_p3md(unsaved_text)
 		else:
-			is_tex = self.file_format != 'tex'
-			html_content = self.get_html_from_pandoc(unsaved_text, is_tex)
+			html_content = self.get_html_from_pandoc(unsaved_text)
 
 		# The html code is converted into bytes
 		my_string = GLib.String()
@@ -334,7 +333,9 @@ class MdPreviewBar(Gtk.Box):
 		# CSS not applied if it's HTML
 		return self.current_page(unsaved_text, None)
 
-	def get_html_from_pandoc(self, unsaved_text, from_temp_file):
+	def get_html_from_pandoc(self, unsaved_text, from_temp_file=True):
+		command = self._settings.get_strv('pandoc-command')
+
 		# Get the current document, or the temporary document if requested
 		unsaved_text = self.current_page(unsaved_text, MARKDOWN_SPLITTERS)
 		if from_temp_file:
@@ -342,14 +343,13 @@ class MdPreviewBar(Gtk.Box):
 			f.write(unsaved_text)
 			f.close()
 			file_path = self.temp_file_md.get_path()
-		else: # if a tex file is used
+		else: # in the future, other formats might be supported
 			doc = self.parent_plugin.window.get_active_document()
 			file_path = doc.get_uri_for_display()
+			# if '-f' not in command:
+			# 	command = command + ['-f', 'latex']
 
-		# It uses pandoc to produce the html code
-		command = self._settings.get_strv('pandoc-command')
-		if not from_temp_file and '-f' not in command:
-			command = command + ['-f', 'latex']
+		# Use pandoc to produce the html code
 		command[command.index('$INPUT_FILE')] = file_path
 		result = subprocess.run(command, stdout=subprocess.PIPE)
 		html_content = result.stdout.decode('utf-8')
@@ -389,10 +389,7 @@ class MdPreviewBar(Gtk.Box):
 			ret = 'md'
 		elif temp == 'html':
 			ret = 'html'
-		elif temp == 'tex' \
-		and BACKEND_PANDOC_AVAILABLE \
-		and self._settings.get_boolean('tex-files'):
-			ret = 'tex'
+
 		if ret is None:
 			if doc.is_untitled():
 				self.display_warning(_("Can't preview an unsaved document"))

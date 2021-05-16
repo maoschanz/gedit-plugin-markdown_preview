@@ -18,14 +18,14 @@ except:
 
 class KeyboardShortcuts():
 	# TODO obviously not finished
-	
+
 	ActionsNames = [
 		'win.md-prev-format-italic',
 		'win.md-prev-format-bold',
 		'win.md-prev-insert-picture',
 		'win.md-prev-format-title-lower',
 		'win.md-prev-format-title-upper'
-	] 
+	]
 
 	SettingsKeys = [
 		'italic',
@@ -42,7 +42,7 @@ class KeyboardShortcuts():
 		_("Lower title"),
 		_("Upper title")
 	]
-	
+
 	############################################################################
 ################################################################################
 
@@ -61,14 +61,11 @@ class HelpLabels():
 	                      "possible options, input formats and output formats.")
 	PandocCustom = _("Any command using $INPUT_FILE as the name of the " + \
 	 "input file, and printing valid HTML to the standard output, is accepted.")
-	PandocTex = _("This enables the preview pane when you edit .tex files, " + \
-	    "so pandoc can try to convert them to HTML, and preview them using " + \
-	                                            "CSS if you set a stylesheet).")
-	
+
 	StyleCSS = _("TODO explanation about CSS")
 	StyleRevealJS = _("With Pandoc, you can preview the file as a revealjs " + \
 	                   "slideshow, which has pre-existing themes and settings.")
-	
+
 	############################################################################
 ################################################################################
 
@@ -94,9 +91,9 @@ class BackendsEnums():
 		'admonition': _("Adds admonitions (notes, warnings, tips, …) with the !!! tag."),
 		'wikilinks': _("Converts any [[bracketed]] word to a link.")
 	}
-	
+
 	############################################################################
-	
+
 	PandocFormatsFull = {
 		'beamer': _("LaTeX beamer slideshow (.tex)"),
 		'docx': _("Microsoft Word (.docx)"),
@@ -115,9 +112,9 @@ class BackendsEnums():
 		'revealjs': _("reveal.js slideshow (HTML/JS)"),
 		'custom': _("Custom command line")
 	}
-	
+
 	############################################################################
-	
+
 	RevealJSTransitions = {
 		'none': _("None"),
 		'fade': _("Fade"),
@@ -139,7 +136,7 @@ class BackendsEnums():
 		'solarized': _("Solarized"),
 		'white': _("White")
 	}
-	
+
 	############################################################################
 ################################################################################
 

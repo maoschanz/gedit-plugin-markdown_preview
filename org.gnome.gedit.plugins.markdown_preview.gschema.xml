@@ -14,11 +14,6 @@
       <summary>Use relative paths</summary>
       <description>Enable relative paths for links and pictures</description>
     </key>
-    <key type="b" name="tex-files">
-      <default>false</default>
-      <summary>Render .tex files</summary>
-      <description>Try to render .tex files if pandoc is installed.</description>
-    </key>
     <key type="b" name="auto-manage-pane">
       <default>true</default>
       <summary>Show/hide pane automatically</summary>

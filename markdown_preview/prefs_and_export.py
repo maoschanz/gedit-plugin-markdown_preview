@@ -76,7 +76,7 @@ class MdRevealjsSettings():
 	############################################################################
 ################################################################################
 
-class MdCSSSettings():
+class MdCssSettings():
 	def __init__(self, settings, related_window, parent_widget):
 		self._settings = settings
 		self.related_window = related_window # might sadly be None
@@ -321,7 +321,7 @@ class MdExportDialog(Gtk.Dialog):
 		self.get_content_area().add(self.no_style_label)
 
 		# Using a stylesheet is possible with both backends
-		self.css_manager = MdCSSSettings(self._settings, self, self)
+		self.css_manager = MdCssSettings(self._settings, self, self)
 		self.get_content_area().add(self.css_manager.full_widget)
 
 		# Shown instead of the CSS manager if user wants to export as revealjs
@@ -513,19 +513,11 @@ class MdConfigWidget(Gtk.Box):
 		relative_paths_switch.set_state(self._settings.get_boolean('relative'))
 		relative_paths_switch.connect('notify::active', self.on_relative_changed)
 
-		########################################################################
-
-		tex_files_switch = builder.get_object('tex_files_switch')
-		tex_files_switch.set_state(self._settings.get_boolean('tex-files'))
-		tex_files_switch.connect('notify::active', self.on_tex_support_changed)
-		tex_files_switch.set_sensitive(BACKEND_PANDOC_AVAILABLE)
-		general_box.add(self._new_dim_label(HelpLabels.PandocTex))
-
 	def _build_style_page(self, builder):
 		style_box = builder.get_object('style_box')
 
 		style_box.add(self._new_dim_label(HelpLabels.StyleCSS))
-		self.css_manager = MdCSSSettings(self._settings, None, self)
+		self.css_manager = MdCssSettings(self._settings, None, self)
 		style_box.add(self.css_manager.full_widget)
 
 		self.revealjs_manager = MdRevealjsSettings(self._settings, self)
@@ -586,9 +578,6 @@ class MdConfigWidget(Gtk.Box):
 
 	def on_relative_changed(self, w, a):
 		self._settings.set_boolean('relative', w.get_state())
-
-	def on_tex_support_changed(self, w, a):
-		self._settings.set_boolean('tex-files', w.get_state())
 
 	def on_position_changed(self, w):
 		position = w.get_active_id()

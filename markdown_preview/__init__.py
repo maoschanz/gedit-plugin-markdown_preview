@@ -306,8 +306,6 @@ class MarkdownGeditPluginView(GObject.Object, Gedit.ViewActivatable):
 			return 'md'
 		elif temp[len(temp)-1] == 'html':
 			return 'html'
-		elif temp[len(temp)-1] == 'tex':
-			return 'tex'
 		return 'error'
 
 	################
