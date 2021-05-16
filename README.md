@@ -6,8 +6,8 @@
 
 - [~] différencier explicitement le chemin d'exécution pour l'ouverture d'un
 fichier (reconnaissance format etc.) d'un reload normal
-	- [ ] régression : si un doc est ouvert et que c'est désac et qu'on active, 
-	ça ne réagit pas et on ne peut pas recharger
+	- [ ] régression : si un doc est ouvert et que c'est désac et qu'on active,
+	      ça ne réagit pas et on ne peut pas recharger
 - [ ] casser prefs_and_export.py en 2 mais intelligemment
 - [ ] links for pandoc too
 - reveal js https://github.com/jgm/pandoc/wiki/Using-pandoc-to-produce-reveal.js-slides
@@ -29,10 +29,8 @@ fichier (reconnaissance format etc.) d'un reload normal
 
 ~     TODO -->
 
-This is a plugin for the Gedit text editor, previewing .md files in the side
+This is a plugin for the Gedit text editor, previewing .md files in the side pane
 (<kbd>F9</kbd>) or the bottom (<kbd>Ctrl</kbd>+<kbd>F9</kbd>) pane.
-
-## Main features
 
 ### Previewing
 
@@ -42,7 +40,7 @@ This is a plugin for the Gedit text editor, previewing .md files in the side
 - search in the preview
 - open links and images
 
-This works for Markdown files (and theorically HTML files)
+This works for Markdown files, and theorically HTML files too.
 
 ### Exporting
 
@@ -51,6 +49,7 @@ You can print the preview, or export it:
 - if [`pandoc`](https://pandoc.org/) is installed on your system, you can export to any format it supports
 	- a stylesheet can be applied to most file formats
 	- options are available when exporting to a [revealjs](https://revealjs.com) slideshow (**WORK IN PROGRESS**)
+	- be careful if you want to export to PDF: pandoc doesn't come with all necessary dependencies by default
 - if only `python3-markdown` is installed, you can export to HTML
 	- a stylesheet can be applied
 	- `python3-markdown` [extensions](https://python-markdown.github.io/extensions/) can be used (including [third-party extensions](https://github.com/Python-Markdown/markdown/wiki/Third-Party-Extensions) like [these great ones](https://facelessuser.github.io/pymdown-extensions/)
@@ -81,8 +80,9 @@ this plugin is **work in progress**, there is no stable release yet
 Be sure to have these packages installed before trying to install the plugin:
 
 - `gedit` (≥3.22)
-- `python3-markdown` or `pandoc`
 - `gir1.2-webkit2-4.0`
+- `python3-markdown` or `pandoc`
+- if you want to export to PDF with pandoc, you'll need `pdflatex` and `lmodern`
 
 ### Download
 
@@ -94,7 +94,7 @@ Be sure to have these packages installed before trying to install the plugin:
 ### Plugin installation
 
 The script `install.sh` can be executed as root (system-wide installation) or as
-a normal user (user-wide installation, but that works only with some systems, weirdly).
+a normal user (user-wide installation).
 
 - Open the project's folder in a terminal.
 - Run `./install.sh`
@@ -112,29 +112,33 @@ The plugin is now installed and has to be activated:
 The plugin's options can be accessed…
 
 - from Gedit's preferences → Plugins → Markdown preview → Preferences
-- or with the extension's "3-dots menu" → Options
+- or with the plugin's "3-dots menu" → Options
 
 ### General options
 
-- Select the position of the pane
-- Choose if you want the plugin to understand relative paths (for links and pictures). Not recommended if you use special characters in filenames (some versions of WebKit2GTK can't load URIs with special characters for some reason)
+- Position of the preview (left side or bottom)
+- If you want the plugin to understand relative paths (for links and pictures). This is not recommended if you use special characters in filenames (some versions of WebKit2GTK can't load URIs with special characters for some reason)
 
 ### Rendering options
 
-The preview can be generated with [pandoc](https://pandoc.org/) or [python-markdown](https://python-markdown.github.io/).
+The preview can be generated with [pandoc](https://pandoc.org/) or
+[python-markdown](https://python-markdown.github.io/).
 
 ##### Options with pandoc
 
 You can decide to render the file as classic HTML (it may then use the CSS file
-you set) or as HTML with the stylesheet and javascript code from _revealjs_. (**WORK IN PROGRESS**)
+you set) or as HTML with the stylesheet and javascript code from _revealjs_.
+(**WORK IN PROGRESS**)
 
-A third "custom" option is possible: be sure to write a full, correct command
-whose output will be HTML, press "Remember" to save your custom command. (**WORK IN PROGRESS**)
+A third "custom" option is possible: be sure to write a full correct command
+whose output will be HTML, and press "Remember" to save your custom command.
+(**WORK IN PROGRESS**)
 
 ##### Options with python-markdown
 
 A set of [extensions](https://python-markdown.github.io/extensions/) is provided
-natively with python-markdown. You can enable or disable them depending on your needs.
+natively with python-markdown. You can enable or disable them depending on your
+needs.
 
 [Great third-party extensions](https://facelessuser.github.io/pymdown-extensions/)
 exist too, and once installed they can be added manually to the list.
@@ -142,10 +146,11 @@ exist too, and once installed they can be added manually to the list.
 ### Style
 
 If you render your preview using `pandoc`, you can render it as a _revealjs_
-slideshow, which comes with pre-defined themes and slide transition types. (**WORK IN PROGRESS**)
+slideshow, which comes with pre-defined themes and slide transition types.
+(**WORK IN PROGRESS**)
 
 Otherwise, a stylesheet (CSS file) can be applied to the preview (markdown files
-only, doesn't work with HTML files)
+only, it doesn't work with HTML files)
 
 ### Keyboard shortcuts
 
