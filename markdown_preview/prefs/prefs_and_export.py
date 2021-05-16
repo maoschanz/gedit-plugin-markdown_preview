@@ -4,15 +4,19 @@
 import subprocess, gi, os
 from gi.repository import Gtk, Gio
 
-from .constants import KeyboardShortcuts, HelpLabels, BackendsEnums
+from ..constants import KeyboardShortcuts, HelpLabels, BackendsEnums
 
 MD_PREVIEW_KEY_BASE = 'org.gnome.gedit.plugins.markdown_preview'
 
-# TODO both dialogs are launched from __init__ so parameters can be passed
+# XXX both dialogs are launched from __init__ so parameters can be passed, and
+# these things have to be set again.
 BACKEND_P3MD_AVAILABLE = True
 BACKEND_PANDOC_AVAILABLE = True
 try:
 	import markdown
+	# FIXME il existe sans doute un meilleur moyen de check l'existence du
+	# module, auquel cas on peut faire un module qu'on appelle et qui nous donne
+	# un dict de booléens.
 except Exception:
 	print("Package python3-markdown not installed")
 	BACKEND_P3MD_AVAILABLE = False

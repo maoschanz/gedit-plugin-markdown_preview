@@ -8,7 +8,7 @@ BASE_PATH = os.path.dirname(os.path.realpath(__file__))
 LOCALE_PATH = os.path.join(BASE_PATH, 'locale')
 
 from .preview import MdPreviewBar
-from .prefs_and_export import MdExportDialog, MdConfigWidget
+from .prefs.prefs_and_export import MdExportDialog, MdConfigWidget
 from .constants import KeyboardShortcuts
 
 try:
@@ -117,7 +117,7 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 
 		self.add_action_simple('md-prev-options', self.on_open_prefs)
 		self.add_action_simple('md-prev-reload', self.preview.on_reload)
-		
+
 		self.add_action_simple('md-prev-open-link-with', self.preview.on_open_link_with)
 		self.add_action_simple('md-prev-open-image-with', self.preview.on_open_image_with)
 
@@ -183,16 +183,16 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 			v = view.markdown_preview_view_activatable
 		else:
 			return
-		
+
 		# print('action : ' + name) # TODO terminer ça mdr
-		
+
 		if name == 'insert_table':
 			v.insert_table()
 		elif name == 'insert_picture':
 			v.insert_picture(self.window)
 		elif name == 'insert_link':
 			v.insert_link(self.window)
-		
+
 		elif name == 'format_bold':
 			v.format_bold()
 		elif name == 'format_italic':
@@ -203,7 +203,7 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 			v.format_quote()
 		elif name == 'format_underline':
 			v.format_underline()
-		
+
 		elif name == 'list_ordered':
 			v.list_ordered()
 		elif name == 'list_unordered':
@@ -213,7 +213,7 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 			v.format_title_upper()
 		elif name == 'format_title_lower':
 			v.format_title_lower()
-		
+
 		elif name == 'format_title_1':
 			v.format_title(1)
 		elif name == 'format_title_2':
@@ -285,7 +285,7 @@ class MarkdownGeditPluginView(GObject.Object, Gedit.ViewActivatable):
 	def populate_popup(self, view, popup):
 		if not isinstance(popup, Gtk.MenuShell):
 			return
-		
+
 		item = Gtk.SeparatorMenuItem()
 		item.show()
 		popup.append(item)
@@ -413,19 +413,19 @@ class MarkdownGeditPluginView(GObject.Object, Gedit.ViewActivatable):
 		document.begin_user_action()
 
 		for i in range(0, number_lines):
-			iter = document.get_iter_at_mark(imark)
-			if not iter.ends_line():
+			iterator = document.get_iter_at_mark(imark)
+			if not iterator.ends_line():
 				document.insert(iter, start_tag)
 				if end_tag is not None:
 					if i != number_lines -1:
-						iter = document.get_iter_at_mark(imark)
-						iter.forward_to_line_end()
-						document.insert(iter, end_tag)
+						iterator = document.get_iter_at_mark(imark)
+						iterator.forward_to_line_end()
+						document.insert(iterator, end_tag)
 					else:
-						iter = document.get_iter_at_mark(emark)
-						document.insert(iter, end_tag)
-			iter = document.get_iter_at_mark(imark)
-			iter.forward_line()
+						iterator = document.get_iter_at_mark(emark)
+						document.insert(iterator, end_tag)
+			iterator = document.get_iter_at_mark(imark)
+			iterator.forward_line()
 			document.delete_mark(imark)
 			imark = document.create_mark("iter", iter, True)
 

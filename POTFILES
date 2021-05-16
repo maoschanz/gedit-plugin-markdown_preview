@@ -1,11 +1,14 @@
-./markdown_preview/prefs_and_export.py
 ./markdown_preview/__init__.py
 ./markdown_preview/constants.py
 ./markdown_preview/preview.py
 
-./markdown_preview/backend_box.ui
-./markdown_preview/css_box.ui
 ./markdown_preview/menus.ui
-./markdown_preview/prefs.ui
 ./markdown_preview/preview.ui
-./markdown_preview/revealjs_box.ui
+
+./markdown_preview/prefs/prefs_and_export.py
+
+./markdown_preview/prefs/backend_box.ui
+./markdown_preview/prefs/css_box.ui
+./markdown_preview/prefs/prefs.ui
+./markdown_preview/prefs/revealjs_box.ui
+
