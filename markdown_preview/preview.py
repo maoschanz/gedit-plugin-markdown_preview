@@ -5,6 +5,7 @@ import subprocess, gi, os
 gi.require_version('WebKit2', '4.0')
 from gi.repository import Gtk, Gio, WebKit2, GLib
 from .utils import get_backends_dict
+from .find_manager import MdFindManager
 
 AVAILABLE_BACKENDS = get_backends_dict()
 if AVAILABLE_BACKENDS['p3md']:
@@ -24,7 +25,11 @@ except:
 MD_PREVIEW_KEY_BASE = 'org.gnome.gedit.plugins.markdown_preview'
 BASE_TEMP_NAME = '/tmp/gedit_plugin_markdown_preview'
 
-MARKDOWN_SPLITTERS = ['\n----', '\n# ', '\n## ']
+MARKDOWN_SPLITTERS = {
+	'hr': "\n----",
+	'h1': "\n# ",
+	'h2': "\n## "
+}
 
 ################################################################################
 
@@ -161,15 +166,8 @@ class MdPreviewBar(Gtk.Box):
 		menuBtn.set_menu_model(menu_builder.get_object('md-preview-menu'))
 
 		# Search popover
-		search_entry = ui_builder.get_object('search_entry')
-		search_entry.connect('search-changed', self.on_search_changed)
-
-		ui_builder.get_object('up_btn').connect('clicked', self.on_search_up)
-		ui_builder.get_object('down_btn').connect('clicked', self.on_search_down)
-
-		self.find_controller = self._webview.get_find_controller()
-		self.find_controller.connect('counted-matches', self.on_count_change)
-		self.count_label = ui_builder.get_object('count_label')
+		options = WebKit2.FindOptions.CASE_INSENSITIVE
+		MdFindManager(ui_builder, self._webview.get_find_controller(), options)
 
 		# Navigation between pages
 		self.pages_box = ui_builder.get_object('pages_box')
@@ -396,12 +394,8 @@ class MdPreviewBar(Gtk.Box):
 	def current_page(self, lang_string, splitters_array):
 		if self.pagination_mode == 'whole' or splitters_array == None:
 			return lang_string
-		elif self.pagination_mode == 'h1':
-			correct_splitter = splitters_array[1]
-		elif self.pagination_mode == 'h2':
-			correct_splitter = splitters_array[2]
-		else: # self.pagination_mode == 'hr':
-			correct_splitter = splitters_array[0]
+		else:
+			correct_splitter = splitters_array[self.pagination_mode]
 
 		# The document is (as much as possible) splitted in its original
 		# language. It avoids converting some markdown to html which wouldn't be
@@ -409,20 +403,18 @@ class MdPreviewBar(Gtk.Box):
 		lang_pages = lang_string.split(correct_splitter)
 		self.page_number = len(lang_pages)
 		if self.page_index >= self.page_number:
-			self.page_index = self.page_number-1
+			self.page_index = self.page_number - 1
 			# TODO remember the page index in the Gedit.View object
 		lang_current_page = lang_pages[self.page_index]
 
 		if self.page_index == 0:
 			pass
-		elif self.pagination_mode == 'h1':
-			lang_current_page = splitters_array[1] + lang_current_page
-		elif self.pagination_mode == 'h2':
-			lang_current_page = splitters_array[2] + lang_current_page
+		elif self.pagination_mode != 'hr':
+			lang_current_page = correct_splitter + lang_current_page
 		return lang_current_page
 
 	def get_dummy_uri(self):
-		# Support for relative paths is cool, but breaks CSS in many cases
+		# Support for relative paths is cool, but breaks CSS in too many cases
 		if self._settings.get_boolean('relative'):
 			return self.parent_plugin.window.get_active_document().get_file().get_location().get_uri()
 		else:
@@ -434,7 +426,7 @@ class MdPreviewBar(Gtk.Box):
 	def auto_change_panel(self):
 		position = self.get_wanted_position()
 		window = self.parent_plugin.window
-		# Get the bottom bar (A Gtk.Stack), or the side bar, and add our box to it.
+		# Get the bottom bar (a Gtk.Stack), or the side bar, and add our box to it.
 		if position == 'bottom' and self.panel != window.get_bottom_panel():
 			self.change_panel()
 			self.update_visibility()
@@ -462,7 +454,7 @@ class MdPreviewBar(Gtk.Box):
 
 	def show_on_panel(self):
 		position = self.get_wanted_position()
-		# Get the bottom bar (A Gtk.Stack), or the side bar, and add our box to it.
+		# Get the bottom bar (a Gtk.Stack), or the side bar, and add our box to it.
 		if position == 'bottom':
 			self.panel = self.parent_plugin.window.get_bottom_panel()
 			self.preview_bar.props.orientation = Gtk.Orientation.HORIZONTAL
@@ -511,23 +503,6 @@ class MdPreviewBar(Gtk.Box):
 
 	def on_zoom_original(self, *args):
 		self._webview.set_zoom_level(1)
-
-	############################################################################
-	# Search ###################################################################
-
-	def on_search_changed(self, *args):
-		text = args[0].get_text()
-		self.find_controller.count_matches(text, WebKit2.FindOptions.CASE_INSENSITIVE, 100)
-		self.find_controller.search(text, WebKit2.FindOptions.CASE_INSENSITIVE, 100)
-
-	def on_search_up(self, btn):
-		self.find_controller.search_previous()
-
-	def on_search_down(self, btn):
-		self.find_controller.search_next()
-
-	def on_count_change(self, find_ctrl, number):
-		self.count_label.set_text(_("%s results") % number)
 
 	############################################################################
 ################################################################################
