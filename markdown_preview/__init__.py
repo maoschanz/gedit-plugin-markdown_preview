@@ -7,7 +7,7 @@ from gi.repository import GObject, Gtk, Gedit, Gio, PeasGtk, GLib
 BASE_PATH = os.path.dirname(os.path.realpath(__file__))
 LOCALE_PATH = os.path.join(BASE_PATH, 'locale')
 
-from .preview import MdPreviewBar
+from .main_container import MdMainContainer
 from .prefs.prefs_and_export import MdExportDialog, MdConfigWidget
 from .constants import KeyboardShortcuts
 
@@ -78,7 +78,7 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 	def __init__(self):
 		GObject.Object.__init__(self)
 		self._auto_position = False # XXX
-		self.preview = MdPreviewBar(self)
+		self.preview = MdMainContainer(self)
 
 	def do_activate(self):
 		self._handlers = []
@@ -108,9 +108,9 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		self.add_action_simple('md-prev-export-doc', self.export_doc)
 		self.add_action_simple('md-prev-print-doc', self.preview.print_doc)
 
-		self.add_action_simple('md-prev-zoom-in', self.preview.on_zoom_in)
-		self.add_action_simple('md-prev-zoom-original', self.preview.on_zoom_original)
-		self.add_action_simple('md-prev-zoom-out', self.preview.on_zoom_out)
+		self.add_action_simple('md-prev-zoom-in', self.on_zoom_in)
+		self.add_action_simple('md-prev-zoom-original', self.on_zoom_original)
+		self.add_action_simple('md-prev-zoom-out', self.on_zoom_out)
 
 		self.add_action_simple('md-prev-next', self.preview.on_next_page)
 		self.add_action_simple('md-prev-previous', self.preview.on_previous_page)
@@ -118,8 +118,8 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		self.add_action_simple('md-prev-options', self.on_open_prefs)
 		self.add_action_simple('md-prev-reload', self.preview.on_reload)
 
-		self.add_action_simple('md-prev-open-link-with', self.preview.on_open_link_with)
-		self.add_action_simple('md-prev-open-image-with', self.preview.on_open_image_with)
+		self.add_action_simple('md-prev-open-link-with', self.on_open_link_with)
+		self.add_action_simple('md-prev-open-image-with', self.on_open_image_with)
 
 		action_view_mode = Gio.SimpleAction().new_stateful('md-set-view-mode', \
 		            GLib.VariantType.new('s'), GLib.Variant.new_string('whole'))
@@ -261,6 +261,24 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 			dialog.do_cancel_export()
 		elif response_id == Gtk.ResponseType.OK:
 			dialog.do_next()
+
+	############################################################################
+	# Actions directly tied to the webview #####################################
+
+	def on_zoom_in(self, *args):
+		self.preview._webview_manager.on_zoom_in()
+
+	def on_zoom_original(self, *args):
+		self.preview._webview_manager.on_zoom_original()
+
+	def on_zoom_out(self, *args):
+		self.preview._webview_manager.on_zoom_out()
+
+	def on_open_link_with(self, *args):
+		self.preview._webview_manager.on_open_link_with()
+
+	def on_open_image_with(self, *args):
+		self.preview._webview_manager.on_open_image_with()
 
 ################################################################################
 
