@@ -1,18 +1,21 @@
 # constants.py
 # GPL v3
 
-import os
+from .utils import init_gettext
 
-BASE_PATH = os.path.dirname(os.path.realpath(__file__))
-LOCALE_PATH = os.path.join(BASE_PATH, 'locale')
+_ = init_gettext()
 
-try:
-	import gettext
-	gettext.bindtextdomain('gedit-plugin-markdown-preview', LOCALE_PATH)
-	gettext.textdomain('gedit-plugin-markdown-preview')
-	_ = gettext.gettext
-except:
-	_ = lambda s: s
+################################################################################
+
+MD_PREVIEW_KEY_BASE = 'org.gnome.gedit.plugins.markdown_preview'
+
+BASE_TEMP_NAME = '/tmp/gedit_plugin_markdown_preview'
+
+MARKDOWN_SPLITTERS = {
+	'hr': "\n----",
+	'h1': "\n# ",
+	'h2': "\n## "
+}
 
 ################################################################################
 

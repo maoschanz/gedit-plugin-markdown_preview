@@ -6,10 +6,9 @@ from gi.repository import Gtk, Gio
 
 from .rendering_settings import MdCssSettings, MdRevealjsSettings, MdBackendSettings
 from ..utils import get_backends_dict
-from ..constants import KeyboardShortcuts, HelpLabels, BackendsEnums
+from ..constants import KeyboardShortcuts, HelpLabels, BackendsEnums, MD_PREVIEW_KEY_BASE
 
 BASE_PATH = os.path.dirname(os.path.realpath(__file__))
-MD_PREVIEW_KEY_BASE = 'org.gnome.gedit.plugins.markdown_preview'
 
 ################################################################################
 

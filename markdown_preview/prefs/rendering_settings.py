@@ -5,18 +5,11 @@ import gi, os
 from gi.repository import Gtk
 
 from ..constants import HelpLabels, BackendsEnums
-from ..utils import get_backends_dict
+from ..utils import get_backends_dict, init_gettext
+
+_ = init_gettext()
 
 BASE_PATH = os.path.dirname(os.path.realpath(__file__))
-LOCALE_PATH = os.path.join(BASE_PATH, 'locale')
-
-try:
-	import gettext
-	gettext.bindtextdomain('gedit-plugin-markdown-preview', LOCALE_PATH)
-	gettext.textdomain('gedit-plugin-markdown-preview')
-	_ = gettext.gettext
-except:
-	_ = lambda s: s
 
 ################################################################################
 

@@ -1,6 +1,10 @@
 # find_manager.py
 # GPL v3
 
+from .utils import init_gettext
+
+_ = init_gettext()
+
 class MdFindManager():
 
 	def __init__(self, ui_builder, find_controller, find_options):
@@ -29,7 +33,10 @@ class MdFindManager():
 		self._find_controller.search_next()
 
 	def on_count_change(self, find_ctrl, number):
-		self._count_label.set_text(_("%s results") % number)
+		if number > 100:
+			self._count_label.set_text(_("More than 100 results"))
+		else:
+			self._count_label.set_text(_("%s results") % number)
 
 	############################################################################
 ################################################################################

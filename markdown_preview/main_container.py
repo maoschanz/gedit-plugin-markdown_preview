@@ -3,32 +3,17 @@
 
 import subprocess, gi, os
 from gi.repository import Gtk, Gio, GLib
-from .utils import get_backends_dict
+from .utils import get_backends_dict, init_gettext
 from .webview_manager import MdWebViewManager
+from .constants import MD_PREVIEW_KEY_BASE, MARKDOWN_SPLITTERS, BASE_TEMP_NAME
 
 AVAILABLE_BACKENDS = get_backends_dict()
 if AVAILABLE_BACKENDS['p3md']:
 	import markdown
 
+_ = init_gettext()
+
 BASE_PATH = os.path.dirname(os.path.realpath(__file__))
-LOCALE_PATH = os.path.join(BASE_PATH, 'locale')
-
-try:
-	import gettext
-	gettext.bindtextdomain('gedit-plugin-markdown-preview', LOCALE_PATH)
-	gettext.textdomain('gedit-plugin-markdown-preview')
-	_ = gettext.gettext
-except:
-	_ = lambda s: s
-
-MD_PREVIEW_KEY_BASE = 'org.gnome.gedit.plugins.markdown_preview'
-BASE_TEMP_NAME = '/tmp/gedit_plugin_markdown_preview'
-
-MARKDOWN_SPLITTERS = {
-	'hr': "\n----",
-	'h1': "\n# ",
-	'h2': "\n## "
-}
 
 ################################################################################
 
@@ -132,6 +117,7 @@ class MdMainContainer(Gtk.Box):
 	# Keep settings as attributes instead of querying GSettings too much #######
 
 	def _on_stylesheet_change(self, *args):
+		# maybe validate it?
 		self._stylesheet = self._settings.get_string('style')
 
 	def _on_backend_change(self, *args):

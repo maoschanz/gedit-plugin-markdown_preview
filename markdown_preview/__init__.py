@@ -4,23 +4,15 @@
 import subprocess, gi, os
 from gi.repository import GObject, Gtk, Gedit, Gio, PeasGtk, GLib
 
-BASE_PATH = os.path.dirname(os.path.realpath(__file__))
-LOCALE_PATH = os.path.join(BASE_PATH, 'locale')
-
 from .main_container import MdMainContainer
 from .prefs.prefs_dialog import MdConfigWidget
 from .prefs.export_dialog import MdExportDialog
-from .constants import KeyboardShortcuts
+from .constants import KeyboardShortcuts, MD_PREVIEW_KEY_BASE
+from .utils import init_gettext
 
-try:
-	import gettext
-	gettext.bindtextdomain('gedit-plugin-markdown-preview', LOCALE_PATH)
-	gettext.textdomain('gedit-plugin-markdown-preview')
-	_ = gettext.gettext
-except:
-	_ = lambda s: s
+_ = init_gettext()
 
-MD_PREVIEW_KEY_BASE = 'org.gnome.gedit.plugins.markdown_preview'
+BASE_PATH = os.path.dirname(os.path.realpath(__file__))
 
 ################################################################################
 
