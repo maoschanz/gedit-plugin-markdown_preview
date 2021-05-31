@@ -277,8 +277,10 @@ class MdMainContainer(Gtk.Box):
 		else: # in the future, other formats might be supported
 			doc = self.parent_plugin.window.get_active_document()
 			file_path = doc.get_uri_for_display()
-			# if '-f' not in command:
-			# 	command = command + ['-f', 'latex']
+
+		if '-c' not in command and self._settings.get_boolean('use-style'):
+			command.append('-c')
+			command.append(self._stylesheet)
 
 		# Use pandoc to produce the html code
 		command[command.index('$INPUT_FILE')] = file_path

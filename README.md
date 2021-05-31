@@ -122,15 +122,8 @@ The plugin's options can be accessed…
 The preview can be generated with [pandoc](https://pandoc.org/) or
 [python-markdown](https://python-markdown.github.io/).
 
-##### Options with pandoc
-
-You can decide to render the file as classic HTML (it may then use the CSS file
-you set) or as HTML with the stylesheet and javascript code from _revealjs_.
-(**WORK IN PROGRESS**)
-
-A third "custom" option is possible: be sure to write a full correct command
-whose output will be HTML, and press "Remember" to save your custom command.
-(**WORK IN PROGRESS**)
+A stylesheet (CSS file) can be applied to the preview (markdown files only, it
+will not be loaded for HTML files).
 
 ##### Options with python-markdown
 
@@ -141,14 +134,16 @@ needs.
 [Great third-party extensions](https://facelessuser.github.io/pymdown-extensions/)
 exist too, and once installed they can be added manually to the list.
 
-### Style
+##### Options with pandoc
 
-If you render your preview using `pandoc`, you can render it as a _revealjs_
-slideshow, which comes with pre-defined themes and slide transition types.
-(**WORK IN PROGRESS**)
-
-Otherwise, a stylesheet (CSS file) can be applied to the preview (markdown files
-only, it doesn't work with HTML files)
+You can decide to render the file
+ directly as HTML (it may then use the CSS file you set);
+<!--- or as HTML with the stylesheet and javascript code from _revealjs_, to preview-->
+<!--the file as a slideshow, which comes with pre-defined themes and slide-->
+<!--transition types. (**WORK IN PROGRESS**);-->
+<!--- or following what you write as the "custom" option: be sure to write a full-->
+<!--correct command whose output will be HTML code, and press "Remember" to save-->
+<!--your custom command. (**WORK IN PROGRESS**)-->
 
 ### Keyboard shortcuts
 
