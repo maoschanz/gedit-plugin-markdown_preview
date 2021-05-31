@@ -58,6 +58,7 @@ class MdMainContainer(Gtk.Box):
 		self.page_number = 1
 		self.temp_file_md = Gio.File.new_for_path(BASE_TEMP_NAME + '.md')
 		self.fix_backend_setting()
+		self.on_backend_change()
 
 	def fix_backend_setting(self):
 		if not AVAILABLE_BACKENDS['p3md'] and not AVAILABLE_BACKENDS['pandoc']:
@@ -121,6 +122,26 @@ class MdMainContainer(Gtk.Box):
 
 	def print_doc(self, *args):
 		self._webview_manager.print_webview()
+
+	############################################################################
+
+	def on_backend_change(self, *args):
+		self._active_backend = self._settings.get_string('backend')
+		if self._active_backend == 'python':
+			self.validate_p3md_extensions()
+		self.on_reload()
+
+	def validate_p3md_extensions(self):
+		initial_md_extensions = self._settings.get_strv('extensions')
+		final_md_extensions = []
+		for extension in initial_md_extensions:
+			try:
+				markdown.markdown("test", extensions=[extension])
+				final_md_extensions.append(extension)
+			except Exception:
+				self.display_warning(_("The extension '%s' isn't valid") % extension)
+				# XXX ne marche pas à l'initialisation car il y a un close après
+		self._settings.set_strv('extensions', final_md_extensions)
 
 	############################################################################
 
@@ -220,8 +241,7 @@ class MdMainContainer(Gtk.Box):
 		unsaved_text = doc.get_text(start, end, True)
 		if self.file_format == 'html':
 			html_content = self.get_html_from_html(unsaved_text)
-		elif self._settings.get_string('backend') == 'python' \
-		                                           and self.file_format == 'md':
+		elif self._active_backend == 'python' and self.file_format == 'md':
 			html_content = self.get_html_from_p3md(unsaved_text)
 		else:
 			html_content = self.get_html_from_pandoc(unsaved_text)
