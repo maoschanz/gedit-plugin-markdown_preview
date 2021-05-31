@@ -41,6 +41,12 @@ class MdMainContainer(Gtk.Box):
 		self.parent_plugin = parent_plugin
 		self.file_format = 'error'
 
+		# Where the values of settings will be loaded later
+		self._active_backend = 'python'
+		self._stylesheet = ''
+		self._p3md_extensions = []
+		self._pandoc_command = []
+
 	def do_activate(self):
 		self._handlers = []
 		self._settings = Gio.Settings.new(MD_PREVIEW_KEY_BASE)
@@ -58,7 +64,6 @@ class MdMainContainer(Gtk.Box):
 		self.page_number = 1
 		self.temp_file_md = Gio.File.new_for_path(BASE_TEMP_NAME + '.md')
 		self.fix_backend_setting()
-		self.on_backend_change()
 
 	def fix_backend_setting(self):
 		if not AVAILABLE_BACKENDS['p3md'] and not AVAILABLE_BACKENDS['pandoc']:
@@ -124,14 +129,21 @@ class MdMainContainer(Gtk.Box):
 		self._webview_manager.print_webview()
 
 	############################################################################
+	# Keep settings as attributes instead of querying GSettings too much #######
 
-	def on_backend_change(self, *args):
+	def _on_stylesheet_change(self, *args):
+		self._stylesheet = self._settings.get_string('style')
+
+	def _on_backend_change(self, *args):
 		self._active_backend = self._settings.get_string('backend')
 		if self._active_backend == 'python':
-			self.validate_p3md_extensions()
+			self._validate_p3md_extensions()
+		else:
+			self._validate_pandoc_command()
 		self.on_reload()
 
-	def validate_p3md_extensions(self):
+	def _validate_p3md_extensions(self):
+		# https://github.com/Python-Markdown/markdown/wiki/Third-Party-Extensions
 		initial_md_extensions = self._settings.get_strv('extensions')
 		final_md_extensions = []
 		for extension in initial_md_extensions:
@@ -140,8 +152,14 @@ class MdMainContainer(Gtk.Box):
 				final_md_extensions.append(extension)
 			except Exception:
 				self.display_warning(_("The extension '%s' isn't valid") % extension)
-				# XXX ne marche pas à l'initialisation car il y a un close après
+				# ne marche pas initialement car il y a un `close_warning` après
 		self._settings.set_strv('extensions', final_md_extensions)
+		self._p3md_extensions = final_md_extensions
+
+	def _validate_pandoc_command(self):
+		pandoc_command = self._settings.get_strv('pandoc-command')
+		# TODO validation ?
+		self._pandoc_command = pandoc_command
 
 	############################################################################
 
@@ -261,7 +279,7 @@ class MdMainContainer(Gtk.Box):
 		return self.current_page(unsaved_text, None)
 
 	def get_html_from_pandoc(self, unsaved_text, from_temp_file=True):
-		command = self._settings.get_strv('pandoc-command')
+		command = self._pandoc_command.copy()
 
 		# Get the current document, or the temporary document if requested
 		unsaved_text = self.current_page(unsaved_text, MARKDOWN_SPLITTERS)
@@ -284,17 +302,17 @@ class MdMainContainer(Gtk.Box):
 
 	def get_html_from_p3md(self, unsaved_text):
 		unsaved_text = self.current_page(unsaved_text, MARKDOWN_SPLITTERS)
-		# https://github.com/Python-Markdown/markdown/wiki/Third-Party-Extensions
-		md_extensions = self._settings.get_strv('extensions')
 		if not self._settings.get_boolean('use-style'):
 			pre_string = '<html><head><meta charset="utf-8" /></head><body>'
 		else:
-			pre_string = '<html><head><meta charset="utf-8" />' + \
-			                    '<link rel="stylesheet" href="' + \
-			            self._settings.get_string('style') + '" /></head><body>'
-			# TODO cacher cet accès bdd dans le recognize_format ??
+			pre_string = '<html><head><meta charset="utf-8" /><link ' + \
+			  'rel="stylesheet" href="' + self._stylesheet + '" /></head><body>'
 		post_string = '</body></html>'
-		html_string = markdown.markdown(unsaved_text, extensions=md_extensions)
+
+		html_string = markdown.markdown(
+			unsaved_text,
+			extensions=self._p3md_extensions
+		)
 		html_content = pre_string + html_string + post_string
 		return html_content
 
@@ -307,7 +325,6 @@ class MdMainContainer(Gtk.Box):
 			self.on_reload()
 
 	def recognize_format(self):
-		# TODO that method looks like a duplicate ?
 		doc = self.parent_plugin.window.get_active_document()
 		# It will not load documents which are not .md/.html/.tex
 		name = doc.get_short_name_for_display()
@@ -326,7 +343,9 @@ class MdMainContainer(Gtk.Box):
 				self.display_warning(_("Unsupported type of document: ") + name)
 			ret = 'error'
 		else:
-			# TODO cacher les accès bdd ici (css_uri, array pandoc, is_tex, ...)
+			# Most accesses to GSettings are cached here
+			self._on_backend_change()
+			self._on_stylesheet_change()
 			self.close_warning()
 		self.set_pagination_available(ret)
 		# print(ret)

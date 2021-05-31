@@ -62,8 +62,8 @@ class HelpLabels():
 	PandocCustom = _("Any command using $INPUT_FILE as the name of the " + \
 	 "input file, and printing valid HTML to the standard output, is accepted.")
 
-	StyleCSS = _("You can select a .css file to make your document look " + \
-	                         "nice and modern, or to increase its readability.")
+	StyleCSS = _("You can select a stylesheet (.css file) to make your " + \
+	           "document look nice and modern, or to increase its readability.")
 	StyleRevealJS = _("With Pandoc, you can preview the file as a revealjs " + \
 	                   "slideshow, which has pre-existing themes and settings.")
 
