@@ -1,11 +1,15 @@
 ./markdown_preview/__init__.py
 ./markdown_preview/constants.py
-./markdown_preview/preview.py
+./markdown_preview/find_manager.py
+./markdown_preview/main_container.py
+./markdown_preview/webview_manager.py
 
 ./markdown_preview/menus.ui
 ./markdown_preview/preview.ui
 
-./markdown_preview/prefs/prefs_and_export.py
+./markdown_preview/prefs/export_dialog.py
+./markdown_preview/prefs/prefs_dialog.py
+./markdown_preview/prefs/rendering_settings.py
 
 ./markdown_preview/prefs/backend_box.ui
 ./markdown_preview/prefs/css_box.ui
