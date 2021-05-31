@@ -153,8 +153,10 @@ class MdBackendSettings():
 
 		# Load UI for the pandoc backend
 		self.pandoc_cli_entry = builder.get_object('pandoc_command_entry')
-		self.pandoc_cli_help = builder.get_object('help_label_pandoc')
-		self.pandoc_cli_help.set_label(HelpLabels.PandocGeneral)
+		pandoc_cli_help = builder.get_object('help_label_pandoc')
+		pandoc_cli_help.set_label(HelpLabels.PandocGeneral)
+		self.pandoc_cli_custom = builder.get_object('help_label_pandoc_custom')
+		self.pandoc_cli_custom.set_label(HelpLabels.PandocCustom)
 		self.remember_button = builder.get_object('remember_button')
 		self.remember_button.connect('clicked', self.on_remember)
 		self.format_combobox = builder.get_object('format_combobox')
@@ -197,6 +199,7 @@ class MdBackendSettings():
 
 	def init_pandoc_combobox(self, default_id):
 		self.format_combobox.set_active_id(default_id)
+		self.adapt_widgets_to_pandoc_custom(default_id == 'custom')
 
 	def update_pandoc_combobox(self):
 		self.on_pandoc_format_changed(self.format_combobox)
@@ -213,14 +216,13 @@ class MdBackendSettings():
 
 	def on_pandoc_format_changed(self, w):
 		output_format = w.get_active_id()
-		is_custom = output_format == 'custom'
-		self.remember_button.set_sensitive(is_custom)
-		self.pandoc_cli_entry.set_sensitive(is_custom)
+		self.adapt_widgets_to_pandoc_custom(output_format == 'custom')
 		self.parent_widget.set_command_for_format(output_format)
-		if is_custom:
-			self.pandoc_cli_help.set_label(HelpLabels.PandocCustom)
-		else:
-			self.pandoc_cli_help.set_label(HelpLabels.PandocGeneral)
+
+	def adapt_widgets_to_pandoc_custom(self, is_custom):
+		self.pandoc_cli_entry.set_sensitive(is_custom)
+		self.remember_button.set_visible(is_custom)
+		self.pandoc_cli_custom.set_visible(is_custom)
 
 	############################################################################
 	# python3-markdown backend options #########################################

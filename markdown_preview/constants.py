@@ -62,7 +62,8 @@ class HelpLabels():
 	PandocCustom = _("Any command using $INPUT_FILE as the name of the " + \
 	 "input file, and printing valid HTML to the standard output, is accepted.")
 
-	StyleCSS = _("TODO explanation about CSS")
+	StyleCSS = _("You can select a .css file to make your document look " + \
+	                         "nice and modern, or to increase its readability.")
 	StyleRevealJS = _("With Pandoc, you can preview the file as a revealjs " + \
 	                   "slideshow, which has pre-existing themes and settings.")
 
@@ -84,12 +85,12 @@ class BackendsEnums():
 	P3mdDescriptions = {
 		'extra': _("A compilation of various extensions (Abbreviations, Attribute Lists, Definition Lists, Fenced Code Blocks, Footnotes, Tables)."),
 		'toc': _("Shows a clickable table of content with the [TOC] tag."),
-		'codehilite': _("Highlights your code with a correct syntax coloration (it needs to be set up and have some dependencies)."), # XXX et du coup, lesquelles?
 		'nl2br': _("Adds a line break at each new line."),
 		'smarty': _("Converts ASCII dashes, quotes and ellipses to their nice-looking equivalents."),
 		'sane_lists': _("Alters the behavior of the lists syntax."),
 		'admonition': _("Adds admonitions (notes, warnings, tips, …) with the !!! tag."),
-		'wikilinks': _("Converts any [[bracketed]] word to a link.")
+		'wikilinks': _("Converts any [[bracketed]] word to a link."),
+		'codehilite': _("Highlights your code with a correct syntax coloration (it needs to be set up and have some dependencies)."), # XXX et du coup, lesquelles?
 	}
 
 	############################################################################

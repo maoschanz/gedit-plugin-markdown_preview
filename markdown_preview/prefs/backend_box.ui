@@ -120,11 +120,40 @@
           </packing>
         </child>
 
+        <!-- *************************************************************** -->
+
         <child>
           <object class="GtkBox">
             <property name="visible">True</property>
             <property name="orientation">vertical</property>
             <property name="spacing">16</property>
+            <child>
+              <object class="GtkBox">
+                <property name="orientation">horizontal</property>
+                <property name="expand">False</property>
+                <property name="visible">True</property>
+                <property name="spacing">16</property>
+                <child>
+                  <object class="GtkLabel" id="help_label_pandoc">
+                    <property name="visible">True</property>
+                    <property name="wrap">True</property>
+                    <property name="use-markup">True</property>
+                    <property name="max-width-chars">50</property>
+                    <style><class name="dim-label"/></style>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLinkButton">
+                    <property name="visible">True</property>
+                    <property name="uri">https://pandoc.org/MANUAL.html</property>
+                    <property name="label" translatable="yes">More informations</property>
+                  </object>
+                  <packing>
+                    <property name="pack-type">end</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
             <child>
               <object class="GtkBox">
                 <property name="visible">True</property>
@@ -170,7 +199,7 @@
                 <property name="visible">True</property>
                 <property name="spacing">16</property>
                 <child>
-                  <object class="GtkLabel" id="help_label_pandoc">
+                  <object class="GtkLabel" id="help_label_pandoc_custom">
                     <property name="visible">True</property>
                     <property name="wrap">True</property>
                     <property name="use-markup">True</property>
