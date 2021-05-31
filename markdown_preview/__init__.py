@@ -8,7 +8,8 @@ BASE_PATH = os.path.dirname(os.path.realpath(__file__))
 LOCALE_PATH = os.path.join(BASE_PATH, 'locale')
 
 from .main_container import MdMainContainer
-from .prefs.prefs_and_export import MdExportDialog, MdConfigWidget
+from .prefs.prefs_dialog import MdConfigWidget
+from .prefs.export_dialog import MdExportDialog
 from .constants import KeyboardShortcuts
 
 try:
@@ -70,6 +71,7 @@ class MarkdownGeditPluginApp(GObject.Object, Gedit.AppActivatable):
 		for i in range(len(KeyboardShortcuts.SettingsKeys)):
 			self.app.remove_accelerator(KeyboardShortcuts.SettingsKeys[i], None)
 
+	############################################################################
 ################################################################################
 
 class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk.Configurable):
@@ -280,6 +282,7 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 	def on_open_image_with(self, *args):
 		self.preview._webview_manager.on_open_image_with()
 
+	############################################################################
 ################################################################################
 
 class MarkdownGeditPluginView(GObject.Object, Gedit.ViewActivatable):
