@@ -8,6 +8,10 @@ from .rendering_settings import MdCssSettings, MdRevealjsSettings, MdBackendSett
 from ..utils import get_backends_dict
 from ..constants import BackendsEnums
 
+AVAILABLE_BACKENDS = get_backends_dict()
+if AVAILABLE_BACKENDS['p3md']:
+	import markdown
+
 ################################################################################
 
 class MdExportAssistant(Gtk.Assistant):
@@ -16,7 +20,7 @@ class MdExportAssistant(Gtk.Assistant):
 	def __init__(self, file_format, gedit_window, settings, **kwargs):
 		super().__init__(use_header_bar=True, title=_("Export as…"), \
 		                        default_width=700, default_height=400, **kwargs)
-		self.file_format = file_format
+		self._source_file_format = file_format # not used yet
 		self.gedit_window = gedit_window
 		self._settings = settings
 		self.output_extension = '.pdf'
@@ -24,6 +28,7 @@ class MdExportAssistant(Gtk.Assistant):
 		if self._init_1st_page():
 			self._init_2nd_page()
 			self._init_3rd_page()
+			self._init_4th_page()
 
 	############################################################################
 
@@ -33,7 +38,6 @@ class MdExportAssistant(Gtk.Assistant):
 		available_formats = {}
 		self._all_radio_btns = {}
 
-		AVAILABLE_BACKENDS = get_backends_dict()
 		if AVAILABLE_BACKENDS['p3md']:
 			available_formats = {
 				'pdf': _("Portable Document Format (.pdf)"),
@@ -74,34 +78,34 @@ class MdExportAssistant(Gtk.Assistant):
 		return True
 
 	def _init_2nd_page(self):
-		options_page = Gtk.Box(visible=True, margin=12, spacing=8, \
+		style_page = Gtk.Box(visible=True, margin=12, \
 		                                   orientation=Gtk.Orientation.VERTICAL)
-
-		# Add the backend settings to the dialog
-		self._backend = MdBackendSettings(_("Export file with:"), \
-		                                            self._settings, False, self)
-		options_page.add(self._backend.full_widget)
-		self._backend.fill_pandoc_combobox(BackendsEnums.PandocFormatsFull)
-
-		options_page.add(Gtk.Separator(visible=True))
-
 		self.no_style_label = Gtk.Label(_("No styling options available for this file format."))
-		options_page.add(self.no_style_label)
+		style_page.add(self.no_style_label)
 
 		# Using a stylesheet is possible with both backends
 		self.css_manager = MdCssSettings(self._settings, self, self)
-		options_page.add(self.css_manager.full_widget)
+		style_page.add(self.css_manager.full_widget)
 
 		# Shown instead of the CSS manager if user wants to export as revealjs
 		self.revealjs_manager = MdRevealjsSettings(self._settings, self)
-		options_page.add(self.revealjs_manager.full_widget)
+		style_page.add(self.revealjs_manager.full_widget)
 
-		# It has to be initialized after the CSS module is here
-		self._backend.init_pandoc_combobox('pdf')
-
-		self._add_page(options_page, _("Rendering options"), Gtk.AssistantPageType.CONTENT)
+		self._add_page(style_page, _("Style"), Gtk.AssistantPageType.CONTENT)
 
 	def _init_3rd_page(self):
+		advanced_page = Gtk.Box(visible=True, margin=12, \
+		                                   orientation=Gtk.Orientation.VERTICAL)
+
+		self._backend = MdBackendSettings(_("Export file with:"), \
+		                                            self._settings, False, self)
+		advanced_page.add(self._backend.full_widget)
+		self._backend.fill_pandoc_combobox(BackendsEnums.PandocFormatsFull)
+		self._backend.init_pandoc_combobox('pdf')
+		self._backend.format_combobox.get_parent().set_visible(False)
+		self._add_page(advanced_page, _("Advanced options"), Gtk.AssistantPageType.CONTENT)
+
+	def _init_4th_page(self):
 		wait_spinner = Gtk.Spinner(visible=True)
 		wait_spinner.start()
 		self._add_page(wait_spinner, _("Export"), Gtk.AssistantPageType.PROGRESS)
@@ -141,16 +145,41 @@ class MdExportAssistant(Gtk.Assistant):
 		pass
 
 	def do_prepare(self, *args):
+		"""Virtual method called by Gtk.Assistant when the active page changes"""
 		if self.get_current_page() == 1:
-			# TODO regarder les boutons et n'activer que les bons backends
-			pass
-		elif self.get_current_page() == 2:
+			# Backends are pre-set at the "style" page, this is normal
+			self.preset_backends()
+
+		elif self.get_current_page() == 3:
+			# Empty "loader" page
 			if not self.start_export():
 				self.set_current_page(0)
 				self.present()
-			self.close()
+			else:
+				self.close()
 
 	############################################################################
+
+	def preset_backends(self):
+		backends_dict = {}
+		for file_format in self._all_radio_btns:
+			if self._all_radio_btns[file_format].get_active():
+				selected_format = file_format
+
+		backends_dict['p3md'] = False
+		if selected_format in ['pdf', 'html5'] and AVAILABLE_BACKENDS['p3md']:
+			if selected_format == 'pdf':
+				self.output_extension = '.pdf'
+			else:
+				self.output_extension = '.html'
+			backends_dict['p3md'] = True
+
+		backends_dict['pandoc'] = False
+		if AVAILABLE_BACKENDS['pandoc']:
+			backends_dict['pandoc'] = True
+			self._backend.format_combobox.set_active_id(selected_format)
+
+		self._backend.set_available_backends(backends_dict)
 
 	def update_css(self, is_active, uri):
 		self._backend.update_pandoc_combobox()
@@ -265,9 +294,13 @@ class MdExportAssistant(Gtk.Assistant):
 			post_string = '</body></html>'
 			content = pre_string + content + post_string
 
-		# TODO the p3md export should propose "pdf" and print to the asked file
-		with open(file_chooser.get_filename(), 'w') as f:
-			f.write(content)
+		if self.output_extension == '.pdf':
+			pass # TODO export using webkit2 printing options
+
+		else:
+			with open(file_chooser.get_filename(), 'w') as f:
+				f.write(content)
+
 		file_chooser.destroy()
 		return True
 

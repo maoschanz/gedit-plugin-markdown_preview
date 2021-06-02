@@ -15,6 +15,7 @@ class MdWebViewManager():
 
 	def __init__(self):
 		self._scroll_level = 0
+		# TODO remember the scroll level in the Gedit.View objects
 
 		self._webview = WebKit2.WebView()
 		self._webview.get_settings().set_property('enable_javascript', True)

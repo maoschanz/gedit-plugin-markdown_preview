@@ -152,7 +152,8 @@ class MdMainContainer(Gtk.Box):
 
 	def _validate_pandoc_command(self):
 		pandoc_command = self._settings.get_strv('pandoc-command')
-		# TODO validation ?
+		if '$INPUT_FILE' not in pandoc_command:
+			pass # TODO insérer en 2nde position
 		self._pandoc_command = pandoc_command
 
 	############################################################################
@@ -360,7 +361,7 @@ class MdMainContainer(Gtk.Box):
 		self.page_number = len(lang_pages)
 		if self.page_index >= self.page_number:
 			self.page_index = self.page_number - 1
-			# TODO remember the page index in the Gedit.View object
+			# TODO remember the page index in the Gedit.View objects
 		lang_current_page = lang_pages[self.page_index]
 
 		if self.page_index == 0:
@@ -370,6 +371,8 @@ class MdMainContainer(Gtk.Box):
 		return lang_current_page
 
 	def get_dummy_uri(self):
+		# FIXME ne fonctionne pas fantastiquement bien avec les fichiers pas
+		# enregistrés (pourquoi mdr ? c'est inactif non ?)
 		# Support for relative paths is cool, but breaks CSS in too many cases
 		if self._settings.get_boolean('relative'):
 			return self.parent_plugin.window.get_active_document().get_file().get_location().get_uri()

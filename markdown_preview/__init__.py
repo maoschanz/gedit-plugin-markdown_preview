@@ -307,7 +307,8 @@ class MarkdownGeditPluginView(GObject.Object, Gedit.ViewActivatable):
 			item.set_sensitive(False)
 		popup.append(item)
 
-	def recognize_format(self): # TODO doc.get_language()
+	def recognize_format(self): # TODO doc.get_language() ? pourquoi j'appelle
+		# le recognize_format depuis ce fichier à d'autres endroits ?
 		doc = self.view.get_buffer()
 		name = doc.get_short_name_for_display()
 		temp = name.split('.')

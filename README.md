@@ -4,10 +4,6 @@
 
 <!-- TODO
 
-- Fix l'export à peu près
-	- [x] erreurs de pandoc
-	- [x] activer l'entrée juste pour l'export
-
 - Faire une branche à part, où je tue:
 	- [] les options de pandoc,
 	- [] le support revealjs,
