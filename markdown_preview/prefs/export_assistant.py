@@ -1,4 +1,4 @@
-# export_dialog.py
+# export_assistant.py
 # GPL v3
 
 import gi, subprocess
@@ -10,55 +10,136 @@ from ..constants import BackendsEnums
 
 ################################################################################
 
-class MdExportDialog(Gtk.Dialog):
-	__gtype_name__ = 'MdExportDialog'
-
-	file_format = 'md'
-	output_extension = '.pdf'
+class MdExportAssistant(Gtk.Assistant):
+	__gtype_name__ = 'MdExportAssistant'
 
 	def __init__(self, file_format, gedit_window, settings, **kwargs):
 		super().__init__(use_header_bar=True, title=_("Export as…"), \
-		                        default_width=640, default_height=400, **kwargs)
+		                        default_width=700, default_height=400, **kwargs)
 		self.file_format = file_format
 		self.gedit_window = gedit_window
 		self._settings = settings
+		self.output_extension = '.pdf'
 
-		self.add_button(_("Cancel"), Gtk.ResponseType.CANCEL)
-		self.get_content_area().set_margin_left(20)
-		self.get_content_area().set_margin_right(20)
-		self.get_content_area().set_margin_top(20)
-		self.get_content_area().set_margin_bottom(20)
-		self.get_content_area().set_spacing(20)
+		self._init_1st_page()
+		self._init_2nd_page()
+		self._init_3rd_page()
+
+	############################################################################
+
+	def _init_1st_page(self):
+		format_page = Gtk.Box(visible=True, margin=8, spacing=12, \
+		                                   orientation=Gtk.Orientation.VERTICAL)
+		available_formats = {}
+		self._all_radio_btns = {}
 
 		AVAILABLE_BACKENDS = get_backends_dict()
-		if not AVAILABLE_BACKENDS['p3md'] and not AVAILABLE_BACKENDS['pandoc']:
+		if AVAILABLE_BACKENDS['p3md']:
+			available_formats = {
+				'pdf': _("Portable Document Format (.pdf)"),
+				'html5': _("HTML5"),
+			}
+		if AVAILABLE_BACKENDS['pandoc']:
+			available_formats = BackendsEnums.PandocFormatsFull
+
+		if not available_formats:
 			error_label = Gtk.Label(visible=True, \
 			        label=_("Error: please install pandoc or python3-markdown"))
-			self.get_content_area().add(error_label)
+			format_page.add(error_label)
 			return
 
-		self.add_button(_("Next"), Gtk.ResponseType.OK)
+		self._radio_format_group = None
+		horizontal_box = Gtk.Box(spacing=12)
+		horizontal_box.add(self._get_format_radio(available_formats, 'pdf'))
+		horizontal_box.add(self._get_format_radio(available_formats, 'html5'))
+		format_page.add(horizontal_box)
+		horizontal_box.show_all()
+
+		flowbox = Gtk.FlowBox(selection_mode=Gtk.SelectionMode.NONE)
+		if len(available_formats) > 2:
+			format_page.add(Gtk.Separator(visible=True))
+			format_page.add(Gtk.Label(visible=True, halign=Gtk.Align.START, \
+			                                    label=_("Other file formats:")))
+			format_page.add(flowbox)
+
+		for file_format in available_formats:
+			if file_format in ['pdf', 'html5']:
+				continue
+			radio = self._get_format_radio(available_formats, file_format, False)
+			flowbox.add(radio)
+		flowbox.show_all()
+
+		self._add_page(format_page, _("Output file format"), Gtk.AssistantPageType.CONTENT)
+
+	def _init_2nd_page(self):
+		options_page = Gtk.Box(visible=True, margin=12, spacing=8, \
+		                                   orientation=Gtk.Orientation.VERTICAL)
 
 		# Add the backend settings to the dialog
 		self._backend = MdBackendSettings(_("Export file with:"), \
 		                                            self._settings, False, self)
-		self.get_content_area().add(self._backend.full_widget)
+		options_page.add(self._backend.full_widget)
 		self._backend.fill_pandoc_combobox(BackendsEnums.PandocFormatsFull)
 
-		self.get_content_area().add(Gtk.Separator(visible=True))
+		options_page.add(Gtk.Separator(visible=True))
 
 		self.no_style_label = Gtk.Label(_("No styling options available for this file format."))
-		self.get_content_area().add(self.no_style_label)
+		options_page.add(self.no_style_label)
 
 		# Using a stylesheet is possible with both backends
 		self.css_manager = MdCssSettings(self._settings, self, self)
-		self.get_content_area().add(self.css_manager.full_widget)
+		options_page.add(self.css_manager.full_widget)
 
 		# Shown instead of the CSS manager if user wants to export as revealjs
 		self.revealjs_manager = MdRevealjsSettings(self._settings, self)
-		self.get_content_area().add(self.revealjs_manager.full_widget)
+		options_page.add(self.revealjs_manager.full_widget)
 
+		# It has to be initialized after the CSS module is here
 		self._backend.init_pandoc_combobox('pdf')
+
+		self._add_page(options_page, _("Rendering options"), Gtk.AssistantPageType.CONTENT)
+
+	def _init_3rd_page(self):
+		wait_spinner = Gtk.Spinner(visible=True)
+		wait_spinner.start()
+		self._add_page(wait_spinner, _("Export"), Gtk.AssistantPageType.PROGRESS)
+
+	def _add_page(self, page, label, page_type):
+		self.append_page(page)
+		self.set_page_type(page, page_type)
+		self.set_page_complete(page, True)
+		self.set_page_title(page, label)
+
+	def _get_format_radio(self, available_formats, file_format, wide=True):
+		file_format_label = available_formats[file_format]
+		if self._radio_format_group is None:
+			radio = Gtk.RadioButton()
+			self._radio_format_group = radio
+		else:
+			radio = Gtk.RadioButton.new_from_widget(self._radio_format_group)
+		if wide:
+			wide_label = Gtk.Label()
+			wide_label.set_markup('<b>' + file_format_label + '</b>')
+			radio.add(wide_label)
+		else:
+			radio.set_label(file_format_label)
+		radio.set_halign(Gtk.Align.START)
+		self._all_radio_btns[file_format] = radio
+		return radio
+
+	############################################################################
+
+	def do_close(self, *args):
+		self.destroy()
+
+	def do_cancel(self, *args):
+		self.destroy()
+
+	def do_apply(self, *args):
+		pass
+
+	def do_prepare(self, *args):
+		pass
 
 	############################################################################
 

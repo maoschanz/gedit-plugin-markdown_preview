@@ -6,7 +6,7 @@ from gi.repository import GObject, Gtk, Gedit, Gio, PeasGtk, GLib
 
 from .main_container import MdMainContainer
 from .prefs.prefs_dialog import MdConfigWidget
-from .prefs.export_dialog import MdExportDialog
+from .prefs.export_assistant import MdExportAssistant
 from .constants import KeyboardShortcuts, MD_PREVIEW_KEY_BASE
 from .utils import init_gettext
 
@@ -249,18 +249,8 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		w.show_all() # immonde mais reproduit le comportement de libpeas
 
 	def export_doc(self, *args):
-		dialog = MdExportDialog(self.preview.recognize_format(), self.window, self._settings)
-		should_close = False
-		while not should_close:
-			response_id = dialog.run()
-			if response_id == Gtk.ResponseType.OK:
-				# If "next" has been clicked but the user changes their mind, or
-				# if there was an error, the dialog should be re-run until the
-				# user successfully exports their file (or gives up).
-				should_close = dialog.do_next()
-			else:
-				should_close = True
-		dialog.destroy()
+		ass = MdExportAssistant(self.preview.recognize_format(), self.window, self._settings)
+		ass.present()
 
 	############################################################################
 	# Actions directly tied to the webview #####################################
