@@ -21,9 +21,9 @@ class MdExportAssistant(Gtk.Assistant):
 		self._settings = settings
 		self.output_extension = '.pdf'
 
-		self._init_1st_page()
-		self._init_2nd_page()
-		self._init_3rd_page()
+		if self._init_1st_page():
+			self._init_2nd_page()
+			self._init_3rd_page()
 
 	############################################################################
 
@@ -45,8 +45,9 @@ class MdExportAssistant(Gtk.Assistant):
 		if not available_formats:
 			error_label = Gtk.Label(visible=True, \
 			        label=_("Error: please install pandoc or python3-markdown"))
-			format_page.add(error_label)
-			return
+			self.append_page(error_label)
+			self.set_page_type(error_label, Gtk.AssistantPageType.SUMMARY)
+			return False
 
 		self._radio_format_group = None
 		horizontal_box = Gtk.Box(spacing=12)
@@ -70,6 +71,7 @@ class MdExportAssistant(Gtk.Assistant):
 		flowbox.show_all()
 
 		self._add_page(format_page, _("Output file format"), Gtk.AssistantPageType.CONTENT)
+		return True
 
 	def _init_2nd_page(self):
 		options_page = Gtk.Box(visible=True, margin=12, spacing=8, \
@@ -139,7 +141,14 @@ class MdExportAssistant(Gtk.Assistant):
 		pass
 
 	def do_prepare(self, *args):
-		pass
+		if self.get_current_page() == 1:
+			# TODO regarder les boutons et n'activer que les bons backends
+			pass
+		elif self.get_current_page() == 2:
+			if not self.start_export():
+				self.set_current_page(0)
+				self.present()
+			self.close()
 
 	############################################################################
 
@@ -202,7 +211,7 @@ class MdExportAssistant(Gtk.Assistant):
 	############################################################################
 	# Export process ###########################################################
 
-	def do_next(self):
+	def start_export(self):
 		if self._backend.get_active_backend() == 'backend_python':
 			exported = self.export_p3md()
 		else: # if self._backend.get_active_backend() == 'backend_pandoc':
