@@ -250,11 +250,17 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 
 	def export_doc(self, *args):
 		dialog = MdExportDialog(self.preview.recognize_format(), self.window, self._settings)
-		response_id = dialog.run()
-		if response_id == Gtk.ResponseType.CANCEL:
-			dialog.do_cancel_export()
-		elif response_id == Gtk.ResponseType.OK:
-			dialog.do_next()
+		should_close = False
+		while not should_close:
+			response_id = dialog.run()
+			if response_id == Gtk.ResponseType.OK:
+				# If "next" has been clicked but the user changes their mind, or
+				# if there was an error, the dialog should be re-run until the
+				# user successfully exports their file (or gives up).
+				should_close = dialog.do_next()
+			else:
+				should_close = True
+		dialog.destroy()
 
 	############################################################################
 	# Actions directly tied to the webview #####################################

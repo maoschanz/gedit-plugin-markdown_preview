@@ -4,10 +4,22 @@
 
 <!-- TODO
 
+- [x] Fix l'export à peu près
+
+- Faire une branche à part, où je tue:
+	- [] les options de pandoc,
+	- [] le support revealjs,
+	- [] le menu contextuel,
+	- [] et les raccourcis clavier associés
+
+- [] En faire une release 1.0
+
+----
+
 - [~] différencier explicitement le chemin d'exécution pour l'ouverture d'un
-fichier (reconnaissance format etc.) d'un reload normal
-	- [ ] régression : si un doc est ouvert et que c'est désac et qu'on active,
-		ça ne réagit pas et on ne peut pas recharger
+  fichier (reconnaissance format etc.) d'un reload normal
+	- [ ] si un doc est ouvert et que c'est désac et qu'on active, ça ne réagit
+	      pas et on ne peut pas recharger
 - reveal js https://github.com/jgm/pandoc/wiki/Using-pandoc-to-produce-reveal.js-slides
 	- [ ] prefs
 		- [ ] rendu fonctionnel
@@ -134,10 +146,11 @@ needs.
 [Great third-party extensions](https://facelessuser.github.io/pymdown-extensions/)
 exist too, and once installed they can be added manually to the list.
 
-##### Options with pandoc
+<!-- ##### Options with pandoc -->
 
-You can decide to render the file
- directly as HTML (it may then use the CSS file you set);
+<!-- You can decide to render the file: -->
+
+<!-- - directly as HTML (it may then use the CSS file you set); -->
 <!--- or as HTML with the stylesheet and javascript code from _revealjs_, to preview-->
 <!--the file as a slideshow, which comes with pre-defined themes and slide-->
 <!--transition types. (**WORK IN PROGRESS**);-->

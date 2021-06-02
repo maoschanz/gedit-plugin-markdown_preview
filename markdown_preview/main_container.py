@@ -33,14 +33,18 @@ class MdMainContainer(Gtk.Box):
 		self._pandoc_command = []
 
 	def do_activate(self):
-		self._handlers = []
 		self._settings = Gio.Settings.new(MD_PREVIEW_KEY_BASE)
-		id0 = self._settings.connect('changed::position', self.change_panel)
-		id1 = self._settings.connect('changed::auto-manage-pane', self.set_auto_manage)
-		id2 = self._settings.connect('changed::splitter', self.change_splitter_setting)
-		self._handlers.append(id0)
-		self._handlers.append(id1)
-		self._handlers.append(id2)
+		self._handlers = [
+			self._settings.connect('changed::position', self._update_container_position),
+			self._settings.connect('changed::auto-manage-pane', self.set_auto_manage),
+			self._settings.connect('changed::splitter', self.change_splitter_setting),
+
+			self._settings.connect('changed::backend', self._on_backend_change),
+			self._settings.connect('changed::pandoc-command', self._on_backend_change),
+			self._settings.connect('changed::extension', self._on_backend_change),
+
+			self._settings.connect('changed::style', self._on_stylesheet_change),
+		]
 
 		self.pagination_mode = self._settings.get_string('splitter')
 		self.set_auto_manage()
@@ -71,6 +75,10 @@ class MdMainContainer(Gtk.Box):
 	def do_deactivate(self):
 		# XXX if it's useful, do this elsewhere
 		self._webview_manager.disconnect_handlers()
+		self._settings.disconnect(self._handlers[6])
+		self._settings.disconnect(self._handlers[5])
+		self._settings.disconnect(self._handlers[4])
+		self._settings.disconnect(self._handlers[3])
 		self._settings.disconnect(self._handlers[2])
 		self._settings.disconnect(self._handlers[1])
 		self._settings.disconnect(self._handlers[0])

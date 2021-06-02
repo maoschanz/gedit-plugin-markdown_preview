@@ -1,7 +1,7 @@
 # export_dialog.py
 # GPL v3
 
-import gi
+import gi, subprocess
 from gi.repository import Gtk, Gio
 
 from .rendering_settings import MdCssSettings, MdRevealjsSettings, MdBackendSettings
@@ -29,12 +29,14 @@ class MdExportDialog(Gtk.Dialog):
 		self.get_content_area().set_margin_top(20)
 		self.get_content_area().set_margin_bottom(20)
 		self.get_content_area().set_spacing(20)
+
 		AVAILABLE_BACKENDS = get_backends_dict()
 		if not AVAILABLE_BACKENDS['p3md'] and not AVAILABLE_BACKENDS['pandoc']:
 			error_label = Gtk.Label(visible=True, \
 			        label=_("Error: please install pandoc or python3-markdown"))
 			self.get_content_area().add(error_label)
 			return
+
 		self.add_button(_("Next"), Gtk.ResponseType.OK)
 
 		# Add the backend settings to the dialog
@@ -57,9 +59,6 @@ class MdExportDialog(Gtk.Dialog):
 		self.get_content_area().add(self.revealjs_manager.full_widget)
 
 		self._backend.init_pandoc_combobox('pdf')
-
-	def do_cancel_export(self):
-		self.destroy()
 
 	############################################################################
 
@@ -126,8 +125,18 @@ class MdExportDialog(Gtk.Dialog):
 		if self._backend.get_active_backend() == 'backend_python':
 			exported = self.export_p3md()
 		else: # if self._backend.get_active_backend() == 'backend_pandoc':
-			exported = self.export_pandoc()
-		self.destroy()
+			try:
+				exported = self.export_pandoc()
+			except Exception as err:
+				exported = False
+				print(err)
+				dialog = Gtk.MessageDialog(self.gedit_window, \
+				   Gtk.DialogFlags.DESTROY_WITH_PARENT, Gtk.MessageType.ERROR, \
+				        Gtk.ButtonsType.CLOSE, _("Pandoc encountered an error"))
+				dialog.format_secondary_text(str(err))
+				dialog.run()
+				dialog.destroy()
+		return exported
 
 	def launch_file_chooser(self, output_extension):
 		file_chooser = Gtk.FileChooserNative.new(_("Export the preview"), \
@@ -165,6 +174,8 @@ class MdExportDialog(Gtk.Dialog):
 			                                                 '" /></head><body>'
 			post_string = '</body></html>'
 			content = pre_string + content + post_string
+
+		# TODO the p3md export should propose "pdf" and print to the asked file
 		with open(file_chooser.get_filename(), 'w') as f:
 			f.write(content)
 		file_chooser.destroy()
@@ -182,8 +193,10 @@ class MdExportDialog(Gtk.Dialog):
 		words = cmd.split()
 		words[words.index('$INPUT_FILE')] = doc_path
 		words[words.index('$OUTPUT_FILE')] = file_chooser.get_filename()
-		subprocess.run(words)
 		file_chooser.destroy()
+		result = subprocess.run(words, capture_output=True)
+		if result.stderr:
+			raise Exception(result.stderr.decode('utf-8'))
 		return True
 
 	############################################################################
