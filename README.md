@@ -4,7 +4,9 @@
 
 <!-- TODO
 
-- [x] Fix l'export à peu près
+- Fix l'export à peu près
+	- [x] erreurs de pandoc
+	- [x] activer l'entrée juste pour l'export
 
 - Faire une branche à part, où je tue:
 	- [] les options de pandoc,
@@ -50,7 +52,7 @@ This is a plugin for the Gedit text editor, previewing .md files in the side pan
 - search in the preview
 - open links and images
 
-This works for Markdown files, and theorically HTML files too.
+This works for Markdown files, and theoretically HTML files too.
 
 ### Exporting
 
