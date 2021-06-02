@@ -316,7 +316,7 @@ class MdMainContainer(Gtk.Box):
 
 	def on_file_changed(self, *args):
 		self.file_format = self.recognize_format()
-		self.update_visibility()
+		self._update_panel_visibility()
 		if self.file_format != 'error':
 			self.on_reload()
 
@@ -384,13 +384,11 @@ class MdMainContainer(Gtk.Box):
 		window = self.parent_plugin.window
 		# Get the bottom bar (a Gtk.Stack), or the side bar, and add our box to it.
 		if position == 'bottom' and self.panel != window.get_bottom_panel():
-			self.change_panel()
-			self.update_visibility()
+			self._update_container_position()
 			if self.auto_manage_panel:
 				window.get_side_panel().hide()
 		elif position == 'side' and self.panel != window.get_side_panel():
-			self.change_panel()
-			self.update_visibility()
+			self._update_container_position()
 			if self.auto_manage_panel:
 				window.get_bottom_panel().hide()
 
@@ -430,13 +428,14 @@ class MdMainContainer(Gtk.Box):
 		if self.panel is not None:
 			self.panel.remove(self.preview_bar)
 
-	def change_panel(self, *args):
+	def _update_container_position(self, *args):
 		self.remove_from_panel()
 		self.show_on_panel()
 		self.do_update_state()
 		self.on_reload()
+		self._update_panel_visibility()
 
-	def update_visibility(self):
+	def _update_panel_visibility(self):
 		if not self.auto_manage_panel or self.file_format == 'error':
 			if self.panel.props.visible:
 				if self.panel.get_visible_child() == self.preview_bar:

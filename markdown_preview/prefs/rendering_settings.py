@@ -213,6 +213,8 @@ class MdBackendSettings():
 		self.parent_widget.set_command_for_format(output_format)
 
 	def adapt_widgets_to_pandoc_custom(self, is_custom):
+		if not self.apply_to_settings:
+			is_custom = True
 		self.pandoc_cli_entry.set_sensitive(is_custom)
 		self.remember_button.set_visible(is_custom)
 		self.pandoc_cli_custom.set_visible(is_custom)
