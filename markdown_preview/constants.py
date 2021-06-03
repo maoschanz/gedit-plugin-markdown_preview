@@ -19,36 +19,6 @@ MARKDOWN_SPLITTERS = {
 
 ################################################################################
 
-class KeyboardShortcuts():
-	# TODO obviously not finished
-
-	ActionsNames = [
-		'win.md-prev-format-italic',
-		'win.md-prev-format-bold',
-		'win.md-prev-insert-picture',
-		'win.md-prev-format-title-lower',
-		'win.md-prev-format-title-upper'
-	]
-
-	SettingsKeys = [
-		'italic',
-		'bold',
-		'insert-picture',
-		'title-lower',
-		'title-upper'
-	]
-
-	Labels = [
-		_("Italic"),
-		_("Bold"),
-		_("Insert a picture"),
-		_("Lower title"),
-		_("Upper title")
-	]
-
-	############################################################################
-################################################################################
-
 class HelpLabels():
 
 	P3mdExtensions1 = _("Aside of default extensions provided by the " + \

@@ -1,4 +1,3 @@
-(**WORK IN PROGRESS**)
 
 # Gedit Markdown Preview
 
@@ -7,12 +6,10 @@
 - Faire une branche à part, où je tue:
 	- [x] les options de pandoc,
 	- [x] le support revealjs,
-	- [] le menu contextuel,
-	- [] et les raccourcis clavier associés
+	- [x] le menu contextuel,
+	- [x] et les raccourcis clavier associés
 
 - [] En faire une release 1.0
-
-----
 
 - [~] différencier explicitement le chemin d'exécution pour l'ouverture d'un
   fichier (reconnaissance format etc.) d'un reload normal
@@ -49,11 +46,6 @@ You can print the preview, or export it:
 - if only `python3-markdown` is installed, you can export to HTML
 	- a stylesheet can be applied
 	- `python3-markdown` [extensions](https://python-markdown.github.io/extensions/) can be used (including [third-party extensions](https://github.com/Python-Markdown/markdown/wiki/Third-Party-Extensions) like [these great ones](https://facelessuser.github.io/pymdown-extensions/)
-
-### Editing assistance
-
-- insert an image in your file
-- insert markdown tags in your text with right-click menu or keyboard shortcuts
 
 ----
 
@@ -131,10 +123,6 @@ needs.
 
 [Great third-party extensions](https://facelessuser.github.io/pymdown-extensions/)
 exist too, and once installed they can be added manually to the list.
-
-### Keyboard shortcuts
-
-Customize keyboard shortcuts to add/remove tags (**WORK IN PROGRESS**)
 
 ----
 

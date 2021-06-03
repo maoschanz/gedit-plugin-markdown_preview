@@ -6,7 +6,7 @@ from gi.repository import Gtk, Gio
 
 from .rendering_settings import MdCssSettings, MdBackendSettings
 from ..utils import get_backends_dict
-from ..constants import KeyboardShortcuts, HelpLabels, BackendsEnums, MD_PREVIEW_KEY_BASE
+from ..constants import HelpLabels, BackendsEnums, MD_PREVIEW_KEY_BASE
 
 BASE_PATH = os.path.dirname(os.path.realpath(__file__))
 
@@ -31,7 +31,6 @@ class MdConfigWidget(Gtk.Box):
 		self._build_backend_page(builder)
 		self._build_style_page(builder)
 		self._backend.init_pandoc_combobox('html5') # TODO FIXME wrong, not what the user defined!!
-		self._build_shortcuts_page(builder)
 
 		self.add(sidebar)
 		self.add(stack)
@@ -77,16 +76,6 @@ class MdConfigWidget(Gtk.Box):
 		builder.get_object('backend_box').add(self._backend.full_widget)
 		self._backend.fill_pandoc_combobox(BackendsEnums.PandocFormatsPreview)
 
-	def _build_shortcuts_page(self, builder):
-		self.shortcuts_treeview = builder.get_object('shortcuts_treeview')
-		renderer = builder.get_object('accel_renderer')
-		renderer.connect('accel-edited', self._on_accel_edited)
-		renderer.connect('accel-cleared', self._on_accel_cleared)
-		# https://github.com/GNOME/gtk/blob/master/gdk/keynames.txt
-		for i in range(len(KeyboardShortcuts.SettingsKeys)):
-			self._add_keybinding(KeyboardShortcuts.SettingsKeys[i], \
-			                                        KeyboardShortcuts.Labels[i])
-
 	############################################################################
 
 	def _new_dim_label(self, raw_text):
@@ -94,28 +83,6 @@ class MdConfigWidget(Gtk.Box):
 		                                                 halign=Gtk.Align.START)
 		label.get_style_context().add_class('dim-label')
 		return label
-
-	def _add_keybinding(self, setting_id, description):
-		accelerator = self._kb_settings.get_strv(setting_id)[0]
-		if accelerator is None:
-			[key, mods] = [0, 0]
-		else:
-			[key, mods] = Gtk.accelerator_parse(accelerator)
-		row_array = [setting_id, description, key, mods]
-		row = self.shortcuts_treeview.get_model().insert(0, row=row_array)
-
-	def _on_accel_edited(self, *args):
-		tree_iter = self.shortcuts_treeview.get_model().get_iter_from_string(args[1])
-		self.shortcuts_treeview.get_model().set(tree_iter, [2, 3], [args[2], int(args[3])])
-		setting_id = self.shortcuts_treeview.get_model().get_value(tree_iter, 0)
-		accelString = Gtk.accelerator_name(args[2], args[3])
-		self._kb_settings.set_strv(setting_id, [accelString])
-
-	def _on_accel_cleared(self, *args):
-		tree_iter = self.shortcuts_treeview.get_model().get_iter_from_string(args[1])
-		self.shortcuts_treeview.get_model().set(tree_iter, [2, 3], [0, 0])
-		setting_id = self.shortcuts_treeview.get_model().get_value(tree_iter, 0)
-		self._kb_settings.set_strv(setting_id, [])
 
 	############################################################################
 	# Preview options ##########################################################
