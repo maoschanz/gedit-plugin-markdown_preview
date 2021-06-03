@@ -207,16 +207,6 @@
                     <style><class name="dim-label"/></style>
                   </object>
                 </child>
-                <child>
-                  <object class="GtkButton" id="remember_button">
-                    <property name="visible">True</property>
-                    <property name="valign">center</property>
-                    <property name="label" translatable="yes">Remember</property>
-                  </object>
-                  <packing>
-                    <property name="pack-type">end</property>
-                  </packing>
-                </child>
               </object>
             </child>
           </object>

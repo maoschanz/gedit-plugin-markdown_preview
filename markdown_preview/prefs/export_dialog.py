@@ -4,7 +4,7 @@
 import gi, subprocess
 from gi.repository import Gtk, Gio
 
-from .rendering_settings import MdCssSettings, MdRevealjsSettings, MdBackendSettings
+from .rendering_settings import MdCssSettings, MdBackendSettings
 from ..utils import get_backends_dict
 from ..constants import BackendsEnums
 
@@ -54,10 +54,6 @@ class MdExportDialog(Gtk.Dialog):
 		self.css_manager = MdCssSettings(self._settings, self, self)
 		self.get_content_area().add(self.css_manager.full_widget)
 
-		# Shown instead of the CSS manager if user wants to export as revealjs
-		self.revealjs_manager = MdRevealjsSettings(self._settings, self)
-		self.get_content_area().add(self.revealjs_manager.full_widget)
-
 		self._backend.init_pandoc_combobox('pdf')
 
 	############################################################################
@@ -66,7 +62,6 @@ class MdExportDialog(Gtk.Dialog):
 		self._backend.update_pandoc_combobox()
 
 	def _show_accurate_style_manager(self, show_css, show_revealjs):
-		self.revealjs_manager.full_widget.set_visible(show_revealjs)
 		self.css_manager.full_widget.set_visible(show_css)
 		self.no_style_label.set_visible(not (show_css or show_revealjs))
 
@@ -78,7 +73,7 @@ class MdExportDialog(Gtk.Dialog):
 			self._show_accurate_style_manager(False, False)
 			return
 
-		show_revealjs = output_format == 'revealjs'
+		show_revealjs = False
 		show_css = not show_revealjs and output_format != 'plain'
 		self._show_accurate_style_manager(show_css, show_revealjs)
 
@@ -89,18 +84,6 @@ class MdExportDialog(Gtk.Dialog):
 			options = '-V geometry=right=2cm -V geometry=left=2cm -V ' \
 			                 'geometry=bottom=2cm -V geometry=top=2cm'
 			self.output_extension = '.pdf'
-		elif output_format == 'revealjs':
-			options = '-t revealjs -s --metadata pagetitle=Exported ' + \
-			                     '-V revealjs-url=http://lab.hakim.se/reveal-js'
-			options = options + ' -V theme=' + self._settings.get_string('revealjs-theme')
-			options = options + ' -V transition=' + \
-			                   self._settings.get_string('revealjs-transitions')
-			if self._settings.get_boolean('revealjs-slide-num'):
-				options = options + ' -V slideNumber=true'
-				# there are more options but a boolean is enough for me
-			self.output_extension = '.html'
-			accept_css = False # in fact, it does accept a stylesheet as an
-			# option, but the 2 CSS will often be incompatible.
 		else:
 			options = '-t ' + output_format
 			if output_format == 'beamer' or output_format == 'latex':

@@ -4,7 +4,7 @@
 import gi, os
 from gi.repository import Gtk, Gio
 
-from .rendering_settings import MdCssSettings, MdRevealjsSettings, MdBackendSettings
+from .rendering_settings import MdCssSettings, MdBackendSettings
 from ..utils import get_backends_dict
 from ..constants import KeyboardShortcuts, HelpLabels, BackendsEnums, MD_PREVIEW_KEY_BASE
 
@@ -70,14 +70,6 @@ class MdConfigWidget(Gtk.Box):
 		style_box.add(self._new_dim_label(HelpLabels.StyleCSS))
 		self.css_manager = MdCssSettings(self._settings, None, self)
 		style_box.add(self.css_manager.full_widget)
-
-		self.revealjs_manager = MdRevealjsSettings(self._settings, self)
-		AVAILABLE_BACKENDS = get_backends_dict()
-		if AVAILABLE_BACKENDS['pandoc']:
-			style_box.add(Gtk.Separator(visible=True))
-
-			style_box.add(self._new_dim_label(HelpLabels.StyleRevealJS))
-			style_box.add(self.revealjs_manager.full_widget)
 
 	def _build_backend_page(self, builder):
 		self._backend = MdBackendSettings(_("HTML generation backend:"), \
@@ -159,20 +151,10 @@ class MdConfigWidget(Gtk.Box):
 		command = 'pandoc $INPUT_FILE %s'
 		options = '--metadata pagetitle=Preview'
 		accept_css = True
-		# TODO........
-
-		# command = ['pandoc', '-s', file_path, '--metadata', 'pagetitle=Preview', \
-		# '-t', 'revealjs', '-V', 'revealjs-url=http://lab.hakim.se/reveal-js']
-		# command = command + ['-V', 'theme=' + self._settings.get_string('revealjs-theme')]
-		# command = command + ['-V', 'transition=' + self._settings.get_string('revealjs-transitions')]
-		# if self._settings.get_boolean('revealjs-slide-num'):
-		# 	command = command + ['-V', 'slideNumber=true']
 
 		if self.css_manager.switch_css.get_state() and accept_css:
 			options = options + ' -c ' + self.css_manager.css_uri
 		self._backend.set_pandoc_command(command % options)
-
-		# command = self._settings.get_strv('pandoc-command')
 
 	############################################################################
 ################################################################################
