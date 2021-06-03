@@ -1,27 +1,6 @@
 
 # Gedit Markdown Preview
 
-<!-- TODO
-
-- Faire une branche à part, où je tue:
-	- [x] les options de pandoc,
-	- [x] le support revealjs,
-	- [x] le menu contextuel,
-	- [x] et les raccourcis clavier associés
-
-- [] En faire une release 1.0
-
-- [~] différencier explicitement le chemin d'exécution pour l'ouverture d'un
-  fichier (reconnaissance format etc.) d'un reload normal
-	- [ ] si un doc est ouvert et que c'est désac et qu'on active, ça ne réagit
-	      pas et on ne peut pas recharger
-- print(doc.get_mime_type(), doc.get_content_type())
-- [ ] CSS for admonitions (and other default plugins ?)
-	- [ ] and pymdown ??
-- [ ] bring back the fullscreen, but better
-
-~     TODO -->
-
 This is a plugin for the Gedit text editor, previewing .md files in the side pane
 (<kbd>F9</kbd>) or the bottom (<kbd>Ctrl</kbd>+<kbd>F9</kbd>) pane.
 
@@ -60,8 +39,6 @@ You can print the preview, or export it:
 ----
 
 ## Installation
-
-this plugin is **work in progress**, there is no stable release yet
 
 ### Dependencies
 

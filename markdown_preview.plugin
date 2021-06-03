@@ -10,4 +10,5 @@ Module=markdown_preview
 IAge=3
 Authors=Romain F. T.
 Website=https://github.com/maoschanz/gedit-plugin-markdown_preview
-Version=0.10
+Version=1.0
+
