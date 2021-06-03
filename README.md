@@ -1,23 +1,9 @@
-(**WORK IN PROGRESS**)
 
 # Gedit Markdown Preview
 
 <!-- TODO
 
-- Fix l'export à peu près
-	- [x] erreurs de pandoc
-	- [x] activer l'entrée juste pour l'export
-
-- Faire une branche à part, où je tue:
-	- [] les options de pandoc,
-	- [] le support revealjs,
-	- [] le menu contextuel,
-	- [] et les raccourcis clavier associés
-
-- [] En faire une release 1.0
-
-----
-
+- [ ] bandeau de message vide à l'ouverture ??
 - [~] différencier explicitement le chemin d'exécution pour l'ouverture d'un
   fichier (reconnaissance format etc.) d'un reload normal
 	- [ ] si un doc est ouvert et que c'est désac et qu'on active, ça ne réagit
@@ -60,16 +46,15 @@ You can print the preview, or export it:
 
 - if [`pandoc`](https://pandoc.org/) is installed on your system, you can export to any format it supports
 	- a stylesheet can be applied to most file formats
-	- options are available when exporting to a [revealjs](https://revealjs.com) slideshow (**WORK IN PROGRESS**)
 	- be careful if you want to export to PDF: pandoc doesn't come with all necessary dependencies by default
 - if only `python3-markdown` is installed, you can export to HTML
 	- a stylesheet can be applied
 	- `python3-markdown` [extensions](https://python-markdown.github.io/extensions/) can be used (including [third-party extensions](https://github.com/Python-Markdown/markdown/wiki/Third-Party-Extensions) like [these great ones](https://facelessuser.github.io/pymdown-extensions/)
 
-### Editing assistance
+<!-- ### Editing assistance -->
 
-- insert an image in your file
-- insert markdown tags in your text with right-click menu or keyboard shortcuts
+<!-- - insert an image in your file -->
+<!-- - insert markdown tags in your text with right-click menu or keyboard shortcuts -->
 
 ----
 
@@ -85,8 +70,6 @@ You can print the preview, or export it:
 
 ## Installation
 
-this plugin is **work in progress**, there is no stable release yet
-
 ### Dependencies
 
 Be sure to have these packages installed before trying to install the plugin:
@@ -94,14 +77,12 @@ Be sure to have these packages installed before trying to install the plugin:
 - `gedit` (≥3.22)
 - `gir1.2-webkit2-4.0`
 - `python3-markdown` or `pandoc`
-- if you want to export to PDF with pandoc, you'll need `pdflatex` and `lmodern`
+- if you want to export to PDF with pandoc, you'll need at least `pdflatex` and `lmodern`
 
 ### Download
 
-- Using the "**Clone or download**" button, download the project from github.
-- Extract the archive.
-
-(If you know how to do, you can also clone the repo with git.)
+- Download the ZIP of [the last release](https://github.com/maoschanz/gedit-plugin-markdown_preview/releases)
+- Extract the archive
 
 ### Plugin installation
 
@@ -111,7 +92,7 @@ a normal user (user-wide installation).
 - Open the project's folder in a terminal.
 - Run `./install.sh`
 
-The plugin is now installed and has to be activated:
+The plugin is now installed and has to be enabled:
 
 - Open Gedit's preferences.
 - Go to the "Plugins" tab.
@@ -160,9 +141,9 @@ exist too, and once installed they can be added manually to the list.
 <!--correct command whose output will be HTML code, and press "Remember" to save-->
 <!--your custom command. (**WORK IN PROGRESS**)-->
 
-### Keyboard shortcuts
+<!-- ### Keyboard shortcuts -->
 
-Customize keyboard shortcuts to add/remove tags (**WORK IN PROGRESS**)
+<!-- Customize keyboard shortcuts to add/remove tags (**WORK IN PROGRESS**) -->
 
 ----
 
