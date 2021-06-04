@@ -2,7 +2,7 @@
 # GPL v3
 
 import gi, subprocess
-from gi.repository import Gtk, Gio
+from gi.repository import Gtk, Gio, GLib
 
 from .rendering_settings import MdCssSettings, MdRevealjsSettings, MdBackendSettings
 from ..utils import get_backends_dict
@@ -17,10 +17,10 @@ if AVAILABLE_BACKENDS['p3md']:
 class MdExportAssistant(Gtk.Assistant):
 	__gtype_name__ = 'MdExportAssistant'
 
-	def __init__(self, file_format, gedit_window, settings, **kwargs):
+	def __init__(self, preview_container, gedit_window, settings, **kwargs):
 		super().__init__(use_header_bar=True, title=_("Export as…"), \
 		                        default_width=700, default_height=400, **kwargs)
-		self._source_file_format = file_format # not used yet
+		self._preview_container = preview_container
 		self.gedit_window = gedit_window
 		self._settings = settings
 		self.output_extension = '.pdf'
@@ -274,7 +274,7 @@ class MdExportAssistant(Gtk.Assistant):
 			return None
 
 	def export_p3md(self):
-		file_chooser = self.launch_file_chooser('.html')
+		file_chooser = self.launch_file_chooser(self.output_extension)
 		if file_chooser is None:
 			return False
 
@@ -286,20 +286,28 @@ class MdExportAssistant(Gtk.Assistant):
 		doc = self.gedit_window.get_active_document()
 		start, end = doc.get_bounds()
 		unsaved_text = doc.get_text(start, end, True)
-		content = markdown.markdown(unsaved_text, extensions=md_extensions)
+		html_content = markdown.markdown(unsaved_text, extensions=md_extensions)
 		if self.css_manager.is_active():
 			pre_string = '<html><head><meta charset="utf-8" />' + \
 			      '<link rel="stylesheet" href="' + self.css_manager.css_uri + \
 			                                                 '" /></head><body>'
 			post_string = '</body></html>'
-			content = pre_string + content + post_string
+			html_content = pre_string + html_content + post_string
 
 		if self.output_extension == '.pdf':
-			pass # TODO export using webkit2 printing options
+			my_string = GLib.String()
+			my_string.append(html_content)
+			bytes_content = my_string.free_to_bytes()
 
-		else:
+			source_uri = self._preview_container.get_dummy_uri()
+			webview_manager = self._preview_container._webview_manager
+			webview_manager.load_bytes_for_uri(bytes_content, source_uri)
+
+			webview_manager.print_webview(file_chooser.get_uri())
+
+		else: # if self.output_extension == '.html':
 			with open(file_chooser.get_filename(), 'w') as f:
-				f.write(content)
+				f.write(html_content)
 
 		file_chooser.destroy()
 		return True

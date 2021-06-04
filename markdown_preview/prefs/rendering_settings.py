@@ -178,9 +178,7 @@ class MdBackendSettings():
 		if self.apply_to_settings:
 			self._settings.set_string('backend', backend)
 		self.set_correct_page(backend)
-		if backend == 'python':
-			self.parent_widget.set_command_for_format('html5') # FIXME pourquoi?
-		else:
+		if backend == 'pandoc':
 			self.on_pandoc_format_changed(self.format_combobox)
 
 	def set_correct_page(self, backend):

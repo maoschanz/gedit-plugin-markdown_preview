@@ -40,9 +40,13 @@ class MdWebViewManager():
 	def load_bytes_for_uri(self, bytes_content, uri):
 		self._webview.load_bytes(bytes_content, 'text/html', 'UTF-8', uri)
 
-	def print_webview(self):
-		p = WebKit2.PrintOperation.new(self._webview)
-		p.run_dialog()
+	def print_webview(self, known_destination=None):
+		operation = WebKit2.PrintOperation.new(self._webview)
+
+		if known_destination is None:
+			operation.run_dialog()
+		else:
+			print(known_destination)
 
 	############################################################################
 	# Javascript for the scroll level ##########################################

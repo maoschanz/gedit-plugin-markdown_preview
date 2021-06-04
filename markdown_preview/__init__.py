@@ -249,7 +249,7 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		w.show_all() # immonde mais reproduit le comportement de libpeas
 
 	def export_doc(self, *args):
-		ass = MdExportAssistant(self.preview.recognize_format(), self.window, self._settings)
+		ass = MdExportAssistant(self.preview, self.window, self._settings)
 		ass.present()
 
 	############################################################################
