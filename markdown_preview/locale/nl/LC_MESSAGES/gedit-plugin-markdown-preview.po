@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-31 20:02+0200\n"
-"PO-Revision-Date: 2020-05-25 17:04+0200\n"
-"Last-Translator: Heimen Stoffels <vistausss@outlook.com>\n"
+"PO-Revision-Date: 2021-06-04 14:47+0200\n"
+"Last-Translator: Heimen Stoffels <vistausss@fastmail.com>\n"
 "Language-Team: \n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.3.1\n"
+"X-Generator: Poedit 2.4.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: markdown_preview/__init__.py:38 markdown_preview/__init__.py:41
@@ -69,8 +69,8 @@ msgid ""
 "These third-party extensions are <b>not</b> Gedit plugins, they extend "
 "python3-markdown."
 msgstr ""
-"Deze externe uitbreidingen zijn <b>geen</b> Gedit-plug-ins; ze breiden enkel "
-"de functionaliteit van python3-markdown uit."
+"Deze externe uitbreidingen zijn <b>geen</b> Gedit-plug-ins - ze breiden "
+"enkel de functionaliteit van python3-markdown uit."
 
 #: markdown_preview/constants.py:59
 msgid ""
@@ -80,7 +80,7 @@ msgid ""
 msgstr ""
 "Als je de voorvertoning van je markdownbestand wilt verbeteren met de "
 "functies van deze uitbreidingen, dan kun je de modulenamen ervan toevoegen "
-"aan de lijst middels het '+'-pictogram."
+"aan de lijst middels het ‘+’-pictogram."
 
 #: markdown_preview/constants.py:63
 msgid ""
@@ -96,19 +96,23 @@ msgid ""
 "valid HTML to the standard output, is accepted."
 msgstr ""
 "Elke opdracht wordt geaccepteerd, zolang deze voorzien wordt van $INPUT_FILE "
-"als naam van het invoerbestand en geldige HTML kan produceren."
+"als naam van het invoerbestand en geldige html kan produceren."
 
 #: markdown_preview/constants.py:68
 msgid ""
 "You can select a stylesheet (.css file) to make your document look nice and "
 "modern, or to increase its readability."
 msgstr ""
+"Je kunt een stijlblad (.css-bestand) kiezen om je document mooier te maken, "
+"te moderniseren of de leesbaarheid ervan te verhogen."
 
 #: markdown_preview/constants.py:70
 msgid ""
 "With Pandoc, you can preview the file as a revealjs slideshow, which has pre-"
 "existing themes and settings."
 msgstr ""
+"Met Pandoc kun je het bestand voorvertonen als revealjs-diavoorstelling, "
+"welke vooringestelde thema's en instellingen bevat."
 
 #: markdown_preview/constants.py:79
 msgid "Extras"
@@ -139,8 +143,8 @@ msgid ""
 "A compilation of various extensions (Abbreviations, Attribute Lists, "
 "Definition Lists, Fenced Code Blocks, Footnotes, Tables)."
 msgstr ""
-"Een verzameling van verschillende uitbreidingen (afkortingen, attribuut- en "
-"definitielijsten ingesloten codeblokken, voetnoten, tabellen)."
+"Een verzameling uitbreidingen (afkortingen, attribuut- en definitielijsten "
+"ingesloten codeblokken, voetnoten, tabellen)."
 
 #: markdown_preview/constants.py:90
 msgid "Shows a clickable table of content with the [TOC] tag."
@@ -154,12 +158,12 @@ msgstr "Voegt een regeleinde toe op elke nieuwe regel."
 msgid ""
 "Converts ASCII dashes, quotes and ellipses to their nice-looking equivalents."
 msgstr ""
-"Zet ASCII-streepjes, -citaten en -ellipsen om naar mooi uitziende "
+"Zet ascii-streepjes, -citaten en -ellipsen om naar mooier uitziende "
 "equivalenten."
 
 #: markdown_preview/constants.py:93
 msgid "Alters the behavior of the lists syntax."
-msgstr "Past het gedrag van de lijstsyntax aan."
+msgstr "Past het gedrag van de lijstsyntaxis aan."
 
 #: markdown_preview/constants.py:94
 msgid "Adds admonitions (notes, warnings, tips, …) with the !!! tag."
@@ -176,7 +180,7 @@ msgid ""
 "Highlights your code with a correct syntax coloration (it needs to be set up "
 "and have some dependencies)."
 msgstr ""
-"Markeert je code met de juiste syntaxkleuren (dit moet worden ingesteld en "
+"Markeert je code met de juiste syntaxiskleuren (dit moet worden ingesteld en "
 "vereist afhankelijkheden)."
 
 #: markdown_preview/constants.py:102
@@ -221,7 +225,7 @@ msgstr "reveal.js-diavoorstelling (HTML/JS)"
 
 #: markdown_preview/constants.py:112 markdown_preview/constants.py:117
 msgid "Custom command line"
-msgstr "Aangepaste opdrachtregel"
+msgstr "Aangepaste opdrachten"
 
 #: markdown_preview/constants.py:123
 msgid "None"
@@ -288,9 +292,8 @@ msgid "White"
 msgstr "Wit"
 
 #: markdown_preview/find_manager.py:37
-#, fuzzy
 msgid "More than 100 results"
-msgstr "Volgend resultaat"
+msgstr "Meer dan 100 resultaten"
 
 #: markdown_preview/find_manager.py:39
 #, python-format
@@ -300,12 +303,12 @@ msgstr "%s resultaten"
 #: markdown_preview/main_container.py:55
 #: markdown_preview/prefs/export_dialog.py:35
 msgid "Error: please install pandoc or python3-markdown"
-msgstr "Fout: installeer pandoc of python3-markdown"
+msgstr "Foutmelding: installeer pandoc of python3-markdown"
 
 #: markdown_preview/main_container.py:140
 #, python-format
 msgid "The extension '%s' isn't valid"
-msgstr ""
+msgstr "De extensie ‘%s’ is ongeldig"
 
 #: markdown_preview/main_container.py:326
 msgid "Can't preview an unsaved document"
@@ -498,7 +501,7 @@ msgstr "HTML-genereerbackend:"
 #: markdown_preview/prefs/rendering_settings.py:107
 #: markdown_preview/prefs/css_box.ui:44 markdown_preview/prefs/css_box.ui:52
 msgid "Select a CSS file"
-msgstr "Kies een CSS-bestand"
+msgstr "Kies een css-bestand"
 
 #: markdown_preview/prefs/rendering_settings.py:91
 msgid "Select"
@@ -550,9 +553,8 @@ msgid "Automatically show/hide panel"
 msgstr "Paneel automatisch tonen/verbergen"
 
 #: markdown_preview/prefs/prefs.ui:61
-#, fuzzy
 msgid "Split document"
-msgstr "Gehele document"
+msgstr "Document splitsen"
 
 #: markdown_preview/prefs/prefs.ui:86
 msgid "Use relative paths"
