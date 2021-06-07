@@ -252,6 +252,7 @@ class MdMainContainer(Gtk.Box):
 		doc = self.parent_plugin.window.get_active_document()
 		start, end = doc.get_bounds()
 		unsaved_text = doc.get_text(start, end, True)
+		unsaved_text = unsaved_text.encode('utf-8').decode()
 		if self.file_format == 'html':
 			html_content = self.get_html_from_html(unsaved_text)
 		elif self._active_backend == 'python' and self.file_format == 'md':
@@ -279,14 +280,23 @@ class MdMainContainer(Gtk.Box):
 		# Get the current document, or the temporary document if requested
 		unsaved_text = self.current_page(unsaved_text, MARKDOWN_SPLITTERS)
 		if from_temp_file:
-			f = open(BASE_TEMP_NAME + '.md', 'w')
-			f.write(unsaved_text)
+			try:
+				f = open(BASE_TEMP_NAME + '.md', 'w')
+				f.write(unsaved_text)
+				f.close()
+			except UnicodeEncodeError as utf8_error:
+				# The locale encoding sucks? Let's try with UTF-8
+				f = open(BASE_TEMP_NAME + '.md', 'w', encoding='UTF-8')
+				f.write(unsaved_text)
+				f.close()
+			except Exception as err:
+				self.display_warning(_("Rendering error"))
+				raise err
 			f.close()
 			file_path = self.temp_file_md.get_path()
 		else: # in the future, other formats might be supported
 			doc = self.parent_plugin.window.get_active_document()
 			file_path = doc.get_uri_for_display()
-
 		if '-c' not in command and self._settings.get_boolean('use-style'):
 			command.append('-c')
 			command.append(self._stylesheet)
@@ -355,8 +365,8 @@ class MdMainContainer(Gtk.Box):
 			correct_splitter = splitters_array[self.pagination_mode]
 
 		# The document is (as much as possible) splitted in its original
-		# language. It avoids converting some markdown to html which wouldn't be
-		# rendered anyway.
+		# language (md or html). It avoids converting some markdown to html
+		# which wouldn't be rendered anyway.
 		lang_pages = lang_string.split(correct_splitter)
 		self.page_number = len(lang_pages)
 		if self.page_index >= self.page_number:

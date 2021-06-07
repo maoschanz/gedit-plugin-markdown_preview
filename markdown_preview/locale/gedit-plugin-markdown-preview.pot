@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-07 02:14+0200\n"
+"POT-Creation-Date: 2021-06-07 03:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,28 +17,24 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: markdown_preview/__init__.py:38 markdown_preview/__init__.py:41
-#: markdown_preview/__init__.py:245 markdown_preview/main_container.py:433
+#: markdown_preview/__init__.py:39 markdown_preview/__init__.py:42
+#: markdown_preview/__init__.py:249 markdown_preview/main_container.py:433
 msgid "Markdown Preview"
 msgstr ""
 
-#: markdown_preview/__init__.py:44 markdown_preview/constants.py:128
+#: markdown_preview/__init__.py:45 markdown_preview/constants.py:128
 msgid "Zoom"
 msgstr ""
 
-#: markdown_preview/__init__.py:302
+#: markdown_preview/__init__.py:308
 msgid "Markdown tags"
 msgstr ""
 
-#: markdown_preview/__init__.py:394
-msgid "Select a picture"
-msgstr ""
-
-#: markdown_preview/constants.py:42 markdown_preview/menus.ui:142
+#: markdown_preview/constants.py:42 markdown_preview/view-menu.ui:59
 msgid "Italic"
 msgstr ""
 
-#: markdown_preview/constants.py:43 markdown_preview/menus.ui:138
+#: markdown_preview/constants.py:43 markdown_preview/view-menu.ui:55
 msgid "Bold"
 msgstr ""
 
@@ -300,6 +296,10 @@ msgstr ""
 msgid "Unsupported type of document: "
 msgstr ""
 
+#: markdown_preview/tags_manager.py:84
+msgid "Select a picture"
+msgstr ""
+
 #: markdown_preview/webview_manager.py:72
 msgid ""
 "WARNING: THIS STRING MUST BE TRANSLATED AS THE EXACT NAME OF THE 'PRINT TO "
@@ -319,108 +319,64 @@ msgstr ""
 msgid "Reload the preview"
 msgstr ""
 
-#: markdown_preview/menus.ui:6 markdown_preview/prefs/export_assistant.py:267
+#: markdown_preview/menus.ui:7 markdown_preview/prefs/export_assistant.py:267
 msgid "Export the preview"
 msgstr ""
 
-#: markdown_preview/menus.ui:10
+#: markdown_preview/menus.ui:11
 msgid "Print the preview"
 msgstr ""
 
-#: markdown_preview/menus.ui:16
+#: markdown_preview/menus.ui:17
 msgid "Automatically reload"
 msgstr ""
 
-#: markdown_preview/menus.ui:20
+#: markdown_preview/menus.ui:21
 msgid "Options"
 msgstr ""
 
-#: markdown_preview/menus.ui:28
+#: markdown_preview/menus.ui:30
 msgid "Zoom out"
 msgstr ""
 
-#: markdown_preview/menus.ui:34
+#: markdown_preview/menus.ui:36
 msgid "Original Zoom"
 msgstr ""
 
-#: markdown_preview/menus.ui:38
+#: markdown_preview/menus.ui:40
 msgid "Zoom in"
 msgstr ""
 
-#: markdown_preview/menus.ui:45 markdown_preview/prefs/prefs_dialog.py:43
+#: markdown_preview/menus.ui:48 markdown_preview/prefs/prefs_dialog.py:43
 msgid "Automatic"
 msgstr ""
 
-#: markdown_preview/menus.ui:50 markdown_preview/prefs/prefs_dialog.py:44
+#: markdown_preview/menus.ui:53 markdown_preview/prefs/prefs_dialog.py:44
 msgid "Side Pane"
 msgstr ""
 
-#: markdown_preview/menus.ui:55 markdown_preview/prefs/prefs_dialog.py:45
+#: markdown_preview/menus.ui:58 markdown_preview/prefs/prefs_dialog.py:45
 msgid "Bottom Pane"
 msgstr ""
 
-#: markdown_preview/menus.ui:60
+#: markdown_preview/menus.ui:63
 msgid "View mode"
 msgstr ""
 
-#: markdown_preview/menus.ui:63 markdown_preview/prefs/prefs_dialog.py:54
+#: markdown_preview/menus.ui:66 markdown_preview/prefs/prefs_dialog.py:54
 msgid "Split at separators"
 msgstr ""
 
-#: markdown_preview/menus.ui:68 markdown_preview/prefs/prefs_dialog.py:55
+#: markdown_preview/menus.ui:71 markdown_preview/prefs/prefs_dialog.py:55
 msgid "Whole document"
 msgstr ""
 
-#: markdown_preview/menus.ui:73 markdown_preview/prefs/prefs_dialog.py:56
+#: markdown_preview/menus.ui:76 markdown_preview/prefs/prefs_dialog.py:56
 msgid "Split at level 1 titles"
 msgstr ""
 
-#: markdown_preview/menus.ui:78 markdown_preview/prefs/prefs_dialog.py:57
+#: markdown_preview/menus.ui:81 markdown_preview/prefs/prefs_dialog.py:57
 msgid "Split at level 2 titles"
-msgstr ""
-
-#: markdown_preview/menus.ui:92
-msgid "Remove all tags"
-msgstr ""
-
-#: markdown_preview/menus.ui:99
-msgid "Title"
-msgstr ""
-
-#: markdown_preview/menus.ui:102
-msgid "Upper"
-msgstr ""
-
-#: markdown_preview/menus.ui:106
-msgid "Lower"
-msgstr ""
-
-#: markdown_preview/menus.ui:154
-msgid "Monospace"
-msgstr ""
-
-#: markdown_preview/menus.ui:158
-msgid "Quote"
-msgstr ""
-
-#: markdown_preview/menus.ui:164
-msgid "Unordered list"
-msgstr ""
-
-#: markdown_preview/menus.ui:168
-msgid "Ordered list"
-msgstr ""
-
-#: markdown_preview/menus.ui:174
-msgid "Insert an image"
-msgstr ""
-
-#: markdown_preview/menus.ui:178
-msgid "Insert a link"
-msgstr ""
-
-#: markdown_preview/menus.ui:182
-msgid "Insert a table"
 msgstr ""
 
 #: markdown_preview/preview.ui:78
@@ -450,6 +406,50 @@ msgstr ""
 
 #: markdown_preview/preview.ui:198
 msgid "No result"
+msgstr ""
+
+#: markdown_preview/view-menu.ui:7
+msgid "Remove all tags"
+msgstr ""
+
+#: markdown_preview/view-menu.ui:15
+msgid "Title"
+msgstr ""
+
+#: markdown_preview/view-menu.ui:18
+msgid "Upper"
+msgstr ""
+
+#: markdown_preview/view-menu.ui:22
+msgid "Lower"
+msgstr ""
+
+#: markdown_preview/view-menu.ui:71
+msgid "Monospace"
+msgstr ""
+
+#: markdown_preview/view-menu.ui:75
+msgid "Quote"
+msgstr ""
+
+#: markdown_preview/view-menu.ui:82
+msgid "Unordered list"
+msgstr ""
+
+#: markdown_preview/view-menu.ui:86
+msgid "Ordered list"
+msgstr ""
+
+#: markdown_preview/view-menu.ui:93
+msgid "Insert an image"
+msgstr ""
+
+#: markdown_preview/view-menu.ui:97
+msgid "Insert a link"
+msgstr ""
+
+#: markdown_preview/view-menu.ui:101
+msgid "Insert a table"
 msgstr ""
 
 #: markdown_preview/prefs/export_assistant.py:21
