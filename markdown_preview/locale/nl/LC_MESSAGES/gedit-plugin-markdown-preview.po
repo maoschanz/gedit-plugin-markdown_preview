@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-31 20:02+0200\n"
+"POT-Creation-Date: 2021-06-07 02:14+0200\n"
 "PO-Revision-Date: 2020-05-25 17:04+0200\n"
 "Last-Translator: Heimen Stoffels <vistausss@outlook.com>\n"
 "Language-Team: \n"
@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: markdown_preview/__init__.py:38 markdown_preview/__init__.py:41
-#: markdown_preview/__init__.py:245 markdown_preview/main_container.py:412
+#: markdown_preview/__init__.py:245 markdown_preview/main_container.py:433
 msgid "Markdown Preview"
 msgstr "Markdown-voorvertoning"
 
@@ -27,11 +27,11 @@ msgstr "Markdown-voorvertoning"
 msgid "Zoom"
 msgstr "Zoomen"
 
-#: markdown_preview/__init__.py:306
+#: markdown_preview/__init__.py:302
 msgid "Markdown tags"
 msgstr "Markdown-labels"
 
-#: markdown_preview/__init__.py:398
+#: markdown_preview/__init__.py:394
 msgid "Select a picture"
 msgstr "Kies een afbeelding"
 
@@ -180,28 +180,30 @@ msgstr ""
 "vereist afhankelijkheden)."
 
 #: markdown_preview/constants.py:102
-msgid "LaTeX beamer slideshow (.tex)"
-msgstr "LaTeX-beamerdiavoorstelling (.tex)"
+#: markdown_preview/prefs/export_assistant.py:44
+msgid "Portable Document Format (.pdf)"
+msgstr "Portable Document Format (.pdf)"
 
-#: markdown_preview/constants.py:103
-msgid "Microsoft Word (.docx)"
-msgstr "Microsoft Word (.docx)"
-
-#: markdown_preview/constants.py:104 markdown_preview/constants.py:115
+#: markdown_preview/constants.py:103 markdown_preview/constants.py:115
+#: markdown_preview/prefs/export_assistant.py:43
 msgid "HTML5"
 msgstr "HTML5"
 
-#: markdown_preview/constants.py:105
-msgid "LaTeX (.tex)"
-msgstr "LaTeX (.tex)"
-
-#: markdown_preview/constants.py:106
+#: markdown_preview/constants.py:104
 msgid "OpenOffice text document (.odt)"
 msgstr "OpenOffice-tekstdocument (.odt)"
 
+#: markdown_preview/constants.py:105
+msgid "Microsoft Word (.docx)"
+msgstr "Microsoft Word (.docx)"
+
+#: markdown_preview/constants.py:106
+msgid "LaTeX (.tex)"
+msgstr "LaTeX (.tex)"
+
 #: markdown_preview/constants.py:107
-msgid "Portable Document Format (.pdf)"
-msgstr "Portable Document Format (.pdf)"
+msgid "LaTeX beamer slideshow (.tex)"
+msgstr "LaTeX-beamerdiavoorstelling (.tex)"
 
 #: markdown_preview/constants.py:108
 msgid "plain text (.txt)"
@@ -297,37 +299,48 @@ msgstr "Volgend resultaat"
 msgid "%s results"
 msgstr "%s resultaten"
 
-#: markdown_preview/main_container.py:55
-#: markdown_preview/prefs/export_dialog.py:35
+#: markdown_preview/main_container.py:59
+#: markdown_preview/prefs/export_assistant.py:51
 msgid "Error: please install pandoc or python3-markdown"
 msgstr "Fout: installeer pandoc of python3-markdown"
 
-#: markdown_preview/main_container.py:140
+#: markdown_preview/main_container.py:148
 #, python-format
 msgid "The extension '%s' isn't valid"
 msgstr ""
 
-#: markdown_preview/main_container.py:326
+#: markdown_preview/main_container.py:293
+msgid "Rendering error"
+msgstr ""
+
+#: markdown_preview/main_container.py:347
 msgid "Can't preview an unsaved document"
 msgstr "Niet-opgeslagen documenten kunnen niet worden voorvertoond"
 
-#: markdown_preview/main_container.py:329
+#: markdown_preview/main_container.py:350
 msgid "Unsupported type of document: "
 msgstr "Geen ondersteuning voor dit soort documenten: "
 
-#: markdown_preview/webview_manager.py:83
+#: markdown_preview/webview_manager.py:72
+msgid ""
+"WARNING: THIS STRING MUST BE TRANSLATED AS THE EXACT NAME OF THE 'PRINT TO "
+"FILE' PRINTER IN YOUR LANGUAGE, OPEN A GTK3 PRINT DIALOG TO SEE WHAT SHOULD "
+"BE SET AS THE TRANSLATION"
+msgstr ""
+
+#: markdown_preview/webview_manager.py:117
 msgid "Open link in browser"
 msgstr "Link openen in browser"
 
-#: markdown_preview/webview_manager.py:85
+#: markdown_preview/webview_manager.py:119
 msgid "Open image in browser"
 msgstr "Afbeelding openen in browser"
 
-#: markdown_preview/webview_manager.py:114 markdown_preview/preview.ui:58
+#: markdown_preview/webview_manager.py:148 markdown_preview/preview.ui:58
 msgid "Reload the preview"
 msgstr "Voorvertoning herladen"
 
-#: markdown_preview/menus.ui:6 markdown_preview/prefs/export_dialog.py:133
+#: markdown_preview/menus.ui:6 markdown_preview/prefs/export_assistant.py:267
 msgid "Export the preview"
 msgstr "Voorvertoning exporteren"
 
@@ -460,33 +473,53 @@ msgstr "Volgend resultaat"
 msgid "No result"
 msgstr "Geen resultaat"
 
-#: markdown_preview/prefs/export_dialog.py:20
+#: markdown_preview/prefs/export_assistant.py:21
 msgid "Export as…"
 msgstr "Exporteren als…"
 
-#: markdown_preview/prefs/export_dialog.py:26
-#: markdown_preview/prefs/export_dialog.py:135
+#: markdown_preview/prefs/export_assistant.py:64
+#, fuzzy
+msgid "Other file formats:"
+msgstr "Bestandsformaat:"
+
+#: markdown_preview/prefs/export_assistant.py:77
+#, fuzzy
+msgid "Output file format"
+msgstr "Bestandsformaat:"
+
+#: markdown_preview/prefs/export_assistant.py:83
+msgid "No styling options available for this file format."
+msgstr "Er zijn geen stijlopties beschikbaar voor dit bestandsformaat."
+
+#: markdown_preview/prefs/export_assistant.py:94
+#: markdown_preview/prefs/prefs.ui:126
+msgid "Style"
+msgstr "Stijl"
+
+#: markdown_preview/prefs/export_assistant.py:100
+msgid "Export file with:"
+msgstr "Bestand exporteren met:"
+
+#: markdown_preview/prefs/export_assistant.py:106
+#, fuzzy
+msgid "Advanced options"
+msgstr "Algemene opties"
+
+#: markdown_preview/prefs/export_assistant.py:111
+#: markdown_preview/prefs/export_assistant.py:269
+msgid "Export"
+msgstr "Exporteren"
+
+#: markdown_preview/prefs/export_assistant.py:260
+msgid "Pandoc encountered an error"
+msgstr ""
+
+#: markdown_preview/prefs/export_assistant.py:269
 #: markdown_preview/prefs/rendering_settings.py:91
 msgid "Cancel"
 msgstr "Annuleren"
 
-#: markdown_preview/prefs/export_dialog.py:38
-msgid "Next"
-msgstr "Volgende"
-
-#: markdown_preview/prefs/export_dialog.py:41
-msgid "Export file with:"
-msgstr "Bestand exporteren met:"
-
-#: markdown_preview/prefs/export_dialog.py:48
-msgid "No styling options available for this file format."
-msgstr "Er zijn geen stijlopties beschikbaar voor dit bestandsformaat."
-
-#: markdown_preview/prefs/export_dialog.py:135
-msgid "Export"
-msgstr "Exporteren"
-
-#: markdown_preview/prefs/export_dialog.py:138
+#: markdown_preview/prefs/export_assistant.py:272
 msgid "(exported)"
 msgstr "(geëxporteerd)"
 
@@ -566,10 +599,6 @@ msgstr "Algemene opties"
 msgid "Backend"
 msgstr "Backend"
 
-#: markdown_preview/prefs/prefs.ui:126
-msgid "Style"
-msgstr "Stijl"
-
 #: markdown_preview/prefs/prefs.ui:136
 msgid "Double-click on a shortcut to edit it."
 msgstr "Dubbelklik op een sneltoets om deze aan te passen."
@@ -597,6 +626,9 @@ msgstr "Dianummer tonen"
 #: markdown_preview/prefs/revealjs_box.ui:65
 msgid "Transitions type:"
 msgstr "Soort overgang:"
+
+#~ msgid "Next"
+#~ msgstr "Volgende"
 
 #~ msgid "Preview"
 #~ msgstr "Voorvertoning"

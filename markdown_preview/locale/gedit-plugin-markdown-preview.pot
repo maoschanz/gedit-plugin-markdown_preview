@@ -3,11 +3,12 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-31 20:02+0200\n"
+"POT-Creation-Date: 2021-06-07 02:14+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: markdown_preview/__init__.py:38 markdown_preview/__init__.py:41
-#: markdown_preview/__init__.py:245 markdown_preview/main_container.py:412
+#: markdown_preview/__init__.py:245 markdown_preview/main_container.py:433
 msgid "Markdown Preview"
 msgstr ""
 
@@ -25,11 +26,11 @@ msgstr ""
 msgid "Zoom"
 msgstr ""
 
-#: markdown_preview/__init__.py:306
+#: markdown_preview/__init__.py:302
 msgid "Markdown tags"
 msgstr ""
 
-#: markdown_preview/__init__.py:398
+#: markdown_preview/__init__.py:394
 msgid "Select a picture"
 msgstr ""
 
@@ -159,27 +160,29 @@ msgid ""
 msgstr ""
 
 #: markdown_preview/constants.py:102
-msgid "LaTeX beamer slideshow (.tex)"
+#: markdown_preview/prefs/export_assistant.py:44
+msgid "Portable Document Format (.pdf)"
 msgstr ""
 
-#: markdown_preview/constants.py:103
-msgid "Microsoft Word (.docx)"
-msgstr ""
-
-#: markdown_preview/constants.py:104 markdown_preview/constants.py:115
+#: markdown_preview/constants.py:103 markdown_preview/constants.py:115
+#: markdown_preview/prefs/export_assistant.py:43
 msgid "HTML5"
 msgstr ""
 
-#: markdown_preview/constants.py:105
-msgid "LaTeX (.tex)"
-msgstr ""
-
-#: markdown_preview/constants.py:106
+#: markdown_preview/constants.py:104
 msgid "OpenOffice text document (.odt)"
 msgstr ""
 
+#: markdown_preview/constants.py:105
+msgid "Microsoft Word (.docx)"
+msgstr ""
+
+#: markdown_preview/constants.py:106
+msgid "LaTeX (.tex)"
+msgstr ""
+
 #: markdown_preview/constants.py:107
-msgid "Portable Document Format (.pdf)"
+msgid "LaTeX beamer slideshow (.tex)"
 msgstr ""
 
 #: markdown_preview/constants.py:108
@@ -275,37 +278,48 @@ msgstr ""
 msgid "%s results"
 msgstr ""
 
-#: markdown_preview/main_container.py:55
-#: markdown_preview/prefs/export_dialog.py:35
+#: markdown_preview/main_container.py:59
+#: markdown_preview/prefs/export_assistant.py:51
 msgid "Error: please install pandoc or python3-markdown"
 msgstr ""
 
-#: markdown_preview/main_container.py:140
+#: markdown_preview/main_container.py:148
 #, python-format
 msgid "The extension '%s' isn't valid"
 msgstr ""
 
-#: markdown_preview/main_container.py:326
+#: markdown_preview/main_container.py:293
+msgid "Rendering error"
+msgstr ""
+
+#: markdown_preview/main_container.py:347
 msgid "Can't preview an unsaved document"
 msgstr ""
 
-#: markdown_preview/main_container.py:329
+#: markdown_preview/main_container.py:350
 msgid "Unsupported type of document: "
 msgstr ""
 
-#: markdown_preview/webview_manager.py:83
+#: markdown_preview/webview_manager.py:72
+msgid ""
+"WARNING: THIS STRING MUST BE TRANSLATED AS THE EXACT NAME OF THE 'PRINT TO "
+"FILE' PRINTER IN YOUR LANGUAGE, OPEN A GTK3 PRINT DIALOG TO SEE WHAT SHOULD "
+"BE SET AS THE TRANSLATION"
+msgstr ""
+
+#: markdown_preview/webview_manager.py:117
 msgid "Open link in browser"
 msgstr ""
 
-#: markdown_preview/webview_manager.py:85
+#: markdown_preview/webview_manager.py:119
 msgid "Open image in browser"
 msgstr ""
 
-#: markdown_preview/webview_manager.py:114 markdown_preview/preview.ui:58
+#: markdown_preview/webview_manager.py:148 markdown_preview/preview.ui:58
 msgid "Reload the preview"
 msgstr ""
 
-#: markdown_preview/menus.ui:6 markdown_preview/prefs/export_dialog.py:133
+#: markdown_preview/menus.ui:6 markdown_preview/prefs/export_assistant.py:267
 msgid "Export the preview"
 msgstr ""
 
@@ -438,33 +452,50 @@ msgstr ""
 msgid "No result"
 msgstr ""
 
-#: markdown_preview/prefs/export_dialog.py:20
+#: markdown_preview/prefs/export_assistant.py:21
 msgid "Export as…"
 msgstr ""
 
-#: markdown_preview/prefs/export_dialog.py:26
-#: markdown_preview/prefs/export_dialog.py:135
+#: markdown_preview/prefs/export_assistant.py:64
+msgid "Other file formats:"
+msgstr ""
+
+#: markdown_preview/prefs/export_assistant.py:77
+msgid "Output file format"
+msgstr ""
+
+#: markdown_preview/prefs/export_assistant.py:83
+msgid "No styling options available for this file format."
+msgstr ""
+
+#: markdown_preview/prefs/export_assistant.py:94
+#: markdown_preview/prefs/prefs.ui:126
+msgid "Style"
+msgstr ""
+
+#: markdown_preview/prefs/export_assistant.py:100
+msgid "Export file with:"
+msgstr ""
+
+#: markdown_preview/prefs/export_assistant.py:106
+msgid "Advanced options"
+msgstr ""
+
+#: markdown_preview/prefs/export_assistant.py:111
+#: markdown_preview/prefs/export_assistant.py:269
+msgid "Export"
+msgstr ""
+
+#: markdown_preview/prefs/export_assistant.py:260
+msgid "Pandoc encountered an error"
+msgstr ""
+
+#: markdown_preview/prefs/export_assistant.py:269
 #: markdown_preview/prefs/rendering_settings.py:91
 msgid "Cancel"
 msgstr ""
 
-#: markdown_preview/prefs/export_dialog.py:38
-msgid "Next"
-msgstr ""
-
-#: markdown_preview/prefs/export_dialog.py:41
-msgid "Export file with:"
-msgstr ""
-
-#: markdown_preview/prefs/export_dialog.py:48
-msgid "No styling options available for this file format."
-msgstr ""
-
-#: markdown_preview/prefs/export_dialog.py:135
-msgid "Export"
-msgstr ""
-
-#: markdown_preview/prefs/export_dialog.py:138
+#: markdown_preview/prefs/export_assistant.py:272
 msgid "(exported)"
 msgstr ""
 
@@ -541,10 +572,6 @@ msgstr ""
 
 #: markdown_preview/prefs/prefs.ui:115
 msgid "Backend"
-msgstr ""
-
-#: markdown_preview/prefs/prefs.ui:126
-msgid "Style"
 msgstr ""
 
 #: markdown_preview/prefs/prefs.ui:136
