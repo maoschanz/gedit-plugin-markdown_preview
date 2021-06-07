@@ -296,7 +296,8 @@ class MarkdownGeditPluginView(GObject.Object, Gedit.ViewActivatable):
 
 	def do_activate(self):
 		self.view.markdown_preview_view_activatable = self
-		self.menu_builder = Gtk.Builder().new_from_file(os.path.join(BASE_PATH, 'menus.ui'))
+		model_path = os.path.join(BASE_PATH, 'view-menu.ui')
+		self.menu_builder = Gtk.Builder().new_from_file(model_path)
 		self.popup_handler_id = self.view.connect('populate-popup', self.populate_popup)
 		self.tags_manager = MdTagsManager(self)
 
