@@ -2,6 +2,7 @@
 ./markdown_preview/constants.py
 ./markdown_preview/find_manager.py
 ./markdown_preview/main_container.py
+./markdown_preview/tags_manager.py
 ./markdown_preview/webview_manager.py
 
 ./markdown_preview/menus.ui

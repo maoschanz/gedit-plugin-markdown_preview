@@ -5,6 +5,7 @@ import subprocess, gi, os
 from gi.repository import GObject, Gtk, Gedit, Gio, PeasGtk, GLib
 
 from .main_container import MdMainContainer
+from .tags_manager import MdTagsManager
 from .prefs.prefs_dialog import MdConfigWidget
 from .prefs.export_dialog import MdExportDialog
 from .constants import KeyboardShortcuts, MD_PREVIEW_KEY_BASE
@@ -174,9 +175,12 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 
 		view = self.window.get_active_view()
 		if view and view.markdown_preview_view_activatable:
-			v = view.markdown_preview_view_activatable
+			v = view.markdown_preview_view_activatable.tags_manager
 		else:
 			return
+
+		# TODO gérer ça de manière statique avec une méthode hors-classe dans le
+		# fichier tags_manager.py
 
 		# print('action : ' + name) # TODO terminer ça mdr
 
@@ -294,6 +298,7 @@ class MarkdownGeditPluginView(GObject.Object, Gedit.ViewActivatable):
 		self.view.markdown_preview_view_activatable = self
 		self.menu_builder = Gtk.Builder().new_from_file(os.path.join(BASE_PATH, 'menus.ui'))
 		self.popup_handler_id = self.view.connect('populate-popup', self.populate_popup)
+		self.tags_manager = MdTagsManager(self)
 
 	def do_deactivate(self):
 		if self.popup_handler_id != 0:
@@ -326,144 +331,6 @@ class MarkdownGeditPluginView(GObject.Object, Gedit.ViewActivatable):
 		elif temp[len(temp)-1] == 'html':
 			return 'html'
 		return 'error'
-
-	################
-
-	def add_block_tags(self, start_tag, end_tag):
-		pass
-
-	def remove_line_tags(self, start_tag, end_tag):
-		print('à faire')
-
-	def add_line_tags(self, start_tag, end_tag): # FIXME ajouter l'espace si il n'est pas là ?
-		document = self.view.get_buffer()
-		selection = document.get_selection_bounds()
-		if selection != ():
-			(start, end) = selection
-		else:
-			start = document.get_iter_at_mark(document.get_insert())
-			end = document.get_iter_at_mark(document.get_insert())
-		if start.ends_line():
-			start.forward_line()
-		elif not start.starts_line():
-			start.set_line_offset(0)
-		if end.starts_line():
-			end.backward_char()
-		elif not end.ends_line():
-			end.forward_to_line_end()
-		new_code = self.add_tags_characters(document, start_tag, end_tag, start, end)
-
-	def add_word_tags(self, start_tag, end_tag):
-		document = self.view.get_buffer()
-		selection = document.get_selection_bounds()
-		if selection != ():
-			(start, end) = selection
-		else:
-			return
-		new_code = self.add_tags_characters(document, start_tag, end_tag, start, end)
-
-	def format_title_lower(self):
-		self.add_line_tags('#', '')
-
-	def format_title_upper(self):
-		self.remove_line_tags('# ', ' #')
-
-	def format_title(self, level):
-		self.add_line_tags('#'*level + ' ', '')
-
-	def format_bold(self):
-		self.add_word_tags('**', '**')
-
-	def list_unordered(self):
-		self.add_line_tags('- ', '')
-
-	def list_ordered(self):
-		self.add_line_tags('1. ', '')
-
-	def format_italic(self):
-		self.add_word_tags('*', '*')
-
-	def format_monospace(self):
-		self.add_word_tags('`', '`')
-
-	def format_quote(self):
-		self.add_line_tags('> ', '')
-
-	def format_underline(self):
-		self.add_word_tags('__', '__')
-
-	def format_stroke(self):
-		self.add_word_tags('~~', '~~')
-
-	def insert_link(self, window):
-		pass
-
-	def insert_picture(self, window):
-		# Building a FileChooserDialog for pictures
-		file_chooser = Gtk.FileChooserDialog(_("Select a picture"), window,
-			Gtk.FileChooserAction.OPEN,
-			(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
-			Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
-		onlyPictures = Gtk.FileFilter()
-		onlyPictures.set_name("Pictures")
-		onlyPictures.add_mime_type('image/*')
-		file_chooser.set_filter(onlyPictures)
-		response = file_chooser.run()
-
-		# It gets the chosen file's path
-		if response == Gtk.ResponseType.OK:
-			doc = self.view.get_buffer()
-			picture_path = '![](' + file_chooser.get_filename() + ')'
-			iter = doc.get_iter_at_mark(doc.get_insert())
-			doc.insert(iter, picture_path)
-		file_chooser.destroy()
-
-	def insert_table(self):
-		doc = self.view.get_buffer()
-		table = '|||\n|--|--|\n|||'
-		iter = doc.get_iter_at_mark(doc.get_insert())
-		doc.insert(iter, table)
-
-	def add_tags_characters(self, document, start_tag, end_tag, start, end):
-		smark = document.create_mark("start", start, False)
-		imark = document.create_mark("iter", start, False)
-		emark = document.create_mark("end", end, False)
-		number_lines = end.get_line() - start.get_line() + 1
-		document.begin_user_action()
-
-		for i in range(0, number_lines):
-			iterator = document.get_iter_at_mark(imark)
-			if not iterator.ends_line():
-				document.insert(iter, start_tag)
-				if end_tag is not None:
-					if i != number_lines -1:
-						iterator = document.get_iter_at_mark(imark)
-						iterator.forward_to_line_end()
-						document.insert(iterator, end_tag)
-					else:
-						iterator = document.get_iter_at_mark(emark)
-						document.insert(iterator, end_tag)
-			iterator = document.get_iter_at_mark(imark)
-			iterator.forward_line()
-			document.delete_mark(imark)
-			imark = document.create_mark("iter", iter, True)
-
-		document.end_user_action()
-
-		document.delete_mark(imark)
-		new_start = document.get_iter_at_mark(smark)
-		new_end = document.get_iter_at_mark(emark)
-		if not new_start.ends_line():
-			self.backward_tag(new_start, start_tag)
-		document.select_range(new_start, new_end)
-		document.delete_mark(smark)
-		document.delete_mark(emark)
-
-	def forward_tag(self, iter, tag):
-		iter.forward_chars(len(tag))
-
-	def backward_tag(self, iter, tag):
-		iter.backward_chars(len(tag))
 
 	############################################################################
 ################################################################################
