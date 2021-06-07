@@ -159,7 +159,7 @@ class MdBackendSettings():
 		AVAILABLE_BACKENDS = get_backends_dict()
 		self.set_available_backends(AVAILABLE_BACKENDS, active_backend)
 
-	def set_available_backends(self, backends_dict, active_backend='python'):
+	def set_available_backends(self, backends_dict, active_backend='pandoc'):
 		self._switcher_box.set_visible(True)
 		if not backends_dict['p3md']:
 			self.backend_stack.set_visible_child_name('backend_pandoc')

@@ -99,17 +99,17 @@ class BackendsEnums():
 	############################################################################
 
 	PandocFormatsFull = {
-		'beamer': _("LaTeX beamer slideshow (.tex)"),
-		'docx': _("Microsoft Word (.docx)"),
-		'html5': _("HTML5"),
-		'latex': _("LaTeX (.tex)"),
-		'odt': _("OpenOffice text document (.odt)"),
 		'pdf': _("Portable Document Format (.pdf)"),
+		'html5': _("HTML5"),
+		'odt': _("OpenOffice text document (.odt)"),
+		'docx': _("Microsoft Word (.docx)"),
+		'latex': _("LaTeX (.tex)"),
+		'beamer': _("LaTeX beamer slideshow (.tex)"),
 		'plain': _("plain text (.txt)"),
 		'pptx': _("PowerPoint slideshow (.pptx)"),
 		'rtf': _("Rich Text Format (.rtf)"),
 		'revealjs': _("reveal.js slideshow (HTML/JS)"),
-		'custom': _("Custom command line")
+		'custom': _("Custom command line"),
 	}
 	PandocFormatsPreview = {
 		'html5': _("HTML5"),

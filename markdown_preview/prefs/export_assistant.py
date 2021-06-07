@@ -40,8 +40,8 @@ class MdExportAssistant(Gtk.Assistant):
 
 		if AVAILABLE_BACKENDS['p3md']:
 			available_formats = {
-				'pdf': _("Portable Document Format (.pdf)"),
 				'html5': _("HTML5"),
+				'pdf': _("Portable Document Format (.pdf)"),
 			}
 		if AVAILABLE_BACKENDS['pandoc']:
 			available_formats = BackendsEnums.PandocFormatsFull
@@ -54,25 +54,25 @@ class MdExportAssistant(Gtk.Assistant):
 			return False
 
 		self._radio_format_group = None
-		horizontal_box = Gtk.Box(spacing=12)
-		horizontal_box.add(self._get_format_radio(available_formats, 'pdf'))
-		horizontal_box.add(self._get_format_radio(available_formats, 'html5'))
-		format_page.add(horizontal_box)
-		horizontal_box.show_all()
+		flowbox_main = Gtk.FlowBox(selection_mode=Gtk.SelectionMode.NONE)
+		format_page.add(flowbox_main)
 
-		flowbox = Gtk.FlowBox(selection_mode=Gtk.SelectionMode.NONE)
-		if len(available_formats) > 2:
+		flowbox_secondary = Gtk.FlowBox(selection_mode=Gtk.SelectionMode.NONE)
+		if AVAILABLE_BACKENDS['pandoc']:
 			format_page.add(Gtk.Separator(visible=True))
 			format_page.add(Gtk.Label(visible=True, halign=Gtk.Align.START, \
 			                                    label=_("Other file formats:")))
-			format_page.add(flowbox)
+			format_page.add(flowbox_secondary)
 
 		for file_format in available_formats:
-			if file_format in ['pdf', 'html5']:
-				continue
-			radio = self._get_format_radio(available_formats, file_format, False)
-			flowbox.add(radio)
-		flowbox.show_all()
+			bold = file_format in ['pdf', 'html5']
+			radio = self._get_format_radio(available_formats, file_format, bold)
+			if bold:
+				flowbox_main.add(radio)
+			else:
+				flowbox_secondary.add(radio)
+		flowbox_main.show_all()
+		flowbox_secondary.show_all()
 
 		self._add_page(format_page, _("Output file format"), Gtk.AssistantPageType.CONTENT)
 		return True
@@ -146,7 +146,13 @@ class MdExportAssistant(Gtk.Assistant):
 
 	def do_prepare(self, *args):
 		"""Virtual method called by Gtk.Assistant when the active page changes"""
-		if self.get_current_page() == 1:
+		if self.get_current_page() == 0:
+			if len(self._all_radio_btns) == 1:
+				self.set_current_page(1)
+			# If there is only one output file format available, it's useless to
+			# show the 0th page so it's skipped.
+
+		elif self.get_current_page() == 1:
 			# Backends are pre-set at the "style" page, this is normal
 			self.preset_backends()
 

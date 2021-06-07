@@ -59,6 +59,7 @@ class MdWebViewManager():
 			print_settings.set(Gtk.PRINT_SETTINGS_OUTPUT_URI, known_destination)
 			operation.set_print_settings(print_settings)
 
+			file_printer_name = False # FIXME remove this line when it'll work
 			if file_printer_name:
 				# Print directly to the destination without showing the dialog
 				operation.print_()
