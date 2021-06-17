@@ -240,12 +240,20 @@ class MdMainContainer(Gtk.Box):
 	def on_reload(self, *args):
 		if self.parent_plugin._auto_position:
 			self.auto_change_panel()
+		# Guard clause: it will not load documents if they're not a known format
+		# or if the panel is not even visible
 		if self.file_format == 'error' or not self.preview_bar.props.visible:
 			return
-		# Guard clause: it will not load documents is the panel is already used
+		# Guard clause: it will not load documents if the panel is already used
 		# for something else
 		if self.panel.get_visible_child() != self.preview_bar:
 			return
+
+		view = self.parent_plugin.window.get_active_view()
+		if view and hasattr(view, 'markdown_preview_view_activatable'):
+			should_reload = view.markdown_preview_view_activatable.should_reload()
+			if not should_reload:
+				return
 
 		html_content = ''
 		doc = self.parent_plugin.window.get_active_document()
