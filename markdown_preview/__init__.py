@@ -293,7 +293,6 @@ class MarkdownGeditPluginView(GObject.Object, Gedit.ViewActivatable):
 	def __init__(self):
 		self.popup_handler_id = 0
 		GObject.Object.__init__(self)
-		self._previously_typed_char = ' '
 
 	def do_activate(self):
 		self.view.markdown_preview_view_activatable = self
@@ -307,16 +306,6 @@ class MarkdownGeditPluginView(GObject.Object, Gedit.ViewActivatable):
 			self.view.disconnect(self.popup_handler_id)
 			self.popup_handler_id = 0
 		delattr(self.view, 'markdown_preview_view_activatable')
-
-	def should_reload(self):
-		document = self.view.get_buffer()
-		iter_mark = document.get_iter_at_mark(document.get_insert())
-		iter_mark.backward_char()
-		last_typed_char = iter_mark.get_char()
-		if last_typed_char == self._previously_typed_char:
-			return False
-		self._previously_typed_char = last_typed_char
-		return True
 
 	def populate_popup(self, view, popup):
 		if not isinstance(popup, Gtk.MenuShell):

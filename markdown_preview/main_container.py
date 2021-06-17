@@ -25,6 +25,7 @@ class MdMainContainer(Gtk.Box):
 		self.auto_reload = False
 		self.parent_plugin = parent_plugin
 		self.file_format = 'error'
+		self._reload_is_locked = False
 
 		# Where the values of settings will be loaded later
 		self._active_backend = 'python'
@@ -240,21 +241,30 @@ class MdMainContainer(Gtk.Box):
 	def on_reload(self, *args):
 		if self.parent_plugin._auto_position:
 			self.auto_change_panel()
+
 		# Guard clause: it will not load documents if they're not a known format
 		# or if the panel is not even visible
 		if self.file_format == 'error' or not self.preview_bar.props.visible:
 			return
+
 		# Guard clause: it will not load documents if the panel is already used
 		# for something else
 		if self.panel.get_visible_child() != self.preview_bar:
 			return
 
-		view = self.parent_plugin.window.get_active_view()
-		if view and hasattr(view, 'markdown_preview_view_activatable'):
-			should_reload = view.markdown_preview_view_activatable.should_reload()
-			if not should_reload:
-				return
+		if self._reload_is_locked:
+			return
+		self._reload_is_locked = True
+		GLib.timeout_add(300, self._unlock_reload, {})
+		self._on_reload_unsafe()
 
+	def _unlock_reload(self, content_params):
+		self._reload_is_locked = False
+		self._on_reload_unsafe()
+
+	def _on_reload_unsafe(self):
+		"""Must be called ONLY by `on_reload` which checks pre-conditions, or by
+		`_unlock_reload` which is called only by `on_reload` itself."""
 		html_content = ''
 		doc = self.parent_plugin.window.get_active_document()
 		start, end = doc.get_bounds()
