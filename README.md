@@ -3,7 +3,25 @@
 
 <!-- TODO
 
+Pour la release 2.0 :
+
+- [x] rendu délayé
+- [x] autoreload à true
 - [ ] bandeau de message vide à l'ouverture ??
+- export :
+	- [ ] export mixte (md >[p3md]> html >[pandoc]> pdf)
+	- [ ] labels on the 3rd page
+	- [ ] merge
+- tuer les trucs pas terminés :
+	- [ ] revealjs
+	- [ ] clic-droit
+	- [ ] raccourcis claviers
+- [ ] numéro de version etc.
+
+----
+
+Pour un moment indéterminé :
+
 - [~] différencier explicitement le chemin d'exécution pour l'ouverture d'un
   fichier (reconnaissance format etc.) d'un reload normal
 	- [ ] si un doc est ouvert et que c'est désac et qu'on active, ça ne réagit
