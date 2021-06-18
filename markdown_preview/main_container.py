@@ -57,7 +57,7 @@ class MdMainContainer(Gtk.Box):
 
 	def fix_backend_setting(self):
 		if not AVAILABLE_BACKENDS['p3md'] and not AVAILABLE_BACKENDS['pandoc']:
-			self.display_warning(_("Error: please install pandoc or python3-markdown"))
+			self._display_warning(_("Error: please install pandoc or python3-markdown"))
 		elif not AVAILABLE_BACKENDS['p3md']:
 			self._settings.set_string('backend', 'pandoc')
 		elif not AVAILABLE_BACKENDS['pandoc']:
@@ -146,8 +146,7 @@ class MdMainContainer(Gtk.Box):
 				markdown.markdown("test", extensions=[extension])
 				final_md_extensions.append(extension)
 			except Exception:
-				self.display_warning(_("The extension '%s' isn't valid") % extension)
-				# ne marche pas initialement car il y a un `close_warning` après
+				self._display_warning(_("The extension '%s' isn't valid") % extension)
 		self._settings.set_strv('extensions', final_md_extensions)
 		self._p3md_extensions = final_md_extensions
 
@@ -158,13 +157,14 @@ class MdMainContainer(Gtk.Box):
 
 	############################################################################
 
-	def close_warning(self, *args):
+	def _close_warning(self, *args):
 		self.notification_label.set_label('')
 		self.info_bar.set_visible(False)
 
-	def display_warning(self, text):
+	def _display_warning(self, text):
 		self.notification_label.set_label(text)
 		self.info_bar.set_visible(True)
+		print(text)
 
 	############################################################################
 
@@ -185,8 +185,8 @@ class MdMainContainer(Gtk.Box):
 		# Displaying error messages
 		self.info_bar = ui_builder.get_object('info_bar')
 		self.notification_label = ui_builder.get_object('notification_label')
-		self.info_bar.connect('close', self.close_warning)
-		self.info_bar.connect('response', self.close_warning)
+		self.info_bar.connect('close', self._close_warning)
+		self.info_bar.connect('response', self._close_warning)
 
 		# Plugin's main menu
 		menuBtn = ui_builder.get_object('menu_btn')
@@ -307,7 +307,7 @@ class MdMainContainer(Gtk.Box):
 				f.write(unsaved_text)
 				f.close()
 			except Exception as err:
-				self.display_warning(_("Rendering error"))
+				self._display_warning(_("Rendering error"))
 				raise err
 			f.close()
 			file_path = self.temp_file_md.get_path()
@@ -361,16 +361,17 @@ class MdMainContainer(Gtk.Box):
 
 		if ret is None:
 			if doc.is_untitled():
-				self.display_warning(_("Can't preview an unsaved document"))
+				self._display_warning(_("Can't preview an unsaved document"))
 				# XXX it should
 			else:
-				self.display_warning(_("Unsupported type of document: ") + name)
+				self._display_warning(_("Unsupported type of document: ") + name)
 			ret = 'error'
 		else:
+			self._close_warning()
+
 			# Most accesses to GSettings are cached here
 			self._on_backend_change()
 			self._on_stylesheet_change()
-			self.close_warning()
 		self.set_pagination_available(ret)
 		# print(ret)
 		return ret
@@ -448,6 +449,7 @@ class MdMainContainer(Gtk.Box):
 		self.panel.add_titled(self.preview_bar, 'markdown_preview', _("Markdown Preview"))
 		self.panel.set_visible_child(self.preview_bar)
 		self.preview_bar.show_all()
+		self._close_warning() # because the `show_all` shouldn't show that
 		self.pages_box.props.visible = (self.pagination_mode != 'whole')
 		if self.parent_plugin.window.get_state() == 'STATE_NORMAL':
 			self.on_reload()

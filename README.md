@@ -7,7 +7,7 @@ Pour la release 2.0 :
 
 - [x] rendu délayé
 - [x] autoreload à true
-- [ ] bandeau de message vide à l'ouverture ??
+- [x] bandeau de message vide à l'ouverture
 - export :
 	- [ ] export mixte (md >[p3md]> html >[pandoc]> pdf)
 	- [ ] labels on the 3rd page
