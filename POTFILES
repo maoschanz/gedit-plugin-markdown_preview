@@ -9,7 +9,7 @@
 ./markdown_preview/preview.ui
 ./markdown_preview/view-menu.ui
 
-./markdown_preview/prefs/export_dialog.py
+./markdown_preview/prefs/export_assistant.py
 ./markdown_preview/prefs/prefs_dialog.py
 ./markdown_preview/prefs/rendering_settings.py
 

@@ -15,6 +15,7 @@ class MdWebViewManager():
 
 	def __init__(self):
 		self._scroll_level = 0
+		# TODO remember the scroll level in the Gedit.View objects
 
 		self._webview = WebKit2.WebView()
 		self._webview.get_settings().set_property('enable_javascript', True)
@@ -39,9 +40,35 @@ class MdWebViewManager():
 	def load_bytes_for_uri(self, bytes_content, uri):
 		self._webview.load_bytes(bytes_content, 'text/html', 'UTF-8', uri)
 
-	def print_webview(self):
-		p = WebKit2.PrintOperation.new(self._webview)
-		p.run_dialog()
+	############################################################################
+	# Printing #################################################################
+
+	def print_webview(self, known_destination=None):
+		operation = WebKit2.PrintOperation.new(self._webview)
+
+		if known_destination is None:
+			operation.run_dialog()
+		else:
+			print_settings = Gtk.PrintSettings()
+			file_printer_name = self._get_file_printer_name()
+			if file_printer_name:
+				print_settings.set_printer(file_printer_name)
+			else:
+				print_settings.set_printer("Print to file")
+			print_settings.set(Gtk.PRINT_SETTINGS_OUTPUT_FILE_FORMAT, 'pdf')
+			print_settings.set(Gtk.PRINT_SETTINGS_OUTPUT_URI, known_destination)
+			operation.set_print_settings(print_settings)
+
+			if file_printer_name:
+				# Print directly to the destination without showing the dialog
+				operation.print_()
+				# FIXME dans ce cas il a les mêmes dimensions que la webview ??
+			else:
+				operation.run_dialog()
+			# FIXME sometimes there is a segfault anyway????
+
+	def _get_file_printer_name(self):
+		return None # impossible to do...
 
 	############################################################################
 	# Javascript for the scroll level ##########################################

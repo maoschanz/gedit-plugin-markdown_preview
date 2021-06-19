@@ -62,8 +62,10 @@ class HelpLabels():
 	
 	PandocGeneral = _("Pandoc is a command line utility with several " + \
 	                      "possible options, input formats and output formats.")
-	PandocCustom = _("Any command using $INPUT_FILE as the name of the " + \
-	 "input file, and printing valid HTML to the standard output, is accepted.")
+	PandocCustom = _("Any command where $INPUT_FILE would be the input " + \
+	       "file, and printing valid HTML to the standard output, is accepted.")
+	PandocExport = _("Any command where $INPUT_FILE would be the input " + \
+	         "file, and $OUTPUT_FILE the name of the output file, is accepted.")
 
 	StyleCSS = _("You can select a stylesheet (.css file) to make your " + \
 	           "document look nice and modern, or to increase its readability.")
@@ -99,17 +101,17 @@ class BackendsEnums():
 	############################################################################
 
 	PandocFormatsFull = {
-		'beamer': _("LaTeX beamer slideshow (.tex)"),
-		'docx': _("Microsoft Word (.docx)"),
-		'html5': _("HTML5"),
-		'latex': _("LaTeX (.tex)"),
-		'odt': _("OpenOffice text document (.odt)"),
 		'pdf': _("Portable Document Format (.pdf)"),
+		'html5': _("HTML5"),
+		'odt': _("OpenOffice text document (.odt)"),
+		'docx': _("Microsoft Word (.docx)"),
+		'latex': _("LaTeX (.tex)"),
+		'beamer': _("LaTeX beamer slideshow (.tex)"),
 		'plain': _("plain text (.txt)"),
 		'pptx': _("PowerPoint slideshow (.pptx)"),
 		'rtf': _("Rich Text Format (.rtf)"),
 		'revealjs': _("reveal.js slideshow (HTML/JS)"),
-		'custom': _("Custom command line")
+		'custom': _("Custom command line"),
 	}
 	PandocFormatsPreview = {
 		'html5': _("HTML5"),

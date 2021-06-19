@@ -399,7 +399,7 @@ class MdMainContainer(Gtk.Box):
 		self.page_number = len(lang_pages)
 		if self.page_index >= self.page_number:
 			self.page_index = self.page_number - 1
-			# TODO remember the page index in the Gedit.View object
+			# TODO remember the page index in the Gedit.View objects
 		lang_current_page = lang_pages[self.page_index]
 
 		if self.page_index == 0:

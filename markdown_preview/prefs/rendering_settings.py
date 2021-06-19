@@ -126,12 +126,12 @@ class MdBackendSettings():
 		self.full_widget = builder.get_object('backend_box')
 		builder.get_object('combo_label').set_label(label)
 		self.backend_stack = builder.get_object('backend_stack')
-		backendCombobox = builder.get_object('backend_combobox')
-		backendCombobox.append('python', "python3-markdown")
-		backendCombobox.append('pandoc', "pandoc")
+		self.backend_combobox = builder.get_object('backend_combobox')
+		self.backend_combobox.append('python', "python3-markdown")
+		self.backend_combobox.append('pandoc', "pandoc")
 		active_backend = self._settings.get_string('backend')
-		backendCombobox.set_active_id(active_backend)
-		backendCombobox.connect('changed', self.on_backend_changed)
+		self.backend_combobox.set_active_id(active_backend)
+		self.backend_combobox.connect('changed', self.on_backend_changed)
 		self.set_correct_page(active_backend)
 
 		# Load UI for the python3-markdown backend
@@ -148,22 +148,36 @@ class MdBackendSettings():
 		self.pandoc_cli_entry = builder.get_object('pandoc_command_entry')
 		pandoc_cli_help = builder.get_object('help_label_pandoc')
 		pandoc_cli_help.set_label(HelpLabels.PandocGeneral)
+
 		self.pandoc_cli_custom = builder.get_object('help_label_pandoc_custom')
-		self.pandoc_cli_custom.set_label(HelpLabels.PandocCustom)
 		self.remember_button = builder.get_object('remember_button')
+		if self.apply_to_settings:
+			self.pandoc_cli_custom.set_label(HelpLabels.PandocCustom)
+			remember_btn_label = _("Remember as custom rendering command")
+		else:
+			self.pandoc_cli_custom.set_label(HelpLabels.PandocExport)
+			remember_btn_label = _("Remember as custom export command")
+		self.remember_button.set_label(remember_btn_label)
 		self.remember_button.connect('clicked', self.on_remember)
+
 		self.format_combobox = builder.get_object('format_combobox')
 		self.format_combobox.connect('changed', self.on_pandoc_format_changed)
 
+		self._switcher_box = builder.get_object('switcher_box')
 		AVAILABLE_BACKENDS = get_backends_dict()
-		if not AVAILABLE_BACKENDS['p3md']:
+		self.set_available_backends(AVAILABLE_BACKENDS, active_backend)
+
+	def set_available_backends(self, backends_dict, active_backend='pandoc'):
+		self._switcher_box.set_visible(True)
+		if not backends_dict['p3md']:
 			self.backend_stack.set_visible_child_name('backend_pandoc')
-			builder.get_object('switcher_box').set_sensitive(False)
-		elif not AVAILABLE_BACKENDS['pandoc']:
+			self._switcher_box.set_visible(False)
+		elif not backends_dict['pandoc']:
 			self.backend_stack.set_visible_child_name('backend_python')
-			builder.get_object('switcher_box').set_sensitive(False)
+			self._switcher_box.set_visible(False)
 		else:
-			self.backend_stack.set_visible_child_name('backend_' + active_backend)
+			self.backend_combobox.set_active_id(active_backend)
+			self.set_correct_page(active_backend)
 
 	############################################################################
 
@@ -172,9 +186,7 @@ class MdBackendSettings():
 		if self.apply_to_settings:
 			self._settings.set_string('backend', backend)
 		self.set_correct_page(backend)
-		if backend == 'python':
-			self.parent_widget.set_command_for_format('html5')
-		else:
+		if backend == 'pandoc':
 			self.on_pandoc_format_changed(self.format_combobox)
 
 	def set_correct_page(self, backend):
@@ -193,11 +205,13 @@ class MdBackendSettings():
 	def init_pandoc_combobox(self, default_id):
 		self.format_combobox.set_active_id(default_id)
 		self.adapt_widgets_to_pandoc_custom(default_id == 'custom')
+		# FIXME ^ ça ne suffit pas, car on fait un show_all de connard.
 
 	def update_pandoc_combobox(self):
 		self.on_pandoc_format_changed(self.format_combobox)
 
 	def on_remember(self, *args):
+		# FIXME get_text veut des arguments
 		new_command = self.pandoc_cli_entry.get_buffer().get_text()
 		if self.apply_to_settings:
 			self._settings.set_string('custom-render', new_command)
