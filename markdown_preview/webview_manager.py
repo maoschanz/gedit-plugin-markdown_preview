@@ -59,24 +59,16 @@ class MdWebViewManager():
 			print_settings.set(Gtk.PRINT_SETTINGS_OUTPUT_URI, known_destination)
 			operation.set_print_settings(print_settings)
 
-			file_printer_name = False # FIXME remove this line when it'll work
 			if file_printer_name:
 				# Print directly to the destination without showing the dialog
 				operation.print_()
-				# TODO dans ce cas il a les mêmes dimensions que la webview ??
+				# FIXME dans ce cas il a les mêmes dimensions que la webview ??
 			else:
 				operation.run_dialog()
-			# FIXME sometimes there is a segfault????
+			# FIXME sometimes there is a segfault anyway????
 
 	def _get_file_printer_name(self):
-		translated_name = _("WARNING: THIS STRING MUST BE TRANSLATED AS THE" + \
-		                    " EXACT NAME OF THE 'PRINT TO FILE' PRINTER IN " + \
-		                    "YOUR LANGUAGE, OPEN A GTK3 PRINT DIALOG TO SEE" + \
-		                    " WHAT SHOULD BE SET AS THE TRANSLATION")
-		if "WARNING" in translated_name:
-			return None
-		else:
-			return translated_name
+		return None # impossible to do...
 
 	############################################################################
 	# Javascript for the scroll level ##########################################

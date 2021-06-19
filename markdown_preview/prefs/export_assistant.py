@@ -41,7 +41,7 @@ class MdExportAssistant(Gtk.Assistant):
 		if AVAILABLE_BACKENDS['p3md']:
 			available_formats = {
 				'html5': _("HTML5"),
-				'pdf': _("Portable Document Format (.pdf)"),
+				# 'pdf': _("Portable Document Format (.pdf)"),
 			}
 		if AVAILABLE_BACKENDS['pandoc']:
 			available_formats = BackendsEnums.PandocFormatsFull
