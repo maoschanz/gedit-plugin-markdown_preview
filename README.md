@@ -9,8 +9,7 @@ Pour la release 2.0 :
 - [x] autoreload à true
 - [x] bandeau de message vide à l'ouverture
 - export :
-	- [ ] export mixte (md >[p3md]> html >[pandoc]> pdf)
-	- [ ] labels on the 3rd page
+	- [x] labels on the 3rd page
 	- [ ] merge
 - tuer les trucs pas terminés :
 	- [ ] revealjs
@@ -21,6 +20,11 @@ Pour la release 2.0 :
 ----
 
 Pour un moment indéterminé :
+
+Traceback (most recent call last):
+  File "/home/roschan/.local/share/gedit/plugins/markdown_preview/prefs/rendering_settings.py", line 206, in on_remember
+    new_command = self.pandoc_cli_entry.get_buffer().get_text()
+TypeError: Gtk.TextBuffer.get_text() takes exactly 4 arguments (1 given)
 
 - [~] différencier explicitement le chemin d'exécution pour l'ouverture d'un
       fichier (reconnaissance format etc.) d'un reload normal
@@ -56,7 +60,7 @@ pane (<kbd>F9</kbd>) or the bottom (<kbd>Ctrl</kbd>+<kbd>F9</kbd>) pane.
 - search in the preview
 - open links and images
 
-This works for Markdown files, and theoretically HTML files too.
+This works for Markdown files, and HTML files.
 
 ### Exporting
 

@@ -211,14 +211,14 @@ class MdExportAssistant(Gtk.Assistant):
 		options = ''
 		accept_css = True
 		if output_format == 'pdf':
-			options = '-V geometry=right=2cm -V geometry=left=2cm -V ' \
-			                 'geometry=bottom=2cm -V geometry=top=2cm'
+			options = '-V geometry=right=2cm -V geometry=left=2cm ' \
+			          '-V geometry=bottom=2cm -V geometry=top=2cm'
 			self.output_extension = '.pdf'
 		elif output_format == 'revealjs':
-			options = '-t revealjs -s --metadata pagetitle=Exported ' + \
+			options = '-t revealjs -s --metadata pagetitle=exported_preview ' + \
 			                     '-V revealjs-url=http://lab.hakim.se/reveal-js'
-			options = options + ' -V theme=' + self._settings.get_string('revealjs-theme')
-			options = options + ' -V transition=' + \
+			options += ' -V theme=' + self._settings.get_string('revealjs-theme')
+			options += ' -V transition=' + \
 			                   self._settings.get_string('revealjs-transitions')
 			if self._settings.get_boolean('revealjs-slide-num'):
 				options = options + ' -V slideNumber=true'
@@ -240,7 +240,7 @@ class MdExportAssistant(Gtk.Assistant):
 			else:
 				self.output_extension = '.' + output_format
 		if self.css_manager.switch_css.get_state() and accept_css:
-			options = options + ' -c ' + self.css_manager.css_uri
+			options += ' -c ' + self.css_manager.css_uri
 		self._backend.set_pandoc_command(command % options)
 
 	############################################################################

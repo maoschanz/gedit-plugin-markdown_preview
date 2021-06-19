@@ -148,10 +148,18 @@ class MdBackendSettings():
 		self.pandoc_cli_entry = builder.get_object('pandoc_command_entry')
 		pandoc_cli_help = builder.get_object('help_label_pandoc')
 		pandoc_cli_help.set_label(HelpLabels.PandocGeneral)
+
 		self.pandoc_cli_custom = builder.get_object('help_label_pandoc_custom')
-		self.pandoc_cli_custom.set_label(HelpLabels.PandocCustom)
 		self.remember_button = builder.get_object('remember_button')
+		if self.apply_to_settings:
+			self.pandoc_cli_custom.set_label(HelpLabels.PandocCustom)
+			remember_btn_label = _("Remember as custom rendering command")
+		else:
+			self.pandoc_cli_custom.set_label(HelpLabels.PandocExport)
+			remember_btn_label = _("Remember as custom export command")
+		self.remember_button.set_label(remember_btn_label)
 		self.remember_button.connect('clicked', self.on_remember)
+
 		self.format_combobox = builder.get_object('format_combobox')
 		self.format_combobox.connect('changed', self.on_pandoc_format_changed)
 
@@ -203,6 +211,7 @@ class MdBackendSettings():
 		self.on_pandoc_format_changed(self.format_combobox)
 
 	def on_remember(self, *args):
+		# FIXME get_text veut des arguments
 		new_command = self.pandoc_cli_entry.get_buffer().get_text()
 		if self.apply_to_settings:
 			self._settings.set_string('custom-render', new_command)

@@ -62,8 +62,10 @@ class HelpLabels():
 	
 	PandocGeneral = _("Pandoc is a command line utility with several " + \
 	                      "possible options, input formats and output formats.")
-	PandocCustom = _("Any command using $INPUT_FILE as the name of the " + \
-	 "input file, and printing valid HTML to the standard output, is accepted.")
+	PandocCustom = _("Any command where $INPUT_FILE would be the input " + \
+	       "file, and printing valid HTML to the standard output, is accepted.")
+	PandocExport = _("Any command where $INPUT_FILE would be the input " + \
+	         "file, and $OUTPUT_FILE the name of the output file, is accepted.")
 
 	StyleCSS = _("You can select a stylesheet (.css file) to make your " + \
 	           "document look nice and modern, or to increase its readability.")
