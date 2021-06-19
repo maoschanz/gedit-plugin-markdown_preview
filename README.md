@@ -5,47 +5,11 @@
 
 Pour la release 2.0 :
 
-- [x] rendu délayé
-- [x] autoreload à true
-- [x] bandeau de message vide à l'ouverture
-- export :
-	- [x] labels on the 3rd page
-	- [ ] merge
 - tuer les trucs pas terminés :
 	- [ ] revealjs
 	- [ ] clic-droit
 	- [ ] raccourcis claviers
-- [ ] numéro de version etc.
-
-----
-
-Pour un moment indéterminé :
-
-Traceback (most recent call last):
-  File "/home/roschan/.local/share/gedit/plugins/markdown_preview/prefs/rendering_settings.py", line 206, in on_remember
-    new_command = self.pandoc_cli_entry.get_buffer().get_text()
-TypeError: Gtk.TextBuffer.get_text() takes exactly 4 arguments (1 given)
-
-- [~] différencier explicitement le chemin d'exécution pour l'ouverture d'un
-      fichier (reconnaissance format etc.) d'un reload normal
-	- [ ] si un doc est ouvert et que c'est désac et qu'on active, ça ne réagit
-	      pas et on ne peut pas recharger
-- reveal js https://github.com/jgm/pandoc/wiki/Using-pandoc-to-produce-reveal.js-slides
-	- [ ] prefs
-		- [ ] rendu fonctionnel
-		- [ ] transitions
-		- [ ] numéros de pages
-		- [ ] paramètres de thème
-	- [ ] export
-		- [ ] ne pas désactiver l'entrée quand on exporte
-		- [ ] rendu fonctionnel
-		- [ ] transitions
-		- [ ] numéros de pages
-		- [ ] paramètres de thème
-- print(doc.get_mime_type(), doc.get_content_type())
-- [ ] CSS for admonitions (and other default plugins ?)
-	- [ ] and pymdown ??
-- [ ] bring back the fullscreen, but better
+- [x] numéro de version etc.
 
 ~     TODO -->
 
@@ -66,12 +30,17 @@ This works for Markdown files, and HTML files.
 
 You can print the preview, or export it:
 
-- if [`pandoc`](https://pandoc.org/) is installed on your system, you can export to any format it supports
-	- a stylesheet can be applied to most file formats
-	- be careful if you want to export to PDF: pandoc doesn't come with all necessary dependencies by default
+- if [`pandoc`](https://pandoc.org/) is installed on your system, you can export
+  to any format it supports.
+	- a stylesheet can be applied to most file formats.
+	- be careful if you want to export to PDF: pandoc doesn't come with all
+	  necessary dependencies by default.
 - if only `python3-markdown` is installed, you can export to HTML
 	- a stylesheet can be applied
-	- `python3-markdown` [extensions](https://python-markdown.github.io/extensions/) can be used (including [third-party extensions](https://github.com/Python-Markdown/markdown/wiki/Third-Party-Extensions) like [these great ones](https://facelessuser.github.io/pymdown-extensions/)
+	- `python3-markdown` [extensions](https://python-markdown.github.io/extensions/)
+	  can be used. Aside of this default pack of extensions, it's possible to
+	  use [third-party extensions](https://github.com/Python-Markdown/markdown/wiki/Third-Party-Extensions) 
+	  like [these great ones](https://facelessuser.github.io/pymdown-extensions/)
 
 <!-- ### Editing assistance -->
 
