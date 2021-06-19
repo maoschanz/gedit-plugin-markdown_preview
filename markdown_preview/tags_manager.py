@@ -16,7 +16,7 @@ class MdTagsManager():
 		pass # TODO
 
 	def add_line_tags(self, start_tag, end_tag):
-		# FIXME ajouter l'espace si il n'est pas là ?
+		# TODO ajouter l'espace si il n'est pas là ?
 		document = self._view_plugin.view.get_buffer()
 		selection = document.get_selection_bounds()
 		if selection != ():

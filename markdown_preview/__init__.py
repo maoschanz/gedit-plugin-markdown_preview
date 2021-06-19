@@ -181,6 +181,7 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 
 		# TODO gérer ça de manière statique avec une méthode hors-classe dans le
 		# fichier tags_manager.py
+		# ou juste ajouter les actions depuis le tags_manager si possible ??
 
 		# print('action : ' + name) # TODO terminer ça mdr
 

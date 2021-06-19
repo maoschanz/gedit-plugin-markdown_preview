@@ -10,7 +10,7 @@
       <description>Can be 'side', 'bottom', or 'auto'.</description>
     </key>
     <key type="b" name="relative">
-      <default>false</default>
+      <default>true</default>
       <summary>Use relative paths</summary>
       <description>Enable relative paths for links and pictures</description>
     </key>

@@ -11,6 +11,7 @@ Pour la release 2.0 :
 - export :
 	- [ ] export mixte (md >[p3md]> html >[pandoc]> pdf)
 	- [ ] labels on the 3rd page
+	- [ ] impacter les changements de get_dummy_uri
 	- [ ] merge
 - tuer les trucs pas terminés :
 	- [ ] revealjs

@@ -152,7 +152,9 @@ class MdMainContainer(Gtk.Box):
 
 	def _validate_pandoc_command(self):
 		pandoc_command = self._settings.get_strv('pandoc-command')
-		# TODO validation ?
+		if '$INPUT_FILE' not in pandoc_command:
+			pandoc_command.append('-s')
+			pandoc_command.append('$INPUT_FILE')
 		self._pandoc_command = pandoc_command
 
 	############################################################################
@@ -164,7 +166,7 @@ class MdMainContainer(Gtk.Box):
 	def _display_warning(self, text):
 		self.notification_label.set_label(text)
 		self.info_bar.set_visible(True)
-		print(text)
+		# print(text)
 
 	############################################################################
 
@@ -267,12 +269,19 @@ class MdMainContainer(Gtk.Box):
 		`_unlock_reload` which is called only by `on_reload` itself."""
 		html_content = ''
 		doc = self.parent_plugin.window.get_active_document()
+		if doc is None:
+			print("The window doesn't have any active document to preview")
+			return
+		if self.file_format == 'error':
+			# The clause guard has to be duplicated because the document might
+			# change during the delay between `on_reload` & `_on_reload_unsafe`
+			return
 		start, end = doc.get_bounds()
 		unsaved_text = doc.get_text(start, end, True)
 		unsaved_text = unsaved_text.encode('utf-8').decode()
 		if self.file_format == 'html':
 			html_content = self.get_html_from_html(unsaved_text)
-		elif self._active_backend == 'python' and self.file_format == 'md':
+		elif self._active_backend == 'python':
 			html_content = self.get_html_from_p3md(unsaved_text)
 		else:
 			html_content = self.get_html_from_pandoc(unsaved_text)
@@ -314,6 +323,7 @@ class MdMainContainer(Gtk.Box):
 		else: # in the future, other formats might be supported
 			doc = self.parent_plugin.window.get_active_document()
 			file_path = doc.get_uri_for_display()
+		# XXX il est pas caché ce con là ??
 		if '-c' not in command and self._settings.get_boolean('use-style'):
 			command.append('-c')
 			command.append(self._stylesheet)
@@ -399,11 +409,14 @@ class MdMainContainer(Gtk.Box):
 		return lang_current_page
 
 	def get_dummy_uri(self):
-		# Support for relative paths is cool, but breaks CSS in too many cases
+		# Support for relative paths is cool, but breaks CSS in many cases
+		doc_location = None
 		if self._settings.get_boolean('relative'):
-			return self.parent_plugin.window.get_active_document().get_file().get_location().get_uri()
-		else:
+			doc_location = self.parent_plugin.window.get_active_document().get_file().get_location()
+		if doc_location is None:
 			return 'file://'
+		else:
+			return doc_location.get_uri()
 
 	############################################################################
 	# Panels ###################################################################
