@@ -181,6 +181,7 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 
 		# TODO gérer ça de manière statique avec une méthode hors-classe dans le
 		# fichier tags_manager.py
+		# ou juste ajouter les actions depuis le tags_manager si possible ??
 
 		# print('action : ' + name) # TODO terminer ça mdr
 
@@ -304,7 +305,7 @@ class MarkdownGeditPluginView(GObject.Object, Gedit.ViewActivatable):
 		item = Gtk.SeparatorMenuItem()
 		item.show()
 		popup.append(item)
-		
+
 		item = Gtk.MenuItem(_("Markdown tags"))
 		menu = Gtk.Menu().new_from_model(self.menu_builder.get_object('right-click-menu'))
 		item.set_submenu(menu)

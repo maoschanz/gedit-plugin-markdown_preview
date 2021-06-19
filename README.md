@@ -3,7 +3,25 @@
 
 <!-- TODO
 
-- [ ] bandeau de message vide à l'ouverture ??
+Pour la release 2.0 :
+
+- [x] rendu délayé
+- [x] autoreload à true
+- [x] bandeau de message vide à l'ouverture
+- export :
+	- [ ] export mixte (md >[p3md]> html >[pandoc]> pdf)
+	- [ ] labels on the 3rd page
+	- [ ] merge
+- tuer les trucs pas terminés :
+	- [ ] revealjs
+	- [ ] clic-droit
+	- [ ] raccourcis claviers
+- [ ] numéro de version etc.
+
+----
+
+Pour un moment indéterminé :
+
 - [~] différencier explicitement le chemin d'exécution pour l'ouverture d'un
       fichier (reconnaissance format etc.) d'un reload normal
 	- [ ] si un doc est ouvert et que c'est désac et qu'on active, ça ne réagit
@@ -27,8 +45,8 @@
 
 ~     TODO -->
 
-This is a plugin for the Gedit text editor, previewing .md files in the side pane
-(<kbd>F9</kbd>) or the bottom (<kbd>Ctrl</kbd>+<kbd>F9</kbd>) pane.
+This is a plugin for the Gedit text editor, previewing .md files in the side
+pane (<kbd>F9</kbd>) or the bottom (<kbd>Ctrl</kbd>+<kbd>F9</kbd>) pane.
 
 ### Previewing
 
@@ -70,27 +88,31 @@ You can print the preview, or export it:
 
 ## Installation
 
-### Dependencies
+### Packages
 
-Be sure to have these packages installed before trying to install the plugin:
+- For Arch Linux and its derivatives: the [AUR](https://aur.archlinux.org/packages/gedit-plugin-markdown_preview) package is named `gedit-plugin-markdown_preview`.
 
-- `gedit` (≥3.22)
-- `gir1.2-webkit2-4.0`
-- `python3-markdown` or `pandoc`
-- if you want to export to PDF with pandoc, you'll need at least `pdflatex` and `lmodern`
+Even if you install the plugin with a package manager, you may like to read the
+following sections, since installing optional dependencies will enable new
+features of the plugin.
 
-### Download
+### Manual installation
 
-- Download the ZIP of [the last release](https://github.com/maoschanz/gedit-plugin-markdown_preview/releases)
-- Extract the archive
+1. Dependencies. Be sure to have these packages before installing the plugin:
+  - `gedit` (≥3.22)
+  - `gir1.2-webkit2-4.0`
+  - `python3-markdown` or `pandoc`
+  - if you want to export to PDF with pandoc, you'll need at least `pdflatex`
+    and `lmodern`. Those are provided by `texlive` packages whose names vary
+    depending on the distribution. Warning: the version provided by Debian is
+    sadly broken (some error message about *xcolor.sty*).
+2. Download the ZIP of [the last release](https://github.com/maoschanz/gedit-plugin-markdown_preview/releases).
+3. Extract the archive.
+4. Open the project's folder in a terminal.
+5. Run `./install.sh` — it can be executed as root (system-wide installation) or
+   as a normal user (user-wide installation).
 
-### Plugin installation
-
-The script `install.sh` can be executed as root (system-wide installation) or as
-a normal user (user-wide installation).
-
-- Open the project's folder in a terminal.
-- Run `./install.sh`
+## Activation
 
 The plugin is now installed and has to be enabled:
 

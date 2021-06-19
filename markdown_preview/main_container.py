@@ -25,6 +25,7 @@ class MdMainContainer(Gtk.Box):
 		self.auto_reload = False
 		self.parent_plugin = parent_plugin
 		self.file_format = 'error'
+		self._reload_is_locked = False
 
 		# Where the values of settings will be loaded later
 		self._active_backend = 'python'
@@ -56,7 +57,7 @@ class MdMainContainer(Gtk.Box):
 
 	def fix_backend_setting(self):
 		if not AVAILABLE_BACKENDS['p3md'] and not AVAILABLE_BACKENDS['pandoc']:
-			self.display_warning(_("Error: please install pandoc or python3-markdown"))
+			self._display_warning(_("Error: please install pandoc or python3-markdown"))
 		elif not AVAILABLE_BACKENDS['p3md']:
 			self._settings.set_string('backend', 'pandoc')
 		elif not AVAILABLE_BACKENDS['pandoc']:
@@ -145,26 +146,27 @@ class MdMainContainer(Gtk.Box):
 				markdown.markdown("test", extensions=[extension])
 				final_md_extensions.append(extension)
 			except Exception:
-				self.display_warning(_("The extension '%s' isn't valid") % extension)
-				# ne marche pas initialement car il y a un `close_warning` après
+				self._display_warning(_("The extension '%s' isn't valid") % extension)
 		self._settings.set_strv('extensions', final_md_extensions)
 		self._p3md_extensions = final_md_extensions
 
 	def _validate_pandoc_command(self):
 		pandoc_command = self._settings.get_strv('pandoc-command')
 		if '$INPUT_FILE' not in pandoc_command:
-			pass # TODO insérer en 2nde position
+			pandoc_command.append('-s')
+			pandoc_command.append('$INPUT_FILE')
 		self._pandoc_command = pandoc_command
 
 	############################################################################
 
-	def close_warning(self, *args):
+	def _close_warning(self, *args):
 		self.notification_label.set_label('')
 		self.info_bar.set_visible(False)
 
-	def display_warning(self, text):
+	def _display_warning(self, text):
 		self.notification_label.set_label(text)
 		self.info_bar.set_visible(True)
+		# print(text)
 
 	############################################################################
 
@@ -185,8 +187,8 @@ class MdMainContainer(Gtk.Box):
 		# Displaying error messages
 		self.info_bar = ui_builder.get_object('info_bar')
 		self.notification_label = ui_builder.get_object('notification_label')
-		self.info_bar.connect('close', self.close_warning)
-		self.info_bar.connect('response', self.close_warning)
+		self.info_bar.connect('close', self._close_warning)
+		self.info_bar.connect('response', self._close_warning)
 
 		# Plugin's main menu
 		menuBtn = ui_builder.get_object('menu_btn')
@@ -241,21 +243,45 @@ class MdMainContainer(Gtk.Box):
 	def on_reload(self, *args):
 		if self.parent_plugin._auto_position:
 			self.auto_change_panel()
+
+		# Guard clause: it will not load documents if they're not a known format
+		# or if the panel is not even visible
 		if self.file_format == 'error' or not self.preview_bar.props.visible:
 			return
-		# Guard clause: it will not load documents is the panel is already used
+
+		# Guard clause: it will not load documents if the panel is already used
 		# for something else
 		if self.panel.get_visible_child() != self.preview_bar:
 			return
 
+		if self._reload_is_locked:
+			return
+		self._reload_is_locked = True
+		GLib.timeout_add(300, self._unlock_reload, {})
+		self._on_reload_unsafe()
+
+	def _unlock_reload(self, content_params):
+		self._reload_is_locked = False
+		self._on_reload_unsafe()
+
+	def _on_reload_unsafe(self):
+		"""Must be called ONLY by `on_reload` which checks pre-conditions, or by
+		`_unlock_reload` which is called only by `on_reload` itself."""
 		html_content = ''
 		doc = self.parent_plugin.window.get_active_document()
+		if doc is None:
+			print("The window doesn't have any active document to preview")
+			return
+		if self.file_format == 'error':
+			# The clause guard has to be duplicated because the document might
+			# change during the delay between `on_reload` & `_on_reload_unsafe`
+			return
 		start, end = doc.get_bounds()
 		unsaved_text = doc.get_text(start, end, True)
 		unsaved_text = unsaved_text.encode('utf-8').decode()
 		if self.file_format == 'html':
 			html_content = self.get_html_from_html(unsaved_text)
-		elif self._active_backend == 'python' and self.file_format == 'md':
+		elif self._active_backend == 'python':
 			html_content = self.get_html_from_p3md(unsaved_text)
 		else:
 			html_content = self.get_html_from_pandoc(unsaved_text)
@@ -290,13 +316,14 @@ class MdMainContainer(Gtk.Box):
 				f.write(unsaved_text)
 				f.close()
 			except Exception as err:
-				self.display_warning(_("Rendering error"))
+				self._display_warning(_("Rendering error"))
 				raise err
 			f.close()
 			file_path = self.temp_file_md.get_path()
 		else: # in the future, other formats might be supported
 			doc = self.parent_plugin.window.get_active_document()
 			file_path = doc.get_uri_for_display()
+		# XXX il est pas caché ce con là ??
 		if '-c' not in command and self._settings.get_boolean('use-style'):
 			command.append('-c')
 			command.append(self._stylesheet)
@@ -344,16 +371,17 @@ class MdMainContainer(Gtk.Box):
 
 		if ret is None:
 			if doc.is_untitled():
-				self.display_warning(_("Can't preview an unsaved document"))
+				self._display_warning(_("Can't preview an unsaved document"))
 				# XXX it should
 			else:
-				self.display_warning(_("Unsupported type of document: ") + name)
+				self._display_warning(_("Unsupported type of document: ") + name)
 			ret = 'error'
 		else:
+			self._close_warning()
+
 			# Most accesses to GSettings are cached here
 			self._on_backend_change()
 			self._on_stylesheet_change()
-			self.close_warning()
 		self.set_pagination_available(ret)
 		# print(ret)
 		return ret
@@ -381,13 +409,14 @@ class MdMainContainer(Gtk.Box):
 		return lang_current_page
 
 	def get_dummy_uri(self):
-		# FIXME ne fonctionne pas fantastiquement bien avec les fichiers pas
-		# enregistrés (pourquoi mdr ? c'est inactif non ?)
-		# Support for relative paths is cool, but breaks CSS in too many cases
+		# Support for relative paths is cool, but breaks CSS in many cases
+		doc_location = None
 		if self._settings.get_boolean('relative'):
-			return self.parent_plugin.window.get_active_document().get_file().get_location().get_uri()
-		else:
+			doc_location = self.parent_plugin.window.get_active_document().get_file().get_location()
+		if doc_location is None:
 			return 'file://'
+		else:
+			return doc_location.get_uri()
 
 	############################################################################
 	# Panels ###################################################################
@@ -433,6 +462,7 @@ class MdMainContainer(Gtk.Box):
 		self.panel.add_titled(self.preview_bar, 'markdown_preview', _("Markdown Preview"))
 		self.panel.set_visible_child(self.preview_bar)
 		self.preview_bar.show_all()
+		self._close_warning() # because the `show_all` shouldn't show that
 		self.pages_box.props.visible = (self.pagination_mode != 'whole')
 		if self.parent_plugin.window.get_state() == 'STATE_NORMAL':
 			self.on_reload()

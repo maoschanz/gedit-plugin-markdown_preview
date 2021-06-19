@@ -10,7 +10,7 @@
       <description>Can be 'side', 'bottom', or 'auto'.</description>
     </key>
     <key type="b" name="relative">
-      <default>false</default>
+      <default>true</default>
       <summary>Use relative paths</summary>
       <description>Enable relative paths for links and pictures</description>
     </key>
@@ -24,9 +24,12 @@
       </description>
     </key>
     <key type="b" name="auto-reload">
-      <default>false</default>
+      <default>true</default>
       <summary>Automatically reload the preview</summary>
-      <description></description>
+      <description>
+        Reload the preview each time the document changes. It will require more
+        resources if it's enabled.
+      </description>
     </key>
     <key type="s" name="splitter">
       <default>'whole'</default>
