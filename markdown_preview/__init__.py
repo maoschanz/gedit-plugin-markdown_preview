@@ -5,10 +5,9 @@ import subprocess, gi, os
 from gi.repository import GObject, Gtk, Gedit, Gio, PeasGtk, GLib
 
 from .main_container import MdMainContainer
-from .tags_manager import MdTagsManager
 from .prefs.prefs_dialog import MdConfigWidget
 from .prefs.export_assistant import MdExportAssistant
-from .constants import KeyboardShortcuts, MD_PREVIEW_KEY_BASE
+from .constants import MD_PREVIEW_KEY_BASE
 from .utils import init_gettext
 
 _ = init_gettext()
@@ -25,11 +24,9 @@ class MarkdownGeditPluginApp(GObject.Object, Gedit.AppActivatable):
 
 	def do_activate(self):
 		self.build_main_menu()
-		self.add_all_accelerators()
 
 	def do_deactivate(self):
 		self.remove_menu()
-		self.remove_accelerators()
 
 	def build_main_menu(self):
 		self.menu_ext_tools = self.extend_menu('tools-section')
@@ -48,21 +45,6 @@ class MarkdownGeditPluginApp(GObject.Object, Gedit.AppActivatable):
 	def remove_menu(self):
 		self.menu_ext_tools = None # XXX ?
 		self.menu_ext_view = None # XXX ?
-
-	def add_all_accelerators(self):
-		self._kb_settings = Gio.Settings.new(MD_PREVIEW_KEY_BASE + '.keybindings')
-		for i in range(len(KeyboardShortcuts.SettingsKeys)):
-			self.add_one_accelerator(KeyboardShortcuts.SettingsKeys[i], \
-			                                  KeyboardShortcuts.ActionsNames[i])
-
-	def add_one_accelerator(self, setting_key, action_name):
-		accels = self._kb_settings.get_strv(setting_key)
-		if len(accels) > 0:
-			self.app.add_accelerator(accels[0], action_name, None)
-
-	def remove_accelerators(self):
-		for i in range(len(KeyboardShortcuts.SettingsKeys)):
-			self.app.remove_accelerator(KeyboardShortcuts.SettingsKeys[i], None)
 
 	############################################################################
 ################################################################################
@@ -136,96 +118,6 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		self.window.add_action(action_panel)
 		self.window.add_action(action_autoreload)
 
-		########################################################################
-
-		action_remove = Gio.SimpleAction(name='md-prev-remove-all')
-		action_remove.connect('activate', lambda i, j: self.view_method('remove_all'))
-
-		self.add_format_action('md-prev-format-title-1', 'format_title_1')
-		self.add_format_action('md-prev-format-title-2', 'format_title_2')
-		self.add_format_action('md-prev-format-title-3', 'format_title_3')
-		self.add_format_action('md-prev-format-title-4', 'format_title_4')
-		self.add_format_action('md-prev-format-title-5', 'format_title_5')
-		self.add_format_action('md-prev-format-title-6', 'format_title_6')
-
-		self.add_format_action('md-prev-format-title-upper', 'format_title_upper')
-		self.add_format_action('md-prev-format-title-lower', 'format_title_lower')
-
-		self.add_format_action('md-prev-format-bold', 'format_bold')
-		self.add_format_action('md-prev-format-italic', 'format_italic')
-#		self.add_format_action('md-prev-format-underline', 'format_underline')
-#		self.add_format_action('md-prev-format-stroke', 'format_stroke')
-		self.add_format_action('md-prev-format-monospace', 'format_monospace')
-		self.add_format_action('md-prev-format-quote', 'format_quote')
-
-		self.add_format_action('md-prev-list-unordered', 'list_unordered')
-		self.add_format_action('md-prev-list-ordered', 'list_ordered')
-		self.add_format_action('md-prev-insert-picture', 'insert_picture')
-		self.add_format_action('md-prev-insert-link', 'insert_link')
-		self.add_format_action('md-prev-insert-table', 'insert_table')
-
-	def add_format_action(self, action_name, method_name):
-		action = Gio.SimpleAction(name=action_name)
-		action.connect('activate', lambda i, j: self.view_method(method_name))
-		self.window.add_action(action)
-
-	def view_method(self, name):
-		if self.preview.recognize_format() != 'md':
-			return
-
-		view = self.window.get_active_view()
-		if view and view.markdown_preview_view_activatable:
-			v = view.markdown_preview_view_activatable.tags_manager
-		else:
-			return
-
-		# TODO gérer ça de manière statique avec une méthode hors-classe dans le
-		# fichier tags_manager.py
-		# ou juste ajouter les actions depuis le tags_manager si possible ??
-
-		# print('action : ' + name) # TODO terminer ça mdr
-
-		if name == 'insert_table':
-			v.insert_table()
-		elif name == 'insert_picture':
-			v.insert_picture(self.window)
-		elif name == 'insert_link':
-			v.insert_link(self.window)
-
-		elif name == 'format_bold':
-			v.format_bold()
-		elif name == 'format_italic':
-			v.format_italic()
-		elif name == 'format_monospace':
-			v.format_monospace()
-		elif name == 'format_quote':
-			v.format_quote()
-		elif name == 'format_underline':
-			v.format_underline()
-
-		elif name == 'list_ordered':
-			v.list_ordered()
-		elif name == 'list_unordered':
-			v.list_unordered()
-		
-		elif name == 'format_title_upper':
-			v.format_title_upper()
-		elif name == 'format_title_lower':
-			v.format_title_lower()
-
-		elif name == 'format_title_1':
-			v.format_title(1)
-		elif name == 'format_title_2':
-			v.format_title(2)
-		elif name == 'format_title_3':
-			v.format_title(3)
-		elif name == 'format_title_4':
-			v.format_title(4)
-		elif name == 'format_title_5':
-			v.format_title(5)
-		elif name == 'format_title_6':
-			v.format_title(6)
-
 	def on_change_panel_from_popover(self, *args):
 		self._auto_position = False
 		if GLib.Variant.new_string('side') == args[1]:
@@ -274,56 +166,6 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 
 	def on_open_image_with(self, *args):
 		self.preview._webview_manager.on_open_image_with()
-
-	############################################################################
-################################################################################
-
-class MarkdownGeditPluginView(GObject.Object, Gedit.ViewActivatable):
-	view = GObject.Property(type=Gedit.View)
-
-	def __init__(self):
-		self.popup_handler_id = 0
-		GObject.Object.__init__(self)
-
-	def do_activate(self):
-		self.view.markdown_preview_view_activatable = self
-		model_path = os.path.join(BASE_PATH, 'view-menu.ui')
-		self.menu_builder = Gtk.Builder().new_from_file(model_path)
-		self.popup_handler_id = self.view.connect('populate-popup', self.populate_popup)
-		self.tags_manager = MdTagsManager(self)
-
-	def do_deactivate(self):
-		if self.popup_handler_id != 0:
-			self.view.disconnect(self.popup_handler_id)
-			self.popup_handler_id = 0
-		delattr(self.view, 'markdown_preview_view_activatable')
-
-	def populate_popup(self, view, popup):
-		if not isinstance(popup, Gtk.MenuShell):
-			return
-
-		item = Gtk.SeparatorMenuItem()
-		item.show()
-		popup.append(item)
-
-		item = Gtk.MenuItem(_("Markdown tags"))
-		menu = Gtk.Menu().new_from_model(self.menu_builder.get_object('right-click-menu'))
-		item.set_submenu(menu)
-		item.show()
-		if self.recognize_format() != 'md':
-			item.set_sensitive(False)
-		popup.append(item)
-
-	def recognize_format(self): # TODO doc.get_language() ? pourquoi j'appelle
-		# le recognize_format depuis ce fichier à d'autres endroits ?
-		doc = self.view.get_buffer()
-		name = doc.get_short_name_for_display()
-		temp = name.split('.')
-		if temp[len(temp)-1] == 'md':
-			return 'md'
-		elif temp[len(temp)-1] == 'html':
-			return 'html'
-		return 'error'
 
 	############################################################################
 ################################################################################

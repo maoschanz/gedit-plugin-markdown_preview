@@ -4,7 +4,7 @@
 import gi, subprocess
 from gi.repository import Gtk, Gio, GLib
 
-from .rendering_settings import MdCssSettings, MdRevealjsSettings, MdBackendSettings
+from .rendering_settings import MdCssSettings, MdBackendSettings
 from ..utils import get_backends_dict
 from ..constants import BackendsEnums
 
@@ -86,10 +86,6 @@ class MdExportAssistant(Gtk.Assistant):
 		# Using a stylesheet is possible with both backends
 		self.css_manager = MdCssSettings(self._settings, self, self)
 		style_page.add(self.css_manager.full_widget)
-
-		# Shown instead of the CSS manager if user wants to export as revealjs
-		self.revealjs_manager = MdRevealjsSettings(self._settings, self)
-		style_page.add(self.revealjs_manager.full_widget)
 
 		self._add_page(style_page, _("Style"), Gtk.AssistantPageType.CONTENT)
 
@@ -173,11 +169,8 @@ class MdExportAssistant(Gtk.Assistant):
 				selected_format = file_format
 
 		backends_dict['p3md'] = False
-		if selected_format in ['pdf', 'html5'] and AVAILABLE_BACKENDS['p3md']:
-			if selected_format == 'pdf':
-				self.output_extension = '.pdf'
-			else:
-				self.output_extension = '.html'
+		if selected_format in ['html5'] and AVAILABLE_BACKENDS['p3md']:
+			self.output_extension = '.html'
 			backends_dict['p3md'] = True
 
 		backends_dict['pandoc'] = False
@@ -191,7 +184,6 @@ class MdExportAssistant(Gtk.Assistant):
 		self._backend.update_pandoc_combobox()
 
 	def _show_accurate_style_manager(self, show_css, show_revealjs):
-		self.revealjs_manager.full_widget.set_visible(show_revealjs)
 		self.css_manager.full_widget.set_visible(show_css)
 		self.no_style_label.set_visible(not (show_css or show_revealjs))
 

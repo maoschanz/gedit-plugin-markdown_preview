@@ -13,45 +13,6 @@ BASE_PATH = os.path.dirname(os.path.realpath(__file__))
 
 ################################################################################
 
-class MdRevealjsSettings():
-	def __init__(self, settings, parent_widget):
-		self._settings = settings
-		self.parent_widget = parent_widget
-
-		builder = Gtk.Builder().new_from_file(BASE_PATH + '/revealjs_box.ui')
-		self.full_widget = builder.get_object('revealjs_box')
-
-		self.transitions_combobox = builder.get_object('transitions_combobox')
-		self.fill_combobox(self.transitions_combobox, 'revealjs-transitions', \
-		                                      BackendsEnums.RevealJSTransitions)
-		self.theme_combobox = builder.get_object('theme_combobox')
-		self.fill_combobox(self.theme_combobox, 'revealjs-theme', \
-		                                           BackendsEnums.RevealJSThemes)
-
-		self.slidenum_switch = builder.get_object('slide_number_switch')
-		show_slide_num = self._settings.get_boolean('revealjs-slide-num')
-		self.slidenum_switch.set_active(show_slide_num)
-		self.slidenum_switch.connect('notify::active', self._on_slidenum_changed)
-
-	def fill_combobox(self, combobox, setting_key, labels_dict):
-		for choice in labels_dict:
-			combobox.append(choice, labels_dict[choice])
-		combobox.set_active_id(self._settings.get_string(setting_key))
-		combobox.connect('changed', self._on_combobox_changed, setting_key)
-
-	def _on_combobox_changed(self, combobox, setting_key):
-		new_value = combobox.get_active_id()
-		if setting_key == 'revealjs-theme':
-			pass # TODO
-		elif setting_key == 'revealjs-transitions':
-			pass # TODO
-
-	def _on_slidenum_changed(self, *args):
-		pass
-
-	############################################################################
-################################################################################
-
 class MdCssSettings():
 	def __init__(self, settings, related_window, parent_widget):
 		self._settings = settings

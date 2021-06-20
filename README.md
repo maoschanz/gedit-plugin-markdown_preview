@@ -6,10 +6,12 @@
 Pour la release 2.0 :
 
 - tuer les trucs pas terminés :
-	- [ ] revealjs
-	- [ ] clic-droit
-	- [ ] raccourcis claviers
+	- [x] revealjs
+	- [x] clic-droit
+	- [x] raccourcis claviers
 - [x] numéro de version etc.
+- [ ] vérifier la pertinence des commandes customs, au minimum pour l'export.
+- [ ] traductions
 
 ~     TODO -->
 

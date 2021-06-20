@@ -4,9 +4,9 @@
 import gi, os
 from gi.repository import Gtk, Gio
 
-from .rendering_settings import MdCssSettings, MdRevealjsSettings, MdBackendSettings
+from .rendering_settings import MdCssSettings, MdBackendSettings
 from ..utils import get_backends_dict
-from ..constants import KeyboardShortcuts, HelpLabels, BackendsEnums, MD_PREVIEW_KEY_BASE
+from ..constants import HelpLabels, BackendsEnums, MD_PREVIEW_KEY_BASE
 
 BASE_PATH = os.path.dirname(os.path.realpath(__file__))
 
@@ -30,8 +30,7 @@ class MdConfigWidget(Gtk.Box):
 		self._build_general_page(builder)
 		self._build_backend_page(builder)
 		self._build_style_page(builder)
-		self._backend.init_pandoc_combobox('html5') # TODO FIXME wrong, not what the user defined!!
-		self._build_shortcuts_page(builder)
+		self._backend.init_pandoc_combobox('html5')
 
 		self.add(sidebar)
 		self.add(stack)
@@ -71,29 +70,13 @@ class MdConfigWidget(Gtk.Box):
 		self.css_manager = MdCssSettings(self._settings, None, self)
 		style_box.add(self.css_manager.full_widget)
 
-		self.revealjs_manager = MdRevealjsSettings(self._settings, self)
 		AVAILABLE_BACKENDS = get_backends_dict()
-		if AVAILABLE_BACKENDS['pandoc']:
-			style_box.add(Gtk.Separator(visible=True))
-
-			style_box.add(self._new_dim_label(HelpLabels.StyleRevealJS))
-			style_box.add(self.revealjs_manager.full_widget)
 
 	def _build_backend_page(self, builder):
 		self._backend = MdBackendSettings(_("HTML generation backend:"), \
 		                                             self._settings, True, self)
 		builder.get_object('backend_box').add(self._backend.full_widget)
 		self._backend.fill_pandoc_combobox(BackendsEnums.PandocFormatsPreview)
-
-	def _build_shortcuts_page(self, builder):
-		self.shortcuts_treeview = builder.get_object('shortcuts_treeview')
-		renderer = builder.get_object('accel_renderer')
-		renderer.connect('accel-edited', self._on_accel_edited)
-		renderer.connect('accel-cleared', self._on_accel_cleared)
-		# https://github.com/GNOME/gtk/blob/master/gdk/keynames.txt
-		for i in range(len(KeyboardShortcuts.SettingsKeys)):
-			self._add_keybinding(KeyboardShortcuts.SettingsKeys[i], \
-			                                        KeyboardShortcuts.Labels[i])
 
 	############################################################################
 
@@ -102,28 +85,6 @@ class MdConfigWidget(Gtk.Box):
 		                                                 halign=Gtk.Align.START)
 		label.get_style_context().add_class('dim-label')
 		return label
-
-	def _add_keybinding(self, setting_id, description):
-		accelerator = self._kb_settings.get_strv(setting_id)[0]
-		if accelerator is None:
-			[key, mods] = [0, 0]
-		else:
-			[key, mods] = Gtk.accelerator_parse(accelerator)
-		row_array = [setting_id, description, key, mods]
-		row = self.shortcuts_treeview.get_model().insert(0, row=row_array)
-
-	def _on_accel_edited(self, *args):
-		tree_iter = self.shortcuts_treeview.get_model().get_iter_from_string(args[1])
-		self.shortcuts_treeview.get_model().set(tree_iter, [2, 3], [args[2], int(args[3])])
-		setting_id = self.shortcuts_treeview.get_model().get_value(tree_iter, 0)
-		accelString = Gtk.accelerator_name(args[2], args[3])
-		self._kb_settings.set_strv(setting_id, [accelString])
-
-	def _on_accel_cleared(self, *args):
-		tree_iter = self.shortcuts_treeview.get_model().get_iter_from_string(args[1])
-		self.shortcuts_treeview.get_model().set(tree_iter, [2, 3], [0, 0])
-		setting_id = self.shortcuts_treeview.get_model().get_value(tree_iter, 0)
-		self._kb_settings.set_strv(setting_id, [])
 
 	############################################################################
 	# Preview options ##########################################################
@@ -159,14 +120,6 @@ class MdConfigWidget(Gtk.Box):
 		command = 'pandoc $INPUT_FILE %s'
 		options = '--metadata pagetitle=Preview'
 		accept_css = True
-		# TODO........
-
-		# command = ['pandoc', '-s', file_path, '--metadata', 'pagetitle=Preview', \
-		# '-t', 'revealjs', '-V', 'revealjs-url=http://lab.hakim.se/reveal-js']
-		# command = command + ['-V', 'theme=' + self._settings.get_string('revealjs-theme')]
-		# command = command + ['-V', 'transition=' + self._settings.get_string('revealjs-transitions')]
-		# if self._settings.get_boolean('revealjs-slide-num'):
-		# 	command = command + ['-V', 'slideNumber=true']
 
 		if self.css_manager.switch_css.get_state() and accept_css:
 			options = options + ' -c ' + self.css_manager.css_uri

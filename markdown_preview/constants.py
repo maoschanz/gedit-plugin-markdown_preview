@@ -19,36 +19,6 @@ MARKDOWN_SPLITTERS = {
 
 ################################################################################
 
-class KeyboardShortcuts():
-	# TODO obviously not finished
-
-	ActionsNames = [
-		'win.md-prev-format-italic',
-		'win.md-prev-format-bold',
-		'win.md-prev-insert-picture',
-		'win.md-prev-format-title-lower',
-		'win.md-prev-format-title-upper'
-	]
-
-	SettingsKeys = [
-		'italic',
-		'bold',
-		'insert-picture',
-		'title-lower',
-		'title-upper'
-	]
-
-	Labels = [
-		_("Italic"),
-		_("Bold"),
-		_("Insert a picture"),
-		_("Lower title"),
-		_("Upper title")
-	]
-
-	############################################################################
-################################################################################
-
 class HelpLabels():
 
 	P3mdExtensions1 = _("Aside of default extensions provided by the " + \
@@ -69,8 +39,6 @@ class HelpLabels():
 
 	StyleCSS = _("You can select a stylesheet (.css file) to make your " + \
 	           "document look nice and modern, or to increase its readability.")
-	StyleRevealJS = _("With Pandoc, you can preview the file as a revealjs " + \
-	                   "slideshow, which has pre-existing themes and settings.")
 
 	############################################################################
 ################################################################################
@@ -110,37 +78,11 @@ class BackendsEnums():
 		'plain': _("plain text (.txt)"),
 		'pptx': _("PowerPoint slideshow (.pptx)"),
 		'rtf': _("Rich Text Format (.rtf)"),
-		'revealjs': _("reveal.js slideshow (HTML/JS)"),
 		'custom': _("Custom command line"),
 	}
 	PandocFormatsPreview = {
 		'html5': _("HTML5"),
-		'revealjs': _("reveal.js slideshow (HTML/JS)"),
 		'custom': _("Custom command line")
-	}
-
-	############################################################################
-
-	RevealJSTransitions = {
-		'none': _("None"),
-		'fade': _("Fade"),
-		'slide': _("Slide"),
-		'convex': _("Cube (convex)"),
-		'concave': _("Cube (concave)"),
-		'zoom': _("Zoom")
-	}
-	RevealJSThemes = {
-		'beige': _("Beige"),
-		'black': _("Black"),
-		'blood': _("Blood"),
-		'league': _("League"),
-		'moon': _("Moon"),
-		'night': _("Night"),
-		'serif': _("Serif"),
-		'simple': _("Simple"),
-		'sky': _("Sky"),
-		'solarized': _("Solarized"),
-		'white': _("White")
 	}
 
 	############################################################################
