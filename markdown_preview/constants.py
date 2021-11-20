@@ -82,7 +82,7 @@ class BackendsEnums():
 	}
 	PandocFormatsPreview = {
 		'html5': _("HTML5"),
-		'custom': _("Custom command line")
+		# 'custom': _("Custom command line")
 	}
 
 	############################################################################

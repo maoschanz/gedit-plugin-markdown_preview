@@ -1,20 +1,6 @@
 
 # Gedit Markdown Preview
 
-<!-- TODO
-
-Pour la release 2.0 :
-
-- tuer les trucs pas terminés :
-	- [x] revealjs
-	- [x] clic-droit
-	- [x] raccourcis claviers
-- [x] numéro de version etc.
-- [ ] vérifier la pertinence des commandes customs, au minimum pour l'export.
-- [ ] traductions
-
-~     TODO -->
-
 This is a plugin for the Gedit text editor, previewing .md files in the side
 pane (<kbd>F9</kbd>) or the bottom (<kbd>Ctrl</kbd>+<kbd>F9</kbd>) pane.
 
