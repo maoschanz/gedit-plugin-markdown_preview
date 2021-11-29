@@ -360,9 +360,9 @@ class MdMainContainer(Gtk.Box):
 
 	def recognize_format(self):
 		doc = self.parent_plugin.window.get_active_document()
-		# It will not load documents which are not .md/.html/.tex
+		# It will not load documents which are not .md/.html
 		name = doc.get_short_name_for_display()
-		temp = name.split('.')[-1]
+		temp = name.split('.')[-1].lower()
 		ret = None
 		if temp == 'md':
 			ret = 'md'

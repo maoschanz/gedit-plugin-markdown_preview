@@ -318,10 +318,10 @@ class MarkdownGeditPluginView(GObject.Object, Gedit.ViewActivatable):
 		# le recognize_format depuis ce fichier à d'autres endroits ?
 		doc = self.view.get_buffer()
 		name = doc.get_short_name_for_display()
-		temp = name.split('.')
-		if temp[len(temp)-1] == 'md':
+		temp = name.split('.')[-1].lower()
+		if temp == 'md':
 			return 'md'
-		elif temp[len(temp)-1] == 'html':
+		elif temp == 'html':
 			return 'html'
 		return 'error'
 
