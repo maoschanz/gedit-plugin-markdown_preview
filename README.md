@@ -3,15 +3,9 @@
 
 <!-- TODO
 
-Pour la release 2.0 :
+Pour la release 3.0 :
 
-- [x] rendu délayé
-- [x] autoreload à true
-- [x] bandeau de message vide à l'ouverture
-- export :
-	- [x] labels on the 3rd page
-	- [ ] merge
-- tuer les trucs pas terminés :
+- à terminer :
 	- [ ] revealjs
 	- [ ] clic-droit
 	- [ ] raccourcis claviers
