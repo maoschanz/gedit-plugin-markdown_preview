@@ -51,7 +51,7 @@ class MdConfigWidget(Gtk.Box):
 		autoManageSwitch.connect('notify::active', self.on_auto_manage_changed)
 
 		splitter_combobox = builder.get_object('splitter_combobox')
-		splitter_combobox.append('hr', _("Split at separators"))
+		splitter_combobox.append('hr', _("Split at horizontal rules"))
 		splitter_combobox.append('whole', _("Whole document"))
 		splitter_combobox.append('h1', _("Split at level 1 titles"))
 		splitter_combobox.append('h2', _("Split at level 2 titles"))

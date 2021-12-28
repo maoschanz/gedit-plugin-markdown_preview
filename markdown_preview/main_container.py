@@ -47,7 +47,7 @@ class MdMainContainer(Gtk.Box):
 			self._settings.connect('changed::style', self._on_stylesheet_change),
 		]
 
-		self.pagination_mode = self._settings.get_string('splitter')
+		self.pagination_mode = None
 		self.set_auto_manage()
 		self.build_preview_ui()
 		self.page_index = 0
@@ -97,6 +97,7 @@ class MdMainContainer(Gtk.Box):
 	def change_splitter_setting(self, *args):
 		action = self.parent_plugin.window.lookup_action('md-set-view-mode')
 		action.change_state(GLib.Variant.new_string(self._settings.get_string('splitter')))
+		# which calls `change_splitter_action`
 
 	def change_splitter_action(self, *args):
 		mode = args[1].get_string()
@@ -211,8 +212,8 @@ class MdMainContainer(Gtk.Box):
 		can_paginate = file_format == 'md'
 		self.set_action_enabled('md-set-view-mode', can_paginate)
 		if can_paginate:
-			current_pagination = self.parent_plugin.window.lookup_action( \
-			                        'md-set-view-mode').get_state().get_string()
+			action = self.parent_plugin.window.lookup_action('md-set-view-mode')
+			current_pagination = action.get_state().get_string()
 			self.set_pagination_mode(current_pagination)
 		else:
 			self.set_is_whole_doc(False)
@@ -404,7 +405,7 @@ class MdMainContainer(Gtk.Box):
 
 		if self.page_index == 0:
 			pass
-		elif self.pagination_mode != 'hr':
+		else:
 			lang_current_page = correct_splitter + lang_current_page
 		return lang_current_page
 

@@ -12,7 +12,7 @@ MD_PREVIEW_KEY_BASE = 'org.gnome.gedit.plugins.markdown_preview'
 BASE_TEMP_NAME = '/tmp/gedit_plugin_markdown_preview'
 
 MARKDOWN_SPLITTERS = {
-	'hr': "\n----",
+	'hr': "\n---",
 	'h1': "\n# ",
 	'h2': "\n## "
 }

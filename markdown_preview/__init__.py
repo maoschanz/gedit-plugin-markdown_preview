@@ -116,8 +116,11 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		self.add_action_simple('md-prev-open-link-with', self.on_open_link_with)
 		self.add_action_simple('md-prev-open-image-with', self.on_open_image_with)
 
-		action_view_mode = Gio.SimpleAction().new_stateful('md-set-view-mode', \
-		            GLib.VariantType.new('s'), GLib.Variant.new_string('whole'))
+		action_view_mode = Gio.SimpleAction().new_stateful( \
+			'md-set-view-mode', \
+			GLib.VariantType.new('s'), \
+			GLib.Variant.new_string(self._settings.get_string('splitter')) \
+		)
 		action_view_mode.connect('change-state', self.preview.change_splitter_action)
 
 		bool_autoreload = self._settings.get_boolean('auto-reload')
