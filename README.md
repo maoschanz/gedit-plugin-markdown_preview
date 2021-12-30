@@ -1,7 +1,12 @@
 
 # Gedit Markdown Preview
 
+This is a plugin for the Gedit text editor, previewing .md files in the side
+pane (<kbd>F9</kbd>) or the bottom (<kbd>Ctrl</kbd>+<kbd>F9</kbd>) pane.
+
 <!-- TODO
+
+https://docs.gtk.org/gtk3/text-widget-overview.html
 
 Pour la release 3.0 :
 
@@ -54,9 +59,6 @@ TypeError: Gtk.TextBuffer.get_text() takes exactly 4 arguments (1 given)
 - [ ] bring back the fullscreen, but better
 
 ~     TODO -->
-
-This is a plugin for the Gedit text editor, previewing .md files in the side
-pane (<kbd>F9</kbd>) or the bottom (<kbd>Ctrl</kbd>+<kbd>F9</kbd>) pane.
 
 ### Previewing
 

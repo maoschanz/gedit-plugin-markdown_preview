@@ -47,7 +47,7 @@ class MdTagsManager():
 		start_tag = start_tag + " "
 
 		# There is no "closing" tag to add in the case of `add_line_tags`
-		new_code = self.add_tags_characters(document, start_tag, '', start, end)
+		self.add_tags_characters(document, start_tag, '', start, end)
 
 	def add_word_tags(self, tag_both):
 		"""Add a tag at both sides of a selected bit of text."""
@@ -57,7 +57,7 @@ class MdTagsManager():
 			(start, end) = selection
 		else:
 			return
-		new_code = self.add_tags_characters(document, tag_both, tag_both, start, end)
+		self.add_tags_characters(document, tag_both, tag_both, start, end)
 
 	############################################################################
 
@@ -111,13 +111,29 @@ class MdTagsManager():
 		file_chooser.set_filter(onlyPictures)
 		response = file_chooser.run()
 
-		# It gets the chosen file's path
-		if response == Gtk.ResponseType.OK:
-			doc = self._view_plugin.view.get_buffer()
-			picture_path = '![](' + file_chooser.get_filename() + ')'
-			iterator = doc.get_iter_at_mark(doc.get_insert())
-			doc.insert(iterator, picture_path)
+		# Aborting
+		if response != Gtk.ResponseType.OK:
+			file_chooser.destroy()
+			return
+
+		# What to insert
+		start_tag = "!["
+		end_tag = "](" + file_chooser.get_filename() + ")"
 		file_chooser.destroy()
+
+		# Where to insert
+		document = self._view_plugin.view.get_buffer()
+		selection = document.get_selection_bounds()
+		number_lines = 0
+		if selection != ():
+			(start, end) = selection
+			number_lines = self._get_n_lines(start, end)
+		if number_lines != 1:
+			start = document.get_iter_at_mark(document.get_insert())
+			end = document.get_iter_at_mark(document.get_insert())
+
+		# Actually insert
+		self.add_tags_characters(document, start_tag, end_tag, start, end)
 
 	def insert_table(self):
 		doc = self._view_plugin.view.get_buffer()
@@ -128,10 +144,10 @@ class MdTagsManager():
 	############################################################################
 
 	def add_tags_characters(self, document, start_tag, end_tag, start, end):
-		start_mark = document.create_mark('start', start, False)
+		start_mark = document.create_mark('start', start, True)
 		current_mark = document.create_mark('iter', start, False)
 		end_mark = document.create_mark('end', end, False)
-		number_lines = end.get_line() - start.get_line() + 1
+		number_lines = self._get_n_lines(start, end)
 		document.begin_user_action()
 
 		for i in range(0, number_lines):
@@ -153,19 +169,26 @@ class MdTagsManager():
 
 		document.end_user_action()
 
+		# Change the selection to include the newly inserted opening tag in it
 		document.delete_mark(current_mark)
 		new_start = document.get_iter_at_mark(start_mark)
 		new_end = document.get_iter_at_mark(end_mark)
-		if not new_start.ends_line():
-			self.backward_tag(new_start, start_tag)
+		if new_start.compare(new_end) == 0:
+			# An insertion where nothing was selected: the "left_gravity"
+			# properties given to `create_mark` are not enough to manage the
+			# the situation! We move the `new_start` to select both tags.
+			self._backward_tag(new_start, end_tag)
 		document.select_range(new_start, new_end)
 		document.delete_mark(start_mark)
 		document.delete_mark(end_mark)
 
-	def forward_tag(self, iterator, tag):
+	def _get_n_lines(self, start, end):
+		return end.get_line() - start.get_line() + 1
+
+	def _forward_tag(self, iterator, tag):
 		iterator.forward_chars(len(tag))
 
-	def backward_tag(self, iterator, tag):
+	def _backward_tag(self, iterator, tag):
 		iterator.backward_chars(len(tag))
 
 	############################################################################
