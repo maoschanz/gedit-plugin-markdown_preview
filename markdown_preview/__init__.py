@@ -160,7 +160,10 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 
 		self.add_format_action('md-prev-insert-picture', 'insert_picture')
 		self.add_format_action('md-prev-insert-link', 'insert_link')
-		self.add_format_action('md-prev-insert-table', 'insert_table')
+		self.add_format_action('md-prev-insert-table-2', 'insert_table', 2)
+		self.add_format_action('md-prev-insert-table-3', 'insert_table', 3)
+		self.add_format_action('md-prev-insert-table-4', 'insert_table', 4)
+		self.add_format_action('md-prev-insert-table-5', 'insert_table', 5)
 
 	def add_format_action(self, action_name, method, arg=None):
 		action = Gio.SimpleAction(name=action_name)

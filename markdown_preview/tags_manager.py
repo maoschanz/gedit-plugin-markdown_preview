@@ -102,7 +102,9 @@ class MdTagsManager():
 
 	def insert_table(self, nb_columns):
 		doc = self._view_plugin.view.get_buffer()
-		table = '|||\n|--|--|\n|||'
+		table = "\n|" + nb_columns * " header  |" + \
+		        "\n|" + nb_columns * "---------|" + \
+		        "\n|" + nb_columns * " content |" + "\n"
 		iterator = doc.get_iter_at_mark(doc.get_insert())
 		doc.insert(iterator, table)
 

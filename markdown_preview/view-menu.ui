@@ -82,10 +82,27 @@
         <attribute name="label" translatable="yes">Insert a link</attribute>
         <attribute name="action">win.md-prev-insert-link</attribute>
       </item>
-      <item>
+      <submenu>
         <attribute name="label" translatable="yes">Insert a table</attribute>
-        <attribute name="action">win.md-prev-insert-table</attribute>
-      </item>
+        <section>
+          <item>
+            <attribute name="label" translatable="yes">2 columns</attribute>
+            <attribute name="action">win.md-prev-insert-table-2</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">3 columns</attribute>
+            <attribute name="action">win.md-prev-insert-table-3</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">4 columns</attribute>
+            <attribute name="action">win.md-prev-insert-table-4</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">5 columns</attribute>
+            <attribute name="action">win.md-prev-insert-table-5</attribute>
+          </item>
+        </section>
+      </submenu>
     </section>
 
   </menu>
