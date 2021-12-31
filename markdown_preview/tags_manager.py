@@ -11,8 +11,14 @@ class MdTagsManager():
 
 	############################################################################
 
-	def add_block_tags(self, start_tag, end_tag):
-		pass
+	def add_block_tags(self, start_tag, end_tag=None):
+		start, end = self._find_block_iters()
+
+		if end_tag is None:
+			end_tag = start_tag
+		start_tag = start_tag + "\n"
+		end_tag = "\n" + end_tag
+		self.add_tags_characters(start_tag, end_tag, start, end)
 
 	def remove_line_tags(self, start_tag, end_tag=None):
 		"""Remove `start_tag` from the begining of the line; and `end_tag` from
@@ -20,34 +26,15 @@ class MdTagsManager():
 		if end_tag is None:
 			end_tag = start_tag
 
-	def add_line_tags(self, start_tag, surround_with_spaces=True):
+	def add_line_tags(self, start_tag, add_intermediate_space=True):
 		"""Add `start_tag` at the beginning of the line."""
-		document = self._view_plugin.view.get_buffer()
-		selection = document.get_selection_bounds()
-		if selection != ():
-			(start, end) = selection
-		else:
-			start = document.get_iter_at_mark(document.get_insert())
-			end = document.get_iter_at_mark(document.get_insert())
+		start, end = self._find_block_iters()
 
-		# The "start" boundary should be the start of the first line of the
-		# selection, except if no character in this first line is selected.
-		if start.ends_line():
-			start.forward_line()
-		elif not start.starts_line():
-			start.set_line_offset(0)
-
-		# The "end" boundary should be the end of the last line of the
-		# selection, except if no character in this last line is selected.
-		if end.starts_line():
-			end.backward_char()
-		elif not end.ends_line():
-			end.forward_to_line_end()
-
-		start_tag = start_tag + " "
+		if add_intermediate_space:
+			start_tag = start_tag + " "
 
 		# There is no "closing" tag to add in the case of `add_line_tags`
-		self.add_tags_characters(document, start_tag, '', start, end)
+		self.add_tags_characters(start_tag, '', start, end)
 
 	def add_word_tags(self, tag_both):
 		"""Add a tag at both sides of a selected bit of text."""
@@ -57,7 +44,7 @@ class MdTagsManager():
 			(start, end) = selection
 		else:
 			return
-		self.add_tags_characters(document, tag_both, tag_both, start, end)
+		self.add_tags_characters(tag_both, tag_both, start, end)
 
 	############################################################################
 
@@ -98,7 +85,7 @@ class MdTagsManager():
 			end = document.get_iter_at_mark(document.get_insert())
 
 		# Actually insert
-		self.add_tags_characters(document, start_tag, end_tag, start, end)
+		self.add_tags_characters(start_tag, end_tag, start, end)
 
 	def insert_table(self, nb_columns):
 		doc = self._view_plugin.view.get_buffer()
@@ -110,7 +97,8 @@ class MdTagsManager():
 
 	############################################################################
 
-	def add_tags_characters(self, document, start_tag, end_tag, start, end):
+	def add_tags_characters(self, start_tag, end_tag, start, end):
+		document = self._view_plugin.view.get_buffer()
 		start_mark = document.create_mark('start', start, True)
 		current_mark = document.create_mark('iter', start, False)
 		end_mark = document.create_mark('end', end, False)
@@ -157,6 +145,31 @@ class MdTagsManager():
 
 	def _backward_tag(self, iterator, tag):
 		iterator.backward_chars(len(tag))
+
+	def _find_block_iters(self):
+		document = self._view_plugin.view.get_buffer()
+		selection = document.get_selection_bounds()
+		if selection != ():
+			(start, end) = selection
+		else:
+			start = document.get_iter_at_mark(document.get_insert())
+			end = document.get_iter_at_mark(document.get_insert())
+
+		# The "start" boundary should be the start of the first line of the
+		# selection, except if no character in this first line is selected.
+		if start.ends_line():
+			start.forward_line()
+		elif not start.starts_line():
+			start.set_line_offset(0)
+
+		# The "end" boundary should be the end of the last line of the
+		# selection, except if no character in this last line is selected.
+		if end.starts_line():
+			end.backward_char()
+		elif not end.ends_line():
+			end.forward_to_line_end()
+
+		return start, end
 
 	############################################################################
 ################################################################################

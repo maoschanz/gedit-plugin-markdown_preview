@@ -153,7 +153,7 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		self.add_format_action('md-prev-format-stroke', 'format_inline', '~~')
 		self.add_format_action('md-prev-format-monospace', 'format_inline', '`')
 
-		self.add_format_action('md-prev-block-code', 'format_block2', '\n```\n')
+		self.add_format_action('md-prev-block-code', 'format_block2', '```')
 		self.add_format_action('md-prev-block-quote', 'format_block', '>')
 		self.add_format_action('md-prev-list-unordered', 'format_block', '-')
 		self.add_format_action('md-prev-list-ordered', 'format_block', '1.')
@@ -193,7 +193,7 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		elif method_name == 'format_block':
 			v.add_line_tags(argument)
 		elif method_name == 'format_block2':
-			v.add_block_tags(argument, argument)
+			v.add_block_tags(argument)
 		elif method_name == 'remove_block':
 			v.remove_line_tags(argument)
 

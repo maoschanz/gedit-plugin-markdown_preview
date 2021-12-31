@@ -11,14 +11,25 @@ https://docs.gtk.org/gtk3/text-widget-overview.html
 Pour la release 3.0 :
 
 - à terminer :
-	- [ ] MVP du clic-droit
-	- [ ] raccourcis clavier équivalents
+	- [x] MVP du clic-droit
 - à faire :
 	- [ ] retenir le scroll et le numéro de page à l'échelle de la gedit.view
 	- [ ] si le boug scrolle à la fin, reproduire ça au reload
 - [ ] numéro de version etc.
 
 Pour la release 4.0 :
+
+- à changer :
+	- [ ] modèle de données des gsettings des raccourcis (array associatif)
+- à terminer :
+	- [ ] remove tags
+	- [ ] raccourcis clavier
+- à faire :
+	- [ ] retenir le scroll et le numéro de page à l'échelle de la gedit.view
+	- [ ] si le boug scrolle à la fin, reproduire ça au reload
+- [ ] numéro de version etc.
+
+Pour la release 5.0 :
 
 - à faire :
 	- [ ] essayer de faire de l'auto-scrolling en mode 'whole' en faisant des
