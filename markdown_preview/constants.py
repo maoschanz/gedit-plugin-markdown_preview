@@ -23,27 +23,33 @@ class KeyboardShortcuts():
 	# TODO obviously not finished
 
 	ActionsNames = [
+		'win.md-prev-format-title-lower',
+		'win.md-prev-format-title-upper',
+
 		'win.md-prev-format-italic',
 		'win.md-prev-format-bold',
+
 		'win.md-prev-insert-picture',
-		'win.md-prev-format-title-lower',
-		'win.md-prev-format-title-upper'
 	]
 
 	SettingsKeys = [
+		'title-lower',
+		'title-upper',
+
 		'italic',
 		'bold',
+
 		'insert-picture',
-		'title-lower',
-		'title-upper'
 	]
 
 	Labels = [
+		_("Lower title"),
+		_("Upper title"),
+
 		_("Italic"),
 		_("Bold"),
+
 		_("Insert a picture"),
-		_("Lower title"),
-		_("Upper title")
 	]
 
 	############################################################################

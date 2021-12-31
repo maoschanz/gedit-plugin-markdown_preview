@@ -5,7 +5,7 @@
     <section>
       <item>
         <attribute name="label" translatable="yes">Remove all tags</attribute>
-  <!--      <attribute name="action">win.md-prev-remove-all</attribute>-->
+        <attribute name="action">win.md-prev-remove-all</attribute>
         <attribute name="action">win.todo</attribute>
       </item>
     </section>
@@ -21,32 +21,6 @@
           <item>
             <attribute name="label" translatable="yes">Lower</attribute>
             <attribute name="action">win.md-prev-format-title-lower</attribute>
-          </item>
-        </section>
-        <section>
-          <item>
-            <attribute name="label">1</attribute>
-            <attribute name="action">win.md-prev-format-title-1</attribute>
-          </item>
-          <item>
-            <attribute name="label">2</attribute>
-            <attribute name="action">win.md-prev-format-title-2</attribute>
-          </item>
-          <item>
-            <attribute name="label">3</attribute>
-            <attribute name="action">win.md-prev-format-title-3</attribute>
-          </item>
-          <item>
-            <attribute name="label">4</attribute>
-            <attribute name="action">win.md-prev-format-title-4</attribute>
-          </item>
-          <item>
-            <attribute name="label">5</attribute>
-            <attribute name="action">win.md-prev-format-title-5</attribute>
-          </item>
-          <item>
-            <attribute name="label">6</attribute>
-            <attribute name="action">win.md-prev-format-title-6</attribute>
           </item>
         </section>
       </submenu>

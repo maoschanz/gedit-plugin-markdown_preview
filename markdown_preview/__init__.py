@@ -144,13 +144,6 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		action_remove = Gio.SimpleAction(name='md-prev-remove-all')
 		action_remove.connect('activate', lambda i, j: self.view_method('remove_all'))
 
-		self.add_format_action('md-prev-format-title-1', 'format_title_1')
-		self.add_format_action('md-prev-format-title-2', 'format_title_2')
-		self.add_format_action('md-prev-format-title-3', 'format_title_3')
-		self.add_format_action('md-prev-format-title-4', 'format_title_4')
-		self.add_format_action('md-prev-format-title-5', 'format_title_5')
-		self.add_format_action('md-prev-format-title-6', 'format_title_6')
-
 		self.add_format_action('md-prev-format-title-upper', 'format_title_upper')
 		self.add_format_action('md-prev-format-title-lower', 'format_title_lower')
 
@@ -215,19 +208,6 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 			v.format_title_upper()
 		elif name == 'format_title_lower':
 			v.format_title_lower()
-
-		elif name == 'format_title_1':
-			v.format_title(1)
-		elif name == 'format_title_2':
-			v.format_title(2)
-		elif name == 'format_title_3':
-			v.format_title(3)
-		elif name == 'format_title_4':
-			v.format_title(4)
-		elif name == 'format_title_5':
-			v.format_title(5)
-		elif name == 'format_title_6':
-			v.format_title(6)
 
 	def on_change_panel_from_popover(self, *args):
 		self._auto_position = False
