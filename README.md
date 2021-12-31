@@ -12,6 +12,9 @@ Pour la release 3.0 :
 
 - à terminer :
 	- [x] MVP du clic-droit
+	- [x] raccourcis clavier
+	- [ ] insert link ?
+	- [ ] `gtk_widget_get_scale_factor` ???
 - à faire :
 	- [ ] retenir le scroll et le numéro de page à l'échelle de la gedit.view
 	- [ ] si le boug scrolle à la fin, reproduire ça au reload
@@ -20,10 +23,11 @@ Pour la release 3.0 :
 Pour la release 4.0 :
 
 - à changer :
-	- [ ] modèle de données des gsettings des raccourcis (array associatif)
+	- [ ] pourquoi un CDATA ?
+	- [ ] autoriser la suppression des shortcuts
+	- [ ] valeurs par défaut des shortcuts ?
 - à terminer :
 	- [ ] remove tags
-	- [ ] raccourcis clavier
 - à faire :
 	- [ ] retenir le scroll et le numéro de page à l'échelle de la gedit.view
 	- [ ] si le boug scrolle à la fin, reproduire ça au reload
@@ -41,7 +45,7 @@ Pour la release 5.0 :
 	- [ ] raccourcis claviers
 - [ ] numéro de version etc.
 
-----
+---
 
 Pour un moment indéterminé :
 
@@ -99,7 +103,7 @@ You can print the preview, or export it:
 <!-- - insert an image in your file -->
 <!-- - insert markdown tags in your text with right-click menu or keyboard shortcuts -->
 
-----
+---
 
 ## Screenshots
 
@@ -107,9 +111,7 @@ You can print the preview, or export it:
 |------|------|
 | ![With the preview in the side pane, menu opened](https://i.imgur.com/wo2pUrR.png) | ![With the preview in the bottom pane, searching](https://i.imgur.com/NaVogWH.png) |
 
-<!--TODO c'est pas à jour ça-->
-
-----
+---
 
 ## Installation
 
@@ -145,7 +147,7 @@ The plugin is now installed and has to be enabled:
 - Go to the "Plugins" tab.
 - Enable the "Markdown Preview" plugin.
 
-----
+---
 
 ## Configuration
 
@@ -192,7 +194,7 @@ exist too, and once installed they can be added manually to the list.
 
 <!-- Customize keyboard shortcuts to add/remove tags (**WORK IN PROGRESS**) -->
 
-----
+---
 
 ## Available languages
 

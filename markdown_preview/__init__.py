@@ -8,7 +8,7 @@ from .main_container import MdMainContainer
 from .tags_manager import MdTagsManager
 from .prefs.prefs_dialog import MdConfigWidget
 from .prefs.export_assistant import MdExportAssistant
-from .constants import KeyboardShortcuts, MD_PREVIEW_KEY_BASE
+from .constants import KEYBOARD_SHORTCUTS, MD_PREVIEW_KEY_BASE
 from .utils import init_gettext
 
 _ = init_gettext()
@@ -51,18 +51,19 @@ class MarkdownGeditPluginApp(GObject.Object, Gedit.AppActivatable):
 
 	def add_all_accelerators(self):
 		self._kb_settings = Gio.Settings.new(MD_PREVIEW_KEY_BASE + '.keybindings')
-		for i in range(len(KeyboardShortcuts.SettingsKeys)):
-			self.add_one_accelerator(KeyboardShortcuts.SettingsKeys[i], \
-			                                  KeyboardShortcuts.ActionsNames[i])
+		for editing_action_id, label in KEYBOARD_SHORTCUTS.items():
+			self.add_one_accelerator(editing_action_id)
 
-	def add_one_accelerator(self, setting_key, action_name):
-		accels = self._kb_settings.get_strv(setting_key)
+	def add_one_accelerator(self, editing_action_id):
+		action_name = 'win.md-prev-editing-' + editing_action_id
+		accels = self._kb_settings.get_strv(editing_action_id)
 		if len(accels) > 0:
 			self.app.add_accelerator(accels[0], action_name, None)
 
 	def remove_accelerators(self):
-		for i in range(len(KeyboardShortcuts.SettingsKeys)):
-			self.app.remove_accelerator(KeyboardShortcuts.SettingsKeys[i], None)
+		for editing_action_id, label in KEYBOARD_SHORTCUTS.items():
+			action_name = 'win.md-prev-editing-' + editing_action_id
+			self.app.remove_accelerator(action_name, None)
 
 	############################################################################
 ################################################################################
@@ -141,29 +142,34 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 
 		########################################################################
 
-		action_remove = Gio.SimpleAction(name='md-prev-remove-all')
-		action_remove.connect('activate', lambda i, j: self.view_method('remove_all'))
+		# action_remove = Gio.SimpleAction(name='md-prev-remove-all')
+		# action_remove.connect('activate', lambda i, j: self.view_method('remove_all'))
+		# TODO ^
 
-		self.add_format_action('md-prev-format-title-upper', 'remove_block', '#')
-		self.add_format_action('md-prev-format-title-lower', 'format_block', '#')
+		self.add_format_action('md-prev-editing-title-1', 'format_block', '#')
+		self.add_format_action('md-prev-editing-title-2', 'format_block', '##')
+		self.add_format_action('md-prev-editing-title-3', 'format_block', '###')
+		self.add_format_action('md-prev-editing-title-4', 'format_block', '####')
+		self.add_format_action('md-prev-editing-title-5', 'format_block', '#####')
+		self.add_format_action('md-prev-editing-title-6', 'format_block', '#######')
 
-		self.add_format_action('md-prev-format-bold', 'format_inline', '**')
-		self.add_format_action('md-prev-format-italic', 'format_inline', '*')
-		self.add_format_action('md-prev-format-underline', 'format_inline', '__')
-		self.add_format_action('md-prev-format-stroke', 'format_inline', '~~')
-		self.add_format_action('md-prev-format-monospace', 'format_inline', '`')
+		self.add_format_action('md-prev-editing-bold', 'format_inline', '**')
+		self.add_format_action('md-prev-editing-italic', 'format_inline', '*')
+		self.add_format_action('md-prev-editing-underline', 'format_inline', '__')
+		self.add_format_action('md-prev-editing-stroke', 'format_inline', '~~')
+		self.add_format_action('md-prev-editing-monospace', 'format_inline', '`')
 
-		self.add_format_action('md-prev-block-code', 'format_block2', '```')
-		self.add_format_action('md-prev-block-quote', 'format_block', '>')
-		self.add_format_action('md-prev-list-unordered', 'format_block', '-')
-		self.add_format_action('md-prev-list-ordered', 'format_block', '1.')
+		self.add_format_action('md-prev-editing-code-block', 'format_block2', '```')
+		self.add_format_action('md-prev-editing-quote', 'format_block', '>')
+		self.add_format_action('md-prev-editing-list-unordered', 'format_block', '-')
+		self.add_format_action('md-prev-editing-list-ordered', 'format_block', '1.')
 
-		self.add_format_action('md-prev-insert-picture', 'insert_picture')
-		self.add_format_action('md-prev-insert-link', 'insert_link')
-		self.add_format_action('md-prev-insert-table-2', 'insert_table', 2)
-		self.add_format_action('md-prev-insert-table-3', 'insert_table', 3)
-		self.add_format_action('md-prev-insert-table-4', 'insert_table', 4)
-		self.add_format_action('md-prev-insert-table-5', 'insert_table', 5)
+		self.add_format_action('md-prev-editing-insert-picture', 'insert_picture')
+		self.add_format_action('md-prev-editing-insert-link', 'insert_link')
+		self.add_format_action('md-prev-editing-insert-table-2', 'insert_table', 2)
+		self.add_format_action('md-prev-editing-insert-table-3', 'insert_table', 3)
+		self.add_format_action('md-prev-editing-insert-table-4', 'insert_table', 4)
+		self.add_format_action('md-prev-editing-insert-table-5', 'insert_table', 5)
 
 	def add_format_action(self, action_name, method, arg=None):
 		action = Gio.SimpleAction(name=action_name)
@@ -179,6 +185,7 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 			v = view.markdown_preview_view_activatable.tags_manager
 		else:
 			return
+		# print('action : ' + method_name)
 
 		if method_name == 'insert_table':
 			v.insert_table(argument)
@@ -195,7 +202,7 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		elif method_name == 'format_block2':
 			v.add_block_tags(argument)
 		elif method_name == 'remove_block':
-			v.remove_line_tags(argument)
+			v.remove_line_tags(argument) # TODO
 
 	def on_change_panel_from_popover(self, *args):
 		self._auto_position = False

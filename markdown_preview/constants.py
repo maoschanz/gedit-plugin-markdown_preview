@@ -19,40 +19,35 @@ MARKDOWN_SPLITTERS = {
 
 ################################################################################
 
-class KeyboardShortcuts():
-	# TODO obviously not finished
+# The dict's keys correspond to both the actions' name and gsettings key.
+# The translatable label is used to build the list in the preferences dialog.
+KEYBOARD_SHORTCUTS = {
+	'code-block': _("Code block"),
+	'quote': _("Quote"),
+	'list-ordered': _("Ordered list"),
+	'list-unordered': _("Unordered list"),
 
-	ActionsNames = [
-		'win.md-prev-format-title-lower',
-		'win.md-prev-format-title-upper',
+	'title-1': _("Title") + " - " + _("Level 1"),
+	'title-2': _("Title") + " - " + _("Level 2"),
+	'title-3': _("Title") + " - " + _("Level 3"),
+	'title-4': _("Title") + " - " + _("Level 4"),
+	'title-5': _("Title") + " - " + _("Level 5"),
+	'title-6': _("Title") + " - " + _("Level 6"),
 
-		'win.md-prev-format-italic',
-		'win.md-prev-format-bold',
+	'italic': _("Italic"),
+	'bold': _("Bold"),
+	'monospace': _("Inline code"),
+	'underline': _("Underline"),
+	'stroke': _("Stroke"),
 
-		'win.md-prev-insert-picture',
-	]
+	'insert-picture': _("Insert a picture"),
+	'insert-link': _("Insert a link"),
+	'insert-table-2': _("Insert a table") + " - " + _("2 columns"),
+	'insert-table-3': _("Insert a table") + " - " + _("3 columns"),
+	'insert-table-4': _("Insert a table") + " - " + _("4 columns"),
+	'insert-table-5': _("Insert a table") + " - " + _("5 columns"),
+}
 
-	SettingsKeys = [
-		'title-lower',
-		'title-upper',
-
-		'italic',
-		'bold',
-
-		'insert-picture',
-	]
-
-	Labels = [
-		_("Lower title"),
-		_("Upper title"),
-
-		_("Italic"),
-		_("Bold"),
-
-		_("Insert a picture"),
-	]
-
-	############################################################################
 ################################################################################
 
 class HelpLabels():

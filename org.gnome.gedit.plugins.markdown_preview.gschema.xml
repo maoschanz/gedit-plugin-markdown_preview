@@ -101,30 +101,113 @@
   <schema id="org.gnome.gedit.plugins.markdown_preview.keybindings"
     path="/org/gnome/gedit/plugins/markdown_preview/keybindings/">
 
+    <key name="code-block" type="as">
+      <default><![CDATA[['<Primary><Shift>C']]]></default>
+      <summary>Code block</summary>
+      <description></description>
+    </key>
+    <key name="quote" type="as">
+      <default><![CDATA[[]]]></default>
+      <summary>Quote</summary>
+      <description></description>
+    </key>
+    <key name="list-ordered" type="as">
+      <default><![CDATA[[]]]></default>
+      <summary>Ordered list</summary>
+      <description></description>
+    </key>
+    <key name="list-unordered" type="as">
+      <default><![CDATA[[]]]></default>
+      <summary>Unordered list</summary>
+      <description></description>
+    </key>
+
+    <key name="title-1" type="as">
+      <default><![CDATA[[]]]></default>
+      <summary>Title - Level 1</summary>
+      <description></description>
+    </key>
+    <key name="title-2" type="as">
+      <default><![CDATA[[]]]></default>
+      <summary>Title - Level 2</summary>
+      <description></description>
+    </key>
+    <key name="title-3" type="as">
+      <default><![CDATA[[]]]></default>
+      <summary>Title - Level 3</summary>
+      <description></description>
+    </key>
+    <key name="title-4" type="as">
+      <default><![CDATA[[]]]></default>
+      <summary>Title - Level 4</summary>
+      <description></description>
+    </key>
+    <key name="title-5" type="as">
+      <default><![CDATA[[]]]></default>
+      <summary>Title - Level 5</summary>
+      <description></description>
+    </key>
+    <key name="title-6" type="as">
+      <default><![CDATA[[]]]></default>
+      <summary>Title - Level 6</summary>
+      <description></description>
+    </key>
+
     <key name="italic" type="as">
       <default><![CDATA[['<Primary>slash']]]></default>
-      <summary>Add italic markup</summary>
+      <summary>Italic</summary>
       <description></description>
     </key>
     <key name="bold" type="as">
       <default><![CDATA[['<Primary><Shift>B']]]></default>
-      <summary>Add bold markup</summary>
+      <summary>Bold</summary>
       <description></description>
     </key>
+    <key name="monospace" type="as">
+      <default><![CDATA[[]]]></default>
+      <summary>Inline code</summary>
+      <description></description>
+    </key>
+    <key name="underline" type="as">
+      <default><![CDATA[[]]]></default>
+      <summary>Underline</summary>
+      <description></description>
+    </key>
+    <key name="stroke" type="as">
+      <default><![CDATA[[]]]></default>
+      <summary>Stroke</summary>
+      <description></description>
+    </key>
+
     <key name="insert-picture" type="as">
       <default><![CDATA[['<Primary><Shift>P']]]></default>
-      <summary>Insert an image</summary>
+      <summary>Insert a picture</summary>
       <description></description>
     </key>
-    <key name="title-lower" type="as">
-      <default><![CDATA[['<Primary>minus']]]></default>
-      <summary>Lower the level of title</summary>
-      <description>Use a lower level of title by adding a "#" tag</description>
+    <key name="insert-link" type="as">
+      <default><![CDATA[[]]]></default>
+      <summary>Insert a link</summary>
+      <description></description>
     </key>
-    <key name="title-upper" type="as">
-      <default><![CDATA[['<Primary>plus']]]></default>
-      <summary>Rise the level of title</summary>
-      <description>Use an upper level of title by removing a "#" tag</description>
+    <key name="insert-table-2" type="as">
+      <default><![CDATA[[]]]></default>
+      <summary>Insert a table - 2 columns</summary>
+      <description></description>
+    </key>
+    <key name="insert-table-3" type="as">
+      <default><![CDATA[[]]]></default>
+      <summary>Insert a table - 3 columns</summary>
+      <description></description>
+    </key>
+    <key name="insert-table-4" type="as">
+      <default><![CDATA[[]]]></default>
+      <summary>Insert a table - 4 columns</summary>
+      <description></description>
+    </key>
+    <key name="insert-table-5" type="as">
+      <default><![CDATA[[]]]></default>
+      <summary>Insert a table - 5 columns</summary>
+      <description></description>
     </key>
   </schema>
 </schemalist>

@@ -6,7 +6,7 @@ from gi.repository import Gtk, Gio
 
 from .rendering_settings import MdCssSettings, MdRevealjsSettings, MdBackendSettings
 from ..utils import get_backends_dict
-from ..constants import KeyboardShortcuts, HelpLabels, BackendsEnums, MD_PREVIEW_KEY_BASE
+from ..constants import KEYBOARD_SHORTCUTS, HelpLabels, BackendsEnums, MD_PREVIEW_KEY_BASE
 
 BASE_PATH = os.path.dirname(os.path.realpath(__file__))
 
@@ -91,9 +91,8 @@ class MdConfigWidget(Gtk.Box):
 		renderer.connect('accel-edited', self._on_accel_edited)
 		renderer.connect('accel-cleared', self._on_accel_cleared)
 		# https://github.com/GNOME/gtk/blob/master/gdk/keynames.txt
-		for i in range(len(KeyboardShortcuts.SettingsKeys)):
-			self._add_keybinding(KeyboardShortcuts.SettingsKeys[i], \
-			                                        KeyboardShortcuts.Labels[i])
+		for editing_action_id, label in reversed(list(KEYBOARD_SHORTCUTS.items())):
+			self._add_keybinding(editing_action_id, label)
 
 	############################################################################
 
@@ -104,11 +103,11 @@ class MdConfigWidget(Gtk.Box):
 		return label
 
 	def _add_keybinding(self, setting_id, description):
-		accelerator = self._kb_settings.get_strv(setting_id)[0]
-		if accelerator is None:
+		accelerators_list = self._kb_settings.get_strv(setting_id)
+		if accelerators_list == []:
 			[key, mods] = [0, 0]
 		else:
-			[key, mods] = Gtk.accelerator_parse(accelerator)
+			[key, mods] = Gtk.accelerator_parse(accelerators_list[0])
 		row_array = [setting_id, description, key, mods]
 		row = self.shortcuts_treeview.get_model().insert(0, row=row_array)
 
