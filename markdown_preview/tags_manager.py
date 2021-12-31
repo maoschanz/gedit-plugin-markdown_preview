@@ -61,41 +61,6 @@ class MdTagsManager():
 
 	############################################################################
 
-	def format_title_lower(self):
-		self.add_line_tags('#')
-
-	def format_title_upper(self):
-		self.remove_line_tags('#')
-
-	def format_title(self, level):
-		self.add_line_tags('#'*level)
-
-	def format_bold(self):
-		self.add_word_tags('**')
-
-	def format_italic(self):
-		self.add_word_tags('*')
-
-	def format_monospace(self):
-		self.add_word_tags('`')
-
-	def format_underline(self):
-		self.add_word_tags('__')
-
-	def format_stroke(self):
-		self.add_word_tags('~~')
-
-	def list_unordered(self):
-		self.add_line_tags('-')
-
-	def list_ordered(self):
-		self.add_line_tags('1.')
-
-	def format_quote(self):
-		self.add_line_tags('>')
-
-	############################################################################
-
 	def insert_link(self, window):
 		pass
 
@@ -135,7 +100,7 @@ class MdTagsManager():
 		# Actually insert
 		self.add_tags_characters(document, start_tag, end_tag, start, end)
 
-	def insert_table(self):
+	def insert_table(self, nb_columns):
 		doc = self._view_plugin.view.get_buffer()
 		table = '|||\n|--|--|\n|||'
 		iterator = doc.get_iter_at_mark(doc.get_insert())

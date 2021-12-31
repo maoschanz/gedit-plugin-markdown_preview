@@ -144,28 +144,30 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		action_remove = Gio.SimpleAction(name='md-prev-remove-all')
 		action_remove.connect('activate', lambda i, j: self.view_method('remove_all'))
 
-		self.add_format_action('md-prev-format-title-upper', 'format_title_upper')
-		self.add_format_action('md-prev-format-title-lower', 'format_title_lower')
+		self.add_format_action('md-prev-format-title-upper', 'remove_block', '#')
+		self.add_format_action('md-prev-format-title-lower', 'format_block', '#')
 
-		self.add_format_action('md-prev-format-bold', 'format_bold')
-		self.add_format_action('md-prev-format-italic', 'format_italic')
-#		self.add_format_action('md-prev-format-underline', 'format_underline')
-#		self.add_format_action('md-prev-format-stroke', 'format_stroke')
-		self.add_format_action('md-prev-format-monospace', 'format_monospace')
-		self.add_format_action('md-prev-format-quote', 'format_quote')
+		self.add_format_action('md-prev-format-bold', 'format_inline', '**')
+		self.add_format_action('md-prev-format-italic', 'format_inline', '*')
+		self.add_format_action('md-prev-format-underline', 'format_inline', '__')
+		self.add_format_action('md-prev-format-stroke', 'format_inline', '~~')
+		self.add_format_action('md-prev-format-monospace', 'format_inline', '`')
 
-		self.add_format_action('md-prev-list-unordered', 'list_unordered')
-		self.add_format_action('md-prev-list-ordered', 'list_ordered')
+		self.add_format_action('md-prev-block-code', 'format_block2', '\n```\n')
+		self.add_format_action('md-prev-block-quote', 'format_block', '>')
+		self.add_format_action('md-prev-list-unordered', 'format_block', '-')
+		self.add_format_action('md-prev-list-ordered', 'format_block', '1.')
+
 		self.add_format_action('md-prev-insert-picture', 'insert_picture')
 		self.add_format_action('md-prev-insert-link', 'insert_link')
 		self.add_format_action('md-prev-insert-table', 'insert_table')
 
-	def add_format_action(self, action_name, method_name):
+	def add_format_action(self, action_name, method, arg=None):
 		action = Gio.SimpleAction(name=action_name)
-		action.connect('activate', lambda i, j: self.view_method(method_name))
+		action.connect('activate', lambda i, j: self.view_method(method, arg))
 		self.window.add_action(action)
 
-	def view_method(self, name):
+	def view_method(self, method_name, argument=None):
 		if self.preview.recognize_format() != 'md':
 			return
 
@@ -175,39 +177,22 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		else:
 			return
 
-		# TODO gérer ça de manière statique avec une méthode hors-classe dans le
-		# fichier tags_manager.py
-		# ou juste ajouter les actions depuis le tags_manager si possible ??
-
-		# print('action : ' + name) # TODO terminer ça mdr
-
-		if name == 'insert_table':
-			v.insert_table()
-		elif name == 'insert_picture':
+		if method_name == 'insert_table':
+			v.insert_table(argument)
+		elif method_name == 'insert_picture':
 			v.insert_picture(self.window)
-		elif name == 'insert_link':
+		elif method_name == 'insert_link':
 			v.insert_link(self.window)
 
-		elif name == 'format_bold':
-			v.format_bold()
-		elif name == 'format_italic':
-			v.format_italic()
-		elif name == 'format_monospace':
-			v.format_monospace()
-		elif name == 'format_quote':
-			v.format_quote()
-		elif name == 'format_underline':
-			v.format_underline()
+		elif method_name == 'format_inline':
+			v.add_word_tags(argument)
 
-		elif name == 'list_ordered':
-			v.list_ordered()
-		elif name == 'list_unordered':
-			v.list_unordered()
-		
-		elif name == 'format_title_upper':
-			v.format_title_upper()
-		elif name == 'format_title_lower':
-			v.format_title_lower()
+		elif method_name == 'format_block':
+			v.add_line_tags(argument)
+		elif method_name == 'format_block2':
+			v.add_block_tags(argument, argument)
+		elif method_name == 'remove_block':
+			v.remove_line_tags(argument)
 
 	def on_change_panel_from_popover(self, *args):
 		self._auto_position = False
