@@ -298,7 +298,7 @@ msgid "Can't preview an unsaved document"
 msgstr ""
 
 #: markdown_preview/main_container.py:377
-msgid "Unsupported type of document: "
+msgid "Unsupported type of document:"
 msgstr ""
 
 #: markdown_preview/tags_manager.py:84

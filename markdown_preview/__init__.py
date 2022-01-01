@@ -9,7 +9,7 @@ from .tags_manager import MdTagsManager
 from .prefs.prefs_dialog import MdConfigWidget
 from .prefs.export_assistant import MdExportAssistant
 from .constants import KEYBOARD_SHORTCUTS, MD_PREVIEW_KEY_BASE
-from .utils import init_gettext
+from .utils import init_gettext, recognize_format
 
 _ = init_gettext()
 
@@ -32,22 +32,26 @@ class MarkdownGeditPluginApp(GObject.Object, Gedit.AppActivatable):
 		self.remove_accelerators()
 
 	def build_main_menu(self):
-		self.menu_ext_tools = self.extend_menu('tools-section')
-		self.menu_ext_view = self.extend_menu('view-section')
 		builder = Gtk.Builder().new_from_file(os.path.join(BASE_PATH, 'menus.ui'))
+
+		# Append a section to the primary menu's "tools" submenu
+		self.menu_ext_tools = self.extend_menu('tools-section')
 		menu = builder.get_object('md-preview-actions')
 		self.menu_section_actions = Gio.MenuItem.new_section(_("Markdown Preview"), menu)
 		self.menu_ext_tools.append_menu_item(self.menu_section_actions)
+
+		# Append two sections to the primary menu's "view" submenu
+		self.menu_ext_view = self.extend_menu('view-section')
 		menu = builder.get_object('md-preview-settings')
-		self.menu_section_settings = Gio.MenuItem.new_section(_("Markdown Preview"), menu)
-		self.menu_ext_view.append_menu_item(self.menu_section_settings)
+		menu_section_settings = Gio.MenuItem.new_section(_("Markdown Preview"), menu)
+		self.menu_ext_view.append_menu_item(menu_section_settings)
 		menu = builder.get_object('md-preview-zoom')
 		self.menu_section_zoom = Gio.MenuItem.new_submenu(_("Zoom"), menu)
 		self.menu_ext_view.append_menu_item(self.menu_section_zoom)
 
 	def remove_menu(self):
-		self.menu_ext_tools = None # XXX ?
-		self.menu_ext_view = None # XXX ?
+		self.menu_ext_tools = None
+		self.menu_ext_view = None
 
 	def add_all_accelerators(self):
 		self._kb_settings = Gio.Settings.new(MD_PREVIEW_KEY_BASE + '.keybindings')
@@ -143,7 +147,7 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		########################################################################
 
 		# action_remove = Gio.SimpleAction(name='md-prev-remove-all')
-		# action_remove.connect('activate', lambda i, j: self.view_method('remove_all'))
+		# action_remove.connect('activate', lambda i, j: self.method_from_view('remove_all'))
 		# TODO ^
 
 		self.add_format_action('md-prev-editing-title-1', 'format_block', '#')
@@ -173,36 +177,35 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 
 	def add_format_action(self, action_name, method, arg=None):
 		action = Gio.SimpleAction(name=action_name)
-		action.connect('activate', lambda i, j: self.view_method(method, arg))
+		action.connect('activate', lambda i, j: self.method_from_view(method, arg))
 		self.window.add_action(action)
 
-	def view_method(self, method_name, argument=None):
-		if self.preview.recognize_format() != 'md':
-			return
-
+	def method_from_view(self, method_name, argument=None):
 		view = self.window.get_active_view()
 		if view and view.markdown_preview_view_activatable:
-			v = view.markdown_preview_view_activatable.tags_manager
+			tags_manager = view.markdown_preview_view_activatable.tags_manager
 		else:
+			return
+		if recognize_format(view.get_buffer())[1] != 'md':
 			return
 		# print('action : ' + method_name)
 
 		if method_name == 'insert_table':
-			v.insert_table(argument)
+			tags_manager.insert_table(argument)
 		elif method_name == 'insert_picture':
-			v.insert_picture(self.window)
+			tags_manager.insert_picture(self.window)
 		elif method_name == 'insert_link':
-			v.insert_link(self.window)
+			tags_manager.insert_link(self.window)
 
 		elif method_name == 'format_inline':
-			v.add_word_tags(argument)
+			tags_manager.add_word_tags(argument)
 
 		elif method_name == 'format_block':
-			v.add_line_tags(argument)
+			tags_manager.add_line_tags(argument)
 		elif method_name == 'format_block2':
-			v.add_block_tags(argument)
+			tags_manager.add_block_tags(argument)
 		elif method_name == 'remove_block':
-			v.remove_line_tags(argument) # TODO
+			tags_manager.remove_line_tags(argument) # TODO
 
 	def on_change_panel_from_popover(self, *args):
 		self._auto_position = False
@@ -288,20 +291,9 @@ class MarkdownGeditPluginView(GObject.Object, Gedit.ViewActivatable):
 		menu = Gtk.Menu().new_from_model(self.menu_builder.get_object('right-click-menu'))
 		item.set_submenu(menu)
 		item.show()
-		if self.recognize_format() != 'md':
+		if recognize_format(self.view.get_buffer())[1] != 'md':
 			item.set_sensitive(False)
 		popup.append(item)
-
-	def recognize_format(self): # TODO doc.get_language() ? pourquoi j'appelle
-		# le recognize_format depuis ce fichier à d'autres endroits ?
-		doc = self.view.get_buffer()
-		name = doc.get_short_name_for_display()
-		temp = name.split('.')[-1].lower()
-		if temp == 'md':
-			return 'md'
-		elif temp == 'html':
-			return 'html'
-		return 'error'
 
 	############################################################################
 ################################################################################

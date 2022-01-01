@@ -326,8 +326,8 @@ msgid "Can't preview an unsaved document"
 msgstr "Niet-opgeslagen documenten kunnen niet worden voorvertoond"
 
 #: markdown_preview/main_container.py:377
-msgid "Unsupported type of document: "
-msgstr "Geen ondersteuning voor dit soort documenten: "
+msgid "Unsupported type of document:"
+msgstr "Geen ondersteuning voor dit soort documenten:"
 
 #: markdown_preview/tags_manager.py:84
 msgid "Select a picture"

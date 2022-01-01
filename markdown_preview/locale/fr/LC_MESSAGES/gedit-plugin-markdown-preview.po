@@ -310,8 +310,8 @@ msgid "Can't preview an unsaved document"
 msgstr "Impossible de prévisualiser un document non-enregistré"
 
 #: markdown_preview/main_container.py:377
-msgid "Unsupported type of document: "
-msgstr "Type de document non-supporté : "
+msgid "Unsupported type of document:"
+msgstr "Type de document non-supporté :"
 
 #: markdown_preview/tags_manager.py:84
 msgid "Select a picture"

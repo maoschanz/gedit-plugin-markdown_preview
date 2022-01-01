@@ -3,7 +3,7 @@
 
 import subprocess, gi, os
 from gi.repository import Gtk, Gio, GLib
-from .utils import get_backends_dict, init_gettext
+from .utils import get_backends_dict, init_gettext, recognize_format
 from .webview_manager import MdWebViewManager
 from .constants import MD_PREVIEW_KEY_BASE, MARKDOWN_SPLITTERS, BASE_TEMP_NAME
 
@@ -24,7 +24,7 @@ class MdMainContainer(Gtk.Box):
 		super().__init__(**kwargs)
 		self.auto_reload = False
 		self.parent_plugin = parent_plugin
-		self.file_format = 'error'
+		self._file_format = None
 		self._reload_is_locked = False
 
 		# Where the values of settings will be loaded later
@@ -47,7 +47,7 @@ class MdMainContainer(Gtk.Box):
 			self._settings.connect('changed::style', self._on_stylesheet_change),
 		]
 
-		self.pagination_mode = None
+		self._pagination_mode = 'whole'
 		self.set_auto_manage()
 		self.build_preview_ui()
 		self.page_index = 0
@@ -208,8 +208,7 @@ class MdMainContainer(Gtk.Box):
 
 	############################################################################
 
-	def set_pagination_available(self, file_format):
-		can_paginate = file_format == 'md'
+	def _set_pagination_available(self, can_paginate):
 		self.set_action_enabled('md-set-view-mode', can_paginate)
 		if can_paginate:
 			action = self.parent_plugin.window.lookup_action('md-set-view-mode')
@@ -219,8 +218,8 @@ class MdMainContainer(Gtk.Box):
 			self.set_is_whole_doc(False)
 
 	def set_pagination_mode(self, mode):
-		self.pagination_mode = mode
-		is_whole = (self.pagination_mode == 'whole')
+		self._pagination_mode = mode
+		is_whole = (self._pagination_mode == 'whole')
 		self.set_is_whole_doc(is_whole)
 		self.on_reload()
 
@@ -247,7 +246,7 @@ class MdMainContainer(Gtk.Box):
 
 		# Guard clause: it will not load documents if they're not a known format
 		# or if the panel is not even visible
-		if self.file_format == 'error' or not self.preview_bar.props.visible:
+		if self._file_format == None or not self.preview_bar.props.visible:
 			return
 
 		# Guard clause: it will not load documents if the panel is already used
@@ -273,14 +272,14 @@ class MdMainContainer(Gtk.Box):
 		if doc is None:
 			print("The window doesn't have any active document to preview")
 			return
-		if self.file_format == 'error':
+		if self._file_format == None:
 			# The clause guard has to be duplicated because the document might
 			# change during the delay between `on_reload` & `_on_reload_unsafe`
 			return
 		start, end = doc.get_bounds()
 		unsaved_text = doc.get_text(start, end, True)
 		unsaved_text = unsaved_text.encode('utf-8').decode()
-		if self.file_format == 'html':
+		if self._file_format == 'html':
 			html_content = self.get_html_from_html(unsaved_text)
 		elif self._active_backend == 'python':
 			html_content = self.get_html_from_p3md(unsaved_text)
@@ -354,44 +353,42 @@ class MdMainContainer(Gtk.Box):
 	############################################################################
 
 	def on_file_changed(self, *args):
-		self.file_format = self.recognize_format()
+		self._update_file_format()
 		self._update_panel_visibility()
-		if self.file_format != 'error':
+		if self._file_format != None:
 			self.on_reload()
 
-	def recognize_format(self):
-		doc = self.parent_plugin.window.get_active_document()
-		# It will not load documents which are not .md/.html
-		name = doc.get_short_name_for_display()
-		temp = name.split('.')[-1].lower()
+	def _update_file_format(self):
+		"""Checks the file format of the current document, update its cached
+		value ('md', or 'html', or None if unpreviewable), hide or show the info
+		bar telling if the plugin can preview the document, and update other
+		cached settings if pertinent."""
+		document = self.parent_plugin.window.get_active_document()
+		name, extension = recognize_format(document)
 		ret = None
-		if temp == 'md':
+		# It will not load documents which are not .md/.html
+		if extension == 'md':
 			ret = 'md'
-		elif temp == 'html':
+		elif extension == 'html':
 			ret = 'html'
+		# print(ret)
+		self._file_format = ret
 
 		if ret is None:
-			if doc.is_untitled():
-				self._display_warning(_("Can't preview an unsaved document"))
-				# XXX it should
-			else:
-				self._display_warning(_("Unsupported type of document: ") + name)
-			ret = 'error'
+			self._display_warning(_("Unsupported type of document:") + " " + extension)
 		else:
 			self._close_warning()
 
 			# Most accesses to GSettings are cached here
 			self._on_backend_change()
 			self._on_stylesheet_change()
-		self.set_pagination_available(ret)
-		# print(ret)
-		return ret
+		self._set_pagination_available(ret == 'md')
 
 	def current_page(self, lang_string, splitters_array):
-		if self.pagination_mode == 'whole' or splitters_array == None:
+		if self._pagination_mode == 'whole' or splitters_array == None:
 			return lang_string
 		else:
-			correct_splitter = splitters_array[self.pagination_mode]
+			correct_splitter = splitters_array[self._pagination_mode]
 
 		# The document is (as much as possible) splitted in its original
 		# language (md or html). It avoids converting some markdown to html
@@ -464,7 +461,7 @@ class MdMainContainer(Gtk.Box):
 		self.panel.set_visible_child(self.preview_bar)
 		self.preview_bar.show_all()
 		self._close_warning() # because the `show_all` shouldn't show that
-		self.pages_box.props.visible = (self.pagination_mode != 'whole')
+		self.pages_box.props.visible = (self._pagination_mode != 'whole')
 		if self.parent_plugin.window.get_state() == 'STATE_NORMAL':
 			self.on_reload()
 
@@ -480,7 +477,7 @@ class MdMainContainer(Gtk.Box):
 		self._update_panel_visibility()
 
 	def _update_panel_visibility(self):
-		if not self.auto_manage_panel or self.file_format == 'error':
+		if not self.auto_manage_panel or self._file_format == None:
 			if self.panel.props.visible:
 				if self.panel.get_visible_child() == self.preview_bar:
 					self.panel.hide()

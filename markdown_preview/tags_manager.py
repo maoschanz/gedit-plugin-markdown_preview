@@ -38,7 +38,7 @@ class MdTagsManager():
 
 	def add_word_tags(self, tag_both):
 		"""Add a tag at both sides of a selected bit of text."""
-		document = self._view_plugin.view.get_buffer()
+		document = self._get_active_document_buffer()
 		selection = document.get_selection_bounds()
 		if selection != ():
 			(start, end) = selection
@@ -74,7 +74,7 @@ class MdTagsManager():
 		file_chooser.destroy()
 
 		# Where to insert
-		document = self._view_plugin.view.get_buffer()
+		document = self._get_active_document_buffer()
 		selection = document.get_selection_bounds()
 		number_lines = 0
 		if selection != ():
@@ -88,7 +88,7 @@ class MdTagsManager():
 		self.add_tags_characters(start_tag, end_tag, start, end)
 
 	def insert_table(self, nb_columns):
-		doc = self._view_plugin.view.get_buffer()
+		doc = self._get_active_document_buffer()
 		table = "\n|" + nb_columns * " header  |" + \
 		        "\n|" + nb_columns * "---------|" + \
 		        "\n|" + nb_columns * " content |" + "\n"
@@ -98,7 +98,7 @@ class MdTagsManager():
 	############################################################################
 
 	def add_tags_characters(self, start_tag, end_tag, start, end):
-		document = self._view_plugin.view.get_buffer()
+		document = self._get_active_document_buffer()
 		start_mark = document.create_mark('start', start, True)
 		current_mark = document.create_mark('iter', start, False)
 		end_mark = document.create_mark('end', end, False)
@@ -147,7 +147,7 @@ class MdTagsManager():
 		iterator.backward_chars(len(tag))
 
 	def _find_block_iters(self):
-		document = self._view_plugin.view.get_buffer()
+		document = self._get_active_document_buffer()
 		selection = document.get_selection_bounds()
 		if selection != ():
 			(start, end) = selection
@@ -170,6 +170,9 @@ class MdTagsManager():
 			end.forward_to_line_end()
 
 		return start, end
+
+	def _get_active_document_buffer(self):
+		return self._view_plugin.view.get_buffer()
 
 	############################################################################
 ################################################################################

@@ -13,11 +13,13 @@ Pour la release 3.0 :
 - à terminer :
 	- [x] MVP du clic-droit
 	- [x] raccourcis clavier
-	- [ ] insert link ?
+- à réparer :
+	- [ ] fix le show_all des préférences
+	- [ ] fix le get_text qui veut des arguments là
 	- [ ] `gtk_widget_get_scale_factor` ???
 - à faire :
+	- [x] refacto recognize_format
 	- [ ] retenir le scroll et le numéro de page à l'échelle de la gedit.view
-	- [ ] si le boug scrolle à la fin, reproduire ça au reload
 - [ ] numéro de version etc.
 
 Pour la release 4.0 :
@@ -27,9 +29,9 @@ Pour la release 4.0 :
 	- [ ] autoriser la suppression des shortcuts
 	- [ ] valeurs par défaut des shortcuts ?
 - à terminer :
-	- [ ] remove tags
+	- [ ] insert link ?
+	- [ ] "remove tags" action
 - à faire :
-	- [ ] retenir le scroll et le numéro de page à l'échelle de la gedit.view
 	- [ ] si le boug scrolle à la fin, reproduire ça au reload
 - [ ] numéro de version etc.
 
@@ -39,10 +41,9 @@ Pour la release 5.0 :
 	- [ ] essayer de faire de l'auto-scrolling en mode 'whole' en faisant des
 	sélecteurs un peu dégueulasses (qui visent les titres ? ou les paragraphes ?
 	on peut faire évoluer plus tard certes)
+	- [ ] ...
 - à terminer :
 	- [ ] revealjs
-	- [ ] clic-droit
-	- [ ] raccourcis claviers
 - [ ] numéro de version etc.
 
 ---
@@ -70,7 +71,6 @@ TypeError: Gtk.TextBuffer.get_text() takes exactly 4 arguments (1 given)
 		- [ ] transitions
 		- [ ] numéros de pages
 		- [ ] paramètres de thème
-- print(doc.get_mime_type(), doc.get_content_type())
 - [ ] CSS for admonitions (and other default plugins ?)
 	- [ ] and pymdown ??
 - [ ] bring back the fullscreen, but better
