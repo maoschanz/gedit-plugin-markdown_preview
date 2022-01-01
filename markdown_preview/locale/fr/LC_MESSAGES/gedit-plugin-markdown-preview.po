@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: unnamed project\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-20 01:28+0200\n"
+"POT-Creation-Date: 2022-01-01 17:36+0100\n"
 "PO-Revision-Date: 2020-01-15 16:51+0100\n"
 "Last-Translator: Romain F. T.\n"
 "Language-Team: \n"
@@ -18,47 +18,124 @@ msgstr ""
 "X-Generator: Gtranslator 3.34.0\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: markdown_preview/__init__.py:39 markdown_preview/__init__.py:42
-#: markdown_preview/__init__.py:250 markdown_preview/main_container.py:462
+#: markdown_preview/__init__.py:40 markdown_preview/__init__.py:46
+#: markdown_preview/__init__.py:233 markdown_preview/main_container.py:461
 msgid "Markdown Preview"
 msgstr "Aperçu Markdown"
 
-#: markdown_preview/__init__.py:45 markdown_preview/constants.py:130
+#: markdown_preview/__init__.py:49 markdown_preview/constants.py:131
 msgid "Zoom"
 msgstr "Zoom"
 
-#: markdown_preview/__init__.py:309
+#: markdown_preview/__init__.py:292
 msgid "Markdown tags"
 msgstr "Balises Markdown"
 
-#: markdown_preview/constants.py:42 markdown_preview/view-menu.ui:59
+#: markdown_preview/constants.py:25 markdown_preview/view-menu.ui:15
+msgid "Code block"
+msgstr "Bloc de code"
+
+#: markdown_preview/constants.py:26 markdown_preview/view-menu.ui:19
+msgid "Quote"
+msgstr "Citation"
+
+#: markdown_preview/constants.py:27 markdown_preview/view-menu.ui:30
+msgid "Ordered list"
+msgstr "Liste numérotée"
+
+#: markdown_preview/constants.py:28 markdown_preview/view-menu.ui:26
+msgid "Unordered list"
+msgstr "Liste à puces"
+
+#: markdown_preview/constants.py:30 markdown_preview/constants.py:31
+#: markdown_preview/constants.py:32 markdown_preview/constants.py:33
+#: markdown_preview/constants.py:34 markdown_preview/constants.py:35
+#: markdown_preview/view-menu.ui:37
+msgid "Title"
+msgstr "Titre"
+
+#: markdown_preview/constants.py:30 markdown_preview/view-menu.ui:40
+msgid "Level 1"
+msgstr "Niveau 1"
+
+#: markdown_preview/constants.py:31 markdown_preview/view-menu.ui:44
+msgid "Level 2"
+msgstr "Niveau 2"
+
+#: markdown_preview/constants.py:32 markdown_preview/view-menu.ui:48
+msgid "Level 3"
+msgstr "Niveau 3"
+
+#: markdown_preview/constants.py:33 markdown_preview/view-menu.ui:52
+msgid "Level 4"
+msgstr "Niveau 4"
+
+#: markdown_preview/constants.py:34 markdown_preview/view-menu.ui:56
+msgid "Level 5"
+msgstr "Niveau 5"
+
+#: markdown_preview/constants.py:35 markdown_preview/view-menu.ui:60
+msgid "Level 6"
+msgstr "Niveau 6"
+
+#: markdown_preview/constants.py:37 markdown_preview/view-menu.ui:74
 msgid "Italic"
 msgstr "Italique"
 
-#: markdown_preview/constants.py:43 markdown_preview/view-menu.ui:55
+#: markdown_preview/constants.py:38 markdown_preview/view-menu.ui:70
 msgid "Bold"
 msgstr "Gras"
 
-#: markdown_preview/constants.py:44
+#: markdown_preview/constants.py:39 markdown_preview/view-menu.ui:78
+msgid "Inline code"
+msgstr "Code"
+
+#: markdown_preview/constants.py:40 markdown_preview/view-menu.ui:82
+msgid "Underline"
+msgstr "Souligné"
+
+#: markdown_preview/constants.py:41 markdown_preview/view-menu.ui:86
+msgid "Stroke"
+msgstr "Rayé"
+
+#: markdown_preview/constants.py:43
 msgid "Insert a picture"
 msgstr "Insérer une image"
 
-#: markdown_preview/constants.py:45
-msgid "Lower title"
-msgstr "Titre plus bas"
+#: markdown_preview/constants.py:44 markdown_preview/view-menu.ui:99
+msgid "Insert a link"
+msgstr "Insérer un lien"
 
-#: markdown_preview/constants.py:46
-msgid "Upper title"
-msgstr "Titre plus haut"
+#: markdown_preview/constants.py:45 markdown_preview/constants.py:46
+#: markdown_preview/constants.py:47 markdown_preview/constants.py:48
+#: markdown_preview/view-menu.ui:103
+msgid "Insert a table"
+msgstr "Insérer un tableau"
 
-#: markdown_preview/constants.py:54
+#: markdown_preview/constants.py:45 markdown_preview/view-menu.ui:106
+msgid "2 columns"
+msgstr "2 colonnes"
+
+#: markdown_preview/constants.py:46 markdown_preview/view-menu.ui:110
+msgid "3 columns"
+msgstr "3 colonnes"
+
+#: markdown_preview/constants.py:47 markdown_preview/view-menu.ui:114
+msgid "4 columns"
+msgstr "4 colonnes"
+
+#: markdown_preview/constants.py:48 markdown_preview/view-menu.ui:118
+msgid "5 columns"
+msgstr "5 colonnes"
+
+#: markdown_preview/constants.py:55
 msgid ""
 "Aside of default extensions provided by the python3-markdown package, you "
 "can <b>install</b> third-party extensions using instructions provided by "
 "their respective authors."
 msgstr ""
 
-#: markdown_preview/constants.py:57
+#: markdown_preview/constants.py:58
 msgid ""
 "These third-party extensions are <b>not</b> Gedit plugins, they extend "
 "python3-markdown."
@@ -66,7 +143,7 @@ msgstr ""
 "Ces extensions tierces <b>ne sont pas</b> des greffons pour Gedit, elles "
 "étendent python3-markdown."
 
-#: markdown_preview/constants.py:59
+#: markdown_preview/constants.py:60
 msgid ""
 "Next, to improve the preview of your markdown file with the features of "
 "these extensions, please add their module names to the list using the text "
@@ -76,7 +153,7 @@ msgstr ""
 "de ces extensions, veuillez ajouter leurs noms de modules à la liste en "
 "utilisant le champ de texte et l'icône '+'."
 
-#: markdown_preview/constants.py:63
+#: markdown_preview/constants.py:64
 msgid ""
 "Pandoc is a command line utility with several possible options, input "
 "formats and output formats."
@@ -84,19 +161,19 @@ msgstr ""
 "Pandoc est un utilitaire en ligne de commande avec diverses options, formats "
 "d'entrée et formats de sortie."
 
-#: markdown_preview/constants.py:65
+#: markdown_preview/constants.py:66
 msgid ""
 "Any command where $INPUT_FILE would be the input file, and printing valid "
 "HTML to the standard output, is accepted."
 msgstr ""
 
-#: markdown_preview/constants.py:67
+#: markdown_preview/constants.py:68
 msgid ""
 "Any command where $INPUT_FILE would be the input file, and $OUTPUT_FILE the "
 "name of the output file, is accepted."
 msgstr ""
 
-#: markdown_preview/constants.py:70
+#: markdown_preview/constants.py:71
 msgid ""
 "You can select a stylesheet (.css file) to make your document look nice and "
 "modern, or to increase its readability."
@@ -104,181 +181,181 @@ msgstr ""
 "Vous pouvez utiliser une feuille de style (fichier .css) pour que votre "
 "document paraisse plus joli et moderne, ou pour améliorer sa lisibilité."
 
-#: markdown_preview/constants.py:72
+#: markdown_preview/constants.py:73
 msgid ""
 "With Pandoc, you can preview the file as a revealjs slideshow, which has pre-"
 "existing themes and settings."
 msgstr ""
 
-#: markdown_preview/constants.py:81
+#: markdown_preview/constants.py:82
 msgid "Extras"
 msgstr "Extras"
 
-#: markdown_preview/constants.py:82
+#: markdown_preview/constants.py:83
 msgid "Table of content"
 msgstr "Table des matières"
 
-#: markdown_preview/constants.py:84
+#: markdown_preview/constants.py:85
 msgid "New Line To Break"
 msgstr ""
 
-#: markdown_preview/constants.py:86
+#: markdown_preview/constants.py:87
 msgid "Sane Lists"
 msgstr ""
 
-#: markdown_preview/constants.py:87
+#: markdown_preview/constants.py:88
 msgid "Admonitions"
 msgstr ""
 
-#: markdown_preview/constants.py:88
+#: markdown_preview/constants.py:89
 msgid "WikiLinks"
 msgstr "WikiLinks"
 
-#: markdown_preview/constants.py:91
+#: markdown_preview/constants.py:92
 msgid ""
 "A compilation of various extensions (Abbreviations, Attribute Lists, "
 "Definition Lists, Fenced Code Blocks, Footnotes, Tables)."
 msgstr ""
 
-#: markdown_preview/constants.py:92
+#: markdown_preview/constants.py:93
 msgid "Shows a clickable table of content with the [TOC] tag."
 msgstr "Affiche une table des matières cliquable avec la balise [TOC]."
 
-#: markdown_preview/constants.py:93
+#: markdown_preview/constants.py:94
 msgid "Adds a line break at each new line."
 msgstr "Ajoute un retour à la ligne à chaque nouvelle ligne."
 
-#: markdown_preview/constants.py:94
+#: markdown_preview/constants.py:95
 msgid ""
 "Converts ASCII dashes, quotes and ellipses to their nice-looking equivalents."
 msgstr ""
 "Convertit les tirets, guillemets et points de suspension en leurs "
 "équivalents présentables."
 
-#: markdown_preview/constants.py:95
+#: markdown_preview/constants.py:96
 msgid "Alters the behavior of the lists syntax."
 msgstr "Altère le comportement de la syntaxe des listes."
 
-#: markdown_preview/constants.py:96
+#: markdown_preview/constants.py:97
 msgid "Adds admonitions (notes, warnings, tips, …) with the !!! tag."
 msgstr ""
 
-#: markdown_preview/constants.py:97
+#: markdown_preview/constants.py:98
 msgid "Converts any [[bracketed]] word to a link."
 msgstr "Convertit les mots [[entre crochets]] en liens."
 
-#: markdown_preview/constants.py:98
+#: markdown_preview/constants.py:99
 msgid ""
 "Highlights your code with a correct syntax coloration (it needs to be set up "
 "and have some dependencies)."
 msgstr ""
 
-#: markdown_preview/constants.py:104
+#: markdown_preview/constants.py:105
 msgid "Portable Document Format (.pdf)"
 msgstr ""
 
-#: markdown_preview/constants.py:105 markdown_preview/constants.py:117
+#: markdown_preview/constants.py:106 markdown_preview/constants.py:118
 #: markdown_preview/prefs/export_assistant.py:43
 msgid "HTML5"
 msgstr "HTML5"
 
-#: markdown_preview/constants.py:106
+#: markdown_preview/constants.py:107
 msgid "OpenOffice text document (.odt)"
 msgstr ""
 
-#: markdown_preview/constants.py:107
+#: markdown_preview/constants.py:108
 msgid "Microsoft Word (.docx)"
 msgstr ""
 
-#: markdown_preview/constants.py:108
+#: markdown_preview/constants.py:109
 msgid "LaTeX (.tex)"
 msgstr "LaTeX (.tex)"
 
-#: markdown_preview/constants.py:109
+#: markdown_preview/constants.py:110
 msgid "LaTeX beamer slideshow (.tex)"
 msgstr "Présentation LaTeX beamer (.tex)"
 
-#: markdown_preview/constants.py:110
+#: markdown_preview/constants.py:111
 msgid "plain text (.txt)"
 msgstr "texte brut (.txt)"
 
-#: markdown_preview/constants.py:111
+#: markdown_preview/constants.py:112
 msgid "PowerPoint slideshow (.pptx)"
 msgstr "Présentation PowerPoint (.pptx)"
 
-#: markdown_preview/constants.py:112
+#: markdown_preview/constants.py:113
 msgid "Rich Text Format (.rtf)"
 msgstr ""
 
-#: markdown_preview/constants.py:113 markdown_preview/constants.py:118
+#: markdown_preview/constants.py:114 markdown_preview/constants.py:119
 msgid "reveal.js slideshow (HTML/JS)"
 msgstr "Présentation reveal.js (HTML/JS)"
 
-#: markdown_preview/constants.py:114 markdown_preview/constants.py:119
+#: markdown_preview/constants.py:115 markdown_preview/constants.py:120
 msgid "Custom command line"
 msgstr "Ligne de commande personnalisée"
 
-#: markdown_preview/constants.py:125
+#: markdown_preview/constants.py:126
 msgid "None"
 msgstr "Aucune"
 
-#: markdown_preview/constants.py:126
+#: markdown_preview/constants.py:127
 msgid "Fade"
 msgstr "Fondu"
 
-#: markdown_preview/constants.py:127
+#: markdown_preview/constants.py:128
 msgid "Slide"
 msgstr "Glissement"
 
-#: markdown_preview/constants.py:128
+#: markdown_preview/constants.py:129
 msgid "Cube (convex)"
 msgstr "Cube (convexe)"
 
-#: markdown_preview/constants.py:129
+#: markdown_preview/constants.py:130
 msgid "Cube (concave)"
 msgstr "Cube (concave)"
 
-#: markdown_preview/constants.py:133
+#: markdown_preview/constants.py:134
 msgid "Beige"
 msgstr "Beige"
 
-#: markdown_preview/constants.py:134
+#: markdown_preview/constants.py:135
 msgid "Black"
 msgstr "Noir"
 
-#: markdown_preview/constants.py:135
+#: markdown_preview/constants.py:136
 msgid "Blood"
 msgstr "Sang"
 
-#: markdown_preview/constants.py:136
+#: markdown_preview/constants.py:137
 msgid "League"
 msgstr ""
 
-#: markdown_preview/constants.py:137
+#: markdown_preview/constants.py:138
 msgid "Moon"
 msgstr "Lune"
 
-#: markdown_preview/constants.py:138
+#: markdown_preview/constants.py:139
 msgid "Night"
 msgstr "Nuit"
 
-#: markdown_preview/constants.py:139
+#: markdown_preview/constants.py:140
 msgid "Serif"
 msgstr ""
 
-#: markdown_preview/constants.py:140
+#: markdown_preview/constants.py:141
 msgid "Simple"
 msgstr ""
 
-#: markdown_preview/constants.py:141
+#: markdown_preview/constants.py:142
 msgid "Sky"
 msgstr "Ciel"
 
-#: markdown_preview/constants.py:142
+#: markdown_preview/constants.py:143
 msgid "Solarized"
 msgstr "Solarisé"
 
-#: markdown_preview/constants.py:143
+#: markdown_preview/constants.py:144
 msgid "White"
 msgstr "Blanc"
 
@@ -296,7 +373,7 @@ msgstr "%s résultats"
 msgid "Error: please install pandoc or python3-markdown"
 msgstr "Erreur : veuillez installer pandoc ou python3-markdown"
 
-#: markdown_preview/main_container.py:149
+#: markdown_preview/main_container.py:150
 #, python-format
 msgid "The extension '%s' isn't valid"
 msgstr "L'extension '%s' n'est pas valide"
@@ -305,15 +382,11 @@ msgstr "L'extension '%s' n'est pas valide"
 msgid "Rendering error"
 msgstr "Erreur de rendu"
 
-#: markdown_preview/main_container.py:374
-msgid "Can't preview an unsaved document"
-msgstr "Impossible de prévisualiser un document non-enregistré"
-
-#: markdown_preview/main_container.py:377
+#: markdown_preview/main_container.py:379
 msgid "Unsupported type of document:"
 msgstr "Type de document non-supporté :"
 
-#: markdown_preview/tags_manager.py:84
+#: markdown_preview/tags_manager.py:88
 msgid "Select a picture"
 msgstr "Choisissez une image"
 
@@ -373,7 +446,7 @@ msgstr "Panneau inférieur"
 msgid "View mode"
 msgstr "Mode d'affichage"
 
-#: markdown_preview/menus.ui:66 markdown_preview/prefs/prefs_dialog.py:54
+#: markdown_preview/menus.ui:66
 msgid "Split at separators"
 msgstr "Utiliser les séparateurs"
 
@@ -422,45 +495,13 @@ msgstr "Pas de résultat"
 msgid "Remove all tags"
 msgstr "Retirer toutes les balises"
 
-#: markdown_preview/view-menu.ui:15
-msgid "Title"
-msgstr "Titre"
+#: markdown_preview/view-menu.ui:67
+msgid "Inline formatting"
+msgstr "Formatage de la sélection"
 
-#: markdown_preview/view-menu.ui:18
-msgid "Upper"
-msgstr "Plus haut"
-
-#: markdown_preview/view-menu.ui:22
-msgid "Lower"
-msgstr "Plus bas"
-
-#: markdown_preview/view-menu.ui:71
-msgid "Monospace"
-msgstr ""
-
-#: markdown_preview/view-menu.ui:75
-msgid "Quote"
-msgstr "Citation"
-
-#: markdown_preview/view-menu.ui:82
-msgid "Unordered list"
-msgstr "Liste à puces"
-
-#: markdown_preview/view-menu.ui:86
-msgid "Ordered list"
-msgstr "Liste numérotée"
-
-#: markdown_preview/view-menu.ui:93
+#: markdown_preview/view-menu.ui:95
 msgid "Insert an image"
 msgstr "Insérer une image"
-
-#: markdown_preview/view-menu.ui:97
-msgid "Insert a link"
-msgstr "Insérer un lien"
-
-#: markdown_preview/view-menu.ui:101
-msgid "Insert a table"
-msgstr "Insérer un tableau"
 
 #: markdown_preview/prefs/export_assistant.py:21
 msgid "Export as…"
@@ -508,6 +549,10 @@ msgstr "Annuler"
 #: markdown_preview/prefs/export_assistant.py:272
 msgid "(exported)"
 msgstr "(exporté)"
+
+#: markdown_preview/prefs/prefs_dialog.py:54
+msgid "Split at horizontal rules"
+msgstr "Séparer aux traits horizontaux"
 
 #: markdown_preview/prefs/prefs_dialog.py:83
 msgid "HTML generation backend:"
@@ -592,15 +637,15 @@ msgstr ""
 msgid "Double-click on a shortcut to edit it."
 msgstr "Double-cliquez sur un raccourcis pour l'éditer."
 
-#: markdown_preview/prefs/prefs.ui:151
+#: markdown_preview/prefs/prefs.ui:155
 msgid "Description"
 msgstr "Description"
 
-#: markdown_preview/prefs/prefs.ui:163
+#: markdown_preview/prefs/prefs.ui:167
 msgid "Shortcut"
 msgstr "Raccourci"
 
-#: markdown_preview/prefs/prefs.ui:183
+#: markdown_preview/prefs/prefs.ui:189
 msgid "Shortcuts"
 msgstr "Raccourcis"
 
@@ -615,6 +660,12 @@ msgstr "Afficher le numéro de diapositive"
 #: markdown_preview/prefs/revealjs_box.ui:65
 msgid "Transitions type:"
 msgstr "Type de transitions :"
+
+#~ msgid "Lower title"
+#~ msgstr "Titre plus bas"
+
+#~ msgid "Upper title"
+#~ msgstr "Titre plus haut"
 
 #~ msgid "Next"
 #~ msgstr "Suivant"

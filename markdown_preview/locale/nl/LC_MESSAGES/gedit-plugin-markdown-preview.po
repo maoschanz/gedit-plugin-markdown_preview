@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-20 01:28+0200\n"
+"POT-Creation-Date: 2022-01-01 17:36+0100\n"
 "PO-Revision-Date: 2021-06-04 14:47+0200\n"
 "Last-Translator: Heimen Stoffels <vistausss@fastmail.com>\n"
 "Language-Team: \n"
@@ -18,40 +18,117 @@ msgstr ""
 "X-Generator: Poedit 2.4.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: markdown_preview/__init__.py:39 markdown_preview/__init__.py:42
-#: markdown_preview/__init__.py:250 markdown_preview/main_container.py:462
+#: markdown_preview/__init__.py:40 markdown_preview/__init__.py:46
+#: markdown_preview/__init__.py:233 markdown_preview/main_container.py:461
 msgid "Markdown Preview"
 msgstr "Markdown-voorvertoning"
 
-#: markdown_preview/__init__.py:45 markdown_preview/constants.py:130
+#: markdown_preview/__init__.py:49 markdown_preview/constants.py:131
 msgid "Zoom"
 msgstr "Zoomen"
 
-#: markdown_preview/__init__.py:309
+#: markdown_preview/__init__.py:292
 msgid "Markdown tags"
 msgstr "Markdown-labels"
 
-#: markdown_preview/constants.py:42 markdown_preview/view-menu.ui:59
+#: markdown_preview/constants.py:25 markdown_preview/view-menu.ui:15
+msgid "Code block"
+msgstr ""
+
+#: markdown_preview/constants.py:26 markdown_preview/view-menu.ui:19
+msgid "Quote"
+msgstr "Citaat"
+
+#: markdown_preview/constants.py:27 markdown_preview/view-menu.ui:30
+msgid "Ordered list"
+msgstr "Geordende lijst"
+
+#: markdown_preview/constants.py:28 markdown_preview/view-menu.ui:26
+msgid "Unordered list"
+msgstr "Ongeordende lijst"
+
+#: markdown_preview/constants.py:30 markdown_preview/constants.py:31
+#: markdown_preview/constants.py:32 markdown_preview/constants.py:33
+#: markdown_preview/constants.py:34 markdown_preview/constants.py:35
+#: markdown_preview/view-menu.ui:37
+msgid "Title"
+msgstr "Titel"
+
+#: markdown_preview/constants.py:30 markdown_preview/view-menu.ui:40
+msgid "Level 1"
+msgstr ""
+
+#: markdown_preview/constants.py:31 markdown_preview/view-menu.ui:44
+msgid "Level 2"
+msgstr ""
+
+#: markdown_preview/constants.py:32 markdown_preview/view-menu.ui:48
+msgid "Level 3"
+msgstr ""
+
+#: markdown_preview/constants.py:33 markdown_preview/view-menu.ui:52
+msgid "Level 4"
+msgstr ""
+
+#: markdown_preview/constants.py:34 markdown_preview/view-menu.ui:56
+msgid "Level 5"
+msgstr ""
+
+#: markdown_preview/constants.py:35 markdown_preview/view-menu.ui:60
+msgid "Level 6"
+msgstr ""
+
+#: markdown_preview/constants.py:37 markdown_preview/view-menu.ui:74
 msgid "Italic"
 msgstr "Cursief"
 
-#: markdown_preview/constants.py:43 markdown_preview/view-menu.ui:55
+#: markdown_preview/constants.py:38 markdown_preview/view-menu.ui:70
 msgid "Bold"
 msgstr "Vetgedrukt"
 
-#: markdown_preview/constants.py:44
+#: markdown_preview/constants.py:39 markdown_preview/view-menu.ui:78
+msgid "Inline code"
+msgstr ""
+
+#: markdown_preview/constants.py:40 markdown_preview/view-menu.ui:82
+msgid "Underline"
+msgstr ""
+
+#: markdown_preview/constants.py:41 markdown_preview/view-menu.ui:86
+msgid "Stroke"
+msgstr ""
+
+#: markdown_preview/constants.py:43
 msgid "Insert a picture"
 msgstr "Afbeelding invoegen"
 
-#: markdown_preview/constants.py:45
-msgid "Lower title"
-msgstr "Titel met kleine letters"
+#: markdown_preview/constants.py:44 markdown_preview/view-menu.ui:99
+msgid "Insert a link"
+msgstr "Link invoegen"
 
-#: markdown_preview/constants.py:46
-msgid "Upper title"
-msgstr "Titel met hoofdletters"
+#: markdown_preview/constants.py:45 markdown_preview/constants.py:46
+#: markdown_preview/constants.py:47 markdown_preview/constants.py:48
+#: markdown_preview/view-menu.ui:103
+msgid "Insert a table"
+msgstr "Tabel invoegen"
 
-#: markdown_preview/constants.py:54
+#: markdown_preview/constants.py:45 markdown_preview/view-menu.ui:106
+msgid "2 columns"
+msgstr ""
+
+#: markdown_preview/constants.py:46 markdown_preview/view-menu.ui:110
+msgid "3 columns"
+msgstr ""
+
+#: markdown_preview/constants.py:47 markdown_preview/view-menu.ui:114
+msgid "4 columns"
+msgstr ""
+
+#: markdown_preview/constants.py:48 markdown_preview/view-menu.ui:118
+msgid "5 columns"
+msgstr ""
+
+#: markdown_preview/constants.py:55
 msgid ""
 "Aside of default extensions provided by the python3-markdown package, you "
 "can <b>install</b> third-party extensions using instructions provided by "
@@ -60,7 +137,7 @@ msgstr ""
 "Naast de standaarduitbreidingen van python3-markdown, kun je ook "
 "uitbreidingen van andere ontwikkelaars <b>installeren</b>."
 
-#: markdown_preview/constants.py:57
+#: markdown_preview/constants.py:58
 msgid ""
 "These third-party extensions are <b>not</b> Gedit plugins, they extend "
 "python3-markdown."
@@ -68,7 +145,7 @@ msgstr ""
 "Deze externe uitbreidingen zijn <b>geen</b> Gedit-plug-ins - ze breiden "
 "enkel de functionaliteit van python3-markdown uit."
 
-#: markdown_preview/constants.py:59
+#: markdown_preview/constants.py:60
 msgid ""
 "Next, to improve the preview of your markdown file with the features of "
 "these extensions, please add their module names to the list using the text "
@@ -78,7 +155,7 @@ msgstr ""
 "functies van deze uitbreidingen, dan kun je de modulenamen ervan toevoegen "
 "aan de lijst middels het ‘+’-pictogram."
 
-#: markdown_preview/constants.py:63
+#: markdown_preview/constants.py:64
 msgid ""
 "Pandoc is a command line utility with several possible options, input "
 "formats and output formats."
@@ -86,7 +163,7 @@ msgstr ""
 "Pandoc is een opdrachtregelprogramma met verschillende opties, invoer- en "
 "uitvoerformaten."
 
-#: markdown_preview/constants.py:65
+#: markdown_preview/constants.py:66
 #, fuzzy
 msgid ""
 "Any command where $INPUT_FILE would be the input file, and printing valid "
@@ -95,7 +172,7 @@ msgstr ""
 "Elke opdracht wordt geaccepteerd, zolang deze voorzien wordt van $INPUT_FILE "
 "als naam van het invoerbestand en geldige html kan produceren."
 
-#: markdown_preview/constants.py:67
+#: markdown_preview/constants.py:68
 #, fuzzy
 msgid ""
 "Any command where $INPUT_FILE would be the input file, and $OUTPUT_FILE the "
@@ -104,7 +181,7 @@ msgstr ""
 "Elke opdracht wordt geaccepteerd, zolang deze voorzien wordt van $INPUT_FILE "
 "als naam van het invoerbestand en geldige html kan produceren."
 
-#: markdown_preview/constants.py:70
+#: markdown_preview/constants.py:71
 msgid ""
 "You can select a stylesheet (.css file) to make your document look nice and "
 "modern, or to increase its readability."
@@ -112,7 +189,7 @@ msgstr ""
 "Je kunt een stijlblad (.css-bestand) kiezen om je document mooier te maken, "
 "te moderniseren of de leesbaarheid ervan te verhogen."
 
-#: markdown_preview/constants.py:72
+#: markdown_preview/constants.py:73
 msgid ""
 "With Pandoc, you can preview the file as a revealjs slideshow, which has pre-"
 "existing themes and settings."
@@ -120,31 +197,31 @@ msgstr ""
 "Met Pandoc kun je het bestand voorvertonen als revealjs-diavoorstelling, "
 "welke vooringestelde thema's en instellingen bevat."
 
-#: markdown_preview/constants.py:81
+#: markdown_preview/constants.py:82
 msgid "Extras"
 msgstr "Extra's"
 
-#: markdown_preview/constants.py:82
+#: markdown_preview/constants.py:83
 msgid "Table of content"
 msgstr "Inhoudsopgave"
 
-#: markdown_preview/constants.py:84
+#: markdown_preview/constants.py:85
 msgid "New Line To Break"
 msgstr "Nieuw regeleinde"
 
-#: markdown_preview/constants.py:86
+#: markdown_preview/constants.py:87
 msgid "Sane Lists"
 msgstr "Geordende lijsten"
 
-#: markdown_preview/constants.py:87
+#: markdown_preview/constants.py:88
 msgid "Admonitions"
 msgstr "Aanmerkingen"
 
-#: markdown_preview/constants.py:88
+#: markdown_preview/constants.py:89
 msgid "WikiLinks"
 msgstr "WikiLinks"
 
-#: markdown_preview/constants.py:91
+#: markdown_preview/constants.py:92
 msgid ""
 "A compilation of various extensions (Abbreviations, Attribute Lists, "
 "Definition Lists, Fenced Code Blocks, Footnotes, Tables)."
@@ -152,36 +229,36 @@ msgstr ""
 "Een verzameling uitbreidingen (afkortingen, attribuut- en definitielijsten "
 "ingesloten codeblokken, voetnoten, tabellen)."
 
-#: markdown_preview/constants.py:92
+#: markdown_preview/constants.py:93
 msgid "Shows a clickable table of content with the [TOC] tag."
 msgstr "Toont een aanklikbare inhoudsopgave met de [TOC]-tag."
 
-#: markdown_preview/constants.py:93
+#: markdown_preview/constants.py:94
 msgid "Adds a line break at each new line."
 msgstr "Voegt een regeleinde toe op elke nieuwe regel."
 
-#: markdown_preview/constants.py:94
+#: markdown_preview/constants.py:95
 msgid ""
 "Converts ASCII dashes, quotes and ellipses to their nice-looking equivalents."
 msgstr ""
 "Zet ascii-streepjes, -citaten en -ellipsen om naar mooier uitziende "
 "equivalenten."
 
-#: markdown_preview/constants.py:95
+#: markdown_preview/constants.py:96
 msgid "Alters the behavior of the lists syntax."
 msgstr "Past het gedrag van de lijstsyntaxis aan."
 
-#: markdown_preview/constants.py:96
+#: markdown_preview/constants.py:97
 msgid "Adds admonitions (notes, warnings, tips, …) with the !!! tag."
 msgstr ""
 "Voegt aanmerkingen (waarschuwingen, opmerkingen, tips, etc.) toe met de !!!-"
 "tag."
 
-#: markdown_preview/constants.py:97
+#: markdown_preview/constants.py:98
 msgid "Converts any [[bracketed]] word to a link."
 msgstr "Zet elk woord tussen [[rechte haken]] om in een link."
 
-#: markdown_preview/constants.py:98
+#: markdown_preview/constants.py:99
 msgid ""
 "Highlights your code with a correct syntax coloration (it needs to be set up "
 "and have some dependencies)."
@@ -189,112 +266,112 @@ msgstr ""
 "Markeert je code met de juiste syntaxiskleuren (dit moet worden ingesteld en "
 "vereist afhankelijkheden)."
 
-#: markdown_preview/constants.py:104
+#: markdown_preview/constants.py:105
 msgid "Portable Document Format (.pdf)"
 msgstr "Portable Document Format (.pdf)"
 
-#: markdown_preview/constants.py:105 markdown_preview/constants.py:117
+#: markdown_preview/constants.py:106 markdown_preview/constants.py:118
 #: markdown_preview/prefs/export_assistant.py:43
 msgid "HTML5"
 msgstr "HTML5"
 
-#: markdown_preview/constants.py:106
+#: markdown_preview/constants.py:107
 msgid "OpenOffice text document (.odt)"
 msgstr "OpenOffice-tekstdocument (.odt)"
 
-#: markdown_preview/constants.py:107
+#: markdown_preview/constants.py:108
 msgid "Microsoft Word (.docx)"
 msgstr "Microsoft Word (.docx)"
 
-#: markdown_preview/constants.py:108
+#: markdown_preview/constants.py:109
 msgid "LaTeX (.tex)"
 msgstr "LaTeX (.tex)"
 
-#: markdown_preview/constants.py:109
+#: markdown_preview/constants.py:110
 msgid "LaTeX beamer slideshow (.tex)"
 msgstr "LaTeX-beamerdiavoorstelling (.tex)"
 
-#: markdown_preview/constants.py:110
+#: markdown_preview/constants.py:111
 msgid "plain text (.txt)"
 msgstr "Platte tekst (.txt)"
 
-#: markdown_preview/constants.py:111
+#: markdown_preview/constants.py:112
 msgid "PowerPoint slideshow (.pptx)"
 msgstr "PowerPoint-diavoorstelling (.pptx)"
 
-#: markdown_preview/constants.py:112
+#: markdown_preview/constants.py:113
 msgid "Rich Text Format (.rtf)"
 msgstr "Rich Text Format (.rtf)"
 
-#: markdown_preview/constants.py:113 markdown_preview/constants.py:118
+#: markdown_preview/constants.py:114 markdown_preview/constants.py:119
 msgid "reveal.js slideshow (HTML/JS)"
 msgstr "reveal.js-diavoorstelling (HTML/JS)"
 
-#: markdown_preview/constants.py:114 markdown_preview/constants.py:119
+#: markdown_preview/constants.py:115 markdown_preview/constants.py:120
 msgid "Custom command line"
 msgstr "Aangepaste opdrachten"
 
-#: markdown_preview/constants.py:125
+#: markdown_preview/constants.py:126
 msgid "None"
 msgstr "Niks"
 
-#: markdown_preview/constants.py:126
+#: markdown_preview/constants.py:127
 msgid "Fade"
 msgstr "Vervagen"
 
-#: markdown_preview/constants.py:127
+#: markdown_preview/constants.py:128
 msgid "Slide"
 msgstr "Verschuiven"
 
-#: markdown_preview/constants.py:128
+#: markdown_preview/constants.py:129
 msgid "Cube (convex)"
 msgstr "Kubus (indraaien)"
 
-#: markdown_preview/constants.py:129
+#: markdown_preview/constants.py:130
 msgid "Cube (concave)"
 msgstr "Kubus (uitdraaien)"
 
-#: markdown_preview/constants.py:133
+#: markdown_preview/constants.py:134
 msgid "Beige"
 msgstr "Beige"
 
-#: markdown_preview/constants.py:134
+#: markdown_preview/constants.py:135
 msgid "Black"
 msgstr "Zwart"
 
-#: markdown_preview/constants.py:135
+#: markdown_preview/constants.py:136
 msgid "Blood"
 msgstr "Bloedrood"
 
-#: markdown_preview/constants.py:136
+#: markdown_preview/constants.py:137
 msgid "League"
 msgstr "Zwartgrijs"
 
-#: markdown_preview/constants.py:137
+#: markdown_preview/constants.py:138
 msgid "Moon"
 msgstr "Nachtblauw"
 
-#: markdown_preview/constants.py:138
+#: markdown_preview/constants.py:139
 msgid "Night"
 msgstr "Nachtzwart"
 
-#: markdown_preview/constants.py:139
+#: markdown_preview/constants.py:140
 msgid "Serif"
 msgstr "Met schreef"
 
-#: markdown_preview/constants.py:140
+#: markdown_preview/constants.py:141
 msgid "Simple"
 msgstr "Eenvoudig wit"
 
-#: markdown_preview/constants.py:141
+#: markdown_preview/constants.py:142
 msgid "Sky"
 msgstr "Hemelsblauw"
 
-#: markdown_preview/constants.py:142
+#: markdown_preview/constants.py:143
 msgid "Solarized"
 msgstr "Gesolariseerd"
 
-#: markdown_preview/constants.py:143
+#: markdown_preview/constants.py:144
 msgid "White"
 msgstr "Wit"
 
@@ -312,7 +389,7 @@ msgstr "%s resultaten"
 msgid "Error: please install pandoc or python3-markdown"
 msgstr "Foutmelding: installeer pandoc of python3-markdown"
 
-#: markdown_preview/main_container.py:149
+#: markdown_preview/main_container.py:150
 #, python-format
 msgid "The extension '%s' isn't valid"
 msgstr "De extensie ‘%s’ is ongeldig"
@@ -321,15 +398,11 @@ msgstr "De extensie ‘%s’ is ongeldig"
 msgid "Rendering error"
 msgstr ""
 
-#: markdown_preview/main_container.py:374
-msgid "Can't preview an unsaved document"
-msgstr "Niet-opgeslagen documenten kunnen niet worden voorvertoond"
-
-#: markdown_preview/main_container.py:377
+#: markdown_preview/main_container.py:379
 msgid "Unsupported type of document:"
 msgstr "Geen ondersteuning voor dit soort documenten:"
 
-#: markdown_preview/tags_manager.py:84
+#: markdown_preview/tags_manager.py:88
 msgid "Select a picture"
 msgstr "Kies een afbeelding"
 
@@ -389,7 +462,7 @@ msgstr "Paneel onderaan"
 msgid "View mode"
 msgstr "Weergavemodus"
 
-#: markdown_preview/menus.ui:66 markdown_preview/prefs/prefs_dialog.py:54
+#: markdown_preview/menus.ui:66
 msgid "Split at separators"
 msgstr "Splitsen bij scheidingen"
 
@@ -438,45 +511,13 @@ msgstr "Geen resultaat"
 msgid "Remove all tags"
 msgstr "Alle tags verwijderen"
 
-#: markdown_preview/view-menu.ui:15
-msgid "Title"
-msgstr "Titel"
+#: markdown_preview/view-menu.ui:67
+msgid "Inline formatting"
+msgstr ""
 
-#: markdown_preview/view-menu.ui:18
-msgid "Upper"
-msgstr "Hoofdletters"
-
-#: markdown_preview/view-menu.ui:22
-msgid "Lower"
-msgstr "Kleine letters"
-
-#: markdown_preview/view-menu.ui:71
-msgid "Monospace"
-msgstr "Vaste breedte"
-
-#: markdown_preview/view-menu.ui:75
-msgid "Quote"
-msgstr "Citaat"
-
-#: markdown_preview/view-menu.ui:82
-msgid "Unordered list"
-msgstr "Ongeordende lijst"
-
-#: markdown_preview/view-menu.ui:86
-msgid "Ordered list"
-msgstr "Geordende lijst"
-
-#: markdown_preview/view-menu.ui:93
+#: markdown_preview/view-menu.ui:95
 msgid "Insert an image"
 msgstr "Afbeelding invoegen"
-
-#: markdown_preview/view-menu.ui:97
-msgid "Insert a link"
-msgstr "Link invoegen"
-
-#: markdown_preview/view-menu.ui:101
-msgid "Insert a table"
-msgstr "Tabel invoegen"
 
 #: markdown_preview/prefs/export_assistant.py:21
 msgid "Export as…"
@@ -527,6 +568,10 @@ msgstr "Annuleren"
 #: markdown_preview/prefs/export_assistant.py:272
 msgid "(exported)"
 msgstr "(geëxporteerd)"
+
+#: markdown_preview/prefs/prefs_dialog.py:54
+msgid "Split at horizontal rules"
+msgstr ""
 
 #: markdown_preview/prefs/prefs_dialog.py:83
 msgid "HTML generation backend:"
@@ -611,15 +656,15 @@ msgstr "Backend"
 msgid "Double-click on a shortcut to edit it."
 msgstr "Dubbelklik op een sneltoets om deze aan te passen."
 
-#: markdown_preview/prefs/prefs.ui:151
+#: markdown_preview/prefs/prefs.ui:155
 msgid "Description"
 msgstr "Omschrijving"
 
-#: markdown_preview/prefs/prefs.ui:163
+#: markdown_preview/prefs/prefs.ui:167
 msgid "Shortcut"
 msgstr "Sneltoets"
 
-#: markdown_preview/prefs/prefs.ui:183
+#: markdown_preview/prefs/prefs.ui:189
 msgid "Shortcuts"
 msgstr "Sneltoetsen"
 
@@ -634,6 +679,12 @@ msgstr "Dianummer tonen"
 #: markdown_preview/prefs/revealjs_box.ui:65
 msgid "Transitions type:"
 msgstr "Soort overgang:"
+
+#~ msgid "Lower title"
+#~ msgstr "Titel met kleine letters"
+
+#~ msgid "Upper title"
+#~ msgstr "Titel met hoofdletters"
 
 #~ msgid "Next"
 #~ msgstr "Volgende"
