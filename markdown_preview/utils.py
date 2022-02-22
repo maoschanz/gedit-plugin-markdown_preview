@@ -19,6 +19,10 @@ def recognize_format(document):
 	else:
 		extension = mime
 
+	if extension == 'svg':
+		# The webview can render SVG files too, so we take advantage of that.
+		extension = 'html'
+
 	return name, extension
 
 ################################################################################

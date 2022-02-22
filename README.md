@@ -85,7 +85,7 @@ TypeError: Gtk.TextBuffer.get_text() takes exactly 4 arguments (1 given)
 - search in the preview
 - open links and images
 
-This works for Markdown files, and HTML files.
+This works for Markdown, HTML, and SVG files.
 
 ### Exporting
 
