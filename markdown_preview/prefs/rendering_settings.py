@@ -126,6 +126,7 @@ class MdBackendSettings():
 		self.full_widget = builder.get_object('backend_box')
 		builder.get_object('combo_label').set_label(label)
 		self.backend_stack = builder.get_object('backend_stack')
+
 		self.backend_combobox = builder.get_object('backend_combobox')
 		self.backend_combobox.append('python', "python3-markdown")
 		self.backend_combobox.append('pandoc', "pandoc")
@@ -167,6 +168,8 @@ class MdBackendSettings():
 		AVAILABLE_BACKENDS = get_backends_dict()
 		self.set_available_backends(AVAILABLE_BACKENDS, active_backend)
 
+	############################################################################
+
 	def set_available_backends(self, backends_dict, active_backend='pandoc'):
 		self._switcher_box.set_visible(True)
 		if not backends_dict['p3md']:
@@ -179,15 +182,13 @@ class MdBackendSettings():
 			self.backend_combobox.set_active_id(active_backend)
 			self.set_correct_page(active_backend)
 
-	############################################################################
-
 	def on_backend_changed(self, w):
 		backend = w.get_active_id()
 		if self.apply_to_settings:
 			self._settings.set_string('backend', backend)
 		self.set_correct_page(backend)
 		if backend == 'pandoc':
-			self.on_pandoc_format_changed(self.format_combobox)
+			self.update_pandoc_combobox()
 
 	def set_correct_page(self, backend):
 		self.backend_stack.set_visible_child_name('backend_' + backend)
@@ -205,18 +206,17 @@ class MdBackendSettings():
 	def init_pandoc_combobox(self, default_id):
 		self.format_combobox.set_active_id(default_id)
 		self.adapt_widgets_to_pandoc_custom(default_id == 'custom')
-		# FIXME ^ ça ne suffit pas, car on fait un show_all de connard.
 
-	def update_pandoc_combobox(self):
+	def update_pandoc_combobox(self, *args):
 		self.on_pandoc_format_changed(self.format_combobox)
 
 	def on_remember(self, *args):
-		# FIXME get_text veut des arguments
-		new_command = self.pandoc_cli_entry.get_buffer().get_text()
+		buff = self.pandoc_cli_entry.get_buffer()
+		cmd = buff.get_text(buff.get_start_iter(), buff.get_end_iter(), False)
 		if self.apply_to_settings:
-			self._settings.set_string('custom-render', new_command)
+			self._settings.set_string('custom-render', cmd)
 		else:
-			self._settings.set_string('custom-export', new_command)
+			self._settings.set_string('custom-export', cmd)
 
 	def set_pandoc_command(self, command):
 		self.pandoc_cli_entry.get_buffer().set_text(command)

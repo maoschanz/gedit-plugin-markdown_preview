@@ -30,7 +30,11 @@ class MdConfigWidget(Gtk.Box):
 		self._build_general_page(builder)
 		self._build_backend_page(builder)
 		self._build_style_page(builder)
-		self._backend.init_pandoc_combobox('html5') # TODO FIXME wrong, not what the user defined!!
+		self._backend.init_pandoc_combobox('html5')
+		self._backend.update_pandoc_combobox()
+		# This is needed because there are initialisation issues otherwise,
+		# regarding the visibility of widgets for the "custom" option.
+		stack.connect('notify::visible-child', self._backend.update_pandoc_combobox)
 		self._build_shortcuts_page(builder)
 
 		self.add(sidebar)
