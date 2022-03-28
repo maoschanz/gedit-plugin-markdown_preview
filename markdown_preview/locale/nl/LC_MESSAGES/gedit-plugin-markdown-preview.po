@@ -1,22 +1,22 @@
-# SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2019-2020.
 #
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2019-2020.
+# Heimen Stoffels <vistausss@fastmail.com>, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-01-01 17:36+0100\n"
-"PO-Revision-Date: 2021-06-04 14:47+0200\n"
+"PO-Revision-Date: 2022-03-28 13:39+0200\n"
 "Last-Translator: Heimen Stoffels <vistausss@fastmail.com>\n"
-"Language-Team: \n"
+"Language-Team: Dutch <>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 22.03.80\n"
 
 #: markdown_preview/__init__.py:40 markdown_preview/__init__.py:46
 #: markdown_preview/__init__.py:233 markdown_preview/main_container.py:461
@@ -33,7 +33,7 @@ msgstr "Markdown-labels"
 
 #: markdown_preview/constants.py:25 markdown_preview/view-menu.ui:15
 msgid "Code block"
-msgstr ""
+msgstr "Codeblok"
 
 #: markdown_preview/constants.py:26 markdown_preview/view-menu.ui:19
 msgid "Quote"
@@ -56,27 +56,27 @@ msgstr "Titel"
 
 #: markdown_preview/constants.py:30 markdown_preview/view-menu.ui:40
 msgid "Level 1"
-msgstr ""
+msgstr "Niveau 1"
 
 #: markdown_preview/constants.py:31 markdown_preview/view-menu.ui:44
 msgid "Level 2"
-msgstr ""
+msgstr "Niveau 2"
 
 #: markdown_preview/constants.py:32 markdown_preview/view-menu.ui:48
 msgid "Level 3"
-msgstr ""
+msgstr "Niveau 3"
 
 #: markdown_preview/constants.py:33 markdown_preview/view-menu.ui:52
 msgid "Level 4"
-msgstr ""
+msgstr "Niveau 4"
 
 #: markdown_preview/constants.py:34 markdown_preview/view-menu.ui:56
 msgid "Level 5"
-msgstr ""
+msgstr "Niveau 5"
 
 #: markdown_preview/constants.py:35 markdown_preview/view-menu.ui:60
 msgid "Level 6"
-msgstr ""
+msgstr "Niveau 6"
 
 #: markdown_preview/constants.py:37 markdown_preview/view-menu.ui:74
 msgid "Italic"
@@ -88,15 +88,15 @@ msgstr "Vetgedrukt"
 
 #: markdown_preview/constants.py:39 markdown_preview/view-menu.ui:78
 msgid "Inline code"
-msgstr ""
+msgstr "Inline-code"
 
 #: markdown_preview/constants.py:40 markdown_preview/view-menu.ui:82
 msgid "Underline"
-msgstr ""
+msgstr "Onderstrepen"
 
 #: markdown_preview/constants.py:41 markdown_preview/view-menu.ui:86
 msgid "Stroke"
-msgstr ""
+msgstr "Streep"
 
 #: markdown_preview/constants.py:43
 msgid "Insert a picture"
@@ -114,19 +114,19 @@ msgstr "Tabel invoegen"
 
 #: markdown_preview/constants.py:45 markdown_preview/view-menu.ui:106
 msgid "2 columns"
-msgstr ""
+msgstr "2 kolommen"
 
 #: markdown_preview/constants.py:46 markdown_preview/view-menu.ui:110
 msgid "3 columns"
-msgstr ""
+msgstr "3 kolommen"
 
 #: markdown_preview/constants.py:47 markdown_preview/view-menu.ui:114
 msgid "4 columns"
-msgstr ""
+msgstr "4 kolommen"
 
 #: markdown_preview/constants.py:48 markdown_preview/view-menu.ui:118
 msgid "5 columns"
-msgstr ""
+msgstr "5 kolommen"
 
 #: markdown_preview/constants.py:55
 msgid ""
@@ -164,7 +164,6 @@ msgstr ""
 "uitvoerformaten."
 
 #: markdown_preview/constants.py:66
-#, fuzzy
 msgid ""
 "Any command where $INPUT_FILE would be the input file, and printing valid "
 "HTML to the standard output, is accepted."
@@ -173,13 +172,12 @@ msgstr ""
 "als naam van het invoerbestand en geldige html kan produceren."
 
 #: markdown_preview/constants.py:68
-#, fuzzy
 msgid ""
 "Any command where $INPUT_FILE would be the input file, and $OUTPUT_FILE the "
 "name of the output file, is accepted."
 msgstr ""
 "Elke opdracht wordt geaccepteerd, zolang deze voorzien wordt van $INPUT_FILE "
-"als naam van het invoerbestand en geldige html kan produceren."
+"als naam van het invoerbestand en $OUTPUT_FILE kan produceren."
 
 #: markdown_preview/constants.py:71
 msgid ""
@@ -273,7 +271,7 @@ msgstr "Portable Document Format (.pdf)"
 #: markdown_preview/constants.py:106 markdown_preview/constants.py:118
 #: markdown_preview/prefs/export_assistant.py:43
 msgid "HTML5"
-msgstr "HTML5"
+msgstr "Html5"
 
 #: markdown_preview/constants.py:107
 msgid "OpenOffice text document (.odt)"
@@ -305,7 +303,7 @@ msgstr "Rich Text Format (.rtf)"
 
 #: markdown_preview/constants.py:114 markdown_preview/constants.py:119
 msgid "reveal.js slideshow (HTML/JS)"
-msgstr "reveal.js-diavoorstelling (HTML/JS)"
+msgstr "reveal.js-diavoorstelling (html/js)"
 
 #: markdown_preview/constants.py:115 markdown_preview/constants.py:120
 msgid "Custom command line"
@@ -396,7 +394,7 @@ msgstr "De extensie ‘%s’ is ongeldig"
 
 #: markdown_preview/main_container.py:319
 msgid "Rendering error"
-msgstr ""
+msgstr "Fout tijdens samenstellen"
 
 #: markdown_preview/main_container.py:379
 msgid "Unsupported type of document:"
@@ -513,7 +511,7 @@ msgstr "Alle tags verwijderen"
 
 #: markdown_preview/view-menu.ui:67
 msgid "Inline formatting"
-msgstr ""
+msgstr "Tekst opmaken"
 
 #: markdown_preview/view-menu.ui:95
 msgid "Insert an image"
@@ -524,14 +522,12 @@ msgid "Export as…"
 msgstr "Exporteren als…"
 
 #: markdown_preview/prefs/export_assistant.py:64
-#, fuzzy
 msgid "Other file formats:"
-msgstr "Bestandsformaat:"
+msgstr "Overige bestandsformaten:"
 
 #: markdown_preview/prefs/export_assistant.py:77
-#, fuzzy
 msgid "Output file format"
-msgstr "Bestandsformaat:"
+msgstr "Uitvoerbestandsformaat"
 
 #: markdown_preview/prefs/export_assistant.py:83
 msgid "No styling options available for this file format."
@@ -547,9 +543,8 @@ msgid "Export file with:"
 msgstr "Bestand exporteren met:"
 
 #: markdown_preview/prefs/export_assistant.py:106
-#, fuzzy
 msgid "Advanced options"
-msgstr "Algemene opties"
+msgstr "Geavanceerde opties"
 
 #: markdown_preview/prefs/export_assistant.py:111
 #: markdown_preview/prefs/export_assistant.py:269
@@ -558,7 +553,7 @@ msgstr "Exporteren"
 
 #: markdown_preview/prefs/export_assistant.py:260
 msgid "Pandoc encountered an error"
-msgstr ""
+msgstr "Er is een foutmelding opgetreden in Pandoc"
 
 #: markdown_preview/prefs/export_assistant.py:269
 #: markdown_preview/prefs/rendering_settings.py:91
@@ -571,11 +566,11 @@ msgstr "(geëxporteerd)"
 
 #: markdown_preview/prefs/prefs_dialog.py:54
 msgid "Split at horizontal rules"
-msgstr ""
+msgstr "Splitsen bij horizontale regels"
 
 #: markdown_preview/prefs/prefs_dialog.py:83
 msgid "HTML generation backend:"
-msgstr "HTML-genereerbackend:"
+msgstr "Html-genereerbackend:"
 
 #: markdown_preview/prefs/rendering_settings.py:88
 #: markdown_preview/prefs/rendering_settings.py:107
@@ -593,11 +588,11 @@ msgstr "Stijlblad"
 
 #: markdown_preview/prefs/rendering_settings.py:156
 msgid "Remember as custom rendering command"
-msgstr ""
+msgstr "Onthouden als aangepaste samenstelopdracht"
 
 #: markdown_preview/prefs/rendering_settings.py:159
 msgid "Remember as custom export command"
-msgstr ""
+msgstr "Onthouden als aangepaste exportopdracht"
 
 #: markdown_preview/prefs/backend_box.ui:48
 msgid "Extensions for python3-markdown:"
