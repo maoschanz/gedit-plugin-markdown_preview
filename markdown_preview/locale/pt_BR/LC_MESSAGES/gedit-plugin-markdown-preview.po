@@ -1,0 +1,672 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-10-15 18:06-0300\n"
+"PO-Revision-Date: 2022-10-15 18:17+0300\n"
+"Last-Translator: João Emanuel\n"
+"Language-Team: Português Brasil\n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: markdown_preview/__init__.py:40 markdown_preview/__init__.py:46
+#: markdown_preview/__init__.py:231 markdown_preview/main_container.py:460
+msgid "Markdown Preview"
+msgstr "Visualizador markdown"
+
+#: markdown_preview/__init__.py:49 markdown_preview/constants.py:131
+msgid "Zoom"
+msgstr "Zoom"
+
+#: markdown_preview/__init__.py:290
+msgid "Markdown tags"
+msgstr "Tags markdown"
+
+#: markdown_preview/constants.py:25 markdown_preview/view-menu.ui:15
+msgid "Code block"
+msgstr "Bloco de código"
+
+#: markdown_preview/constants.py:26 markdown_preview/view-menu.ui:19
+msgid "Quote"
+msgstr "Citação"
+
+#: markdown_preview/constants.py:27 markdown_preview/view-menu.ui:30
+msgid "Ordered list"
+msgstr "Lista ordenada"
+
+#: markdown_preview/constants.py:28 markdown_preview/view-menu.ui:26
+msgid "Unordered list"
+msgstr "Lista não ordenada"
+
+#: markdown_preview/constants.py:30 markdown_preview/constants.py:31
+#: markdown_preview/constants.py:32 markdown_preview/constants.py:33
+#: markdown_preview/constants.py:34 markdown_preview/constants.py:35
+#: markdown_preview/view-menu.ui:37
+msgid "Title"
+msgstr "Titulo"
+
+#: markdown_preview/constants.py:30 markdown_preview/view-menu.ui:40
+msgid "Level 1"
+msgstr "Nível 1"
+
+#: markdown_preview/constants.py:31 markdown_preview/view-menu.ui:44
+msgid "Level 2"
+msgstr "Nível 2"
+
+#: markdown_preview/constants.py:32 markdown_preview/view-menu.ui:48
+msgid "Level 3"
+msgstr "Nível 3"
+
+#: markdown_preview/constants.py:33 markdown_preview/view-menu.ui:52
+msgid "Level 4"
+msgstr "Nível 4"
+
+#: markdown_preview/constants.py:34 markdown_preview/view-menu.ui:56
+msgid "Level 5"
+msgstr "Nível 5"
+
+#: markdown_preview/constants.py:35 markdown_preview/view-menu.ui:60
+msgid "Level 6"
+msgstr "Nível 6"
+
+#: markdown_preview/constants.py:37 markdown_preview/view-menu.ui:74
+msgid "Italic"
+msgstr "Itálico"
+
+#: markdown_preview/constants.py:38 markdown_preview/view-menu.ui:70
+msgid "Bold"
+msgstr "Negrito"
+
+#: markdown_preview/constants.py:39 markdown_preview/view-menu.ui:78
+msgid "Inline code"
+msgstr "Código"
+
+#: markdown_preview/constants.py:40 markdown_preview/view-menu.ui:82
+msgid "Underline"
+msgstr "Sublinhado"
+
+#: markdown_preview/constants.py:41 markdown_preview/view-menu.ui:86
+msgid "Stroke"
+msgstr "Traço"
+
+#: markdown_preview/constants.py:43
+msgid "Insert a picture"
+msgstr "Inserir figura"
+
+#: markdown_preview/constants.py:44 markdown_preview/view-menu.ui:99
+msgid "Insert a link"
+msgstr "Inserir link"
+
+#: markdown_preview/constants.py:45 markdown_preview/constants.py:46
+#: markdown_preview/constants.py:47 markdown_preview/constants.py:48
+#: markdown_preview/view-menu.ui:103
+msgid "Insert a table"
+msgstr "Inserir tabela"
+
+#: markdown_preview/constants.py:45 markdown_preview/view-menu.ui:106
+msgid "2 columns"
+msgstr "2 colunas"
+
+#: markdown_preview/constants.py:46 markdown_preview/view-menu.ui:110
+msgid "3 columns"
+msgstr "3 colunas"
+
+#: markdown_preview/constants.py:47 markdown_preview/view-menu.ui:114
+msgid "4 columns"
+msgstr "4 colunas"
+
+#: markdown_preview/constants.py:48 markdown_preview/view-menu.ui:118
+msgid "5 columns"
+msgstr "5 colunas"
+
+#: markdown_preview/constants.py:55
+msgid ""
+"Aside of default extensions provided by the python3-markdown package, you "
+"can <b>install</b> third-party extensions using instructions provided by "
+"their respective authors."
+msgstr ""
+"Além das extensões padrões fornecidas pelo pacote python3-markdown, você "
+"pode <b>instalar</b> extensões de terceiros usando instruções fornecidas por "
+"seus respectivos autores."
+
+#: markdown_preview/constants.py:58
+msgid ""
+"These third-party extensions are <b>not</b> Gedit plugins, they extend "
+"python3-markdown."
+msgstr ""
+"Essas extensões de terceiro <b>não</b> são plugins do Gedit, elas estendem o "
+"python3-markdown."
+
+#: markdown_preview/constants.py:60
+msgid ""
+"Next, to improve the preview of your markdown file with the features of "
+"these extensions, please add their module names to the list using the text "
+"entry and the '+' icon."
+msgstr ""
+"Em seguida, para melhorar a visualização do seu arquivo markdown com os "
+"recursos dessas extensões, adicione seus nomes de módulo à lista usando o "
+"texto entrada e o ícone '+'."
+
+#: markdown_preview/constants.py:64
+msgid ""
+"Pandoc is a command line utility with several possible options, input "
+"formats and output formats."
+msgstr ""
+"Pandoc é um utilitário de linha de comando com várias opções possíveis, "
+"digite formatos e formatos de saída."
+
+#: markdown_preview/constants.py:66
+msgid ""
+"Any command where $INPUT_FILE would be the input file, and printing valid "
+"HTML to the standard output, is accepted."
+msgstr ""
+"Qualquer comando onde $INPUT_FILE seria o arquivo de entrada, e a impressão "
+"válida HTML para à saída padrão, é aceito."
+
+#: markdown_preview/constants.py:68
+msgid ""
+"Any command where $INPUT_FILE would be the input file, and $OUTPUT_FILE the "
+"name of the output file, is accepted."
+msgstr ""
+"Qualquer comando onde $INPUT_FILE seria o arquivo de entrada e o "
+"$OUTPUT_FILE nome do arquivo de saída, é aceito."
+
+#: markdown_preview/constants.py:71
+msgid ""
+"You can select a stylesheet (.css file) to make your document look nice and "
+"modern, or to increase its readability."
+msgstr ""
+"Você pode selecionar uma folha de estilo (arquivo .css) para fazer seu "
+"documento bonito e moderno, ou para acrescentar mais legibilidade."
+
+#: markdown_preview/constants.py:73
+msgid ""
+"With Pandoc, you can preview the file as a revealjs slideshow, which has pre-"
+"existing themes and settings."
+msgstr ""
+"Com Pandoc, você tem a previa do arquivo como um apresentação de slides do "
+"revealjs, que tem possui temas e configurações pré-existentes."
+
+#: markdown_preview/constants.py:82
+msgid "Extras"
+msgstr "Extras"
+
+#: markdown_preview/constants.py:83
+msgid "Table of content"
+msgstr "Tabela de conteúdos"
+
+#: markdown_preview/constants.py:85
+msgid "New Line To Break"
+msgstr "Nova quebra de linha"
+
+#: markdown_preview/constants.py:87
+msgid "Sane Lists"
+msgstr "Listas sãs"
+
+#: markdown_preview/constants.py:88
+msgid "Admonitions"
+msgstr "Advertências"
+
+#: markdown_preview/constants.py:89
+msgid "WikiLinks"
+msgstr "Links do Wiki"
+
+#: markdown_preview/constants.py:92
+msgid ""
+"A compilation of various extensions (Abbreviations, Attribute Lists, "
+"Definition Lists, Fenced Code Blocks, Footnotes, Tables)."
+msgstr ""
+"Uma compilação de várias extensões (Abreviaturas, Lista de atributos, Lista "
+"de definições, blocos de código fechado, notas de rodapé, tabelas)."
+
+#: markdown_preview/constants.py:93
+msgid "Shows a clickable table of content with the [TOC] tag."
+msgstr "Mostrar uma tabela de conteúdos clicáveis com a tag [TOC]."
+
+#: markdown_preview/constants.py:94
+msgid "Adds a line break at each new line."
+msgstr "Adiciona uma quebra de linha para a cada nova linha."
+
+#: markdown_preview/constants.py:95
+msgid ""
+"Converts ASCII dashes, quotes and ellipses to their nice-looking equivalents."
+msgstr "Converte traços, aspas e elipses ASCII em seus equivalentes."
+
+#: markdown_preview/constants.py:96
+msgid "Alters the behavior of the lists syntax."
+msgstr "Alterar o comportamento da sintaxe das listas"
+
+#: markdown_preview/constants.py:97
+msgid "Adds admonitions (notes, warnings, tips, …) with the !!! tag."
+msgstr "Adiciona advertências (notas, alertas, dicas...) com a tag '!!!'."
+
+#: markdown_preview/constants.py:98
+msgid "Converts any [[bracketed]] word to a link."
+msgstr "Converte qualquer palavra [[entre colchetes]] para um link."
+
+#: markdown_preview/constants.py:99
+msgid ""
+"Highlights your code with a correct syntax coloration (it needs to be set up "
+"and have some dependencies)."
+msgstr ""
+"Destaca seu código com uma coloração de sintaxe correta (ele precisa ser "
+"configurado e ter algumas dependências)."
+
+#: markdown_preview/constants.py:105
+msgid "Portable Document Format (.pdf)"
+msgstr "Portable Document Format (.pdf)"
+
+#: markdown_preview/constants.py:106 markdown_preview/constants.py:118
+#: markdown_preview/prefs/export_assistant.py:43
+msgid "HTML5"
+msgstr "HTML5"
+
+#: markdown_preview/constants.py:107
+msgid "OpenOffice text document (.odt)"
+msgstr "OpenOffice text document (.odt)"
+
+#: markdown_preview/constants.py:108
+msgid "Microsoft Word (.docx)"
+msgstr "Microsoft Word (.docx)"
+
+#: markdown_preview/constants.py:109
+msgid "LaTeX (.tex)"
+msgstr "LaTeX (.tex)"
+
+#: markdown_preview/constants.py:110
+msgid "LaTeX beamer slideshow (.tex)"
+msgstr "Apresentação do beamer LaTeX (.tex)"
+
+#: markdown_preview/constants.py:111
+msgid "plain text (.txt)"
+msgstr "texto simples (.txt)"
+
+#: markdown_preview/constants.py:112
+msgid "PowerPoint slideshow (.pptx)"
+msgstr "Apresentação PowerPoint (.pptx)"
+
+#: markdown_preview/constants.py:113
+msgid "Rich Text Format (.rtf)"
+msgstr "Rich Text Format (.rtf)"
+
+#: markdown_preview/constants.py:114 markdown_preview/constants.py:119
+msgid "reveal.js slideshow (HTML/JS)"
+msgstr "Apresentação do reveal.js (HTML/JS)"
+
+#: markdown_preview/constants.py:115 markdown_preview/constants.py:120
+msgid "Custom command line"
+msgstr "Linha de comando customizada"
+
+#: markdown_preview/constants.py:126
+msgid "None"
+msgstr "Nada"
+
+#: markdown_preview/constants.py:127
+msgid "Fade"
+msgstr "Desaparecer gradualmente (Fade)"
+
+#: markdown_preview/constants.py:128
+msgid "Slide"
+msgstr "Slide"
+
+#: markdown_preview/constants.py:129
+msgid "Cube (convex)"
+msgstr "Cubo (convexo)"
+
+#: markdown_preview/constants.py:130
+msgid "Cube (concave)"
+msgstr "Cubo (côncavo)"
+
+#: markdown_preview/constants.py:134
+msgid "Beige"
+msgstr "Bege"
+
+#: markdown_preview/constants.py:135
+msgid "Black"
+msgstr "Preto"
+
+#: markdown_preview/constants.py:136
+msgid "Blood"
+msgstr "Sangue"
+
+#: markdown_preview/constants.py:137
+msgid "League"
+msgstr "Liga"
+
+#: markdown_preview/constants.py:138
+msgid "Moon"
+msgstr "Lua"
+
+#: markdown_preview/constants.py:139
+msgid "Night"
+msgstr "Noite"
+
+#: markdown_preview/constants.py:140
+msgid "Serif"
+msgstr "Serif"
+
+#: markdown_preview/constants.py:141
+msgid "Simple"
+msgstr "Simples"
+
+#: markdown_preview/constants.py:142
+msgid "Sky"
+msgstr "Céu"
+
+#: markdown_preview/constants.py:143
+msgid "Solarized"
+msgstr "Solarizado"
+
+#: markdown_preview/constants.py:144
+msgid "White"
+msgstr "Branco"
+
+#: markdown_preview/find_manager.py:37
+msgid "More than 100 results"
+msgstr "Mais de 100 resultados"
+
+#: markdown_preview/find_manager.py:39
+#, python-format
+msgid "%s results"
+msgstr "%s resultados"
+
+#: markdown_preview/main_container.py:60
+#: markdown_preview/prefs/export_assistant.py:51
+msgid "Error: please install pandoc or python3-markdown"
+msgstr "Error: por favor instale pandoc ou python3-markdown"
+
+#: markdown_preview/main_container.py:150
+#, python-format
+msgid "The extension '%s' isn't valid"
+msgstr "A extensão '%s' é inválida"
+
+#: markdown_preview/main_container.py:319
+msgid "Rendering error"
+msgstr "Erro de renderização"
+
+#: markdown_preview/main_container.py:378
+msgid "Unsupported type of document:"
+msgstr "Tipo de documento não suportado:"
+
+#: markdown_preview/tags_manager.py:56
+msgid "Select a picture"
+msgstr "Selecione uma imagem"
+
+#: markdown_preview/webview_manager.py:109
+msgid "Open link in browser"
+msgstr "Abrir link no navegador"
+
+#: markdown_preview/webview_manager.py:111
+msgid "Open image in browser"
+msgstr "Abrir imagem no navegador"
+
+#: markdown_preview/webview_manager.py:140 markdown_preview/preview.ui:58
+msgid "Reload the preview"
+msgstr "Recarregar prévia"
+
+#: markdown_preview/menus.ui:7 markdown_preview/prefs/export_assistant.py:267
+msgid "Export the preview"
+msgstr "Exportar prévia"
+
+#: markdown_preview/menus.ui:11
+msgid "Print the preview"
+msgstr "Printar a prévia"
+
+#: markdown_preview/menus.ui:17
+msgid "Automatically reload"
+msgstr "Recarregamento automático"
+
+#: markdown_preview/menus.ui:21
+msgid "Options"
+msgstr "Opções"
+
+#: markdown_preview/menus.ui:30
+msgid "Zoom out"
+msgstr "Diminuir Zoom"
+
+#: markdown_preview/menus.ui:36
+msgid "Original Zoom"
+msgstr "Zoom original"
+
+#: markdown_preview/menus.ui:40
+msgid "Zoom in"
+msgstr "Aumentar Zoom"
+
+#: markdown_preview/menus.ui:48 markdown_preview/prefs/prefs_dialog.py:47
+msgid "Automatic"
+msgstr "Automático"
+
+#: markdown_preview/menus.ui:53 markdown_preview/prefs/prefs_dialog.py:48
+msgid "Side Pane"
+msgstr "Painel de lado"
+
+#: markdown_preview/menus.ui:58 markdown_preview/prefs/prefs_dialog.py:49
+msgid "Bottom Pane"
+msgstr "Painel embaixo"
+
+#: markdown_preview/menus.ui:63
+msgid "View mode"
+msgstr "Modo de visualização"
+
+#: markdown_preview/menus.ui:66
+msgid "Split at separators"
+msgstr "Dividir em separadores"
+
+#: markdown_preview/menus.ui:71 markdown_preview/prefs/prefs_dialog.py:59
+msgid "Whole document"
+msgstr "Documento inteiro"
+
+#: markdown_preview/menus.ui:76 markdown_preview/prefs/prefs_dialog.py:60
+msgid "Split at level 1 titles"
+msgstr "Dividido em títulos de nível 1"
+
+#: markdown_preview/menus.ui:81 markdown_preview/prefs/prefs_dialog.py:61
+msgid "Split at level 2 titles"
+msgstr "Dividido em títulos de nível 2"
+
+#: markdown_preview/preview.ui:78
+msgid "Previous page"
+msgstr "Página anterior"
+
+#: markdown_preview/preview.ui:90
+msgid "Next page"
+msgstr "Próxima página"
+
+#. <property name="halign">center</property>
+#: markdown_preview/preview.ui:110
+msgid "More options"
+msgstr "Mais opções"
+
+#: markdown_preview/preview.ui:128
+msgid "Search"
+msgstr "Procurar"
+
+#: markdown_preview/preview.ui:170
+msgid "Previous result"
+msgstr "Resultado anterior"
+
+#: markdown_preview/preview.ui:182
+msgid "Next result"
+msgstr "Próximo resultado"
+
+#: markdown_preview/preview.ui:198
+msgid "No result"
+msgstr "Sem resultados"
+
+#: markdown_preview/view-menu.ui:7
+msgid "Remove all tags"
+msgstr "Remover todas as tags"
+
+#: markdown_preview/view-menu.ui:67
+msgid "Inline formatting"
+msgstr "Formatação em linha"
+
+#: markdown_preview/view-menu.ui:95
+msgid "Insert an image"
+msgstr "Inserir uma imagem"
+
+#: markdown_preview/prefs/export_assistant.py:21
+msgid "Export as…"
+msgstr "Exportar como..."
+
+#: markdown_preview/prefs/export_assistant.py:64
+msgid "Other file formats:"
+msgstr "Outros formatos de arquivo:"
+
+#: markdown_preview/prefs/export_assistant.py:77
+msgid "Output file format"
+msgstr "Formato do arquivo de saída"
+
+#: markdown_preview/prefs/export_assistant.py:83
+msgid "No styling options available for this file format."
+msgstr "Nenhuma opção de estilo disponível para este formato de arquivo."
+
+#: markdown_preview/prefs/export_assistant.py:94
+#: markdown_preview/prefs/prefs.ui:126
+msgid "Style"
+msgstr "Estilo"
+
+#: markdown_preview/prefs/export_assistant.py:100
+msgid "Export file with:"
+msgstr "Exportar arquivo com:"
+
+#: markdown_preview/prefs/export_assistant.py:106
+msgid "Advanced options"
+msgstr "Opções avançadas"
+
+#: markdown_preview/prefs/export_assistant.py:111
+#: markdown_preview/prefs/export_assistant.py:269
+msgid "Export"
+msgstr "Exportar"
+
+#: markdown_preview/prefs/export_assistant.py:260
+msgid "Pandoc encountered an error"
+msgstr "Pandoc encontrou um error"
+
+#: markdown_preview/prefs/export_assistant.py:269
+#: markdown_preview/prefs/rendering_settings.py:91
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: markdown_preview/prefs/export_assistant.py:272
+msgid "(exported)"
+msgstr "(exportado)"
+
+#: markdown_preview/prefs/prefs_dialog.py:58
+msgid "Split at horizontal rules"
+msgstr "Dividir em réguas horizontais"
+
+#: markdown_preview/prefs/prefs_dialog.py:87
+msgid "HTML generation backend:"
+msgstr "Backend de geração de HTML:"
+
+#: markdown_preview/prefs/rendering_settings.py:88
+#: markdown_preview/prefs/rendering_settings.py:107
+#: markdown_preview/prefs/css_box.ui:44 markdown_preview/prefs/css_box.ui:52
+msgid "Select a CSS file"
+msgstr "Selecionar um arquivo CSS"
+
+#: markdown_preview/prefs/rendering_settings.py:91
+msgid "Select"
+msgstr "Selecionar"
+
+#: markdown_preview/prefs/rendering_settings.py:93
+msgid "Stylesheet"
+msgstr "Folha de estilo"
+
+#: markdown_preview/prefs/rendering_settings.py:157
+msgid "Remember as custom rendering command"
+msgstr "Salvar as customizações do comando de renderização"
+
+#: markdown_preview/prefs/rendering_settings.py:160
+msgid "Remember as custom export command"
+msgstr "Salvar as customizações do comando de exportação"
+
+#: markdown_preview/prefs/backend_box.ui:48
+msgid "Extensions for python3-markdown:"
+msgstr "Extensões para python3-markdown:"
+
+#: markdown_preview/prefs/backend_box.ui:58
+#: markdown_preview/prefs/backend_box.ui:149
+msgid "More informations"
+msgstr "Mais informações"
+
+#: markdown_preview/prefs/backend_box.ui:89
+msgid "Help"
+msgstr "Ajuda"
+
+#: markdown_preview/prefs/backend_box.ui:102
+msgid "Get extensions"
+msgstr "Pegar extensões"
+
+#: markdown_preview/prefs/backend_box.ui:165
+msgid "Output file format:"
+msgstr "Formato do arquivo de saída:"
+
+#: markdown_preview/prefs/css_box.ui:16
+msgid "Use a stylesheet"
+msgstr "Use uma folha de estilo"
+
+#: markdown_preview/prefs/css_box.ui:38
+msgid "CSS file:"
+msgstr "Arquivo CSS:"
+
+#: markdown_preview/prefs/prefs.ui:19
+msgid "Preview position"
+msgstr "Posição da prévia"
+
+#: markdown_preview/prefs/prefs.ui:40
+msgid "Automatically show/hide panel"
+msgstr "Mostrar automaticamente/ocultar painel"
+
+#: markdown_preview/prefs/prefs.ui:61
+msgid "Split document"
+msgstr "Dividir documento"
+
+#: markdown_preview/prefs/prefs.ui:86
+msgid "Use relative paths"
+msgstr "Usar caminhos relativos"
+
+#: markdown_preview/prefs/prefs.ui:104
+msgid "General options"
+msgstr "Opções gerais"
+
+#: markdown_preview/prefs/prefs.ui:115
+msgid "Backend"
+msgstr "Backend"
+
+#: markdown_preview/prefs/prefs.ui:136
+msgid "Double-click on a shortcut to edit it."
+msgstr "Dois cliques em um atalho para editar ele"
+
+#: markdown_preview/prefs/prefs.ui:155
+msgid "Description"
+msgstr "Descrição"
+
+#: markdown_preview/prefs/prefs.ui:167
+msgid "Shortcut"
+msgstr "Atalho"
+
+#: markdown_preview/prefs/prefs.ui:189
+msgid "Shortcuts"
+msgstr "Atalhos"
+
+#: markdown_preview/prefs/revealjs_box.ui:16
+msgid "Theme:"
+msgstr "Tema"
+
+#: markdown_preview/prefs/revealjs_box.ui:41
+msgid "Show slide number"
+msgstr "Mostrar número da apresentação"
+
+#: markdown_preview/prefs/revealjs_box.ui:65
+msgid "Transitions type:"
+msgstr "Tipos de transições:"
