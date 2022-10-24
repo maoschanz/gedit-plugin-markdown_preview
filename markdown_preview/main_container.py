@@ -390,7 +390,7 @@ class MdMainContainer(Gtk.Box):
 		else:
 			correct_splitter = splitters_array[self._pagination_mode]
 
-		# The document is (as much as possible) splitted in its original
+		# The document is (as much as possible) split in its original
 		# language (md or html). It avoids converting some markdown to html
 		# which wouldn't be rendered anyway.
 		lang_pages = lang_string.split(correct_splitter)

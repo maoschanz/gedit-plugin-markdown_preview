@@ -55,7 +55,7 @@
                   <object class="GtkLinkButton">
                     <property name="visible">True</property>
                     <property name="uri">https://python-markdown.github.io/extensions/#officially-supported-extensions</property>
-                    <property name="label" translatable="yes">More informations</property>
+                    <property name="label" translatable="yes">More information</property>
                   </object>
                   <packing>
                     <property name="pack-type">end</property>
@@ -146,7 +146,7 @@
                   <object class="GtkLinkButton">
                     <property name="visible">True</property>
                     <property name="uri">https://pandoc.org/MANUAL.html</property>
-                    <property name="label" translatable="yes">More informations</property>
+                    <property name="label" translatable="yes">More information</property>
                   </object>
                   <packing>
                     <property name="pack-type">end</property>
