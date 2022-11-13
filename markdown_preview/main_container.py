@@ -6,6 +6,7 @@ from gi.repository import Gtk, Gio, GLib
 from .utils import get_backends_dict, init_gettext, recognize_format
 from .webview_manager import MdWebViewManager
 from .constants import MD_PREVIEW_KEY_BASE, MARKDOWN_SPLITTERS, BASE_TEMP_NAME
+from .source_lines import SourceLinesExtension
 
 AVAILABLE_BACKENDS = get_backends_dict()
 if AVAILABLE_BACKENDS['p3md']:
@@ -278,6 +279,9 @@ class MdMainContainer(Gtk.Box):
 			return
 		start, end = doc.get_bounds()
 		unsaved_text = doc.get_text(start, end, True)
+		cursor_position = doc.get_property("cursor-position")
+		text_iter = doc.get_iter_at_offset(cursor_position)
+		self._webview_manager.set_cursor_position (text_iter.get_line()+1, text_iter.get_line_offset()+1)
 		unsaved_text = unsaved_text.encode('utf-8').decode()
 		if self._file_format == 'html':
 			html_content = self.get_html_from_html(unsaved_text)
@@ -343,9 +347,10 @@ class MdMainContainer(Gtk.Box):
 			  'rel="stylesheet" href="' + self._stylesheet + '" /></head><body>'
 		post_string = '</body></html>'
 
+		extensions = [SourceLinesExtension()]+self._p3md_extensions
 		html_string = markdown.markdown(
 			unsaved_text,
-			extensions=self._p3md_extensions
+			extensions=extensions
 		)
 		html_content = pre_string + html_string + post_string
 		return html_content

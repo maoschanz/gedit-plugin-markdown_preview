@@ -9,12 +9,79 @@ from .utils import init_gettext
 
 _ = init_gettext()
 
+SCRIPT_SCROLL_TO_CURSOR = """
+window.document.body.scrollTop = %d;
+var cursorRow = %d;
+var cursorColumn = %d;
+function setCursorPositionPandoc () {
+   var dataPosElements = window.document.querySelectorAll("[data-pos]");
+   var dataPosRegExp = new RegExp(".*@(?<start_row>[0-9]*):(?<start_column>[0-9]*)-(?<end_row>[0-9]*):(?<end_column>[0-9]*)");
+   var values = "";
+   for (let e of dataPosElements) {
+      var dataPos = e.getAttribute("data-pos");
+      var matches = dataPosRegExp.exec(dataPos, "g");
+
+      if (!matches) {
+         continue;
+      }
+
+      values += cursorRow+" "+cursorColumn+"\\n";
+      values += startRow+" "+startColumn+" "+endRow+" "+endColumn+"\\n";
+
+      var startRow = parseInt(matches.groups.start_row);
+      var startColumn = parseInt(matches.groups.start_column);
+      var endRow = parseInt(matches.groups.end_row);
+      var endColumn = parseInt(matches.groups.end_column);
+      if (startRow<=cursorRow && cursorRow<=endRow &&
+         (startRow!==cursorRow || startColumn<=cursorColumn) &&
+          (endRow!==cursorRow || cursorColumn<=endColumn)) {
+         e.scrollIntoViewIfNeeded();
+         return true;
+      }
+   }
+   return false;
+}
+
+function setCursorPositionPythonMarkdown() {
+   var sourceLineElements = window.document.querySelectorAll("[source-line]");
+   var highestLowerBoundLine = -1;
+   var highestLowerBoundElement = null;
+   for (let e of sourceLineElements) {
+      let sourceLine = parseInt(e.getAttribute("source-line"));
+      if (sourceLine<=cursorRow && highestLowerBoundLine<sourceLine) {
+         highestLowerBoundLine = sourceLine;
+         highestLowerBoundElement = e;
+      }
+   }
+   if (highestLowerBoundElement) {
+      highestLowerBoundElement.scrollIntoViewIfNeeded();
+      return true;
+   }
+   return false;
+}
+
+let cursorUpdateFunctions = [setCursorPositionPandoc, setCursorPositionPythonMarkdown];
+for (let f of cursorUpdateFunctions) {
+   try {
+      if (f ()) {
+         break;
+      }
+   }
+   catch (e) {
+      window.alert(e);
+   }
+}
+"""
+
 ################################################################################
 
 class MdWebViewManager():
 
 	def __init__(self):
 		self._scroll_level = 0
+		self.cursor_row = 0
+		self.cursor_column = 0
+
 		# TODO remember the scroll level in the Gedit.View objects
 
 		self._webview = WebKit2.WebView()
@@ -27,6 +94,10 @@ class MdWebViewManager():
 		self._handlers.append(id2)
 		self._handlers.append(id3)
 		self._handlers.append(id4)
+
+	def set_cursor_position (self, row, column):
+		self.cursor_row = row
+		self.cursor_column = column
 
 	def add_find_manager(self, ui_builder):
 		options = WebKit2.FindOptions.CASE_INSENSITIVE
@@ -79,8 +150,9 @@ class MdWebViewManager():
 		return
 
 	def on_restore_scroll(self, *args):
-		js = 'window.document.body.scrollTop = ' + str(self._scroll_level) + '; undefined;'
-		self._webview.run_javascript(js, None, None, None)
+		self._webview.run_javascript(SCRIPT_SCROLL_TO_CURSOR %(self._scroll_level,
+                                             self.cursor_row, self.cursor_column),
+                                             None, None, None)
 		return
 
 	def javascript_finished(self, webview, result, user_data):
