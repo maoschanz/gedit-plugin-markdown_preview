@@ -133,6 +133,8 @@ features of the plugin.
     and `lmodern`. Those are provided by `texlive` packages whose names vary
     depending on the distribution. Warning: the version provided by Debian is
     sadly broken (some error message about *xcolor.sty*).
+  - `libglib2.0-bin` (needed for the installation script only). This is the
+    package name on debian-based distros, it may differ on your system.
 2. Download the ZIP of [the last release](https://github.com/maoschanz/gedit-plugin-markdown_preview/releases).
 3. Extract the archive.
 4. Open the project's folder in a terminal.
