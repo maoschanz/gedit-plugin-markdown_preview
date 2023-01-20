@@ -21,7 +21,7 @@ class MdTagsManager():
 		self.add_tags_characters(start_tag, end_tag, start, end)
 
 	def remove_line_tags(self, start_tag, end_tag=None):
-		"""Remove `start_tag` from the begining of the line; and `end_tag` from
+		"""Remove `start_tag` from the beginning of the line; and `end_tag` from
 		the end of the line."""
 		if end_tag is None:
 			end_tag = start_tag
