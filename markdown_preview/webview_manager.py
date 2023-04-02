@@ -140,6 +140,12 @@ class MdWebViewManager():
 		reloadItem = self.build_context_item(_("Reload the preview"), \
 		                                                       'md-prev-reload')
 		context_menu.append(reloadItem)
+		exportItem = self.build_context_item(_("Export the preview"), \
+		                                                       'md-prev-export-doc')
+		context_menu.append(exportItem)
+		printItem = self.build_context_item(_("Print the preview"), \
+		                                                       'md-prev-print-doc')
+		context_menu.append(printItem)
 		return False
 
 	def on_open_link_with(self, *args):
