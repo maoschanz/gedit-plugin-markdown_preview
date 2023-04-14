@@ -364,7 +364,7 @@ class MdMainContainer(Gtk.Box):
 		bar telling if the plugin can preview the document, and update other
 		cached settings if pertinent."""
 		document = self.parent_plugin.window.get_active_document()
-		name, extension = recognize_format(document)
+		extension = recognize_format(document)
 		ret = None
 		# It will not load documents which are not .md/.html
 		if extension == 'md':

@@ -1,8 +1,9 @@
 
-import importlib, shutil, os
+import importlib, shutil, os, gi
+from gi.repository import Gio
 
 def recognize_format(document):
-	name = document.get_short_name_for_display()
+	name = get_display_name(document)
 
 	mime = None
 	if document.get_language():
@@ -12,10 +13,14 @@ def recognize_format(document):
 		extension = 'md'
 	elif mime and 'html' in mime:
 		extension = 'html'
-	elif document.is_untitled():
+	elif file is None:
+		# jadis on avait une API "is_untitled" mais elle a été virée et personne
+		# n'a l'air de savoir pourquoi ni d'en avoir quelque chose à foutre
 		extension = _("Unsaved document")
 	elif '.' in name:
 		extension = name.split('.')[-1].lower()
+	elif mime is None:
+		extension = _("Unknown document")
 	else:
 		extension = mime
 
@@ -23,7 +28,14 @@ def recognize_format(document):
 		# The webview can render SVG files too, so we take advantage of that.
 		extension = 'html'
 
-	return name, extension
+	return extension
+
+def get_display_name():
+	file = document.get_file().get_location()
+	if file is None:
+		return None
+	file_info = file.query_info(Gio.FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME, 0, None)
+	return file_info.get_display_name()
 
 ################################################################################
 

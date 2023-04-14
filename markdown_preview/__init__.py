@@ -186,7 +186,7 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 			tags_manager = view.markdown_preview_view_activatable.tags_manager
 		else:
 			return
-		if recognize_format(view.get_buffer())[1] != 'md':
+		if recognize_format(view.get_buffer()) != 'md':
 			return
 		# print('action : ' + method_name)
 
@@ -291,7 +291,7 @@ class MarkdownGeditPluginView(GObject.Object, Gedit.ViewActivatable):
 		menu = Gtk.Menu().new_from_model(self.menu_builder.get_object('right-click-menu'))
 		item.set_submenu(menu)
 		item.show()
-		if recognize_format(self.view.get_buffer())[1] != 'md':
+		if recognize_format(self.view.get_buffer()) != 'md':
 			item.set_sensitive(False)
 		popup.append(item)
 
