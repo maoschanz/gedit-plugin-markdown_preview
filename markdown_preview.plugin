@@ -4,6 +4,7 @@ Name[fr]=Aperçu Markdown
 Description=Preview .md (and .html) files
 Description[fr]=Prévisualiser les fichiers .md (et .html)
 Description[nl]=Voorvertoning van .md- (en .html-) bestanden
+Description[de]=Vorschau für .md (und .html) Dateien
 Icon=x-office-document-symbolic
 Loader=python3
 Module=markdown_preview
