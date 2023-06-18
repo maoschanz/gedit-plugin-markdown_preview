@@ -13,7 +13,7 @@ def recognize_format(document):
 		extension = 'md'
 	elif mime and 'html' in mime:
 		extension = 'html'
-	elif file is None:
+	elif name is None:
 		# jadis on avait une API "is_untitled" mais elle a été virée et personne
 		# n'a l'air de savoir pourquoi ni d'en avoir quelque chose à foutre
 		extension = _("Unsaved document")
@@ -30,7 +30,7 @@ def recognize_format(document):
 
 	return extension
 
-def get_display_name():
+def get_display_name(document):
 	file = document.get_file().get_location()
 	if file is None:
 		return None
