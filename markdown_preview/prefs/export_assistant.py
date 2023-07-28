@@ -2,7 +2,7 @@
 # GPL v3
 
 import gi, subprocess
-from gi.repository import Gtk, Gio, GLib
+from gi.repository import Gtk, Gio, GLib, Tepl
 
 from .rendering_settings import MdCssSettings, MdRevealjsSettings, MdBackendSettings
 from ..utils import get_backends_dict
@@ -267,7 +267,9 @@ class MdExportAssistant(Gtk.Assistant):
 		file_chooser = Gtk.FileChooserNative.new(_("Export the preview"), \
 		                        self.gedit_window, Gtk.FileChooserAction.SAVE, \
 		                                               _("Export"), _("Cancel"))
-		name = self.gedit_window.get_active_document().get_short_name_for_display()
+		doc = self.gedit_window.get_active_document()
+		tepl_file = Tepl.File.new_for_location(doc.get_location())
+		name = tepl_file.get_short_name()
 		# retirer l'ancienne extension ?
 		name = str(name + ' ' + _("(exported)") + output_extension)
 		file_chooser.set_current_name(name)
