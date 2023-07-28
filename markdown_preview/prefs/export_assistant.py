@@ -267,7 +267,8 @@ class MdExportAssistant(Gtk.Assistant):
 		file_chooser = Gtk.FileChooserNative.new(_("Export the preview"), \
 		                        self.gedit_window, Gtk.FileChooserAction.SAVE, \
 		                                               _("Export"), _("Cancel"))
-		name = self.gedit_window.get_active_document().get_short_name_for_display()
+		doc = self.gedit_window.get_active_document()
+		name = doc.get_file().get_location().get_basename()
 		# retirer l'ancienne extension ?
 		name = str(name + ' ' + _("(exported)") + output_extension)
 		file_chooser.set_current_name(name)
