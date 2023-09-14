@@ -269,9 +269,11 @@ class MdExportAssistant(Gtk.Assistant):
 		                                               _("Export"), _("Cancel"))
 		doc = self.gedit_window.get_active_document()
 		name = doc.get_file().get_location().get_basename()
+		folder = doc.get_file().get_location().get_parent().get_path()
 		# retirer l'ancienne extension ?
 		name = str(name + ' ' + _("(exported)") + output_extension)
 		file_chooser.set_current_name(name)
+		file_chooser.set_current_folder(folder)
 		file_chooser.set_do_overwrite_confirmation(True)
 		response = file_chooser.run()
 		if response == Gtk.ResponseType.ACCEPT:
