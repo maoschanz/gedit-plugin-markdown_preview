@@ -5,7 +5,7 @@ import gi, subprocess
 from gi.repository import Gtk, Gio, GLib
 
 from .rendering_settings import MdCssSettings, MdRevealjsSettings, MdBackendSettings
-from ..utils import get_backends_dict
+from ..utils import get_backends_dict, get_display_name
 from ..constants import BackendsEnums
 
 AVAILABLE_BACKENDS = get_backends_dict()
@@ -267,10 +267,12 @@ class MdExportAssistant(Gtk.Assistant):
 		file_chooser = Gtk.FileChooserNative.new(_("Export the preview"), \
 		                        self.gedit_window, Gtk.FileChooserAction.SAVE, \
 		                                               _("Export"), _("Cancel"))
-		name = self.gedit_window.get_active_document().get_short_name_for_display()
-		# retirer l'ancienne extension ?
+		name = get_display_name(self.gedit_window.get_active_document())
+		folder = doc.get_file().get_location().get_parent().get_path()
+		# XXX should i remove the former file extension from the string ?
 		name = str(name + ' ' + _("(exported)") + output_extension)
 		file_chooser.set_current_name(name)
+		file_chooser.set_current_folder(folder)
 		file_chooser.set_do_overwrite_confirmation(True)
 		response = file_chooser.run()
 		if response == Gtk.ResponseType.ACCEPT:
