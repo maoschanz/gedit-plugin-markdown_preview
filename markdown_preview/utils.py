@@ -31,10 +31,11 @@ def recognize_format(document):
 	return extension
 
 def get_display_name(document):
-	file = document.get_file().get_location()
-	if file is None:
+	try:
+		file = document.get_file().get_location()
+		file_info = file.query_info(Gio.FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME, 0, None)
+	except Exception as e:
 		return None
-	file_info = file.query_info(Gio.FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME, 0, None)
 	return file_info.get_display_name()
 
 ################################################################################
