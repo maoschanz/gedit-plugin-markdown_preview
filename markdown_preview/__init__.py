@@ -83,12 +83,18 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 	def do_activate(self):
 		self._handlers = []
 		self._settings = Gio.Settings.new(MD_PREVIEW_KEY_BASE)
-		sig_id0 = self.window.connect('active-tab-changed', self.preview.on_file_changed)
-		self._handlers.append(sig_id0)
-		sig_id1 = self.window.connect('active-tab-state-changed', self.preview.on_file_changed)
-		self._handlers.append(sig_id1)
+
+		self._connect_handler(self.window, 'active-tab-changed')
+		self._connect_handler(self.window, 'active-tab-state-changed')
+		self._connect_handler(self.window.get_bottom_panel(), 'notify::visible-child')
+		self._connect_handler(self.window.get_side_panel(), 'notify::visible-child')
+
 		self.connect_actions()
 		self.preview.do_activate()
+
+	def _connect_handler(self, widget, signal_name):
+		sig_id = widget.connect(signal_name, self.preview.on_file_changed)
+		self._handlers.append(sig_id)
 
 	# This is called every time the gui is updated
 	def do_update_state(self):
