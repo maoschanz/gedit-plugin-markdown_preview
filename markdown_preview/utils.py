@@ -6,7 +6,7 @@ def recognize_format(document):
 	name = get_display_name(document)
 
 	mime = None
-	if document.get_language():
+	if document and document.get_language():
 		mime = document.get_language().get_mime_types()[0]
 
 	if mime and 'markdown' in mime:

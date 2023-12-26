@@ -10,9 +10,6 @@ https://docs.gtk.org/gtk3/text-widget-overview.html
 
 Pour la release 3.0 :
 
-- à terminer :
-	- [x] MVP du clic-droit
-	- [x] raccourcis clavier
 - à réparer :
 	- [ ] fix le show_all des préférences
 	- [ ] fix le get_text qui veut des arguments là

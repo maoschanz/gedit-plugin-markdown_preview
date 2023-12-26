@@ -398,6 +398,9 @@ class MdMainContainer(Gtk.Box):
 		if self.page_index >= self.page_number:
 			self.page_index = self.page_number - 1
 			# TODO remember the page index in the Gedit.View objects
+			# TODO remember the pagination mode in the Gedit.View objects too,
+			# because it's not correct regarding splitters in blocks of code,
+			# and the best way to hide it is to reset to "whole" every time #56
 		lang_current_page = lang_pages[self.page_index]
 
 		if self.page_index == 0:
