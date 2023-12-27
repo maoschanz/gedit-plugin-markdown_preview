@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-16 12:25+0200\n"
+"POT-Creation-Date: 2023-12-27 21:34+0100\n"
 "PO-Revision-Date: 2023-04-15 15:13+0100\n"
 "Last-Translator: Philipp Kitzberger <coding@kitze.net>\n"
 "Language-Team: German <>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "X-Generator: Lokalize 22.03.80\n"
 
 #: markdown_preview/__init__.py:40 markdown_preview/__init__.py:46
-#: markdown_preview/__init__.py:231 markdown_preview/main_container.py:460
+#: markdown_preview/__init__.py:237 markdown_preview/main_container.py:463
 msgid "Markdown Preview"
 msgstr "Markdown-Vorschau"
 
@@ -27,7 +27,7 @@ msgstr "Markdown-Vorschau"
 msgid "Zoom"
 msgstr "Zoomen"
 
-#: markdown_preview/__init__.py:290
+#: markdown_preview/__init__.py:296
 msgid "Markdown tags"
 msgstr "Markdown Tags"
 
@@ -555,7 +555,7 @@ msgstr "Es gab eine Pandoc Fehlermeldung"
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: markdown_preview/prefs/export_assistant.py:272
+#: markdown_preview/prefs/export_assistant.py:273
 msgid "(exported)"
 msgstr "(exportiert)"
 

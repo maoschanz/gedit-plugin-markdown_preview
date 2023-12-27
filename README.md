@@ -11,11 +11,8 @@ https://docs.gtk.org/gtk3/text-widget-overview.html
 Pour la release 3.0 :
 
 - à réparer :
-	- [ ] fix le show_all des préférences
-	- [ ] fix le get_text qui veut des arguments là
 	- [ ] `gtk_widget_get_scale_factor` ???
 - à faire :
-	- [x] refacto recognize_format
 	- [ ] retenir le scroll et le numéro de page à l'échelle de la gedit.view
 - [ ] numéro de version etc.
 
@@ -46,11 +43,6 @@ Pour la release 5.0 :
 ---
 
 Pour un moment indéterminé :
-
-Traceback (most recent call last):
-  File "/home/roschan/.local/share/gedit/plugins/markdown_preview/prefs/rendering_settings.py", line 206, in on_remember
-    new_command = self.pandoc_cli_entry.get_buffer().get_text()
-TypeError: Gtk.TextBuffer.get_text() takes exactly 4 arguments (1 given)
 
 - [~] différencier explicitement le chemin d'exécution pour l'ouverture d'un
       fichier (reconnaissance format etc.) d'un reload normal

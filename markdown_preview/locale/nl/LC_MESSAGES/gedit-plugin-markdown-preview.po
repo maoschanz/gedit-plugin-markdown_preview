@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-01 17:36+0100\n"
+"POT-Creation-Date: 2023-12-27 21:34+0100\n"
 "PO-Revision-Date: 2022-03-28 13:39+0200\n"
 "Last-Translator: Heimen Stoffels <vistausss@fastmail.com>\n"
 "Language-Team: Dutch <>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "X-Generator: Lokalize 22.03.80\n"
 
 #: markdown_preview/__init__.py:40 markdown_preview/__init__.py:46
-#: markdown_preview/__init__.py:233 markdown_preview/main_container.py:461
+#: markdown_preview/__init__.py:237 markdown_preview/main_container.py:463
 msgid "Markdown Preview"
 msgstr "Markdown-voorvertoning"
 
@@ -27,7 +27,7 @@ msgstr "Markdown-voorvertoning"
 msgid "Zoom"
 msgstr "Zoomen"
 
-#: markdown_preview/__init__.py:292
+#: markdown_preview/__init__.py:296
 msgid "Markdown tags"
 msgstr "Markdown-labels"
 
@@ -396,11 +396,11 @@ msgstr "De extensie ‘%s’ is ongeldig"
 msgid "Rendering error"
 msgstr "Fout tijdens samenstellen"
 
-#: markdown_preview/main_container.py:379
+#: markdown_preview/main_container.py:378
 msgid "Unsupported type of document:"
 msgstr "Geen ondersteuning voor dit soort documenten:"
 
-#: markdown_preview/tags_manager.py:88
+#: markdown_preview/tags_manager.py:56
 msgid "Select a picture"
 msgstr "Kies een afbeelding"
 
@@ -444,15 +444,15 @@ msgstr "Oorspronkelijk zoomniveau"
 msgid "Zoom in"
 msgstr "Inzoomen"
 
-#: markdown_preview/menus.ui:48 markdown_preview/prefs/prefs_dialog.py:43
+#: markdown_preview/menus.ui:48 markdown_preview/prefs/prefs_dialog.py:47
 msgid "Automatic"
 msgstr "Automatisch"
 
-#: markdown_preview/menus.ui:53 markdown_preview/prefs/prefs_dialog.py:44
+#: markdown_preview/menus.ui:53 markdown_preview/prefs/prefs_dialog.py:48
 msgid "Side Pane"
 msgstr "Paneel aan de zijkant"
 
-#: markdown_preview/menus.ui:58 markdown_preview/prefs/prefs_dialog.py:45
+#: markdown_preview/menus.ui:58 markdown_preview/prefs/prefs_dialog.py:49
 msgid "Bottom Pane"
 msgstr "Paneel onderaan"
 
@@ -464,15 +464,15 @@ msgstr "Weergavemodus"
 msgid "Split at separators"
 msgstr "Splitsen bij scheidingen"
 
-#: markdown_preview/menus.ui:71 markdown_preview/prefs/prefs_dialog.py:55
+#: markdown_preview/menus.ui:71 markdown_preview/prefs/prefs_dialog.py:59
 msgid "Whole document"
 msgstr "Gehele document"
 
-#: markdown_preview/menus.ui:76 markdown_preview/prefs/prefs_dialog.py:56
+#: markdown_preview/menus.ui:76 markdown_preview/prefs/prefs_dialog.py:60
 msgid "Split at level 1 titles"
 msgstr "Splitsen bij kop 1-titels"
 
-#: markdown_preview/menus.ui:81 markdown_preview/prefs/prefs_dialog.py:57
+#: markdown_preview/menus.ui:81 markdown_preview/prefs/prefs_dialog.py:61
 msgid "Split at level 2 titles"
 msgstr "Splitsen bij kop 2-titels"
 
@@ -560,15 +560,15 @@ msgstr "Er is een foutmelding opgetreden in Pandoc"
 msgid "Cancel"
 msgstr "Annuleren"
 
-#: markdown_preview/prefs/export_assistant.py:272
+#: markdown_preview/prefs/export_assistant.py:273
 msgid "(exported)"
 msgstr "(geëxporteerd)"
 
-#: markdown_preview/prefs/prefs_dialog.py:54
+#: markdown_preview/prefs/prefs_dialog.py:58
 msgid "Split at horizontal rules"
 msgstr "Splitsen bij horizontale regels"
 
-#: markdown_preview/prefs/prefs_dialog.py:83
+#: markdown_preview/prefs/prefs_dialog.py:87
 msgid "HTML generation backend:"
 msgstr "Html-genereerbackend:"
 
@@ -586,11 +586,11 @@ msgstr "Kiezen"
 msgid "Stylesheet"
 msgstr "Stijlblad"
 
-#: markdown_preview/prefs/rendering_settings.py:156
+#: markdown_preview/prefs/rendering_settings.py:157
 msgid "Remember as custom rendering command"
 msgstr "Onthouden als aangepaste samenstelopdracht"
 
-#: markdown_preview/prefs/rendering_settings.py:159
+#: markdown_preview/prefs/rendering_settings.py:160
 msgid "Remember as custom export command"
 msgstr "Onthouden als aangepaste exportopdracht"
 
@@ -600,7 +600,7 @@ msgstr "Uitbreidingen voor python3-markdown:"
 
 #: markdown_preview/prefs/backend_box.ui:58
 #: markdown_preview/prefs/backend_box.ui:149
-msgid "More informations"
+msgid "More information"
 msgstr "Meer informatie"
 
 #: markdown_preview/prefs/backend_box.ui:89

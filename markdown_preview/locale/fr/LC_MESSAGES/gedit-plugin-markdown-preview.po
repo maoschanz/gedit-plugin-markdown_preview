@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: unnamed project\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-01 17:36+0100\n"
+"POT-Creation-Date: 2023-12-27 21:34+0100\n"
 "PO-Revision-Date: 2020-01-15 16:51+0100\n"
 "Last-Translator: Romain F. T.\n"
 "Language-Team: \n"
@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: markdown_preview/__init__.py:40 markdown_preview/__init__.py:46
-#: markdown_preview/__init__.py:233 markdown_preview/main_container.py:461
+#: markdown_preview/__init__.py:237 markdown_preview/main_container.py:463
 msgid "Markdown Preview"
 msgstr "Aperçu Markdown"
 
@@ -27,7 +27,7 @@ msgstr "Aperçu Markdown"
 msgid "Zoom"
 msgstr "Zoom"
 
-#: markdown_preview/__init__.py:292
+#: markdown_preview/__init__.py:296
 msgid "Markdown tags"
 msgstr "Balises Markdown"
 
@@ -382,11 +382,11 @@ msgstr "L'extension '%s' n'est pas valide"
 msgid "Rendering error"
 msgstr "Erreur de rendu"
 
-#: markdown_preview/main_container.py:379
+#: markdown_preview/main_container.py:378
 msgid "Unsupported type of document:"
 msgstr "Type de document non-supporté :"
 
-#: markdown_preview/tags_manager.py:88
+#: markdown_preview/tags_manager.py:56
 msgid "Select a picture"
 msgstr "Choisissez une image"
 
@@ -430,15 +430,15 @@ msgstr "Zoom original"
 msgid "Zoom in"
 msgstr "Zoomer"
 
-#: markdown_preview/menus.ui:48 markdown_preview/prefs/prefs_dialog.py:43
+#: markdown_preview/menus.ui:48 markdown_preview/prefs/prefs_dialog.py:47
 msgid "Automatic"
 msgstr "Automatique"
 
-#: markdown_preview/menus.ui:53 markdown_preview/prefs/prefs_dialog.py:44
+#: markdown_preview/menus.ui:53 markdown_preview/prefs/prefs_dialog.py:48
 msgid "Side Pane"
 msgstr "Panneau latéral"
 
-#: markdown_preview/menus.ui:58 markdown_preview/prefs/prefs_dialog.py:45
+#: markdown_preview/menus.ui:58 markdown_preview/prefs/prefs_dialog.py:49
 msgid "Bottom Pane"
 msgstr "Panneau inférieur"
 
@@ -450,15 +450,15 @@ msgstr "Mode d'affichage"
 msgid "Split at separators"
 msgstr "Utiliser les séparateurs"
 
-#: markdown_preview/menus.ui:71 markdown_preview/prefs/prefs_dialog.py:55
+#: markdown_preview/menus.ui:71 markdown_preview/prefs/prefs_dialog.py:59
 msgid "Whole document"
 msgstr "Document complet"
 
-#: markdown_preview/menus.ui:76 markdown_preview/prefs/prefs_dialog.py:56
+#: markdown_preview/menus.ui:76 markdown_preview/prefs/prefs_dialog.py:60
 msgid "Split at level 1 titles"
 msgstr "Diviser aux titres de niveau 1"
 
-#: markdown_preview/menus.ui:81 markdown_preview/prefs/prefs_dialog.py:57
+#: markdown_preview/menus.ui:81 markdown_preview/prefs/prefs_dialog.py:61
 msgid "Split at level 2 titles"
 msgstr "Diviser aux titres de niveau 2"
 
@@ -546,15 +546,15 @@ msgstr "Pandoc a rencontré une erreur"
 msgid "Cancel"
 msgstr "Annuler"
 
-#: markdown_preview/prefs/export_assistant.py:272
+#: markdown_preview/prefs/export_assistant.py:273
 msgid "(exported)"
 msgstr "(exporté)"
 
-#: markdown_preview/prefs/prefs_dialog.py:54
+#: markdown_preview/prefs/prefs_dialog.py:58
 msgid "Split at horizontal rules"
 msgstr "Séparer aux traits horizontaux"
 
-#: markdown_preview/prefs/prefs_dialog.py:83
+#: markdown_preview/prefs/prefs_dialog.py:87
 msgid "HTML generation backend:"
 msgstr "Logiciel générateur de HTML :"
 
@@ -572,11 +572,11 @@ msgstr "Choisir"
 msgid "Stylesheet"
 msgstr "Feuille de style"
 
-#: markdown_preview/prefs/rendering_settings.py:156
+#: markdown_preview/prefs/rendering_settings.py:157
 msgid "Remember as custom rendering command"
 msgstr ""
 
-#: markdown_preview/prefs/rendering_settings.py:159
+#: markdown_preview/prefs/rendering_settings.py:160
 msgid "Remember as custom export command"
 msgstr ""
 
@@ -586,7 +586,7 @@ msgstr "Extensions pour python3-markdown :"
 
 #: markdown_preview/prefs/backend_box.ui:58
 #: markdown_preview/prefs/backend_box.ui:149
-msgid "More informations"
+msgid "More information"
 msgstr "Plus d'informations"
 
 #: markdown_preview/prefs/backend_box.ui:89

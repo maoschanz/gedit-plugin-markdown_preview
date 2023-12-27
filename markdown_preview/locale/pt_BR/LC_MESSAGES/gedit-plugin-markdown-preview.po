@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-15 18:06-0300\n"
+"POT-Creation-Date: 2023-12-27 21:34+0100\n"
 "PO-Revision-Date: 2022-10-15 18:17+0300\n"
 "Last-Translator: João Emanuel\n"
 "Language-Team: Português Brasil\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: markdown_preview/__init__.py:40 markdown_preview/__init__.py:46
-#: markdown_preview/__init__.py:231 markdown_preview/main_container.py:460
+#: markdown_preview/__init__.py:237 markdown_preview/main_container.py:463
 msgid "Markdown Preview"
 msgstr "Visualizador markdown"
 
@@ -26,7 +26,7 @@ msgstr "Visualizador markdown"
 msgid "Zoom"
 msgstr "Zoom"
 
-#: markdown_preview/__init__.py:290
+#: markdown_preview/__init__.py:296
 msgid "Markdown tags"
 msgstr "Tags markdown"
 
@@ -556,7 +556,7 @@ msgstr "Pandoc encontrou um error"
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: markdown_preview/prefs/export_assistant.py:272
+#: markdown_preview/prefs/export_assistant.py:273
 msgid "(exported)"
 msgstr "(exportado)"
 
@@ -596,7 +596,7 @@ msgstr "Extensões para python3-markdown:"
 
 #: markdown_preview/prefs/backend_box.ui:58
 #: markdown_preview/prefs/backend_box.ui:149
-msgid "More informations"
+msgid "More information"
 msgstr "Mais informações"
 
 #: markdown_preview/prefs/backend_box.ui:89
