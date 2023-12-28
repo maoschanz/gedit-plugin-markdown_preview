@@ -49,8 +49,13 @@ class MdTagsManager():
 
 	############################################################################
 
-	def insert_link(self, window):
-		pass
+	def insert_link(self):
+		# What to insert
+		start_tag = "["
+		end_tag = "]()"
+
+		# Where to insert
+		self._insert_around_alt_text(start_tag, end_tag)
 
 	def insert_picture(self, window):
 		# Building a FileChooserDialog for pictures

@@ -201,7 +201,7 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		elif method_name == 'insert_picture':
 			tags_manager.insert_picture(self.window)
 		elif method_name == 'insert_link':
-			tags_manager.insert_link(self.window)
+			tags_manager.insert_link()
 
 		elif method_name == 'format_inline':
 			tags_manager.add_word_tags(argument)
