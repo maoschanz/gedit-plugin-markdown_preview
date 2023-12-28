@@ -75,23 +75,7 @@ class MdTagsManager():
 		file_chooser.destroy()
 
 		# Where to insert
-		document = self._get_active_document_buffer()
-		start = document.get_iter_at_mark(document.get_insert())
-		end = None
-		# by default, insert as a tag with empty brackets. But if a part of a
-		# line is selected, it will be the image's alt text.
-		selection = document.get_selection_bounds()
-		if selection != ():
-			(start_select, end_select) = selection
-			number_lines = self._get_n_lines(start_select, end_select)
-			if number_lines != 1:
-				(start, end) = (start_select, end_select)
-
-		# Actually insert
-		if end is None:
-			document.insert(start, start_tag + end_tag)
-		else:
-			self._add_tags_characters(start_tag, end_tag, start, end)
+		self._insert_around_alt_text(start_tag, end_tag)
 
 	def insert_table(self, nb_columns):
 		document = self._get_active_document_buffer()
@@ -102,6 +86,27 @@ class MdTagsManager():
 		document.insert(iterator, table_markdown)
 
 	############################################################################
+
+	def _insert_around_alt_text(self, start_tag, end_tag):
+		"""Insert around a given selection IF it's on a single line. Otherwise,
+		or if there is no selection, insert as a single string."""
+		document = self._get_active_document_buffer()
+		start = document.get_iter_at_mark(document.get_insert())
+		end = None
+		# by default, insert as a tag with empty brackets. But if a part of a
+		# line is selected, it will be the image/link's alt text.
+		selection = document.get_selection_bounds()
+		if selection != ():
+			(start_select, end_select) = selection
+			number_lines = self._get_n_lines(start_select, end_select)
+			if number_lines == 1:
+				(start, end) = (start_select, end_select)
+
+		# Actually insert
+		if end is None:
+			document.insert(start, start_tag + end_tag)
+		else:
+			self._add_tags_characters(start_tag, end_tag, start, end)
 
 	def _add_tags_characters(self, start_tag, end_tag, start, end):
 		document = self._get_active_document_buffer()
