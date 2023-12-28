@@ -154,14 +154,14 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 
 		# action_remove = Gio.SimpleAction(name='md-prev-remove-all')
 		# action_remove.connect('activate', lambda i, j: self.method_from_view('remove_all'))
-		# TODO ^
+		# TODO ^ v4
 
-		self.add_format_action('md-prev-editing-title-1', 'format_block', '#')
-		self.add_format_action('md-prev-editing-title-2', 'format_block', '##')
-		self.add_format_action('md-prev-editing-title-3', 'format_block', '###')
-		self.add_format_action('md-prev-editing-title-4', 'format_block', '####')
-		self.add_format_action('md-prev-editing-title-5', 'format_block', '#####')
-		self.add_format_action('md-prev-editing-title-6', 'format_block', '#######')
+		self.add_format_action('md-prev-editing-title-1', 'format_lines', '#')
+		self.add_format_action('md-prev-editing-title-2', 'format_lines', '##')
+		self.add_format_action('md-prev-editing-title-3', 'format_lines', '###')
+		self.add_format_action('md-prev-editing-title-4', 'format_lines', '####')
+		self.add_format_action('md-prev-editing-title-5', 'format_lines', '#####')
+		self.add_format_action('md-prev-editing-title-6', 'format_lines', '#######')
 
 		self.add_format_action('md-prev-editing-bold', 'format_inline', '**')
 		self.add_format_action('md-prev-editing-italic', 'format_inline', '*')
@@ -169,10 +169,10 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		self.add_format_action('md-prev-editing-stroke', 'format_inline', '~~')
 		self.add_format_action('md-prev-editing-monospace', 'format_inline', '`')
 
-		self.add_format_action('md-prev-editing-code-block', 'format_block2', '```')
-		self.add_format_action('md-prev-editing-quote', 'format_block', '>')
-		self.add_format_action('md-prev-editing-list-unordered', 'format_block', '-')
-		self.add_format_action('md-prev-editing-list-ordered', 'format_block', '1.')
+		self.add_format_action('md-prev-editing-code-block', 'format_block', '```')
+		self.add_format_action('md-prev-editing-quote', 'format_lines', '>')
+		self.add_format_action('md-prev-editing-list-unordered', 'format_lines', '-')
+		self.add_format_action('md-prev-editing-list-ordered', 'format_lines', '1.')
 
 		self.add_format_action('md-prev-editing-insert-picture', 'insert_picture')
 		self.add_format_action('md-prev-editing-insert-link', 'insert_link')
@@ -206,9 +206,9 @@ class MarkdownGeditPluginWindow(GObject.Object, Gedit.WindowActivatable, PeasGtk
 		elif method_name == 'format_inline':
 			tags_manager.add_word_tags(argument)
 
-		elif method_name == 'format_block':
+		elif method_name == 'format_lines':
 			tags_manager.add_line_tags(argument)
-		elif method_name == 'format_block2':
+		elif method_name == 'format_block':
 			tags_manager.add_block_tags(argument)
 		elif method_name == 'remove_block':
 			tags_manager.remove_line_tags(argument) # TODO
