@@ -8,16 +8,10 @@ pane (<kbd>F9</kbd>) or the bottom (<kbd>Ctrl</kbd>+<kbd>F9</kbd>) pane.
 
 https://docs.gtk.org/gtk3/text-widget-overview.html
 
-Pour la release 3.0 :
+Pour la release 4.0 :
 
 - à réparer :
 	- [ ] `gtk_widget_get_scale_factor` ???
-- à faire :
-	- [ ] retenir le scroll et le numéro de page à l'échelle de la gedit.view
-- [ ] numéro de version etc.
-
-Pour la release 4.0 :
-
 - à changer :
 	- [ ] pourquoi un CDATA ?
 	- [ ] autoriser la suppression des shortcuts
@@ -26,6 +20,7 @@ Pour la release 4.0 :
 	- [ ] insert link ?
 	- [ ] "remove tags" action
 - à faire :
+	- [ ] retenir le scroll et le numéro de page à l'échelle de la gedit.view
 	- [ ] si le boug scrolle à la fin, reproduire ça au reload
 - [ ] numéro de version etc.
 
@@ -87,10 +82,11 @@ You can print the preview, or export it:
 	- a stylesheet can be applied
 	- `python3-markdown` [extensions](https://python-markdown.github.io/extensions/) can be used (including [third-party extensions](https://github.com/Python-Markdown/markdown/wiki/Third-Party-Extensions) like [these great ones](https://facelessuser.github.io/pymdown-extensions/)
 
-<!-- ### Editing assistance -->
+### Editing assistance
 
-<!-- - insert an image in your file -->
-<!-- - insert markdown tags in your text with right-click menu or keyboard shortcuts -->
+- insert an image in your file
+- insert markdown tags in your text from the right-click menu
+<!--- insert markdown tags in your text with keyboard shortcuts-->
 
 ---
 

@@ -18,13 +18,14 @@ class MdTagsManager():
 			end_tag = start_tag
 		start_tag = start_tag + "\n"
 		end_tag = "\n" + end_tag
-		self.add_tags_characters(start_tag, end_tag, start, end)
+		self._add_tags_characters(start_tag, end_tag, start, end)
 
 	def remove_line_tags(self, start_tag, end_tag=None):
 		"""Remove `start_tag` from the beginning of the line; and `end_tag` from
 		the end of the line."""
 		if end_tag is None:
 			end_tag = start_tag
+		# TODO v4
 
 	def add_line_tags(self, start_tag, add_intermediate_space=True):
 		"""Add `start_tag` at the beginning of the line."""
@@ -34,7 +35,7 @@ class MdTagsManager():
 			start_tag = start_tag + " "
 
 		# There is no "closing" tag to add in the case of `add_line_tags`
-		self.add_tags_characters(start_tag, '', start, end)
+		self._add_tags_characters(start_tag, '', start, end)
 
 	def add_word_tags(self, tag_both):
 		"""Add a tag at both sides of a selected bit of text."""
@@ -44,7 +45,7 @@ class MdTagsManager():
 			(start, end) = selection
 		else:
 			return
-		self.add_tags_characters(tag_both, tag_both, start, end)
+		self._add_tags_characters(tag_both, tag_both, start, end)
 
 	############################################################################
 
@@ -75,29 +76,34 @@ class MdTagsManager():
 
 		# Where to insert
 		document = self._get_active_document_buffer()
+		start = document.get_iter_at_mark(document.get_insert())
+		end = None
+		# by default, insert as a tag with empty brackets. But if a part of a
+		# line is selected, it will be the image's alt text.
 		selection = document.get_selection_bounds()
-		number_lines = 0
 		if selection != ():
-			(start, end) = selection
-			number_lines = self._get_n_lines(start, end)
-		if number_lines != 1:
-			start = document.get_iter_at_mark(document.get_insert())
-			end = document.get_iter_at_mark(document.get_insert())
+			(start_select, end_select) = selection
+			number_lines = self._get_n_lines(start_select, end_select)
+			if number_lines != 1:
+				(start, end) = (start_select, end_select)
 
 		# Actually insert
-		self.add_tags_characters(start_tag, end_tag, start, end)
+		if end is None:
+			document.insert(start, start_tag + end_tag)
+		else:
+			self._add_tags_characters(start_tag, end_tag, start, end)
 
 	def insert_table(self, nb_columns):
-		doc = self._get_active_document_buffer()
-		table = "\n|" + nb_columns * " header  |" + \
-		        "\n|" + nb_columns * "---------|" + \
-		        "\n|" + nb_columns * " content |" + "\n"
-		iterator = doc.get_iter_at_mark(doc.get_insert())
-		doc.insert(iterator, table)
+		document = self._get_active_document_buffer()
+		table_markdown = "\n|" + nb_columns * " header  |" + \
+		                 "\n|" + nb_columns * "---------|" + \
+		                 "\n|" + nb_columns * " content |" + "\n"
+		iterator = doc.get_iter_at_mark(document.get_insert())
+		document.insert(iterator, table_markdown)
 
 	############################################################################
 
-	def add_tags_characters(self, start_tag, end_tag, start, end):
+	def _add_tags_characters(self, start_tag, end_tag, start, end):
 		document = self._get_active_document_buffer()
 		start_mark = document.create_mark('start', start, True)
 		current_mark = document.create_mark('iter', start, False)
