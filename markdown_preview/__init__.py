@@ -25,11 +25,11 @@ class MarkdownGeditPluginApp(GObject.Object, Gedit.AppActivatable):
 
 	def do_activate(self):
 		self.build_main_menu()
-		self.add_all_accelerators()
+		# self.add_all_accelerators()
 
 	def do_deactivate(self):
 		self.remove_menu()
-		self.remove_accelerators()
+		# self.remove_accelerators()
 
 	def build_main_menu(self):
 		builder = Gtk.Builder().new_from_file(os.path.join(BASE_PATH, 'menus.ui'))

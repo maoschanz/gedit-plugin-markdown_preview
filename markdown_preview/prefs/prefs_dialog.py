@@ -35,7 +35,7 @@ class MdConfigWidget(Gtk.Box):
 		# This is needed because there are initialisation issues otherwise,
 		# regarding the visibility of widgets for the "custom" option.
 		stack.connect('notify::visible-child', self._backend.update_pandoc_combobox)
-		self._build_shortcuts_page(builder)
+		# self._build_shortcuts_page(builder)
 
 		self.add(sidebar)
 		self.add(stack)
@@ -75,13 +75,13 @@ class MdConfigWidget(Gtk.Box):
 		self.css_manager = MdCssSettings(self._settings, None, self)
 		style_box.add(self.css_manager.full_widget)
 
-		self.revealjs_manager = MdRevealjsSettings(self._settings, self)
-		AVAILABLE_BACKENDS = get_backends_dict()
-		if AVAILABLE_BACKENDS['pandoc']:
-			style_box.add(Gtk.Separator(visible=True))
+		# self.revealjs_manager = MdRevealjsSettings(self._settings, self)
+		# AVAILABLE_BACKENDS = get_backends_dict()
+		# if AVAILABLE_BACKENDS['pandoc']:
+		# 	style_box.add(Gtk.Separator(visible=True))
 
-			style_box.add(self._new_dim_label(HelpLabels.StyleRevealJS))
-			style_box.add(self.revealjs_manager.full_widget)
+		# 	style_box.add(self._new_dim_label(HelpLabels.StyleRevealJS))
+		#	style_box.add(self.revealjs_manager.full_widget)
 
 	def _build_backend_page(self, builder):
 		self._backend = MdBackendSettings(_("HTML generation backend:"), \

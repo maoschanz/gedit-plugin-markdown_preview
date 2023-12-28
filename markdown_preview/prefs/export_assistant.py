@@ -88,8 +88,8 @@ class MdExportAssistant(Gtk.Assistant):
 		style_page.add(self.css_manager.full_widget)
 
 		# Shown instead of the CSS manager if user wants to export as revealjs
-		self.revealjs_manager = MdRevealjsSettings(self._settings, self)
-		style_page.add(self.revealjs_manager.full_widget)
+		# self.revealjs_manager = MdRevealjsSettings(self._settings, self)
+		# style_page.add(self.revealjs_manager.full_widget)
 
 		self._add_page(style_page, _("Style"), Gtk.AssistantPageType.CONTENT)
 
@@ -191,7 +191,7 @@ class MdExportAssistant(Gtk.Assistant):
 		self._backend.update_pandoc_combobox()
 
 	def _show_accurate_style_manager(self, show_css, show_revealjs):
-		self.revealjs_manager.full_widget.set_visible(show_revealjs)
+		# self.revealjs_manager.full_widget.set_visible(show_revealjs)
 		self.css_manager.full_widget.set_visible(show_css)
 		self.no_style_label.set_visible(not (show_css or show_revealjs))
 

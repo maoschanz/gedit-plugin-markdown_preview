@@ -184,10 +184,10 @@
           </object>
         </child>
       </object>
-      <packing>
-        <property name="name">shortcuts_page</property>
-        <property name="title" translatable="yes">Shortcuts</property>
-      </packing>
+      <!-- <packing> -->
+      <!--   <property name="name">shortcuts_page</property> -->
+      <!--   <property name="title" translatable="yes">Shortcuts</property> -->
+      <!-- </packing> -->
     </child>
   </object>
 
