@@ -160,7 +160,7 @@ class MdConfigWidget(Gtk.Box):
 			return
 
 		command = 'pandoc $INPUT_FILE %s'
-		options = '--metadata pagetitle=Preview'
+		options = '-f commonmark+sourcepos --metadata pagetitle=Preview'
 		accept_css = True
 		# TODO........
 
