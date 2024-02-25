@@ -83,7 +83,7 @@
       <description></description>
     </key>
     <key type="as" name="pandoc-command">
-      <default>['pandoc', '-s', '$INPUT_FILE', '--metadata', 'pagetitle=Preview']</default>
+      <default>['pandoc', '-s', '$INPUT_FILE', '--metadata', 'title=Preview']</default>
       <summary>Pandoc rendering command line</summary>
       <description>
         The command line used for pandoc rendering. It has to return HTML code

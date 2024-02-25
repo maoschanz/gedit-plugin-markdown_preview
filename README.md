@@ -10,6 +10,7 @@ https://docs.gtk.org/gtk3/text-widget-overview.html
 
 Pour la release 4.0 :
 
+- [ ] merger le mec qui m'a fait un scroll dymanique
 - à réparer :
 	- [ ] `gtk_widget_get_scale_factor` ???
 - à changer :
@@ -17,7 +18,6 @@ Pour la release 4.0 :
 	- [ ] autoriser la suppression des shortcuts
 	- [ ] valeurs par défaut des shortcuts ?
 - à terminer :
-	- [ ] insert link ?
 	- [ ] "remove tags" action
 - à faire :
 	- [ ] retenir le scroll et le numéro de page à l'échelle de la gedit.view
@@ -57,7 +57,6 @@ Pour un moment indéterminé :
 		- [ ] paramètres de thème
 - [ ] CSS for admonitions (and other default plugins ?)
 	- [ ] and pymdown ??
-- [ ] bring back the fullscreen, but better
 
 ~     TODO -->
 
