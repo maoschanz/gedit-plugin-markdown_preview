@@ -267,7 +267,8 @@ class MdExportAssistant(Gtk.Assistant):
 		file_chooser = Gtk.FileChooserNative.new(_("Export the preview"), \
 		                        self.gedit_window, Gtk.FileChooserAction.SAVE, \
 		                                               _("Export"), _("Cancel"))
-		name = get_display_name(self.gedit_window.get_active_document())
+		doc = self.gedit_window.get_active_document()
+		name = get_display_name(doc)
 		folder = doc.get_file().get_location().get_parent().get_path()
 		# XXX should i remove the former file extension from the string ?
 		name = str(name + ' ' + _("(exported)") + output_extension)
